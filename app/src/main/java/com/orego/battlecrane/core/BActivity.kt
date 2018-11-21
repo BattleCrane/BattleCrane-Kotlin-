@@ -1,7 +1,8 @@
-package com.orego.battlecrane
+package com.orego.battlecrane.core
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.orego.battlecrane.R
 import kotlinx.android.synthetic.main.activity.*
 
 class BActivity : AppCompatActivity() {
@@ -18,7 +19,7 @@ class BActivity : AppCompatActivity() {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    private external fun stringFromJNI(): String
+    external fun stringFromJNI(): String
 
     companion object {
 
