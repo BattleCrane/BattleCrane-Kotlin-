@@ -2,17 +2,59 @@ package com.orego.battlecrane.core
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.orego.battlecrane.R
-import kotlinx.android.synthetic.main.activity.*
+import com.orego.battlecrane.ui.fragment.BFragment
+import com.orego.battlecrane.ui.fragment.battle.fieldAdapter.BBattleFragment
 
 class BActivity : AppCompatActivity() {
 
+    private val app
+        get() = this.application as BApplication
+
+    private var activityController: BActivityController?
+        get() = this.app.activityController
+        set(activityController) {
+            this.app.activityController = activityController
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity)
+        this.setContentView(R.layout.activity)
+        if (this.activityController == null) {
+            this.activityController = BActivityController()
+        }
+        this.activityController!!.requestFragment(BBattleFragment::class.java, this.supportFragmentManager)
+    }
 
-        // Example of a call to a native method
-        sample_text.text = stringFromJNI()
+    /**
+     * Controls application fragments.
+     */
+
+    class BActivityController {
+
+        lateinit var displayedFragment: BFragment
+
+        private val fragmentMap = mutableMapOf(
+            BBattleFragment::class.java to BBattleFragment()
+        )
+
+        fun requestFragment(
+            clazz: Class<out BFragment>,
+            manager: FragmentManager,
+            bundle: Bundle? = null
+        ) {
+            val fragment = this.fragmentMap[clazz]
+            if (fragment != null) {
+                fragment.arguments = bundle
+                val transaction: FragmentTransaction = manager.beginTransaction()
+                transaction.replace(R.id.fragment, fragment).commit()
+                this.displayedFragment = fragment
+            } else {
+                throw IllegalArgumentException("There isn't fragment class!")
+            }
+        }
     }
 
     /**
