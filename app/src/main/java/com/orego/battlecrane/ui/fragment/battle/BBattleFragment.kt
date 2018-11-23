@@ -22,28 +22,41 @@ class BBattleFragment : BFragment() {
     }
 
     private fun renderCells() {
+        val constraintLayoutId = this.field_constraint_layout.id
         val measuredCellSide = this.field_constraint_layout.measuredWidth / FIELD_SIDE
         val idCellList = mutableListOf<Int>()
         for (i in 0 until FIELD_SIDE) {
-            val imageView = ImageView(this.context)
-            imageView.id = View.generateViewId()
-            imageView.setImageDrawable(this.context!!.getDrawable(R.drawable.ic_action_name))
-            imageView.layoutParams = ConstraintLayout.LayoutParams(measuredCellSide, measuredCellSide)
-            this.field_constraint_layout.addView(imageView)
-            idCellList.add(imageView.id)
+            for (j in 0 until FIELD_SIDE) {
+                val imageView = ImageView(this.context)
+                imageView.id = View.generateViewId()
+                imageView.setImageDrawable(this.context!!.getDrawable(R.drawable.ic_action_name))
+                imageView.layoutParams = ConstraintLayout.LayoutParams(measuredCellSide, measuredCellSide)
+                this.field_constraint_layout.addView(imageView)
+                idCellList.add(imageView.id)
+            }
         }
         val constraintSet = ConstraintSet()
         constraintSet.clone(this.field_constraint_layout)
         for (i in 0 until FIELD_SIDE) {
-            val cellId = idCellList[i]
-            val x = i * measuredCellSide
-            constraintSet.connect(
-                cellId,
-                ConstraintSet.LEFT,
-                this.field_constraint_layout.id,
-                ConstraintSet.LEFT,
-                x
-            )
+            for (j in 0 until FIELD_SIDE) {
+                val cellId = idCellList[(i - 1) * j + j]
+                val x = i * measuredCellSide
+                val y = j * measuredCellSide
+                constraintSet.connect(
+                    cellId,
+                    ConstraintSet.LEFT,
+                    constraintLayoutId,
+                    ConstraintSet.LEFT,
+                    x
+                )
+                constraintSet.connect(
+                    cellId,
+                    ConstraintSet.TOP,
+                    constraintLayoutId,
+                    ConstraintSet.TOP,
+                    y
+                )
+            }
         }
         constraintSet.applyTo(this.field_constraint_layout)
     }
