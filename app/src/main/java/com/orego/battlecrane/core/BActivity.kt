@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.fragment.BFragment
-import com.orego.battlecrane.ui.fragment.battle.fieldAdapter.BBattleFragment
+import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
 
 class BActivity : AppCompatActivity() {
 
