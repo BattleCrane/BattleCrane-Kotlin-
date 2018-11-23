@@ -13,9 +13,11 @@
             android:layout_marginTop="32dp" android:layout_marginStart="32dp" android:layout_marginEnd="32dp"
             android:layout_marginBottom="32dp"
             android:visibility="visible"
-            android:layout_width="256dp"
-            android:layout_height="256dp" tools:background="@color/colorPrimaryDark"
-            android:background="@color/colorPrimary" android:backgroundTint="@color/colorPrimaryDark">
+            android:layout_width="0dp"
+            android:layout_height="0dp" tools:background="@color/colorPrimaryDark"
+            android:background="@color/colorPrimary" android:backgroundTint="@color/colorPrimaryDark"
+            app:layout_constraintVertical_bias="0.555"
+            app:layout_constraintDimensionRatio="1:1">
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
