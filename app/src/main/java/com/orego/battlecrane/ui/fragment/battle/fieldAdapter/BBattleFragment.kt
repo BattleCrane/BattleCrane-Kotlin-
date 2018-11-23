@@ -14,6 +14,5 @@ class BBattleFragment : BFragment() {
         .inflate(R.layout.fragment_battle, c, false)!!
 
     override fun onContentViewCreated() {
-        this.battle_field_view.adapter = BBattleFieldAdapter(this.context!!, this.presenter.manager.battleField)
     }
 }

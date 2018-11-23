@@ -1,5 +1,6 @@
 package com.orego.battlecrane.core
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -22,6 +23,7 @@ class BActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.setContentView(R.layout.activity)
+        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         if (this.activityController == null) {
             this.activityController = BActivityController()
         }
@@ -34,7 +36,7 @@ class BActivity : AppCompatActivity() {
 
     class BActivityController {
 
-        lateinit var displayedFragment: BFragment
+        private lateinit var displayedFragment: BFragment
 
         private val fragmentMap = mutableMapOf(
             BBattleFragment::class.java to BBattleFragment()
