@@ -8,7 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.orego.battlecrane.core.BActivity
 import com.orego.battlecrane.core.BApplication
-import com.orego.battlecrane.repository.game.manager.BManager
+import com.orego.battlecrane.bcApi.manager.BGameManager
+import com.orego.battlecrane.repository.manager.BRepositoryManager
 
 /**
  * @author Игорь Гулькин 14.07.2018
@@ -99,8 +100,7 @@ abstract class BFragment : Fragment() {
 
         var root: View? = null
 
-
-        val manager: BManager
+        val manager: BRepositoryManager
             get() = (this@BFragment.activity!!.application as BApplication).manager
 
         fun replaceFragment(clazz: Class<out BFragment>, bundle: Bundle? = null) {
