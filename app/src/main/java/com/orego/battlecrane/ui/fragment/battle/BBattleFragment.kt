@@ -8,8 +8,8 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bcApi.manager.field.BBattleField
-import com.orego.battlecrane.bcApi.manager.field.BBattleField.FIELD_SIDE
+import com.orego.battlecrane.bcApi.manager.battlefield.BBattleField
+import com.orego.battlecrane.bcApi.manager.battlefield.BBattleField.FIELD_SIDE
 import com.orego.battlecrane.ui.fragment.BFragment
 import kotlinx.android.synthetic.main.fragment_battle.*
 
