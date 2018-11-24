@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
-    /* circle image view */
+    /* circle image displayedView */
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     /* GSON */
