@@ -8,6 +8,7 @@ import com.orego.battlecrane.bcApi.manager.battlefield.BBattleMap.MAP_SIDE
 import com.orego.battlecrane.bcApi.manager.unit.BUnit
 import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.BUnitViewHolder
 import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.BUnitViewHolderFactory
+import com.orego.battlecrane.ui.util.addUnit
 import com.orego.battlecrane.ui.util.moveTo
 
 class BBattleMapRender(
@@ -26,15 +27,13 @@ class BBattleMapRender(
         val constraintLayoutId = this.constraintLayout.id
         //Draw units:
         val units = this.battleMap.unitHeap.values
-        var counter = 0
         for (unit in units) {
             val unitViewHolder = BUnitViewHolderFactory.build(
                 unit,
                 measuredCellSide,
                 this.context
             )
-            println("UNITS ${counter++}")
-            this.constraintLayout.addView(unitViewHolder.displayedView)
+            this.constraintLayout.addUnit(unitViewHolder)
             this.temporaryUnitViewHolderList.add(unitViewHolder)
         }
         this.constraintSet.clone(this.constraintLayout)
