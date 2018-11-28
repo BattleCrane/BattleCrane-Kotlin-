@@ -5,5 +5,5 @@ import com.orego.battlecrane.bcApi.scenario.BGameScenario
 
 class BGameManager(scenario: BGameScenario) {
 
-    val battleField = BBattleMap(scenario)
+    val battleMap = BBattleMap(scenario)
 }

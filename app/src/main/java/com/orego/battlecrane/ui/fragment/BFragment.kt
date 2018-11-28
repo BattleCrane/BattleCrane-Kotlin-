@@ -93,7 +93,6 @@ abstract class BFragment : Fragment() {
         this.presenter.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-
     open inner class BPresenter {
 
         var wasCreated = false

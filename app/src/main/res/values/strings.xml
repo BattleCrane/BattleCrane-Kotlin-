@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BattleCrane</string>
+    <string name="fragment_loading_battle_text_view">Loading...</string>
 </resources>
