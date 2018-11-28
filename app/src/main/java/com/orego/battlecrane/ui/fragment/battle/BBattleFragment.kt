@@ -38,6 +38,7 @@ class BBattleFragment : BFragment() {
             )
         }
 
+
         fun drawMap(constraintLayout: ConstraintLayout) {
             val observer = constraintLayout.viewTreeObserver
             observer.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
