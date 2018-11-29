@@ -56,7 +56,7 @@ class BActivity : AppCompatActivity() {
                 transaction.replace(R.id.fragment, fragment).commit()
                 this.displayedFragment = fragment
             } else {
-                throw IllegalArgumentException("There isn't fragment class!")
+                throw IllegalStateException("There isn't fragment class!")
             }
         }
     }

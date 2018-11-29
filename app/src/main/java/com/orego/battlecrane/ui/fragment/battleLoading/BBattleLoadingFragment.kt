@@ -14,6 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+//TODO MAKE OVER BATTLE FRAGMENT!!!
 class BBattleLoadingFragment : BFragment() {
 
     override val presenter = Presenter()
