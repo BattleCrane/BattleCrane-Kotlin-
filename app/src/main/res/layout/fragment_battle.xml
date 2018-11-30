@@ -5,7 +5,6 @@
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent" android:id="@+id/battle_constraint_layout">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -67,6 +66,7 @@
                 app:layout_constraintStart_toEndOf="@+id/fragment_battle_buildings_text_view"
         />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/fragment_battle_map_constraint_layout"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +79,6 @@
             android:background="@color/colorPrimary" android:backgroundTint="@color/colorPrimaryDark"
             app:layout_constraintVertical_bias="0.555"
             app:layout_constraintDimensionRatio="1:1">
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -194,6 +193,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" android:textSize="18sp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -222,7 +222,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/fragment_battle_reinforcements_text_view"
                 android:layout_marginEnd="16dp"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_sort_by_size"
@@ -233,34 +235,37 @@
             app:layout_constraintStart_toEndOf="@+id/fragment_battle_end_turn_constraint_layout"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintVertical_bias="0.0"/>
-    <androidx.recyclerview.widget.RecyclerView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
-            android:layout_height="0dp" android:id="@+id/fragment_battle_reinforcements_recycler_view"
+            android:layout_height="0dp" android:id="@+id/fragment_battle_reinforcements_tools"
             app:layout_constraintEnd_toEndOf="@+id/fragment_battle_map_constraint_layout"
             app:layout_constraintBottom_toTopOf="@+id/fragment_battle_reinforcements_constraint_layout"
             app:layout_constraintTop_toBottomOf="@+id/fragment_battle_end_turn_constraint_layout"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/fragment_battle_map_constraint_layout"/>
-    <GridView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:numColumns="2"
             app:layout_constraintBottom_toBottomOf="@+id/fragment_battle_train_constraint_layout"
             app:layout_constraintTop_toTopOf="@+id/fragment_battle_train_constraint_layout"
-            app:layout_constraintEnd_toStartOf="@+id/fragment_battle_reinforcements_recycler_view"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_battle_reinforcements_tools"
             app:layout_constraintStart_toStartOf="@+id/fragment_battle_train_constraint_layout"
-            android:id="@+id/fragment_battle_train_grid_view" android:visibility="visible">
-    </GridView>
-    <GridView
+            android:id="@+id/fragment_battle_train_tools"
+            android:visibility="visible">
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:numColumns="2"
-            android:id="@+id/fragment_battle_build_grid_view"
+            android:id="@+id/fragment_battle_build_tools"
             app:layout_constraintEnd_toEndOf="@+id/fragment_battle_build_constraint_layout"
-            app:layout_constraintStart_toEndOf="@+id/fragment_battle_reinforcements_recycler_view"
+            app:layout_constraintStart_toEndOf="@+id/fragment_battle_reinforcements_tools"
             app:layout_constraintTop_toTopOf="@+id/fragment_battle_build_constraint_layout"
             app:layout_constraintBottom_toBottomOf="@+id/fragment_battle_build_constraint_layout"
-            android:visibility="invisible">
+            android:visibility="visible">
 
-    </GridView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bcApi.unit
+package com.orego.battlecrane.bcApi.util
 
 interface BAttackable {
 

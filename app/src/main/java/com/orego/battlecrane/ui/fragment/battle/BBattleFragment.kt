@@ -4,16 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.RecyclerView
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bcApi.manager.playerManager.BPlayerManager
 import com.orego.battlecrane.ui.fragment.BFragment
-import com.orego.battlecrane.ui.fragment.battle.mapRender.BBattleMapRender
-import com.orego.battlecrane.ui.fragment.battle.tool.BAbstractToolManager
-import com.orego.battlecrane.ui.fragment.battle.tool.unit.BUnitToolGridViewAdapter
+import com.orego.battlecrane.ui.fragment.battle.map.BBattleMapRender
+import com.orego.battlecrane.ui.fragment.battle.tool.BBuildToolRender
+import com.orego.battlecrane.ui.fragment.battle.tool.BTrainToolRender
+import com.orego.battlecrane.ui.util.onMeasured
 import kotlinx.android.synthetic.main.fragment_battle.*
 
 class BBattleFragment : BFragment() {
@@ -23,83 +21,70 @@ class BBattleFragment : BFragment() {
     override fun onCreateContentView(i: LayoutInflater, c: ViewGroup?, b: Bundle?): View? = i
         .inflate(R.layout.fragment_battle, c, false)!!
 
-    override fun onContentViewCreated() {
-        this.presenter.initPlayerTools()
-    }
-
     override fun onStart() {
         super.onStart()
         this.presenter.drawMap(this.fragment_battle_map_constraint_layout)
-
+        this.presenter.drawBuildTools(this.fragment_battle_build_tools)
+        this.presenter.drawTrainTools(this.fragment_battle_train_tools)
+        this.presenter.drawReinforcementTools(this.fragment_battle_reinforcements_tools)
     }
 
     inner class Presenter : BFragment.BPresenter() {
 
-        private lateinit var buildManager: BuildManager
+        private val gameManager by lazy {
+            this.manager.gameManager
+        }
 
-        private lateinit var trainManager: TrainManager
-
-        private lateinit var reinforcementsManager: ReinforcementsManager
+        private val context by lazy {
+            this@BBattleFragment.context!!
+        }
 
         private val mapRender by lazy {
             BBattleMapRender(
-                this.manager.gameManager.battleMap,
+                this.gameManager.battleMap.unitHeap,
                 this@BBattleFragment.fragment_battle_map_constraint_layout,
-                this@BBattleFragment.context!!
+                this.context
+            )
+        }
+
+        private val buildToolRender by lazy {
+            BBuildToolRender(
+                this.gameManager.playerManager,
+                this@BBattleFragment.fragment_battle_build_tools,
+                this.context
+            )
+        }
+
+        private val trainToolRender by lazy {
+            BTrainToolRender(
+                this.gameManager.playerManager,
+                this@BBattleFragment.fragment_battle_train_tools,
+                this.context
+            )
+        }
+
+        private val reinforcesToolRender by lazy {
+            BReinforcesToolRender(
+                this.gameManager.playerManager,
+                this@BBattleFragment.fragment_battle_reinforcements_tools,
+                this.context
             )
         }
 
         fun drawMap(constraintLayout: ConstraintLayout) {
-            val observer = constraintLayout.viewTreeObserver
-            observer.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-
-                override fun onGlobalLayout() {
-                    observer.removeOnGlobalLayoutListener(this)
-                    this@Presenter.mapRender.draw()
-                }
-            })
+            constraintLayout.onMeasured { this.mapRender.draw() }
         }
 
-        fun initPlayerTools() {
-            val playerManager = this.manager.gameManager.playerManager
-            this.buildManager = BuildManager(playerManager)
-            this.trainManager = TrainManager(playerManager)
-            this.reinforcementsManager = ReinforcementsManager(playerManager)
+        fun drawBuildTools(constraintLayout: ConstraintLayout) {
+            constraintLayout.onMeasured { this.buildToolRender.draw() }
         }
 
-        //TODO: CHECK ADAPTERS:
-        //TODO THINK ABOUT DATA SET AND ADAPTER DUPLICATON:
-        private inner class BuildManager(playerManager: BPlayerManager) : BAbstractToolManager(playerManager) {
-
-            val adapter = BUnitToolGridViewAdapter(this@Presenter.activity)
-
-            init {
-                this@BBattleFragment.fragment_battle_build_grid_view.adapter = this.adapter
-            }
+        fun drawTrainTools(constraintLayout: ConstraintLayout) {
+            constraintLayout.onMeasured { this.trainToolRender.draw() }
         }
 
-        private inner class TrainManager(playerManager: BPlayerManager) : BAbstractToolManager(playerManager) {
-
-            val adapter = BUnitToolGridViewAdapter(this@Presenter.activity)
-
-            init {
-                this@BBattleFragment.fragment_battle_train_grid_view.adapter = this.adapter
-            }
-        }
-
-        private inner class ReinforcementsManager(playerManager: BPlayerManager) : BAbstractToolManager(playerManager) {
-
+        fun drawReinforcementTools(constraintLayout: ConstraintLayout) {
+            constraintLayout.onMeasured { this.reinforcesToolRender.draw() }
         }
     }
-
-
-    //TODO LATER:
-//    val scenario = ViewModelProviders
-//                .of(this@BBattleFragment)
-//                .get(BGameScenarioViewModel::class.java)
-//                .scenario
-//            val currentPlayer = scenario.currentPlayer
-//            val buildTools = currentPlayer.buildTools
-//            val trainTools = currentPlayer.trainTools
-//            val reinforcementsTools = currentPlayer.reinforcenentsTools
 }

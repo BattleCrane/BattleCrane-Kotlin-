@@ -26,9 +26,9 @@ public final class BBattleMapManager {
             final int horizontalSide = unit.getHorizontalSide();
             final int verticalSide = unit.getVerticalSide();
             final BCell pivot = BBattleMapManager.this.cells[x][y];
-            //Attach pivot to unit:
+            //Attach pivot to entity:
             unit.setPivot(pivot);
-            //Attach unit to cells:
+            //Attach entity to cells:
             for (int i = x; i < horizontalSide; i++) {
                 for (int j = y; j < verticalSide; j++) {
                     final BCell cell = BBattleMapManager.this.cells[i][j];

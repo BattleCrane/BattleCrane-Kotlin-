@@ -11,7 +11,7 @@ abstract class BField : BUnit() {
         private const val DEFAULT_HORIZONTAL_SIDE = 1
     }
 
-    override val verticalSide = DEFAULT_VERTICAL_SIDE
+    final override val verticalSide = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
+    final override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
 }

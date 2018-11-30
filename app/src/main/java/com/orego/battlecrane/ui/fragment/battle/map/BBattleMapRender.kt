@@ -1,51 +1,43 @@
-package com.orego.battlecrane.ui.fragment.battle.mapRender
+package com.orego.battlecrane.ui.fragment.battle.map
 
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import com.orego.battlecrane.bcApi.manager.battleMapManager.BBattleMapManager
 import com.orego.battlecrane.bcApi.manager.battleMapManager.BBattleMapManager.MAP_SIDE
 import com.orego.battlecrane.bcApi.unit.BUnit
-import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.BUnitViewHolder
-import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.BUnitViewHolderFactory
+import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.BUnitViewHolder
+import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.BUnitViewHolderFactory
+import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.util.addUnit
 import com.orego.battlecrane.ui.util.moveTo
 
-class BBattleMapRender(
-    private val battleMap: BBattleMapManager,
-    private val constraintLayout: ConstraintLayout,
-    private val context: Context
-) {
+class BBattleMapRender(private val units: Map<Int, BUnit>, constraintLayout: ConstraintLayout, context: Context) :
+    BRender<BUnitViewHolder>(constraintLayout, context) {
 
-    private val constraintSet = ConstraintSet()
-
-    private val temporaryUnitViewHolderList: MutableList<BUnitViewHolder<out BUnit>> = mutableListOf()
-
-    fun draw() {
+    override fun draw() {
         //Map relation is 1:1:
         val measuredCellSide = this.constraintLayout.measuredWidth / MAP_SIDE
         val constraintLayoutId = this.constraintLayout.id
         //Draw units:
-        val units = this.battleMap.unitHeap.values
-        for (unit in units) {
+        for (unit in this.units.values) {
             val unitViewHolder = BUnitViewHolderFactory.build(
                 unit,
                 measuredCellSide,
                 this.context
             )
             this.constraintLayout.addUnit(unitViewHolder)
-            this.temporaryUnitViewHolderList.add(unitViewHolder)
+            this.temporaryViewHolderList.add(unitViewHolder)
         }
         this.constraintSet.clone(this.constraintLayout)
         //Move units:
-        for (holder in this.temporaryUnitViewHolderList) {
+        for (holder in this.temporaryViewHolderList) {
             val displayedViewId = holder.displayedView.id
-            val pivot = holder.unit.pivot!!
+            val pivot = holder.entity.pivot!!
             val x = pivot.x * measuredCellSide
             val y = pivot.y * measuredCellSide
             this.constraintSet.moveTo(displayedViewId, constraintLayoutId, x, y)
         }
         this.constraintSet.applyTo(this.constraintLayout)
-        this.temporaryUnitViewHolderList.clear()
+        this.temporaryViewHolderList.clear()
     }
 }
