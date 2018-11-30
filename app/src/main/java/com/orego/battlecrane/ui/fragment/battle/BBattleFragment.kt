@@ -67,6 +67,7 @@ class BBattleFragment : BFragment() {
             this.reinforcementsManager = ReinforcementsManager(playerManager)
         }
 
+        //TODO: CHECK ADAPTERS:
         //TODO THINK ABOUT DATA SET AND ADAPTER DUPLICATON:
         private inner class BuildManager(playerManager: BPlayerManager) : BAbstractToolManager(playerManager) {
 
