@@ -1,8 +1,8 @@
 package com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder
 
 import android.content.Context
-import com.orego.battlecrane.bcApi.manager.unit.BUnit
-import com.orego.battlecrane.bcApi.manager.unit.field.BField
+import com.orego.battlecrane.bcApi.unit.BUnit
+import com.orego.battlecrane.bcApi.unit.field.BField
 import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.field.BFieldViewHolderFactory
 
 object BUnitViewHolderFactory {

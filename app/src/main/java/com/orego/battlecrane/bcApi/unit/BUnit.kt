@@ -1,6 +1,6 @@
-package com.orego.battlecrane.bcApi.manager.unit
+package com.orego.battlecrane.bcApi.unit
 
-import com.orego.battlecrane.bcApi.manager.battlefield.cell.BCell
+import com.orego.battlecrane.bcApi.manager.battleMapManager.cell.BCell
 
 abstract class BUnit {
 

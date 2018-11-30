@@ -1,9 +1,9 @@
 package com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.field
 
 import android.content.Context
-import com.orego.battlecrane.bcApi.manager.unit.BUnit
-import com.orego.battlecrane.bcApi.manager.unit.field.destroyed.BDestroyedField
-import com.orego.battlecrane.bcApi.manager.unit.field.empty.BEmptyField
+import com.orego.battlecrane.bcApi.unit.BUnit
+import com.orego.battlecrane.bcApi.unit.field.destroyed.BDestroyedField
+import com.orego.battlecrane.bcApi.unit.field.empty.BEmptyField
 import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.BUnitViewHolder
 import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.field.destroyed.BDestroyedFieldViewHolder
 import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.field.empty.BEmptyFieldViewHolder

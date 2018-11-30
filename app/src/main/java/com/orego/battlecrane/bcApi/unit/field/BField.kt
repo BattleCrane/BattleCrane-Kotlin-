@@ -1,6 +1,6 @@
-package com.orego.battlecrane.bcApi.manager.unit.field
+package com.orego.battlecrane.bcApi.unit.field
 
-import com.orego.battlecrane.bcApi.manager.unit.BUnit
+import com.orego.battlecrane.bcApi.unit.BUnit
 
 abstract class BField : BUnit() {
 

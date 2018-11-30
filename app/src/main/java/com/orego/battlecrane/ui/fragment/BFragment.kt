@@ -99,8 +99,11 @@ abstract class BFragment : Fragment() {
 
         var root: View? = null
 
-        val manager: BRepositoryManager
-            get() = (this@BFragment.activity!!.application as BApplication).manager
+        val activity by lazy { this@BFragment.activity!! }
+
+        val application by lazy { this.activity.application as BApplication }
+
+        val manager by lazy { this.application.manager }
 
         fun replaceFragment(clazz: Class<out BFragment>, bundle: Bundle? = null) {
             val activity = this@BFragment.activity!!

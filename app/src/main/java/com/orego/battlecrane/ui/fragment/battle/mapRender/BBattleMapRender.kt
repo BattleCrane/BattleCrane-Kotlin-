@@ -3,16 +3,16 @@ package com.orego.battlecrane.ui.fragment.battle.mapRender
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import com.orego.battlecrane.bcApi.manager.battlefield.BBattleMap
-import com.orego.battlecrane.bcApi.manager.battlefield.BBattleMap.MAP_SIDE
-import com.orego.battlecrane.bcApi.manager.unit.BUnit
+import com.orego.battlecrane.bcApi.manager.battleMapManager.BBattleMapManager
+import com.orego.battlecrane.bcApi.manager.battleMapManager.BBattleMapManager.MAP_SIDE
+import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.BUnitViewHolder
 import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.BUnitViewHolderFactory
 import com.orego.battlecrane.ui.util.addUnit
 import com.orego.battlecrane.ui.util.moveTo
 
 class BBattleMapRender(
-    private val battleMap: BBattleMap,
+    private val battleMap: BBattleMapManager,
     private val constraintLayout: ConstraintLayout,
     private val context: Context
 ) {

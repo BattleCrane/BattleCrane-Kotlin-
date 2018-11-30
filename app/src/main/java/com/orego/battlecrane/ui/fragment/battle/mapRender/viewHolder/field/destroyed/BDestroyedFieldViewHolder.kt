@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bcApi.manager.unit.field.destroyed.BDestroyedField
+import com.orego.battlecrane.bcApi.unit.field.destroyed.BDestroyedField
 import com.orego.battlecrane.ui.fragment.battle.mapRender.viewHolder.BUnitViewHolder
 import com.orego.battlecrane.ui.util.setImageById
 
