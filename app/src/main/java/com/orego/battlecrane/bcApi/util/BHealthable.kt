@@ -28,6 +28,7 @@ interface BHealthable {
         if (damage > 0) {
             val oldHealth = this.currentHealth
             val newHealth = this.currentHealth - damage
+            this.currentHealth = newHealth
             damageObserver.values.forEach { it.onDamageDealt(oldHealth, newHealth, damage) }
             this.decreaseHealthObserver.values.forEach { it.onHealthChanged(oldHealth, newHealth, damage) }
         }
@@ -37,6 +38,7 @@ interface BHealthable {
         if (damage > 0) {
             val oldHealth = this.currentHealth
             val newHealth = this.currentHealth - damage
+            this.currentHealth = newHealth
             this.decreaseHealthObserver.values.forEach { it.onHealthChanged(oldHealth, newHealth, damage) }
         }
     }

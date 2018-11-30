@@ -4,7 +4,7 @@ import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.bcApi.util.BHealthable
 import com.orego.battlecrane.bcApi.util.BLevelable
 
-class BHumanHeadquarters : BUnit(), BHealthable, BLevelable {
+abstract class BHumanHeadquarters : BUnit(), BHealthable, BLevelable {
 
     companion object {
 
@@ -19,19 +19,23 @@ class BHumanHeadquarters : BUnit(), BHealthable, BLevelable {
         private const val DEFAULT_MAX_LEVEL = 2
     }
 
-    override val verticalSide = DEFAULT_VERTICAL_SIDE
+    final override val verticalSide = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
+    final override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
 
-    override var currentHealth = DEFAULT_MAX_HEALTH
+    final override var currentHealth = DEFAULT_MAX_HEALTH
 
-    override var maxHealth = DEFAULT_MAX_HEALTH
+    final override var maxHealth = DEFAULT_MAX_HEALTH
 
-    override var currentLevel = DEFAULT_LEVEL
+    final override var currentLevel = DEFAULT_LEVEL
 
-    override var maxLevel = DEFAULT_MAX_LEVEL
+    final override var maxLevel = DEFAULT_MAX_LEVEL
 
-    override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    final override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
 
-    override val increaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    final override val increaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+
+    final override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+
+    final override val levelDownObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
 }

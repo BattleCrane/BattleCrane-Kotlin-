@@ -34,4 +34,8 @@ class BHumanGenerator : BUnit(), BHealthable, BLevelable {
     override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
 
     override val increaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+
+    override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+
+    override val levelDownObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
 }
