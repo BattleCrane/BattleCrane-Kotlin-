@@ -2,12 +2,12 @@ package com.orego.battlecrane.ui.fragment.battle.map
 
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bcApi.manager.battleMapManager.BMapManager.MAP_SIZE
+import com.orego.battlecrane.bcApi.manager.mapManager.BMapManager.MAP_SIZE
 import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.BUnitViewHolder
 import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.BUnitViewHolderFactory
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
-import com.orego.battlecrane.ui.util.addUnit
+import com.orego.battlecrane.ui.util.addView
 import com.orego.battlecrane.ui.util.moveTo
 
 class BBattleMapRender(private val units: Map<Int, BUnit>, constraintLayout: ConstraintLayout, context: Context) :
@@ -24,7 +24,7 @@ class BBattleMapRender(private val units: Map<Int, BUnit>, constraintLayout: Con
                 measuredCellSide,
                 this.context
             )
-            this.constraintLayout.addUnit(unitViewHolder)
+            this.constraintLayout.addView(unitViewHolder)
             this.temporaryViewHolderList.add(unitViewHolder)
         }
         this.constraintSet.clone(this.constraintLayout)

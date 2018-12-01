@@ -8,7 +8,8 @@ import com.orego.battlecrane.bcApi.unit.contract.BAttackable
 import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 import com.orego.battlecrane.bcApi.unit.contract.BLevelable
 
-class BHumanTurret(manager: BGameManager, owner: BPlayer) : BUnit(manager, owner), BHealthable, BLevelable, BAttackable {
+class BHumanTurret(manager: BGameManager, owner: BPlayer) :
+    BUnit(manager, owner), BHumanBuilding, BHealthable, BLevelable, BAttackable {
 
     companion object {
 

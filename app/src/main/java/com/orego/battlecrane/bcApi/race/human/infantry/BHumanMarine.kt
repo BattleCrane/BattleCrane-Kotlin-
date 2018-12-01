@@ -5,7 +5,7 @@ import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.bcApi.unit.contract.BAttackable
 import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 
-open class BHumanMarine(manager: BGameManager) : BUnit(manager), BHealthable, BAttackable {
+open class BHumanMarine(manager: BGameManager) : BUnit(manager), BHumanInfantry, BHealthable, BAttackable {
 
     companion object {
 

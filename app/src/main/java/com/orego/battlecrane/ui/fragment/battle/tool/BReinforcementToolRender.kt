@@ -7,7 +7,7 @@ import com.orego.battlecrane.bcApi.manager.playerManager.BPlayerManager
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.fragment.battle.tool.viewHolder.BToolViewHolder
 
-class BReinforcementRender(
+class BReinforcementToolRender(
     private val playerManager: BPlayerManager,
     constraintLayout: ConstraintLayout,
     context: Context

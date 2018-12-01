@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bcApi.unit
 
 import com.orego.battlecrane.bcApi.manager.BGameManager
-import com.orego.battlecrane.bcApi.manager.battleMapManager.cell.BCell
+import com.orego.battlecrane.bcApi.manager.mapManager.cell.BCell
 import com.orego.battlecrane.bcApi.manager.playerManager.team.player.BPlayer
 
 abstract class BUnit(

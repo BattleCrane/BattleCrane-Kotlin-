@@ -1,6 +1,11 @@
 package com.orego.battlecrane.bcApi.race.human.upgrade
 
-class BHumanUpgrade {
+import com.orego.battlecrane.bcApi.race.human.BHumanRace
+import com.orego.battlecrane.bcApi.unit.contract.BLevelable
 
+class BHumanUpgrade : BHumanRace {
 
+    fun upgrade(levelable: BLevelable) {
+
+    }
 }

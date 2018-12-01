@@ -2,13 +2,13 @@ package com.orego.battlecrane.ui.fragment.battle.tool
 
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.orego.battlecrane.bcApi.manager.mapManager.cell.BCell
 import com.orego.battlecrane.bcApi.manager.playerManager.BPlayerManager
 import com.orego.battlecrane.bcApi.unit.BUnit
-import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.BUnitViewHolderFactory
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.fragment.battle.tool.viewHolder.BToolViewHolder
 import com.orego.battlecrane.ui.fragment.battle.tool.viewHolder.BToolViewHolderFactory
-import com.orego.battlecrane.ui.util.addUnit
+import com.orego.battlecrane.ui.util.addView
 import com.orego.battlecrane.ui.util.moveTo
 
 class BBuildToolRender(
@@ -20,6 +20,8 @@ class BBuildToolRender(
     companion object {
 
         private const val COLUMN_COUNT = 2
+
+        private const val ROW_COUNT = 3
     }
 
     private val buildingStack: List<Class<out BUnit>>
@@ -27,29 +29,28 @@ class BBuildToolRender(
 
     override fun draw() {
         val stack = this.buildingStack
-        val measuredCellSide = this.constraintLayout.measuredWidth / COLUMN_COUNT
+        val measuredCellSize = this.constraintLayout.measuredWidth / COLUMN_COUNT
         val constraintLayoutId = this.constraintLayout.id
-        //Draw units:
-        for (unit in stack) {
-            val unitViewHolder = BToolViewHolderFactory.build(
-                unit,
-                measuredCellSide,
-                this.context
-            )
-            this.constraintLayout.addUnit(unitViewHolder)
-            this.temporaryViewHolderList.add(unitViewHolder)
+        var index = 0
+        //Draw tools:
+        for (x in 0 until COLUMN_COUNT) {
+            for (y in 0 until ROW_COUNT) {
+                val unitTool = stack[index++]
+                val toolViewHolder = BToolViewHolderFactory.build(unitTool, measuredCellSize, BCell(x, y), this.context)
+                this.constraintLayout.addView(toolViewHolder)
+                this.temporaryViewHolderList.add(toolViewHolder)
+            }
         }
         this.constraintSet.clone(this.constraintLayout)
-        //Move units:
+        //Move tools:
         for (holder in this.temporaryViewHolderList) {
             val displayedViewId = holder.displayedView.id
-            val pivot = holder.entity.pivot!!
-            val x = pivot.x * measuredCellSide
-            val y = pivot.y * measuredCellSide
+            val cell = holder.cell
+            val x = cell.x * measuredCellSize
+            val y = cell.y * measuredCellSize
             this.constraintSet.moveTo(displayedViewId, constraintLayoutId, x, y)
         }
         this.constraintSet.applyTo(this.constraintLayout)
         this.temporaryViewHolderList.clear()
-
     }
 }

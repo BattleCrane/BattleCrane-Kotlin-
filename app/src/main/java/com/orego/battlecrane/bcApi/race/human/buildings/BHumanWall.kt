@@ -4,7 +4,7 @@ import com.orego.battlecrane.bcApi.manager.BGameManager
 import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 
-class BHumanWall(gameManager: BGameManager) : BUnit(gameManager), BHealthable {
+class BHumanWall(gameManager: BGameManager) : BUnit(gameManager), BHumanBuilding, BHealthable {
 
     companion object {
 

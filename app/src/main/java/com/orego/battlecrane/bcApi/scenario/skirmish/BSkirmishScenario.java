@@ -1,11 +1,11 @@
 package com.orego.battlecrane.bcApi.scenario.skirmish;
 
-import com.orego.battlecrane.bcApi.manager.battleMapManager.BMapManager;
+import com.orego.battlecrane.bcApi.manager.mapManager.BMapManager;
 import com.orego.battlecrane.bcApi.unit.BUnit;
 import com.orego.battlecrane.bcApi.unit.field.empty.BEmptyField;
 import com.orego.battlecrane.bcApi.scenario.BGameScenario;
 
-import static com.orego.battlecrane.bcApi.manager.battleMapManager.BMapManager.MAP_SIZE;
+import static com.orego.battlecrane.bcApi.manager.mapManager.BMapManager.MAP_SIZE;
 
 public final class BSkirmishScenario implements BGameScenario {
 

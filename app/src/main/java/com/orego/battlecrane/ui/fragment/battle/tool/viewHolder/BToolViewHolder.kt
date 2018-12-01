@@ -5,11 +5,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.orego.battlecrane.bcApi.manager.mapManager.cell.BCell
 import com.orego.battlecrane.ui.fragment.battle.holder.BViewHolder
 import com.orego.battlecrane.ui.util.setImageById
 import org.intellij.lang.annotations.MagicConstant
 
-class BToolViewHolder(entity: BTool, measuredCellSide: Int, context: Context) : BViewHolder<BTool>(entity) {
+class BToolViewHolder(entity: BTool, measuredCellSize: Int, val cell: BCell, context: Context) :
+    BViewHolder<BTool>(entity) {
 
     companion object {
 
@@ -22,15 +24,15 @@ class BToolViewHolder(entity: BTool, measuredCellSide: Int, context: Context) : 
     init {
         val toolImage = ImageView(context)
         toolImage.id = View.generateViewId()
-        toolImage.layoutParams = ConstraintLayout.LayoutParams(measuredCellSide, measuredCellSide)
+        toolImage.layoutParams = ConstraintLayout.LayoutParams(measuredCellSize, measuredCellSize)
         toolImage.setImageById(context, entity.imageId)
         val toolName = TextView(context)
         toolName.id = View.generateViewId()
         toolName.text = entity.name
-        toolName.layoutParams = ConstraintLayout.LayoutParams(measuredCellSide, measuredCellSide / COEFFICIENT)
+        toolName.layoutParams = ConstraintLayout.LayoutParams(measuredCellSize, measuredCellSize / COEFFICIENT)
         this.displayedView = ConstraintLayout(context)
         this.displayedView.id = View.generateViewId()
-        this.displayedView.layoutParams = ConstraintLayout.LayoutParams(measuredCellSide, measuredCellSide)
+        this.displayedView.layoutParams = ConstraintLayout.LayoutParams(measuredCellSize, measuredCellSize)
         this.displayedView.addView(toolImage)
         this.displayedView.addView(toolName)
     }

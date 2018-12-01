@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bcApi.manager.battleMapManager.cell
+package com.orego.battlecrane.bcApi.manager.mapManager.cell
 
 import com.orego.battlecrane.bcApi.unit.BUnit
 

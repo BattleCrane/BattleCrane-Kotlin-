@@ -1,6 +1,6 @@
-package com.orego.battlecrane.bcApi.manager.battleMapManager;
+package com.orego.battlecrane.bcApi.manager.mapManager;
 
-import com.orego.battlecrane.bcApi.manager.battleMapManager.cell.BCell;
+import com.orego.battlecrane.bcApi.manager.mapManager.cell.BCell;
 import com.orego.battlecrane.bcApi.scenario.BGameScenario;
 import com.orego.battlecrane.bcApi.unit.BUnit;
 

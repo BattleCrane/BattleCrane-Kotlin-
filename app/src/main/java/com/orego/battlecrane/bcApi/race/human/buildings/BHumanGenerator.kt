@@ -5,7 +5,7 @@ import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 import com.orego.battlecrane.bcApi.unit.contract.BLevelable
 
-class BHumanGenerator(gameManager: BGameManager) : BUnit(gameManager), BHealthable, BLevelable {
+class BHumanGenerator(gameManager: BGameManager) : BUnit(gameManager), BHumanBuilding, BHealthable, BLevelable {
 
     companion object {
 
