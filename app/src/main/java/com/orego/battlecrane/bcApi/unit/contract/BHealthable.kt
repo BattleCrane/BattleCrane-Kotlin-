@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bcApi.util
+package com.orego.battlecrane.bcApi.unit.contract
 
 interface BHealthable {
 

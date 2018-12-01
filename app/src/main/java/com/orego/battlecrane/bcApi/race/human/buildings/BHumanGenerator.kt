@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bcApi.race.human.buildings
 
 import com.orego.battlecrane.bcApi.unit.BUnit
-import com.orego.battlecrane.bcApi.util.BHealthable
-import com.orego.battlecrane.bcApi.util.BLevelable
+import com.orego.battlecrane.bcApi.unit.contract.BHealthable
+import com.orego.battlecrane.bcApi.unit.contract.BLevelable
 
 class BHumanGenerator : BUnit(), BHealthable, BLevelable {
 

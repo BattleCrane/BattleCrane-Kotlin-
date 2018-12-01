@@ -1,10 +1,11 @@
 package com.orego.battlecrane.bcApi.race.human.infantry
 
 import com.orego.battlecrane.bcApi.unit.BUnit
-import com.orego.battlecrane.bcApi.util.BAttackable
-import com.orego.battlecrane.bcApi.util.BHealthable
+import com.orego.battlecrane.bcApi.unit.contract.BAttackable
+import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 
-abstract class BHumanTank : BUnit(), BHealthable, BAttackable {
+abstract class BHumanTank : BUnit(), BHealthable,
+    BAttackable {
 
     companion object {
 

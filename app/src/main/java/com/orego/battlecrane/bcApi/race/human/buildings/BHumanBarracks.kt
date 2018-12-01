@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bcApi.race.human.buildings
 
 import com.orego.battlecrane.bcApi.unit.BUnit
-import com.orego.battlecrane.bcApi.util.BHealthable
-import com.orego.battlecrane.bcApi.util.BLevelable
+import com.orego.battlecrane.bcApi.unit.contract.BHealthable
+import com.orego.battlecrane.bcApi.unit.contract.BLevelable
 
 class BHumanBarracks : BUnit(), BHealthable, BLevelable {
 
@@ -19,6 +19,10 @@ class BHumanBarracks : BUnit(), BHealthable, BLevelable {
         private const val DEFAULT_MAX_LEVEL = 3
     }
 
+    /**
+     * Properties.
+     */
+
     override val verticalSide = DEFAULT_VERTICAL_SIDE
 
     override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
@@ -30,6 +34,10 @@ class BHumanBarracks : BUnit(), BHealthable, BLevelable {
     override var currentLevel = DEFAULT_LEVEL
 
     override var maxLevel = DEFAULT_MAX_LEVEL
+
+    /**
+     * Observers.
+     */
 
     override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
 

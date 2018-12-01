@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bcApi.manager.playerManager.BPlayerManager
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.fragment.battle.map.BBattleMapRender
 import com.orego.battlecrane.ui.fragment.battle.tool.BBuildToolRender
@@ -41,7 +40,7 @@ class BBattleFragment : BFragment() {
 
         private val mapRender by lazy {
             BBattleMapRender(
-                this.gameManager.battleMap.unitHeap,
+                this.gameManager.mapManager.unitHeap,
                 this@BBattleFragment.fragment_battle_map_constraint_layout,
                 this.context
             )

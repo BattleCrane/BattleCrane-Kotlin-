@@ -1,10 +1,11 @@
 package com.orego.battlecrane.bcApi.race.human.buildings
 
 import com.orego.battlecrane.bcApi.unit.BUnit
-import com.orego.battlecrane.bcApi.util.BHealthable
-import com.orego.battlecrane.bcApi.util.BLevelable
+import com.orego.battlecrane.bcApi.unit.contract.BAttackable
+import com.orego.battlecrane.bcApi.unit.contract.BHealthable
+import com.orego.battlecrane.bcApi.unit.contract.BLevelable
 
-abstract class BHumanHeadquarters : BUnit(), BHealthable, BLevelable {
+class BHumanHeadquarters : BUnit(), BHealthable, BLevelable, BAttackable {
 
     companion object {
 
@@ -17,25 +18,47 @@ abstract class BHumanHeadquarters : BUnit(), BHealthable, BLevelable {
         private const val DEFAULT_LEVEL = 1
 
         private const val DEFAULT_MAX_LEVEL = 2
+
+
     }
 
-    final override val verticalSide = DEFAULT_VERTICAL_SIDE
+    /**
+     * Property.
+     */
 
-    final override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
+    override val verticalSide = DEFAULT_VERTICAL_SIDE
 
-    final override var currentHealth = DEFAULT_MAX_HEALTH
+    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
 
-    final override var maxHealth = DEFAULT_MAX_HEALTH
+    override var currentHealth = DEFAULT_MAX_HEALTH
 
-    final override var currentLevel = DEFAULT_LEVEL
+    override var maxHealth = DEFAULT_MAX_HEALTH
 
-    final override var maxLevel = DEFAULT_MAX_LEVEL
+    override var currentLevel = DEFAULT_LEVEL
 
-    final override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    override var maxLevel = DEFAULT_MAX_LEVEL
 
-    final override val increaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    override var damage = DEFAULT_DAMAGE
 
-    final override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+    override var attackTimes = DEFAULT_ATTACK_TIMES
 
-    final override val levelDownObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+    override var isAttackEnable = DEFAULT_IS_ATTACK_ENABLE
+
+    /**
+     * Observers.
+     */
+
+    override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+
+    override val increaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+
+    override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+
+    override val levelDownObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+
+    override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
+
+    override val damageObserver: MutableMap<Long, BAttackable.DamageListener> = mutableMapOf()
+
+    override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
 }

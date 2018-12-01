@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.fragment.battle.tool
 
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bcApi.util.BCoastable
+import com.orego.battlecrane.bcApi.unit.contract.BCoastable
 import com.orego.battlecrane.bcApi.manager.playerManager.BPlayerManager
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.fragment.battle.tool.viewHolder.BToolViewHolder

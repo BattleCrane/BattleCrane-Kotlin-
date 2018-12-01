@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bcApi.scenario;
 
-import com.orego.battlecrane.bcApi.manager.battleMapManager.BBattleMapManager;
+import com.orego.battlecrane.bcApi.manager.battleMapManager.BMapManager;
 
 public interface BGameScenario {
 
-    void initMap(final BBattleMapManager.BMapHolder mapHolder);
+    void initMap(final BMapManager.BMapHolder mapHolder);
 }

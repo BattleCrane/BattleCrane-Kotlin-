@@ -1,9 +1,9 @@
 package com.orego.battlecrane.bcApi.race.human.buildings
 
 import com.orego.battlecrane.bcApi.unit.BUnit
-import com.orego.battlecrane.bcApi.util.BHealthable
+import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 
-class BHumanWall : BUnit(), BHealthable{
+class BHumanWall : BUnit(), BHealthable {
 
     companion object {
 

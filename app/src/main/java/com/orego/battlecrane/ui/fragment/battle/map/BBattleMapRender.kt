@@ -2,8 +2,7 @@ package com.orego.battlecrane.ui.fragment.battle.map
 
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bcApi.manager.battleMapManager.BBattleMapManager
-import com.orego.battlecrane.bcApi.manager.battleMapManager.BBattleMapManager.MAP_SIDE
+import com.orego.battlecrane.bcApi.manager.battleMapManager.BMapManager.MAP_SIZE
 import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.BUnitViewHolder
 import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.BUnitViewHolderFactory
@@ -16,7 +15,7 @@ class BBattleMapRender(private val units: Map<Int, BUnit>, constraintLayout: Con
 
     override fun draw() {
         //Map relation is 1:1:
-        val measuredCellSide = this.constraintLayout.measuredWidth / MAP_SIDE
+        val measuredCellSide = this.constraintLayout.measuredWidth / MAP_SIZE
         val constraintLayoutId = this.constraintLayout.id
         //Draw units:
         for (unit in this.units.values) {
