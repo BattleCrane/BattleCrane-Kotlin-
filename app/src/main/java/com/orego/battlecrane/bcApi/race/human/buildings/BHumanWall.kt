@@ -1,9 +1,10 @@
 package com.orego.battlecrane.bcApi.race.human.buildings
 
+import com.orego.battlecrane.bcApi.manager.BGameManager
 import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 
-class BHumanWall : BUnit(), BHealthable {
+class BHumanWall(gameManager: BGameManager) : BUnit(gameManager), BHealthable {
 
     companion object {
 
@@ -14,6 +15,10 @@ class BHumanWall : BUnit(), BHealthable {
         private const val DEFAULT_MAX_HEALTH = 1
     }
 
+    /**
+     * Properties.
+     */
+
     override val verticalSide = DEFAULT_VERTICAL_SIDE
 
     override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
@@ -21,6 +26,10 @@ class BHumanWall : BUnit(), BHealthable {
     override var currentHealth = DEFAULT_MAX_HEALTH
 
     override var maxHealth = DEFAULT_MAX_HEALTH
+
+    /**
+     * Observers.
+     */
 
     override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
 

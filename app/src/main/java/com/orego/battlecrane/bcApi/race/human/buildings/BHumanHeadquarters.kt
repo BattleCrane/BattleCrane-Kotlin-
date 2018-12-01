@@ -1,11 +1,12 @@
 package com.orego.battlecrane.bcApi.race.human.buildings
 
+import com.orego.battlecrane.bcApi.manager.BGameManager
 import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.bcApi.unit.contract.BAttackable
 import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 import com.orego.battlecrane.bcApi.unit.contract.BLevelable
 
-class BHumanHeadquarters : BUnit(), BHealthable, BLevelable, BAttackable {
+class BHumanHeadquarters(gameManager: BGameManager) : BUnit(gameManager), BHealthable, BLevelable, BAttackable {
 
     companion object {
 
@@ -19,7 +20,11 @@ class BHumanHeadquarters : BUnit(), BHealthable, BLevelable, BAttackable {
 
         private const val DEFAULT_MAX_LEVEL = 2
 
+        private const val DEFAULT_DAMAGE = 1
 
+        private const val DEFAULT_ATTACK_TIMES = 2
+
+        private const val DEFAULT_IS_ATTACK_ENABLE = false
     }
 
     /**

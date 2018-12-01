@@ -1,13 +1,17 @@
-package com.orego.battlecrane.bcApi.manager.playerManager.player
+package com.orego.battlecrane.bcApi.manager.playerManager.team.player
 
 import com.orego.battlecrane.bcApi.bonus.BBonus
 import com.orego.battlecrane.bcApi.unit.BUnit
 
-abstract class BPlayer {
+open class BPlayer {
 
-    val toolStack = ToolStack()
+    val toolStack = Tools()
 
-    class ToolStack {
+    val alies = mutableSetOf<BPlayer>()
+
+    val enemies = mutableSetOf<BPlayer>()
+
+    class Tools {
 
         val buildingStack = mutableListOf<Class<out BUnit>>()
 

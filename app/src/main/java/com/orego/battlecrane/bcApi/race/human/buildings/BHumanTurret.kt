@@ -1,13 +1,14 @@
 package com.orego.battlecrane.bcApi.race.human.buildings
 
 import com.orego.battlecrane.bcApi.manager.BGameManager
+import com.orego.battlecrane.bcApi.manager.playerManager.team.player.BPlayer
 import com.orego.battlecrane.bcApi.unit.BIdGenerator
 import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.bcApi.unit.contract.BAttackable
 import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 import com.orego.battlecrane.bcApi.unit.contract.BLevelable
 
-class BHumanTurret(manager: BGameManager, owner: Int) : BUnit(manager, owner), BHealthable, BLevelable, BAttackable {
+class BHumanTurret(manager: BGameManager, owner: BPlayer) : BUnit(manager, owner), BHealthable, BLevelable, BAttackable {
 
     companion object {
 
@@ -95,10 +96,9 @@ class BHumanTurret(manager: BGameManager, owner: Int) : BUnit(manager, owner), B
             for (j in y - countShift until y + 1 + countShift) {
                 if (mapManager.inBounds(i, j)) {
                     val currentUnit = mapManager.getUnitByPosition(i, j)
-                    if (playerManager.isEnemies(this, currentUnit)) {
-                        if (currentUnit is BHealthable) {
-                            this.attack(currentUnit)
-                        }
+                    val isEnemy = playerManager.isEnemies(this, currentUnit)
+                    if (isEnemy && currentUnit is BHealthable) {
+                        this.attack(currentUnit)
                     }
                 }
             }
@@ -109,6 +109,10 @@ class BHumanTurret(manager: BGameManager, owner: Int) : BUnit(manager, owner), B
             }
         }
     }
+
+    /**
+     * Listenres.
+     */
 
     private inner class OnCreateTurretListener : OnCreateListener {
 

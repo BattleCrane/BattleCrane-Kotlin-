@@ -1,10 +1,11 @@
 package com.orego.battlecrane.bcApi.race.human.buildings
 
+import com.orego.battlecrane.bcApi.manager.BGameManager
 import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.bcApi.unit.contract.BHealthable
 import com.orego.battlecrane.bcApi.unit.contract.BLevelable
 
-class BHumanBarracks : BUnit(), BHealthable, BLevelable {
+class BHumanBarracks(gameManager: BGameManager) : BUnit(gameManager), BHealthable, BLevelable {
 
     companion object {
 
