@@ -1,6 +1,7 @@
 package bcApi.manager.playerManager.team.player
 
 import bcApi.bonus.BBonus
+import bcApi.race.human.buildings.BHumanBarracks
 import bcApi.unit.BUnit
 
 open class BPlayer {
@@ -17,6 +18,6 @@ open class BPlayer {
 
         val armyStack = mutableListOf<Class<out BUnit>>()
 
-        val reinforcementStack = mutableListOf<Class<out BBonus>>()
+        val bonusStack = mutableListOf<Class<out BBonus>>()
     }
 }

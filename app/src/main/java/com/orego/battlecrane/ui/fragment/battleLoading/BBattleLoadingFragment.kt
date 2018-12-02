@@ -8,11 +8,9 @@ import com.orego.battlecrane.R
 import bcApi.manager.BGameManager
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
-import com.orego.battlecrane.ui.viewModel.BGameScenarioViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.orego.battlecrane.ui.viewModel.BFactoryViewModel
+import com.orego.battlecrane.ui.viewModel.BScenarioProviderViewModel
+import kotlinx.coroutines.*
 
 //TODO MAKE OVER BATTLE FRAGMENT!!!
 class BBattleLoadingFragment : BFragment() {
@@ -29,13 +27,31 @@ class BBattleLoadingFragment : BFragment() {
 
     inner class Presenter : BPresenter() {
 
+        private val scenarioProvider by lazy {
+            ViewModelProviders
+                .of(this.activity)
+                .get(BScenarioProviderViewModel::class.java)
+                .supporter
+        }
+
+        private val factoryViewModel by lazy {
+            ViewModelProviders
+                .of(this.activity)
+                .get(BFactoryViewModel::class.java)
+        }
+
         fun start() =
             GlobalScope.launch(Dispatchers.Main) {
-                val scenario = ViewModelProviders
-                    .of(this@BBattleLoadingFragment.activity!!)
-                    .get(BGameScenarioViewModel::class.java)
-                    .scenario
-                this@Presenter.manager.gameManager = withContext(Dispatchers.IO) { BGameManager(scenario) }
+                val scenarioProvider = this@Presenter.scenarioProvider
+                val gameScenario = scenarioProvider.gameScenario
+                //Install game manager:
+                val gameManagerInstallationJob = async { BGameManager(gameScenario) }
+                //Install ui renders:
+                val uiRenderInstallationJob = async { this@Presenter.factoryViewModel.install(scenarioProvider)}
+                //Get results:
+                this@Presenter.manager.gameManager = gameManagerInstallationJob.await()
+                uiRenderInstallationJob.await()
+                //Game is ready:
                 this@Presenter.replaceFragment(BBattleFragment::class.java)
             }
     }

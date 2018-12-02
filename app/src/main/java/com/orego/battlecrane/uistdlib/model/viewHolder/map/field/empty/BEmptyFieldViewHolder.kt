@@ -1,22 +1,22 @@
-package com.orego.battlecrane.uistdlib.model.map.field.destroyed
+package com.orego.battlecrane.uistdlib.model.viewHolder.map.field.empty
 
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import bcApi.unit.BUnit
-import bcApi.unit.field.destroyed.BDestroyedField
+import bcApi.unit.field.empty.BEmptyField
 import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.fragment.battle.render.map.BBattleMapRender
-import com.orego.battlecrane.ui.model.map.BUnitViewHolder
+import com.orego.battlecrane.ui.model.viewHolder.map.BUnitViewHolder
 import com.orego.battlecrane.ui.util.setImageById
 
-class BDestroyedFieldViewHolder(unit: BDestroyedField, measuredCellSide: Int, context: Context) :
+class BEmptyFieldViewHolder(unit: BEmptyField, measuredCellSide: Int, context: Context) :
     BUnitViewHolder(unit) {
 
     companion object {
 
-        private const val EMPTY_FIELD_IMAGE_ID = R.drawable.ic_action_name_2
+        private const val EMPTY_FIELD_IMAGE_ID = R.drawable.ic_action_name
     }
 
     override val displayedView: View
@@ -31,6 +31,6 @@ class BDestroyedFieldViewHolder(unit: BDestroyedField, measuredCellSide: Int, co
     class Builder : BBattleMapRender.ViewHolderBuilder {
 
         override fun build(unit: BUnit, measuredCellSide: Int, context: Context) =
-            BDestroyedFieldViewHolder(unit as BDestroyedField, measuredCellSide, context)
+            BEmptyFieldViewHolder(unit as BEmptyField, measuredCellSide, context)
     }
 }

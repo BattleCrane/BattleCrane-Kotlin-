@@ -31,21 +31,26 @@ abstract class BRender<K, V> {
 
     class ViewHolderFactory<K, V> {
 
-        private val builderMap = mutableMapOf<Class<out K>, ViewHolderBuilder<K, V>>()
+        //TODO: MAKE BY CANONICAL NAME:
+        private val builderMap = mutableMapOf<String, ViewHolderBuilder<K, V>>()
 
-        fun addViewHolderBuilder(type: Class<out K>, builder: ViewHolderBuilder<K, V>) {
+        fun addViewHolderBuilder(type: Class<out ViewHolderBuilder<K, V>>, builder: ViewHolderBuilder<K, V>) {
             val builderMap = this.builderMap
             if (!builderMap.containsKey(type)) {
                 builderMap[type] = builder
             } else {
                 throw IllegalStateException("The type is added")
-            }
+            }g
         }
 
-        fun build(unit: K, measuredCellSide: Int, context: Context, unitClazz: Class<out K>): V {
-            val builder = this.builderMap[unitClazz]
+        fun build(
+            unit: K, measuredCellSize: Int,
+            context: Context,
+            builderClazz: Class<out ViewHolderBuilder<K, V>>
+        ): V {
+            val builder = this.builderMap[builderClazz]
             if (builder != null) {
-                return builder.build(unit, measuredCellSide, context)
+                return builder.build(unit, measuredCellSize, context)
             } else {
                 throw IllegalStateException("Not supported type!")
             }

@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.fragment.battle.render.map.BBattleMapRender
-import com.orego.battlecrane.ui.fragment.battle.render.tool.BBuildToolRender
-import com.orego.battlecrane.ui.fragment.battle.render.tool.BReinforcementToolRender
-import com.orego.battlecrane.ui.fragment.battle.render.tool.BTrainToolRender
+import com.orego.battlecrane.ui.fragment.battle.render.tool.unit.implementations.BBuildToolRender
+import com.orego.battlecrane.ui.fragment.battle.render.tool.bonus.BBonusToolRender
+import com.orego.battlecrane.ui.fragment.battle.render.tool.unit.implementations.BTrainToolRender
 import com.orego.battlecrane.ui.util.onMeasured
 import com.orego.battlecrane.ui.viewModel.BFactoryViewModel
 import kotlinx.android.synthetic.main.fragment_battle.*
@@ -50,27 +50,15 @@ class BBattleFragment : BFragment() {
         }
 
         private val buildToolRender by lazy {
-            BBuildToolRender(
-                this.gameManager.playerManager,
-                this@BBattleFragment.fragment_battle_build_tools,
-                this.context
-            )
+            BBuildToolRender(this.gameManager.playerManager)
         }
 
         private val trainToolRender by lazy {
-            BTrainToolRender(
-                this.gameManager.playerManager,
-                this@BBattleFragment.fragment_battle_train_tools,
-                this.context
-            )
+            BTrainToolRender(this.gameManager.playerManager)
         }
 
         private val reinforcesToolRender by lazy {
-            BReinforcementToolRender(
-                this.gameManager.playerManager,
-                this@BBattleFragment.fragment_battle_reinforcements_tools,
-                this.context
-            )
+            BBonusToolRender(this.gameManager.playerManager)
         }
 
         fun prepareMap(constraintLayout: ConstraintLayout) {
@@ -86,17 +74,31 @@ class BBattleFragment : BFragment() {
         fun prepareBuildTools(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
                 this.buildToolRender.install(
-
+                    this@BBattleFragment.fragment_battle_build_tools,
+                    this.factoryViewModel.buildToolFactory,
+                    this.context
                 )
             }
         }
 
         fun prepareTrainTools(constraintLayout: ConstraintLayout) {
-            constraintLayout.onMeasured { this.trainToolRender.draw() }
+            constraintLayout.onMeasured {
+                this.trainToolRender.install(
+                    this@BBattleFragment.fragment_battle_train_tools,
+                    this.factoryViewModel.trainToolFactory,
+                    this.context
+                )
+            }
         }
 
         fun prepareReinforcementTools(constraintLayout: ConstraintLayout) {
-            constraintLayout.onMeasured { this.reinforcesToolRender.draw() }
+            constraintLayout.onMeasured {
+                this.reinforcesToolRender.install(
+                    this@BBattleFragment.fragment_battle_reinforcements_tools,
+                    this.factoryViewModel.bonusToolFactory,
+                    this.context
+                )
+            }
         }
     }
 }

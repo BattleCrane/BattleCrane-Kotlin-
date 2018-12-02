@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model
+package com.orego.battlecrane.ui.model.viewHolder
 
 import android.view.View
 

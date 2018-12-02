@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model.tool
+package com.orego.battlecrane.ui.model.viewHolder.tool
 
 import android.content.Context
 import android.view.View
@@ -6,11 +6,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import bcApi.manager.mapManager.cell.BCell
-import com.orego.battlecrane.ui.model.BViewHolder
+import com.orego.battlecrane.ui.model.viewHolder.BViewHolder
 import com.orego.battlecrane.ui.util.setImageById
 import org.intellij.lang.annotations.MagicConstant
 
-class BToolViewHolder(entity: BTool, measuredCellSize: Int, val cell: BCell, context: Context) :
+class BToolViewHolder(entity: BTool, measuredCellSize: Int, context: Context) :
     BViewHolder<BTool>(entity) {
 
     companion object {
@@ -18,6 +18,8 @@ class BToolViewHolder(entity: BTool, measuredCellSize: Int, val cell: BCell, con
         @MagicConstant
         private const val COEFFICIENT = 4
     }
+
+    lateinit var position : BCell
 
     override val displayedView: ConstraintLayout
 

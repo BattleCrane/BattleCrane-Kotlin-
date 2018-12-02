@@ -3,7 +3,7 @@ package com.orego.battlecrane.ui.fragment.battle.render.map
 import bcApi.manager.mapManager.BMapManager.MAP_SIZE
 import bcApi.unit.BUnit
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
-import com.orego.battlecrane.ui.model.map.BUnitViewHolder
+import com.orego.battlecrane.ui.model.viewHolder.map.BUnitViewHolder
 import com.orego.battlecrane.ui.util.addView
 import com.orego.battlecrane.ui.util.moveTo
 
@@ -15,6 +15,7 @@ class BBattleMapRender(private val units: Map<Int, BUnit>) : BRender<BUnit, BUni
         val constraintLayoutId = this.constraintLayout.id
         //Draw units:
         for (unit in this.units.values) {
+            //TODO MAKE THIS BY STRING:
             val unitViewHolder = this.factory.build(unit, measuredCellSide, this.context, unit::class.java)
             this.constraintLayout.addView(unitViewHolder)
             this.temporaryViewHolderList.add(unitViewHolder)

@@ -1,13 +1,13 @@
 package bcApi.scenario.skirmish;
 
 import bcApi.manager.mapManager.BMapManager;
+import bcApi.scenario.BGameScenario;
 import bcApi.unit.BUnit;
 import bcApi.unit.field.empty.BEmptyField;
-import bcApi.scenario.BGameScenario;
 
 import static bcApi.manager.mapManager.BMapManager.MAP_SIZE;
 
-public final class BSkirmishScenario implements BGameScenario {
+public final class BStandardSkirmishScenario implements BGameScenario {
 
     @Override
     public final void initMap(final BMapManager.BMapHolder mapHolder) {

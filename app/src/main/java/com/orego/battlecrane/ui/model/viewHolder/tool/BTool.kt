@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model.tool
+package com.orego.battlecrane.ui.model.viewHolder.tool
 
 data class BTool(
     val name: String,
