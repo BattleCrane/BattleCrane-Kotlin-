@@ -7,10 +7,5 @@ import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.field.BFieldViewH
 
 object BUnitViewHolderFactory {
 
-    fun build(unit: BUnit, measuredCellSide: Int, context: Context): BUnitViewHolder {
-        return when (unit) {
-            is BField -> BFieldViewHolderFactory.build(unit, measuredCellSide, context)
-            else -> throw IllegalStateException("Invalid entity!")
-        }
-    }
+
 }

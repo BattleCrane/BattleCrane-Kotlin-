@@ -4,14 +4,18 @@ import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.bcApi.manager.mapManager.BMapManager.MAP_SIZE
 import com.orego.battlecrane.bcApi.unit.BUnit
+import com.orego.battlecrane.bcApi.unit.field.BField
 import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.BUnitViewHolder
 import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.BUnitViewHolderFactory
+import com.orego.battlecrane.ui.fragment.battle.map.viewHolder.field.BFieldViewHolderFactory
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.util.addView
 import com.orego.battlecrane.ui.util.moveTo
 
 class BBattleMapRender(private val units: Map<Int, BUnit>, constraintLayout: ConstraintLayout, context: Context) :
     BRender<BUnitViewHolder>(constraintLayout, context) {
+
+    private val factory = Factory()
 
     override fun draw() {
         //Map relation is 1:1:
@@ -38,5 +42,26 @@ class BBattleMapRender(private val units: Map<Int, BUnit>, constraintLayout: Con
         }
         this.constraintSet.applyTo(this.constraintLayout)
         this.temporaryViewHolderList.clear()
+    }
+
+    fun addRaceBuilder(raceBuilder: RaceBuilder) {
+
+    }
+
+    class RaceFactory {
+
+        private val raceBuilder = mutableMapOf<Class<BUnit>>()
+
+        fun build(unit: BUnit, measuredCellSide: Int, context: Context): BUnitViewHolder {
+            return when (unit) {
+                is BField -> BFieldViewHolderFactory.build(unit, measuredCellSide, context)
+                else -> throw IllegalStateException("Invalid entity!")
+            }
+        }
+    }
+
+    interface RaceBuilder {
+
+        fun build(unit: BUnit, measuredCellSide: Int, context: Context): BUnitViewHolder
     }
 }
