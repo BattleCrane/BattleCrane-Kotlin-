@@ -40,7 +40,7 @@ abstract class BRender<K, V> {
                 builderMap[type] = builder
             } else {
                 throw IllegalStateException("The type is added")
-            }g
+            }
         }
 
         fun build(
