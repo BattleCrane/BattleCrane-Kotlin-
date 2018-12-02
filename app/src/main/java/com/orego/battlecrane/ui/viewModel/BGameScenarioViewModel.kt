@@ -1,8 +1,8 @@
 package com.orego.battlecrane.ui.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.orego.battlecrane.bcApi.scenario.BGameScenario
-import com.orego.battlecrane.bcApi.scenario.skirmish.BSkirmishScenario
+import bcApi.scenario.BGameScenario
+import bcApi.scenario.skirmish.BSkirmishScenario
 
 class BGameScenarioViewModel : ViewModel() {
 

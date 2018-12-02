@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bcApi.manager.BGameManager
+import bcApi.manager.BGameManager
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
 import com.orego.battlecrane.ui.viewModel.BGameScenarioViewModel

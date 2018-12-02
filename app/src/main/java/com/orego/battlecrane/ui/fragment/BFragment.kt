@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.orego.battlecrane.core.BActivity
 import com.orego.battlecrane.core.BApplication
-import com.orego.battlecrane.bcApi.manager.BGameManager
+import bcApi.manager.BGameManager
 import com.orego.battlecrane.repository.manager.BRepositoryManager
 
 /**
