@@ -4,9 +4,9 @@ import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import bcApi.race.human.building.BHumanBarracks
-import bcApi.unit.BUnit
-import bcApi.unit.field.destroyed.BDestroyedField
+import com.orego.battlecrane.bcApi.race.human.building.BHumanBarracks
+import com.orego.battlecrane.bcApi.unit.BUnit
+import com.orego.battlecrane.bcApi.unit.field.destroyed.BDestroyedField
 import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.model.viewHolder.map.BUnitViewHolder

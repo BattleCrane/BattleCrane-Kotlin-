@@ -1,7 +1,7 @@
 package com.orego.battlecrane.ui.fragment.battle.render.tool.bonus
 
-import bcApi.bonus.BBonus
-import bcApi.manager.playerManager.BPlayerManager
+import com.orego.battlecrane.bcApi.bonus.BBonus
+import com.orego.battlecrane.bcApi.manager.playerManager.BPlayerManager
 import com.orego.battlecrane.ui.fragment.battle.render.tool.BToolRender
 
 class BBonusToolRender(private val playerManager: BPlayerManager) : BToolRender<BBonus>(COLUMN_COUNT, ROW_COUNT) {

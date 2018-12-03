@@ -1,6 +1,6 @@
 package com.orego.battlecrane.ui.fragment.battle.render.tool
 
-import bcApi.manager.mapManager.cell.BCell
+import com.orego.battlecrane.bcApi.manager.mapManager.cell.BCell
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.model.viewHolder.tool.BToolViewHolder
 import com.orego.battlecrane.ui.util.addView

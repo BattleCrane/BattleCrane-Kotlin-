@@ -1,7 +1,7 @@
 package com.orego.battlecrane.ui.fragment.battle.render.map
 
-import bcApi.manager.mapManager.BMapManager.MAP_SIZE
-import bcApi.unit.BUnit
+import com.orego.battlecrane.bcApi.manager.mapManager.BMapManager.MAP_SIZE
+import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.model.viewHolder.map.BUnitViewHolder
 import com.orego.battlecrane.ui.util.addView

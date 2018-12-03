@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import bcApi.manager.mapManager.cell.BCell
+import com.orego.battlecrane.bcApi.manager.mapManager.cell.BCell
 import com.orego.battlecrane.ui.model.viewHolder.BViewHolder
 import com.orego.battlecrane.ui.util.setImageById
 import org.intellij.lang.annotations.MagicConstant

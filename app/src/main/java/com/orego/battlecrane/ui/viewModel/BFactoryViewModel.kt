@@ -1,8 +1,8 @@
 package com.orego.battlecrane.ui.viewModel
 
 import androidx.lifecycle.ViewModel
-import bcApi.bonus.BBonus
-import bcApi.unit.BUnit
+import com.orego.battlecrane.bcApi.bonus.BBonus
+import com.orego.battlecrane.bcApi.unit.BUnit
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.model.scenarioProvider.BScenarioProvider
 import com.orego.battlecrane.ui.model.viewHolder.map.BUnitViewHolder
