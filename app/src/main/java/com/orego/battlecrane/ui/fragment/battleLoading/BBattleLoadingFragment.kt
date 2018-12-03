@@ -27,11 +27,10 @@ class BBattleLoadingFragment : BFragment() {
 
     inner class Presenter : BPresenter() {
 
-        private val scenarioProvider by lazy {
+        private val scenarioProviderViewModel by lazy {
             ViewModelProviders
                 .of(this.activity)
                 .get(BScenarioProviderViewModel::class.java)
-                .supporter
         }
 
         private val factoryViewModel by lazy {
@@ -42,7 +41,7 @@ class BBattleLoadingFragment : BFragment() {
 
         fun start() =
             GlobalScope.launch(Dispatchers.Main) {
-                val scenarioProvider = this@Presenter.scenarioProvider
+                val scenarioProvider = this@Presenter.scenarioProviderViewModel.scenarioProvider
                 val gameScenario = scenarioProvider.gameScenario
                 //Install game manager:
                 val gameManagerInstallationJob = async { BGameManager(gameScenario) }

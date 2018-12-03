@@ -31,10 +31,10 @@ abstract class BRender<K, V> {
 
     class ViewHolderFactory<K, V> {
 
-        //TODO: MAKE BY CANONICAL NAME:
         private val builderMap = mutableMapOf<String, ViewHolderBuilder<K, V>>()
 
-        fun addViewHolderBuilder(type: Class<out ViewHolderBuilder<K, V>>, builder: ViewHolderBuilder<K, V>) {
+        fun addBuilder(builder: ViewHolderBuilder<K, V>) {
+            val type = builder.type
             val builderMap = this.builderMap
             if (!builderMap.containsKey(type)) {
                 builderMap[type] = builder
@@ -43,12 +43,8 @@ abstract class BRender<K, V> {
             }
         }
 
-        fun build(
-            unit: K, measuredCellSize: Int,
-            context: Context,
-            builderClazz: Class<out ViewHolderBuilder<K, V>>
-        ): V {
-            val builder = this.builderMap[builderClazz]
+        fun build(unit: K, measuredCellSize: Int, context: Context, type: String): V {
+            val builder = this.builderMap[type]
             if (builder != null) {
                 return builder.build(unit, measuredCellSize, context)
             } else {
@@ -58,6 +54,8 @@ abstract class BRender<K, V> {
     }
 
     interface ViewHolderBuilder<K, V> {
+
+        val type: String
 
         fun build(unit: K, measuredCellSide: Int, context: Context): V
     }

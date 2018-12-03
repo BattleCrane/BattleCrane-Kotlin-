@@ -18,8 +18,10 @@ class BFactoryViewModel : ViewModel() {
 
     val bonusToolFactory = BRender.ViewHolderFactory<Class<out BBonus>, BToolViewHolder>()
 
-    fun install(scenarioProvider: BScenarioProvider) {
-        scenarioProvider.unitBuilders.forEach { this.mapFactory.addViewHolderBuilder(it::class.java, it) }
-        scenarioProvider.bonusToolsBuilders
+    fun install(provider: BScenarioProvider) {
+        provider.unitBuilders.forEach { this.mapFactory.addBuilder(it) }
+        provider.buildingToolsBuilders.forEach { this.buildToolFactory.addBuilder(it) }
+        provider.trainToolsBuilders.forEach { this.trainToolFactory.addBuilder(it) }
+        provider.bonusToolsBuilders.forEach { this.buildToolFactory.addBuilder(it) }
     }
 }

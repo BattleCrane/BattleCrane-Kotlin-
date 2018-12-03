@@ -1,4 +1,4 @@
-package bcApi.race.human.buildings
+package bcApi.race.human.building
 
 import bcApi.race.human.BHumanRace
 

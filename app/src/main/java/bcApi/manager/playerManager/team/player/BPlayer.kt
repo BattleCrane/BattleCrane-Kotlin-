@@ -1,7 +1,6 @@
 package bcApi.manager.playerManager.team.player
 
 import bcApi.bonus.BBonus
-import bcApi.race.human.buildings.BHumanBarracks
 import bcApi.unit.BUnit
 
 open class BPlayer {

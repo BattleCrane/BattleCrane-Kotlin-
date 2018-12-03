@@ -15,8 +15,8 @@ class BBattleMapRender(private val units: Map<Int, BUnit>) : BRender<BUnit, BUni
         val constraintLayoutId = this.constraintLayout.id
         //Draw units:
         for (unit in this.units.values) {
-            //TODO MAKE THIS BY STRING:
-            val unitViewHolder = this.factory.build(unit, measuredCellSide, this.context, unit::class.java)
+            val type = unit::class.java.name
+            val unitViewHolder = this.factory.build(unit, measuredCellSide, this.context, type)
             this.constraintLayout.addView(unitViewHolder)
             this.temporaryViewHolderList.add(unitViewHolder)
         }
