@@ -1,7 +1,7 @@
 package com.orego.battlecrane.uistd.scenarioProvider
 
 import com.orego.battlecrane.bcApi.scenario.skirmish.BStandardSkirmishScenario
-import com.orego.battlecrane.bcApi.unit.BUnit
+import com.orego.battlecrane.bcApi.model.unit.BUnit
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.model.scenarioProvider.BScenarioProvider
 import com.orego.battlecrane.ui.model.viewHolder.map.BUnitViewHolder
@@ -26,9 +26,11 @@ class BStandardSkirmishScenarioProvider : BScenarioProvider(BStandardSkirmishSce
         this.unitBuilders.addAll(BHumanViewHolderBuilders.units)
     }
 
-    override val buildingToolsBuilders: Set<BRender.ViewHolderBuilder<Class<out BUnit>, BToolViewHolder>> = setOf(
+    override val buildingToolsBuilders = mutableSetOf<BRender.ViewHolderBuilder<Class<out BUnit>, BToolViewHolder>>()
 
-    )
+    init {
+        this.buildingToolsBuilders.addAll(BHumanViewHolderBuilders.buildingTools)
+    }
 
     override val trainToolsBuilders: Set<BRender.ViewHolderBuilder<Class<out BUnit>, BToolViewHolder>> = setOf(
 

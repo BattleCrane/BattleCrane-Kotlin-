@@ -1,16 +1,13 @@
 package com.orego.battlecrane.uistd.viewHolder.map.field.destroyed
 
 import android.content.Context
-import android.view.View
 import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bcApi.unit.BUnit
-import com.orego.battlecrane.bcApi.unit.field.destroyed.BDestroyedField
+import com.orego.battlecrane.bcApi.model.unit.BUnit
+import com.orego.battlecrane.bcApi.model.unit.field.destroyed.BDestroyedField
 import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.model.viewHolder.map.BUnitViewHolder
 import com.orego.battlecrane.ui.util.asSimple
-import com.orego.battlecrane.ui.util.setImageById
 
 class BDestroyedFieldViewHolder(unit: BDestroyedField, measuredCellSize: Int, context: Context) :
     BUnitViewHolder(unit) {
@@ -26,7 +23,7 @@ class BDestroyedFieldViewHolder(unit: BDestroyedField, measuredCellSize: Int, co
 
         override val type: String = BDestroyedField::class.java.name
 
-        override fun build(unit: BUnit, measuredCellSide: Int, context: Context) =
-            BDestroyedFieldViewHolder(unit as BDestroyedField, measuredCellSide, context)
+        override fun build(obj: BUnit, measuredCellSide: Int, context: Context): BUnitViewHolder =
+            BDestroyedFieldViewHolder(obj as BDestroyedField, measuredCellSide, context)
     }
 }

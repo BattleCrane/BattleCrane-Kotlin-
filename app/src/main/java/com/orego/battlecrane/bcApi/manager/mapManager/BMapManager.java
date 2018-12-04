@@ -1,8 +1,9 @@
 package com.orego.battlecrane.bcApi.manager.mapManager;
 
+import com.orego.battlecrane.bcApi.manager.BGameContext;
 import com.orego.battlecrane.bcApi.manager.mapManager.cell.BCell;
 import com.orego.battlecrane.bcApi.scenario.BGameScenario;
-import com.orego.battlecrane.bcApi.unit.BUnit;
+import com.orego.battlecrane.bcApi.model.unit.BUnit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,14 +45,14 @@ public final class BMapManager {
         //TODO: Unbind.
     }
 
-    public BMapManager(final BGameScenario initializer) {
+    public BMapManager(final BGameScenario initializer, final BGameContext gameContext) {
         for (int i = 0; i < MAP_SIZE; i++) {
             for (int j = 0; j < MAP_SIZE; j++) {
                 final BCell cell = new BCell(i, j);
                 this.cells[i][j] = cell;
             }
         }
-        initializer.initMap(this.mapHolder);
+        initializer.initMap(this.mapHolder, gameContext);
     }
 
     public final boolean inBounds(final int x, final int y) {

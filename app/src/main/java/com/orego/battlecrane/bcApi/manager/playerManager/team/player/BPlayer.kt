@@ -1,22 +1,24 @@
 package com.orego.battlecrane.bcApi.manager.playerManager.team.player
 
-import com.orego.battlecrane.bcApi.bonus.BBonus
-import com.orego.battlecrane.bcApi.unit.BUnit
+import com.orego.battlecrane.bcApi.model.tools.BTools
 
-open class BPlayer {
+class BPlayer {
 
-    val toolStack = Tools()
+    lateinit var tools: BTools
 
-    val alies = mutableSetOf<BPlayer>()
+    private val allies = mutableSetOf<BPlayer>()
 
-    val enemies = mutableSetOf<BPlayer>()
+    private val enemies = mutableSetOf<BPlayer>()
 
-    class Tools {
+    fun addEnemy(player: BPlayer) = this.enemies.add(player)
 
-        val buildingStack = mutableListOf<Class<out BUnit>>()
+    fun removeEnemy(player: BPlayer) = this.enemies.remove(player)
 
-        val armyStack = mutableListOf<Class<out BUnit>>()
+    fun isEnemy(player: BPlayer) = this.enemies.contains(player)
 
-        val bonusStack = mutableListOf<Class<out BBonus>>()
-    }
+    fun addAlly(player: BPlayer) = this.allies.add(player)
+
+    fun removeAlly(player: BPlayer) = this.allies.remove(player)
+
+    fun isAlly(player: BPlayer) = this.allies.contains(player)
 }

@@ -3,16 +3,12 @@ package com.orego.battlecrane.uistd.viewHolder.map.race.human.building
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bcApi.race.human.building.BHumanBarracks
-import com.orego.battlecrane.bcApi.unit.BUnit
-import com.orego.battlecrane.bcApi.unit.field.destroyed.BDestroyedField
+import com.orego.battlecrane.bcApi.race.human.building.implementation.BHumanBarracks
+import com.orego.battlecrane.bcApi.model.unit.BUnit
 import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.fragment.battle.render.BRender
 import com.orego.battlecrane.ui.model.viewHolder.map.BUnitViewHolder
 import com.orego.battlecrane.ui.util.asSimple
-import com.orego.battlecrane.ui.util.setImageById
-import com.orego.battlecrane.uistd.viewHolder.map.field.destroyed.BDestroyedFieldViewHolder
 
 class BHumanBarracksViewHolder(unit: BHumanBarracks, measuredCellSide: Int, context: Context) : BUnitViewHolder(unit) {
 
@@ -32,7 +28,7 @@ class BHumanBarracksViewHolder(unit: BHumanBarracks, measuredCellSide: Int, cont
 
         override val type: String = BHumanBarracks::class.java.name
 
-        override fun build(unit: BUnit, measuredCellSide: Int, context: Context) =
-            BHumanBarracksViewHolder(unit as BHumanBarracks, measuredCellSide, context)
+        override fun build(obj: BUnit, measuredCellSide: Int, context: Context): BUnitViewHolder =
+            BHumanBarracksViewHolder(obj as BHumanBarracks, measuredCellSide, context)
     }
 }

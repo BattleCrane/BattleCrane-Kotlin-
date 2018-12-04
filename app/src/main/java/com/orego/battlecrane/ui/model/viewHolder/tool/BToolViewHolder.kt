@@ -10,7 +10,7 @@ import com.orego.battlecrane.ui.model.viewHolder.BViewHolder
 import com.orego.battlecrane.ui.util.setImageById
 import org.intellij.lang.annotations.MagicConstant
 
-class BToolViewHolder(entity: BTool, measuredCellSize: Int, context: Context) :
+open class BToolViewHolder(entity: BTool, measuredCellSize: Int, context: Context) :
     BViewHolder<BTool>(entity) {
 
     companion object {
@@ -21,7 +21,7 @@ class BToolViewHolder(entity: BTool, measuredCellSize: Int, context: Context) :
 
     lateinit var position : BCell
 
-    override val displayedView: ConstraintLayout
+    final override val displayedView: ConstraintLayout
 
     init {
         val toolImage = ImageView(context)

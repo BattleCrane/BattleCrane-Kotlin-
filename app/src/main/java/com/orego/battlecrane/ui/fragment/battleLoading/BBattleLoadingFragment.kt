@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bcApi.manager.BGameManager
+import com.orego.battlecrane.bcApi.manager.BGameContext
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
 import com.orego.battlecrane.ui.viewModel.BFactoryViewModel
@@ -44,11 +44,11 @@ class BBattleLoadingFragment : BFragment() {
                 val scenarioProvider = this@Presenter.scenarioProviderViewModel.scenarioProvider
                 val gameScenario = scenarioProvider.gameScenario
                 //Install game manager:
-                val gameManagerInstallationJob = async { BGameManager(gameScenario) }
+                val gameManagerInstallationJob = async { BGameContext(gameScenario) }
                 //Install ui renders:
                 val uiRenderInstallationJob = async { this@Presenter.factoryViewModel.install(scenarioProvider)}
                 //Get results:
-                this@Presenter.manager.gameManager = gameManagerInstallationJob.await()
+                this@Presenter.manager.gameContext = gameManagerInstallationJob.await()
                 uiRenderInstallationJob.await()
                 //Game is ready:
                 this@Presenter.replaceFragment(BBattleFragment::class.java)

@@ -43,12 +43,16 @@ abstract class BRender<K, V> {
             }
         }
 
+        var counter = 0
+
         fun build(unit: K, measuredCellSize: Int, context: Context, type: String): V {
             val builder = this.builderMap[type]
             if (builder != null) {
+                println("COUNTER ${counter++}")
                 return builder.build(unit, measuredCellSize, context)
             } else {
-                throw IllegalStateException("Not supported type!")
+                println("!!!! $type")
+                throw IllegalStateException(">>>>>> Not supported $type type!")
             }
         }
     }
@@ -57,6 +61,6 @@ abstract class BRender<K, V> {
 
         val type: String
 
-        fun build(unit: K, measuredCellSide: Int, context: Context): V
+        fun build(obj: K, measuredCellSide: Int, context: Context): V
     }
 }

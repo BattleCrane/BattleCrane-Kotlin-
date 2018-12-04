@@ -34,7 +34,7 @@ class BBattleFragment : BFragment() {
     inner class Presenter : BFragment.BPresenter() {
 
         private val gameManager by lazy {
-            this.manager.gameManager
+            this.manager.gameContext
         }
 
         private val context by lazy {

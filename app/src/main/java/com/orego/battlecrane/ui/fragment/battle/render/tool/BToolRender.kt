@@ -20,7 +20,7 @@ abstract class BToolRender<T>(private val columnCount: Int, private val rowCount
         for (x in 0 until this.columnCount) {
             for (y in 0 until this.rowCount) {
                 val unitTool: Class<out T> = stack[index++]
-                val toolName = unitTool::class.java.name
+                val toolName = unitTool.name
                 val toolViewHolder = this.factory.build(unitTool, measuredCellSize, this.context, toolName)
                 toolViewHolder.position = BCell(x, y)
                 this.constraintLayout.addView(toolViewHolder)
