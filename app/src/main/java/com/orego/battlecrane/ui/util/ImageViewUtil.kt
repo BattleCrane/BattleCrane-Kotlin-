@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.uistd.viewHolder.map.race.human.building.BHumanBarracksViewHolder
 
 fun ImageView.setImageById(context: Context, id: Int) {
     this.setImageDrawable(context.getDrawable(id))

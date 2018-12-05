@@ -2,9 +2,9 @@ package com.orego.battlecrane.ui.util
 
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import com.orego.battlecrane.ui.model.viewHolder.BViewHolder
+import com.orego.battlecrane.ui.model.api.view.BView
 
-fun ConstraintLayout.addView(holder: BViewHolder<*>) {
+fun ConstraintLayout.addView(holder: BView<*>) {
     this.addView(holder.displayedView)
 }
 

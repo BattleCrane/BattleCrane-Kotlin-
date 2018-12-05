@@ -10,7 +10,7 @@ abstract class BRender<K, V> {
 
     protected lateinit var context: Context
 
-    protected lateinit var factory: ViewHolderFactory<K, V>
+    protected lateinit var factory: ViewFactory<K, V>
 
     protected lateinit var constraintLayout: ConstraintLayout
 
@@ -20,7 +20,7 @@ abstract class BRender<K, V> {
 
     abstract fun draw()
 
-    fun install(constraintLayout: ConstraintLayout, factory: ViewHolderFactory<K, V>, context: Context) {
+    fun install(constraintLayout: ConstraintLayout, factory: ViewFactory<K, V>, context: Context) {
         if (!this.isInstalled) {
             this.factory = factory
             this.constraintLayout = constraintLayout
@@ -29,11 +29,11 @@ abstract class BRender<K, V> {
         this.draw()
     }
 
-    class ViewHolderFactory<K, V> {
+    open class ViewFactory<K, V> {
 
-        private val builderMap = mutableMapOf<String, ViewHolderBuilder<K, V>>()
+        private val builderMap = mutableMapOf<String, ViewBuilder<K, V>>()
 
-        fun addBuilder(builder: ViewHolderBuilder<K, V>) {
+        fun addBuilder(builder: ViewBuilder<K, V>) {
             val type = builder.type
             val builderMap = this.builderMap
             if (!builderMap.containsKey(type)) {
@@ -43,21 +43,21 @@ abstract class BRender<K, V> {
             }
         }
 
-        var counter = 0
-
         fun build(unit: K, measuredCellSize: Int, context: Context, type: String): V {
             val builder = this.builderMap[type]
-            if (builder != null) {
-                println("COUNTER ${counter++}")
-                return builder.build(unit, measuredCellSize, context)
+            return if (builder != null) {
+                builder.build(unit, measuredCellSize, context)
             } else {
-                println("!!!! $type")
-                throw IllegalStateException(">>>>>> Not supported $type type!")
+                this.buildByDefault(unit, measuredCellSize, context, type)
             }
+        }
+
+        open fun buildByDefault(unit: K, measuredCellSize: Int, context: Context, type: String) : V {
+            throw IllegalStateException(">>>>>> Not supported type!")
         }
     }
 
-    interface ViewHolderBuilder<K, V> {
+    interface ViewBuilder<K, V> {
 
         val type: String
 

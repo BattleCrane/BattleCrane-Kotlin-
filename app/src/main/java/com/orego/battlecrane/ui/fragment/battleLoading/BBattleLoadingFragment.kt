@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bcApi.manager.BGameContext
+import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
-import com.orego.battlecrane.ui.viewModel.BFactoryViewModel
-import com.orego.battlecrane.ui.viewModel.BScenarioProviderViewModel
+import com.orego.battlecrane.ui.viewModel.BViewFactoryViewModel
+import com.orego.battlecrane.ui.viewModel.BUiScenarioSupportViewModel
 import kotlinx.coroutines.*
 
 //TODO MAKE OVER BATTLE FRAGMENT!!!
@@ -30,26 +30,26 @@ class BBattleLoadingFragment : BFragment() {
         private val scenarioProviderViewModel by lazy {
             ViewModelProviders
                 .of(this.activity)
-                .get(BScenarioProviderViewModel::class.java)
+                .get(BUiScenarioSupportViewModel::class.java)
         }
 
         private val factoryViewModel by lazy {
             ViewModelProviders
                 .of(this.activity)
-                .get(BFactoryViewModel::class.java)
+                .get(BViewFactoryViewModel::class.java)
         }
 
         fun start() =
             GlobalScope.launch(Dispatchers.Main) {
-                val scenarioProvider = this@Presenter.scenarioProviderViewModel.scenarioProvider
-                val gameScenario = scenarioProvider.gameScenario
+                val support = this@Presenter.scenarioProviderViewModel.uiScenarioSupport
+                val gameScenario = support.gameScenario
                 //Install game manager:
-                val gameManagerInstallationJob = async { BGameContext(gameScenario) }
+                val gameInstallation = async { BGameContext(gameScenario) }
                 //Install ui renders:
-                val uiRenderInstallationJob = async { this@Presenter.factoryViewModel.install(scenarioProvider)}
+                val uiRenderInstallation = async { this@Presenter.factoryViewModel.install(support)}
                 //Get results:
-                this@Presenter.manager.gameContext = gameManagerInstallationJob.await()
-                uiRenderInstallationJob.await()
+                this@Presenter.manager.gameContext = gameInstallation.await()
+                uiRenderInstallation.await()
                 //Game is ready:
                 this@Presenter.replaceFragment(BBattleFragment::class.java)
             }

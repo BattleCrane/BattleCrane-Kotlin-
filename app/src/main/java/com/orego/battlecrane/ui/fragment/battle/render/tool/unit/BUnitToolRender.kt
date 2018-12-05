@@ -1,9 +1,8 @@
 package com.orego.battlecrane.ui.fragment.battle.render.tool.unit
 
-import com.orego.battlecrane.bcApi.model.unit.BUnit
 import com.orego.battlecrane.ui.fragment.battle.render.tool.BToolRender
 
-abstract class BUnitToolRender : BToolRender<BUnit>(COLUMN_COUNT, ROW_COUNT) {
+abstract class BUnitToolRender : BToolRender(COLUMN_COUNT, ROW_COUNT) {
 
     companion object {
 

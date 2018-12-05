@@ -1,6 +1,6 @@
 package com.orego.battlecrane.repository.manager
 
-import com.orego.battlecrane.bcApi.manager.BGameContext
+import com.orego.battlecrane.bc.api.manager.BGameContext
 
 class BRepositoryManager {
 

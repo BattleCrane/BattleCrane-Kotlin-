@@ -10,10 +10,9 @@ import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.fragment.battle.render.map.BBattleMapRender
 import com.orego.battlecrane.ui.fragment.battle.render.tool.unit.implementations.BBuildToolRender
-import com.orego.battlecrane.ui.fragment.battle.render.tool.bonus.BBonusToolRender
 import com.orego.battlecrane.ui.fragment.battle.render.tool.unit.implementations.BTrainToolRender
 import com.orego.battlecrane.ui.util.onMeasured
-import com.orego.battlecrane.ui.viewModel.BFactoryViewModel
+import com.orego.battlecrane.ui.viewModel.BViewFactoryViewModel
 import kotlinx.android.synthetic.main.fragment_battle.*
 
 class BBattleFragment : BFragment() {
@@ -28,45 +27,48 @@ class BBattleFragment : BFragment() {
         this.presenter.prepareMap(this.fragment_battle_map_constraint_layout)
         this.presenter.prepareBuildTools(this.fragment_battle_build_tools)
         this.presenter.prepareTrainTools(this.fragment_battle_train_tools)
-        this.presenter.prepareReinforcementTools(this.fragment_battle_reinforcements_tools)
+//        this.presenter.prepareBonusTools(this.fragment_battle_reinforcements_tools)
     }
 
     inner class Presenter : BFragment.BPresenter() {
 
-        private val gameManager by lazy {
+        private val gameContext by lazy {
             this.manager.gameContext
         }
 
-        private val context by lazy {
+        private val applicationContext by lazy {
             this@BBattleFragment.context!!
         }
 
-        private val factoryViewModel by lazy {
-            ViewModelProviders.of(this.activity).get(BFactoryViewModel::class.java)
+        private val viewFactoryViewModel by lazy {
+            ViewModelProviders
+                .of(this.activity)
+                .get(BViewFactoryViewModel::class.java)
         }
 
         private val mapRender by lazy {
-            BBattleMapRender(this.gameManager.mapManager.unitHeap)
+            BBattleMapRender(this.gameContext.mapManager.unitHeap)
         }
 
         private val buildToolRender by lazy {
-            BBuildToolRender(this.gameManager.playerManager)
+            BBuildToolRender(this.gameContext.playerManager)
         }
 
         private val trainToolRender by lazy {
-            BTrainToolRender(this.gameManager.playerManager)
+            BTrainToolRender(this.gameContext.playerManager)
         }
 
-        private val reinforcesToolRender by lazy {
-            BBonusToolRender(this.gameManager.playerManager)
-        }
+        //TODO: MAKE BONUS:
+//        private val bonusToolRender by lazy {
+//            BBonusToolRender(this.gameContext.playerManager)
+//        }
 
         fun prepareMap(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
                 this.mapRender.install(
                     this@BBattleFragment.fragment_battle_map_constraint_layout,
-                    this.factoryViewModel.mapFactory,
-                    this.context
+                    this.viewFactoryViewModel.mapFactory,
+                    this.applicationContext
                 )
             }
         }
@@ -75,8 +77,8 @@ class BBattleFragment : BFragment() {
             constraintLayout.onMeasured {
                 this.buildToolRender.install(
                     this@BBattleFragment.fragment_battle_build_tools,
-                    this.factoryViewModel.buildToolFactory,
-                    this.context
+                    this.viewFactoryViewModel.buildToolFactory,
+                    this.applicationContext
                 )
             }
         }
@@ -85,20 +87,21 @@ class BBattleFragment : BFragment() {
             constraintLayout.onMeasured {
                 this.trainToolRender.install(
                     this@BBattleFragment.fragment_battle_train_tools,
-                    this.factoryViewModel.trainToolFactory,
-                    this.context
+                    this.viewFactoryViewModel.trainToolFactory,
+                    this.applicationContext
                 )
             }
         }
 
-        fun prepareReinforcementTools(constraintLayout: ConstraintLayout) {
-            constraintLayout.onMeasured {
-                this.reinforcesToolRender.install(
-                    this@BBattleFragment.fragment_battle_reinforcements_tools,
-                    this.factoryViewModel.bonusToolFactory,
-                    this.context
-                )
-            }
-        }
+        //TODO: MAKE BONUSES!!!
+//        fun prepareBonusTools(constraintLayout: ConstraintLayout) {
+//            constraintLayout.onMeasured {
+//                this.bonusToolRender.install(
+//                    this@BBattleFragment.fragment_battle_reinforcements_tools,
+//                    this.viewFactoryViewModel.bonusToolFactory,
+//                    this.applicationContext
+//                )
+//            }
+//        }
     }
 }
