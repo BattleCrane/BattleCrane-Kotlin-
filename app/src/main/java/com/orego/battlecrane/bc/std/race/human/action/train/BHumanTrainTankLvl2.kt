@@ -17,7 +17,7 @@ class BHumanTrainTankLvl2(gameContext: BGameContext, owner : BPlayer) : BHumanAc
             val manager = this.gameContext.mapManager
             val unit = manager.getUnitByPosition(this.targetPosition)
             if (!this.owner!!.isEnemy(unit.owner!!)) {
-                return manager.mapHolder.bindUnitTo(tank, this.targetPosition)
+                return manager.createUnit(tank, this.targetPosition)
             }
         }
         return false

@@ -21,13 +21,31 @@ public final class BMapManager {
 
     private final BMapHolder mapHolder = new BMapHolder();
 
-    public final class BMapHolder {
-
-        //TODO: MAKE CREATE UNIT:
-
-        public final void bindUnitTo(final BUnit unit, final BCell positon) {
-            this.bindUnitTo(unit, positon.getX(), positon.getY());
+    public final boolean createUnit(final BUnit unit, final BCell pivot) {
+        final boolean isPlaced = unit.isPlaced(pivot);
+        if (isPlaced) {
+            //Attach unit on matrix:
+            this.mapHolder.bindUnitTo(unit, pivot.getX(), pivot.getY());
+            //Notify subscribers:
+            unit.getOnCreateObserver().values().forEach(it -> it.onCreate(unit));
         }
+        return isPlaced;
+    }
+
+
+    public final boolean inBounds(final int x, final int y) {
+        return x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE;
+    }
+
+    public final BUnit getUnitByPosition(final BCell position) {
+        return this.getUnitByPosition(position.getX(), position.getY());
+    }
+
+    public final BUnit getUnitByPosition(final int x, final int y) {
+        return this.cells[x][y].getAttachedUnit();
+    }
+
+    public final class BMapHolder {
 
         //TODO: Handling errors: cell was attached, index out bound etc:
         public final void bindUnitTo(final BUnit unit, final int x, final int y) {
@@ -46,15 +64,6 @@ public final class BMapManager {
             //Put in heap:
             final long unitId = unit.getUnitId();
             BMapManager.this.unitHeap.put(unitId, unit);
-
-            //TODO: SET TO ACTION:
-//            final boolean isPlaced = unit.isPlaced(pivot);
-//            if (isPlaced) {
-//
-//                //Notify subscribers:
-//                unit.getOnCreateObserver().values().forEach(it -> it.onCreate(unit));
-//            }
-//            return isPlaced;
         }
         //TODO: Unbind.
     }
@@ -69,27 +78,11 @@ public final class BMapManager {
         initializer.initMap(this.mapHolder, gameContext);
     }
 
-    public final boolean inBounds(final int x, final int y) {
-        return x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE;
-    }
-
-    public final BUnit getUnitByPosition(final BCell position) {
-        return this.getUnitByPosition(position.getX(), position.getY());
-    }
-
-    public final BUnit getUnitByPosition(final int x, final int y) {
-        return this.cells[x][y].getAttachedUnit();
-    }
-
     /**
      * Boilerplate. TODO:Go to Lombok
      */
 
     public final Map<Long, BUnit> getUnitHeap() {
         return this.unitHeap;
-    }
-
-    public final BMapHolder getMapHolder() {
-        return this.mapHolder;
     }
 }

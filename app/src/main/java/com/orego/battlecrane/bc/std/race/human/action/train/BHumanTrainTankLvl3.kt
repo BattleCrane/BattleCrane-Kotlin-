@@ -15,7 +15,7 @@ class BHumanTrainTankLvl3(gameContext: BGameContext, owner: BPlayer) : BHumanAct
         if (this.targetPosition != null && this.owner != null) {
             val tank = BHumanTank(this.gameContext, this.owner!!)
             val manager = this.gameContext.mapManager
-            return manager.mapHolder.bindUnitTo(tank, this.targetPosition)
+            return manager.createUnit(tank, this.targetPosition)
         }
         return false
     }

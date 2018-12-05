@@ -14,8 +14,8 @@ class BHumanBuildGenerator(gameContext: BGameContext, owner : BPlayer) : BHumanA
     override fun performAction(): Boolean {
         if (this.targetPosition != null && this.owner != null) {
             val generator = BHumanGenerator(this.gameContext, this.owner!!)
-            val mapHolder = this.gameContext.mapManager.mapHolder
-            return mapHolder.bindUnitTo(generator, this.targetPosition)
+            val manager = this.gameContext.mapManager
+            return manager.createUnit(generator, this.targetPosition)
         }
         return false
     }

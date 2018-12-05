@@ -18,7 +18,7 @@ class BHumanTrainMarineLvl2(gameContext: BGameContext, owner : BPlayer) : BHuman
             val unit = manager.getUnitByPosition(this.targetPosition)
             val isNotEnemy = !this.owner!!.isEnemy(unit.owner!!)
             if (isNotEnemy) {
-                return manager.mapHolder.bindUnitTo(marine, this.targetPosition)
+                return manager.createUnit(marine, this.targetPosition)
             }
         }
         return false

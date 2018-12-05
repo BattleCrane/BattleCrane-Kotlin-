@@ -15,7 +15,7 @@ class BHumanTrainMarineLvl3(gameContext: BGameContext, owner : BPlayer) : BHuman
         if (this.targetPosition != null && this.owner != null) {
             val marine = BHumanMarine(this.gameContext, this.owner!!)
             val manager = this.gameContext.mapManager
-            return manager.mapHolder.bindUnitTo(marine, this.targetPosition)
+            return manager.createUnit(marine, this.targetPosition)
         }
         return false
     }

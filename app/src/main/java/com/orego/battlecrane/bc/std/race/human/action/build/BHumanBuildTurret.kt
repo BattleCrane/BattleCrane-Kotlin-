@@ -14,8 +14,8 @@ class BHumanBuildTurret(gameContext: BGameContext, owner : BPlayer) : BHumanActi
     override fun performAction(): Boolean {
         if (this.targetPosition != null && this.owner != null) {
             val turret = BHumanTurret(this.gameContext, this.owner!!)
-            val mapHolder = this.gameContext.mapManager.mapHolder
-            return mapHolder.bindUnitTo(turret, this.targetPosition)
+            val manager = this.gameContext.mapManager
+            return manager.createUnit(turret, this.targetPosition)
         }
         return false
     }

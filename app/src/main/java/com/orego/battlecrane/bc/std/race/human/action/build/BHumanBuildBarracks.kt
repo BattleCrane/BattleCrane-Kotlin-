@@ -14,8 +14,8 @@ class BHumanBuildBarracks(gameContext: BGameContext, owner: BPlayer) : BHumanAct
     override fun performAction(): Boolean {
         if (this.targetPosition != null && this.owner != null) {
             val barracks = BHumanBarracks(this.gameContext, this.owner!!)
-            val mapHolder = this.gameContext.mapManager.mapHolder
-            return mapHolder.bindUnitTo(barracks, this.targetPosition)
+            val manager = this.gameContext.mapManager
+            return manager.createUnit(barracks, this.targetPosition)
         }
         return false
     }
