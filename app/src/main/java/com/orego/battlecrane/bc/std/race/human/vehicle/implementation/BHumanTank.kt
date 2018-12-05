@@ -1,11 +1,17 @@
 package com.orego.battlecrane.bc.std.race.human.vehicle.implementation
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
+import com.orego.battlecrane.bc.api.manager.mapManager.cell.BCell
+import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.api.model.unit.contract.BAttackable
-import com.orego.battlecrane.bc.api.model.unit.contract.BHealthable
+import com.orego.battlecrane.bc.api.model.contract.BAttackable
+import com.orego.battlecrane.bc.api.model.contract.BHealthable
 
-open class BHumanTank(context: BGameContext) : BUnit(context), BHealthable, BAttackable {
+open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, owner), BHealthable,
+    BAttackable {
+    override fun isPlaced(position: BCell): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     companion object {
 
@@ -51,23 +57,13 @@ open class BHumanTank(context: BGameContext) : BUnit(context), BHealthable, BAtt
      * Observers.
      */
 
-    final override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    final override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
 
-    final override val increaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    final override val increaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
 
     final override val damageObserver: MutableMap<Long, BAttackable.DamageListener> = mutableMapOf()
 
     final override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
 
     final override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
-
-    /**
-     * Implementations.
-     */
-
-    class Tank1(context: BGameContext) : BHumanTank(context)
-
-    class Tank2(context: BGameContext) : BHumanTank(context)
-
-    class Tank3(context: BGameContext) : BHumanTank(context)
 }

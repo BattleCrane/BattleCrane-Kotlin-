@@ -1,12 +1,18 @@
 package com.orego.battlecrane.bc.std.race.human.building.implementation
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
+import com.orego.battlecrane.bc.api.manager.mapManager.cell.BCell
+import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.api.model.unit.contract.BHealthable
-import com.orego.battlecrane.bc.api.model.unit.contract.BLevelable
+import com.orego.battlecrane.bc.api.model.contract.BHealthable
+import com.orego.battlecrane.bc.api.model.contract.BLevelable
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
-class BHumanFactory(context: BGameContext) : BHumanBuilding, BUnit(context), BHealthable, BLevelable {
+class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding, BUnit(context),
+    BHealthable, BLevelable {
+    override fun isPlaced(position: BCell): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     companion object {
 
@@ -39,9 +45,9 @@ class BHumanFactory(context: BGameContext) : BHumanBuilding, BUnit(context), BHe
     override var maxLevel =
         DEFAULT_MAX_LEVEL
 
-    override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
 
-    override val increaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    override val increaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
 
     override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
 

@@ -31,9 +31,12 @@ class BPlayer {
      */
 
     open class BTools(
-        val buildingStack: MutableList<Class<out BAction>>,
-        val armyStack: MutableList<Class<out BAction>>,
-        val bonusStack: MutableList<Class<out BAction>>
+
+        val buildingStack: MutableList<BAction>,
+
+        val armyStack: MutableList<BAction>,
+
+        val bonusStack: MutableList<BAction>
     ) {
 
         companion object {

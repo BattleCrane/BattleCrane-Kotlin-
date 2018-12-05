@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.api.model.action.contract
+package com.orego.battlecrane.bc.api.model.contract
 
 interface BCoastable {
 

@@ -1,13 +1,19 @@
 package com.orego.battlecrane.bc.std.race.human.infantry.implementation
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
+import com.orego.battlecrane.bc.api.manager.mapManager.cell.BCell
+import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.api.model.unit.contract.BAttackable
-import com.orego.battlecrane.bc.api.model.unit.contract.BHealthable
+import com.orego.battlecrane.bc.api.model.contract.BAttackable
+import com.orego.battlecrane.bc.api.model.contract.BHealthable
 import com.orego.battlecrane.bc.std.race.human.infantry.BHumanInfantry
 
-open class BHumanMarine(context: BGameContext) : BUnit(context),
+open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, owner),
     BHumanInfantry, BHealthable, BAttackable {
+
+    override fun isPlaced(position: BCell): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     companion object {
 
@@ -53,23 +59,13 @@ open class BHumanMarine(context: BGameContext) : BUnit(context),
      * Observers.
      */
 
-    final override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    final override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
 
-    final override val increaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    final override val increaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
 
     final override val damageObserver: MutableMap<Long, BAttackable.DamageListener> = mutableMapOf()
 
     final override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
 
     final override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
-
-    /**
-     * Implementations.
-     */
-
-    class Marine1(context: BGameContext) : BHumanMarine(context)
-
-    class Marine2(context: BGameContext) : BHumanMarine(context)
-
-    class Marine3(context: BGameContext) : BHumanMarine(context)
 }

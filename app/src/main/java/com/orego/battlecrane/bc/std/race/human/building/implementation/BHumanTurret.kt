@@ -4,13 +4,14 @@ import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.util.BIdGenerator
 import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.api.model.unit.contract.BAttackable
-import com.orego.battlecrane.bc.api.model.unit.contract.BHealthable
-import com.orego.battlecrane.bc.api.model.unit.contract.BLevelable
+import com.orego.battlecrane.bc.api.model.contract.BAttackable
+import com.orego.battlecrane.bc.api.model.contract.BHealthable
+import com.orego.battlecrane.bc.api.model.contract.BLevelable
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
 class BHumanTurret(context: BGameContext, owner: BPlayer) :
-    BUnit(context, owner), BHumanBuilding, BHealthable, BLevelable, BAttackable {
+    BUnit(context, owner), BHumanBuilding, BHealthable,
+    BLevelable, BAttackable {
 
     companion object {
 
@@ -71,9 +72,9 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) :
      * Observers.
      */
 
-    override val decreaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
 
-    override val increaseHealthObserver: MutableMap<Long, BHealthable.HealthListener> = mutableMapOf()
+    override val increaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
 
     override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
 

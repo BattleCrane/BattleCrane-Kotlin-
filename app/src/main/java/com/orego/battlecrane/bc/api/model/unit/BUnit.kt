@@ -6,8 +6,8 @@ import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.util.BIdGenerator
 
 abstract class BUnit(
-    protected val gameContext : BGameContext,
-    var owner : BPlayer? = null
+    protected val gameContext: BGameContext,
+    var owner: BPlayer? = null
 ) {
 
     val unitId = BIdGenerator.generateUnitId()
@@ -22,11 +22,11 @@ abstract class BUnit(
 
     val onDestroyListener = mutableMapOf<Long, OnDestroyListener>()
 
-    //TODO: Can place?
+    abstract fun isPlaced(position: BCell) : Boolean
 
     interface OnCreateListener {
 
-        fun onCreate(unit : BUnit)
+        fun onCreate(unit: BUnit)
     }
 
     interface OnDestroyListener {

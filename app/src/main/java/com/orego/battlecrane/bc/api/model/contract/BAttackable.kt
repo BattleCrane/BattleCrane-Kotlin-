@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.api.model.unit.contract
+package com.orego.battlecrane.bc.api.model.contract
 
 interface BAttackable {
 
@@ -22,6 +22,7 @@ interface BAttackable {
             }
         }
     }
+
     fun attack(damage: Int, target: BHealthable) {
         if (this.isAttackEnable) {
             this.attackObserver.values.forEach { it.onAttack() }
@@ -30,8 +31,6 @@ interface BAttackable {
             }
         }
     }
-
-
 
     fun switchAttackEnable(isAttackEnable: Boolean) {
         this.isAttackEnable = isAttackEnable

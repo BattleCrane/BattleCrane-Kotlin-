@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.api.model.unit.contract
+package com.orego.battlecrane.bc.api.model.contract
 
 interface BLevelable {
 
@@ -6,15 +6,18 @@ interface BLevelable {
 
     var maxLevel: Int
 
-    fun increaseLevel(range: Int) {
-        if (range > 0 && this.currentLevel < this.maxLevel) {
+    fun increaseLevel(range: Int): Boolean {
+        val hasIncreased = range > 0 && this.currentLevel < this.maxLevel
+        if (hasIncreased) {
             val oldLevel = this.currentLevel
             val newLevel = this.currentLevel + range
             this.currentLevel = newLevel
             this.levelUpObserver.values.forEach { it.onLevelChanged(oldLevel, newLevel, range) }
         }
+        return hasIncreased
     }
 
+    //TODO: MAKE BOOLEAN
     fun decreaseLevel(range: Int) {
         if (range > 0) {
             val oldLevel = this.currentLevel

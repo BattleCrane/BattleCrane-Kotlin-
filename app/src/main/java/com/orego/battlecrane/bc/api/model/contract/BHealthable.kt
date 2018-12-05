@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.api.model.unit.contract
+package com.orego.battlecrane.bc.api.model.contract
 
 interface BHealthable {
 
@@ -6,9 +6,9 @@ interface BHealthable {
 
     var maxHealth: Int
 
-    val decreaseHealthObserver: MutableMap<Long, HealthListener>
+    val decreaseHealthObserver: MutableMap<Long, Listener>
 
-    val increaseHealthObserver: MutableMap<Long, HealthListener>
+    val increaseHealthObserver: MutableMap<Long, Listener>
 
     fun increaseHealth(range: Int) {
         val result = range > 0 && this.currentHealth < this.maxHealth
@@ -43,7 +43,7 @@ interface BHealthable {
         }
     }
 
-    interface HealthListener {
+    interface Listener {
 
         fun onHealthChanged(oldHealth: Int, newHealth: Int, comparison: Int)
     }
