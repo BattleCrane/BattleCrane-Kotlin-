@@ -23,33 +23,38 @@ public final class BMapManager {
 
     public final class BMapHolder {
 
-        public final boolean bindUnitTo(final BUnit unit, final BCell positon) {
-            return this.bindUnitTo(unit, positon.getX(), positon.getY());
+        //TODO: MAKE CREATE UNIT:
+
+        public final void bindUnitTo(final BUnit unit, final BCell positon) {
+            this.bindUnitTo(unit, positon.getX(), positon.getY());
         }
 
         //TODO: Handling errors: cell was attached, index out bound etc:
-        public final boolean bindUnitTo(final BUnit unit, final int x, final int y) {
+        public final void bindUnitTo(final BUnit unit, final int x, final int y) {
             final int horizontalSide = unit.getHorizontalSide();
             final int verticalSide = unit.getVerticalSide();
             final BCell pivot = BMapManager.this.cells[x][y];
-            final boolean isPlaced = unit.isPlaced(pivot);
-            if (isPlaced) {
-                //Attach pivot to entity:
-                unit.setPivot(pivot);
-                //Attach entity to cells:
-                for (int i = x; i < horizontalSide; i++) {
-                    for (int j = y; j < verticalSide; j++) {
-                        final BCell cell = BMapManager.this.cells[i][j];
-                        cell.setAttachedUnit(unit);
-                    }
+            //Attach pivot to entity:
+            unit.setPivot(pivot);
+            //Attach entity to cells:
+            for (int i = x; i < horizontalSide; i++) {
+                for (int j = y; j < verticalSide; j++) {
+                    final BCell cell = BMapManager.this.cells[i][j];
+                    cell.setAttachedUnit(unit);
                 }
-                //Put in heap:
-                final long unitId = unit.getUnitId();
-                BMapManager.this.unitHeap.put(unitId, unit);
-                //Notify subscribers:
-                unit.getOnCreateObserver().values().forEach(it -> it.onCreate(unit));
             }
-            return isPlaced;
+            //Put in heap:
+            final long unitId = unit.getUnitId();
+            BMapManager.this.unitHeap.put(unitId, unit);
+
+            //TODO: SET TO ACTION:
+//            final boolean isPlaced = unit.isPlaced(pivot);
+//            if (isPlaced) {
+//
+//                //Notify subscribers:
+//                unit.getOnCreateObserver().values().forEach(it -> it.onCreate(unit));
+//            }
+//            return isPlaced;
         }
         //TODO: Unbind.
     }

@@ -7,7 +7,7 @@ import com.orego.battlecrane.bc.api.model.contract.BTargetable
 import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.vehicle.implementation.BHumanTank
 
-class BHumanTrainTankLvl3(gameContext: BGameContext, owner : BPlayer) : BHumanAction(gameContext, owner), BTargetable {
+class BHumanTrainTankLvl3(gameContext: BGameContext, owner: BPlayer) : BHumanAction(gameContext, owner), BTargetable {
 
     override var targetPosition: BCell? = null
 

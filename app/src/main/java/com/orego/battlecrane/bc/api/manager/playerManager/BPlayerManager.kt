@@ -1,14 +1,15 @@
 package com.orego.battlecrane.bc.api.manager.playerManager
 
+import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 
-class BPlayerManager(scenario: BGameScenario) {
+class BPlayerManager(scenario: BGameScenario, gameContext: BGameContext) {
 
-    var currentPlayer: BPlayer = scenario.startPlayer
+    val players : List<BPlayer> = scenario.initPlayerList(gameContext)
 
-    val players : List<BPlayer> = scenario.playerList
+    var currentPlayer: BPlayer = scenario.getStartPlayer(this.players)
 
     fun isEnemies(unit1: BUnit, unit2: BUnit): Boolean {
         val owner1 = unit1.owner

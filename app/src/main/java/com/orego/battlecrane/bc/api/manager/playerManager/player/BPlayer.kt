@@ -1,10 +1,11 @@
 package com.orego.battlecrane.bc.api.manager.playerManager.player
 
+import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.model.action.BAction
 
 class BPlayer {
 
-    lateinit var tools: BTools
+    lateinit var tools: Tools
 
     private val allies = mutableSetOf<BPlayer>()
 
@@ -30,13 +31,13 @@ class BPlayer {
      * Tools.
      */
 
-    open class BTools(
+    abstract class Tools(
 
-        val buildingStack: MutableList<BAction>,
+        val buildingStack : MutableSet<Pair<BAction, Int>>,
 
-        val armyStack: MutableList<BAction>,
+        val armyStack : MutableSet<Pair<BAction, Int>>,
 
-        val bonusStack: MutableList<BAction>
+        val bonusStack : MutableSet<Pair<BAction, Int>>
     ) {
 
         companion object {
@@ -44,6 +45,6 @@ class BPlayer {
             const val DEFAULT_RESOURCE_COUNT = 0
         }
 
-        var resourceCount : Int = 0
+        var resourceCount: Int = DEFAULT_RESOURCE_COUNT
     }
 }
