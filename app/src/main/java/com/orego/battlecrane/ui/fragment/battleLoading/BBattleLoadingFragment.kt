@@ -33,7 +33,7 @@ class BBattleLoadingFragment : BFragment() {
                 .get(BUiScenarioSupportViewModel::class.java)
         }
 
-        private val factoryViewModel by lazy {
+        private val viewFactoryViewModel by lazy {
             ViewModelProviders
                 .of(this.activity)
                 .get(BViewFactoryViewModel::class.java)
@@ -44,12 +44,12 @@ class BBattleLoadingFragment : BFragment() {
                 val support = this@Presenter.scenarioProviderViewModel.uiScenarioSupport
                 val gameScenario = support.gameScenario
                 //Install game manager:
-                val gameInstallation = async { BGameContext(gameScenario) }
+                val gameContext = async { BGameContext(gameScenario) }
                 //Install ui renders:
-                val uiRenderInstallation = async { this@Presenter.factoryViewModel.install(support)}
+                val viewInstallation = async { this@Presenter.viewFactoryViewModel.install(support)}
                 //Get results:
-                this@Presenter.manager.gameContext = gameInstallation.await()
-                uiRenderInstallation.await()
+                this@Presenter.manager.gameContext = gameContext.await()
+                viewInstallation.await()
                 //Game is ready:
                 this@Presenter.replaceFragment(BBattleFragment::class.java)
             }

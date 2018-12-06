@@ -6,7 +6,7 @@ import android.widget.ImageView
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.infantry.implementation.BHumanMarine
-import com.orego.battlecrane.ui.fragment.battle.render.BRender
+import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 import com.orego.battlecrane.ui.util.asSimple
 
@@ -25,11 +25,11 @@ class BHumanMarineView(unit: BHumanMarine, measuredCellSide: Int, context: Conte
         )
     }
 
-    class Builder : BRender.ViewBuilder<BUnit, BUnitView> {
+    class Builder : BViewRender.ViewBuilder<BUnit, BUnitView> {
 
         override val type: String = BHumanMarine::class.java.name
 
-        override fun build(obj: BUnit, measuredCellSide: Int, context: Context): BUnitView =
-            BHumanMarineView(obj as BHumanMarine, measuredCellSide, context)
+        override fun build(value: BUnit, measuredCellSize: Int, context: Context): BUnitView =
+            BHumanMarineView(value as BHumanMarine, measuredCellSize, context)
     }
 }

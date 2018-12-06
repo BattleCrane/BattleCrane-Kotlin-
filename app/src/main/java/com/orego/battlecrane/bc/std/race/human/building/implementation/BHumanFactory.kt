@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.std.race.human.building.implementation
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mapManager.cell.BCell
+import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.model.contract.BHealthable
@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
 class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding, BUnit(context),
     BHealthable, BLevelable {
-    override fun isPlaced(position: BCell): Boolean {
+    override fun isPlaced(position: BPoint): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

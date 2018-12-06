@@ -8,9 +8,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.fragment.BFragment
-import com.orego.battlecrane.ui.fragment.battle.render.map.BBattleMapRender
-import com.orego.battlecrane.ui.fragment.battle.render.tool.unit.implementations.BBuildToolRender
-import com.orego.battlecrane.ui.fragment.battle.render.tool.unit.implementations.BTrainToolRender
+import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
+import com.orego.battlecrane.ui.model.api.render.action.unit.implementations.BBuildToolRender
+import com.orego.battlecrane.ui.model.api.render.action.unit.implementations.BTrainToolRender
 import com.orego.battlecrane.ui.util.onMeasured
 import com.orego.battlecrane.ui.viewModel.BViewFactoryViewModel
 import kotlinx.android.synthetic.main.fragment_battle.*
@@ -47,7 +47,7 @@ class BBattleFragment : BFragment() {
         }
 
         private val mapRender by lazy {
-            BBattleMapRender(this.gameContext.mapManager.unitHeap)
+            BUnitViewRender(this.gameContext.mapManager.unitHeap)
         }
 
         private val buildToolRender by lazy {

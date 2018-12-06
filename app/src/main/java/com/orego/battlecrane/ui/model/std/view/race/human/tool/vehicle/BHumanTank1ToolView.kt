@@ -4,7 +4,7 @@ import android.content.Context
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.vehicle.implementation.BHumanTank
-import com.orego.battlecrane.ui.fragment.battle.render.BRender
+import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.tool.BToolView
 
 class BHumanTank1ToolView(measuredCellSize: Int, context: Context) :
@@ -23,10 +23,10 @@ class BHumanTank1ToolView(measuredCellSize: Int, context: Context) :
         private const val UNIT_DRAWABLE = R.drawable.ic_action_name
     }
 
-    class Builder : BRender.ViewBuilder<Class<out BUnit>, BToolView> {
+    class Builder : BViewRender.ViewBuilder<Class<out BUnit>, BToolView> {
 
-        override fun build(obj: Class<out BUnit>, measuredCellSide: Int, context: Context) =
-            BHumanTank1ToolView(measuredCellSide, context)
+        override fun build(value: Class<out BUnit>, measuredCellSize: Int, context: Context) =
+            BHumanTank1ToolView(measuredCellSize, context)
 
         override val type: String = BHumanTank.Tank1::class.java.name
     }

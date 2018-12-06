@@ -3,20 +3,20 @@ package com.orego.battlecrane.ui.viewModel
 import androidx.lifecycle.ViewModel
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.ui.fragment.battle.render.BRender
-import com.orego.battlecrane.ui.fragment.battle.render.tool.BToolRender
+import com.orego.battlecrane.ui.model.api.render.BViewRender
+import com.orego.battlecrane.ui.model.api.render.action.BActionRender
 import com.orego.battlecrane.ui.model.api.scenarioSupport.BUiScenarioSupport
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 
 class BViewFactoryViewModel : ViewModel() {
 
-    val mapFactory = BRender.ViewFactory<BUnit, BUnitView>()
+    val mapFactory = BViewRender.ViewFactory<BUnit, BUnitView>()
 
-    val buildToolFactory = BToolRender.ViewFactory<BUnit>()
+    val buildToolFactory = BActionRender.ViewFactory<BUnit>()
 
-    val trainToolFactory = BToolRender.ViewFactory<BUnit>()
+    val trainToolFactory = BActionRender.ViewFactory<BUnit>()
 
-    val bonusToolFactory = BToolRender.ViewFactory<BAction>()
+    val bonusToolFactory = BActionRender.ViewFactory<BAction>()
 
     fun install(scenarioSupport: BUiScenarioSupport) {
         scenarioSupport.unitBuilders.forEach { this.mapFactory.addBuilder(it) }

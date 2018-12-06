@@ -1,10 +1,10 @@
-package com.orego.battlecrane.ui.fragment.battle.render
+package com.orego.battlecrane.ui.model.api.render
 
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 
-abstract class BRender<K, V> {
+abstract class BViewRender<K, V> {
 
     private var isInstalled = false
 
@@ -16,7 +16,7 @@ abstract class BRender<K, V> {
 
     protected val constraintSet = ConstraintSet()
 
-    protected val temporaryViewHolderList: MutableList<V> = mutableListOf()
+    protected val temporaryViewList: MutableList<V> = mutableListOf()
 
     abstract fun draw()
 
@@ -53,7 +53,7 @@ abstract class BRender<K, V> {
         }
 
         open fun buildByDefault(unit: K, measuredCellSize: Int, context: Context, type: String) : V {
-            throw IllegalStateException(">>>>>> Not supported type!")
+            throw IllegalStateException("Not supported type!")
         }
     }
 
@@ -61,6 +61,6 @@ abstract class BRender<K, V> {
 
         val type: String
 
-        fun build(obj: K, measuredCellSide: Int, context: Context): V
+        fun build(value: K, measuredCellSize: Int, context: Context): V
     }
 }

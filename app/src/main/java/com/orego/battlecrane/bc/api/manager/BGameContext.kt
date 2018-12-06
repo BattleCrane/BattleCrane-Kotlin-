@@ -8,5 +8,5 @@ class BGameContext(scenario: BGameScenario) {
 
     val mapManager = BMapManager(scenario, this)
 
-    val playerManager = BPlayerManager(scenario)
+    val playerManager = BPlayerManager(scenario, this)
 }

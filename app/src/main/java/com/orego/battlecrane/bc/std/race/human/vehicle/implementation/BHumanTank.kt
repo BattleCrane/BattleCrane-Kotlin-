@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.std.race.human.vehicle.implementation
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mapManager.cell.BCell
+import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
@@ -9,7 +9,7 @@ import com.orego.battlecrane.bc.api.model.contract.BHealthable
 
 open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, owner), BHealthable,
     BAttackable {
-    override fun isPlaced(position: BCell): Boolean {
+    override fun isPlaced(position: BPoint): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

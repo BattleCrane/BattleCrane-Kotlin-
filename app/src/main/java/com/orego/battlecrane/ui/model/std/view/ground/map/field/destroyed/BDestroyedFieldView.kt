@@ -5,7 +5,7 @@ import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.destroyed.BDestroyedField
 import com.orego.battlecrane.R
-import com.orego.battlecrane.ui.fragment.battle.render.BRender
+import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 import com.orego.battlecrane.ui.util.asSimple
 
@@ -18,11 +18,11 @@ class BDestroyedFieldView(unit: BDestroyedField, measuredCellSize: Int, context:
 
     override val displayedView = ImageView(context).asSimple(context, measuredCellSize, EMPTY_FIELD_IMAGE_ID)
 
-    class Builder : BRender.ViewBuilder<BUnit, BUnitView> {
+    class Builder : BViewRender.ViewBuilder<BUnit, BUnitView> {
 
         override val type: String = BDestroyedField::class.java.name
 
-        override fun build(obj: BUnit, measuredCellSide: Int, context: Context): BUnitView =
-            BDestroyedFieldView(obj as BDestroyedField, measuredCellSide, context)
+        override fun build(value: BUnit, measuredCellSize: Int, context: Context): BUnitView =
+            BDestroyedFieldView(value as BDestroyedField, measuredCellSize, context)
     }
 }

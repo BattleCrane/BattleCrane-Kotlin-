@@ -1,13 +1,13 @@
-package com.orego.battlecrane.ui.fragment.battle.render.map
+package com.orego.battlecrane.ui.model.api.render.unit
 
 import com.orego.battlecrane.bc.api.manager.mapManager.BMapManager.MAP_SIZE
 import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.ui.fragment.battle.render.BRender
+import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 import com.orego.battlecrane.ui.util.addView
 import com.orego.battlecrane.ui.util.moveTo
 
-class BBattleMapRender(private val units: Map<Int, BUnit>) : BRender<BUnit, BUnitView>() {
+class BUnitViewRender(private val units: Map<Int, BUnit>) : BViewRender<BUnit, BUnitView>() {
 
     override fun draw() {
         //Map relation is 1:1:
@@ -16,14 +16,13 @@ class BBattleMapRender(private val units: Map<Int, BUnit>) : BRender<BUnit, BUni
         //Draw units:
         for (unit in this.units.values) {
             val type = unit::class.java.name
-            println(">>>>>>>>>>>>>>>>>TYPE $type")
             val unitViewHolder = this.factory.build(unit, measuredCellSide, this.context, type)
             this.constraintLayout.addView(unitViewHolder)
-            this.temporaryViewHolderList.add(unitViewHolder)
+            this.temporaryViewList.add(unitViewHolder)
         }
         this.constraintSet.clone(this.constraintLayout)
         //Move units:
-        for (holder in this.temporaryViewHolderList) {
+        for (holder in this.temporaryViewList) {
             val displayedViewId = holder.displayedView.id
             val pivot = holder.entity.pivot!!
             val x = pivot.x * measuredCellSide
@@ -31,6 +30,6 @@ class BBattleMapRender(private val units: Map<Int, BUnit>) : BRender<BUnit, BUni
             this.constraintSet.moveTo(displayedViewId, constraintLayoutId, x, y)
         }
         this.constraintSet.applyTo(this.constraintLayout)
-        this.temporaryViewHolderList.clear()
+        this.temporaryViewList.clear()
     }
 }

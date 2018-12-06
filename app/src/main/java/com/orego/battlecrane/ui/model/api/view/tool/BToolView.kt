@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bc.api.manager.mapManager.cell.BCell
+import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.ui.model.api.view.BView
 import com.orego.battlecrane.ui.util.setImageById
 import org.intellij.lang.annotations.MagicConstant
@@ -18,7 +18,7 @@ open class BToolView(entity: BTool, measuredCellSize: Int, context: Context) : B
         private const val COEFFICIENT = 4
     }
 
-    lateinit var position: BCell
+    lateinit var position: BPoint
 
     final override val displayedView: ConstraintLayout
 
