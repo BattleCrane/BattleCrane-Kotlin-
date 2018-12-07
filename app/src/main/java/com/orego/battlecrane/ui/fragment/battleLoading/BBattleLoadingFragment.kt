@@ -41,7 +41,7 @@ class BBattleLoadingFragment : BFragment() {
 
         fun start() =
             GlobalScope.launch(Dispatchers.Main) {
-                val support = this@Presenter.scenarioProviderViewModel.uiScenarioSupport
+                val support = this@Presenter.scenarioProviderViewModel.scenarioMaterials
                 val gameScenario = support.gameScenario
                 //Install game manager:
                 val gameContext = async { BGameContext(gameScenario) }

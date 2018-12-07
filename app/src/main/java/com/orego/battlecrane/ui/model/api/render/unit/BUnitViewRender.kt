@@ -7,7 +7,7 @@ import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 import com.orego.battlecrane.ui.util.addView
 import com.orego.battlecrane.ui.util.moveTo
 
-class BUnitViewRender(private val units: Map<Int, BUnit>) : BViewRender<BUnit, BUnitView>() {
+class BUnitViewRender(private val units: Map<Long, BUnit>) : BViewRender<BUnit, BUnitView>() {
 
     override fun draw() {
         //Map relation is 1:1:
@@ -16,15 +16,15 @@ class BUnitViewRender(private val units: Map<Int, BUnit>) : BViewRender<BUnit, B
         //Draw units:
         for (unit in this.units.values) {
             val type = unit::class.java.name
-            val unitViewHolder = this.factory.build(unit, measuredCellSide, this.context, type)
-            this.constraintLayout.addView(unitViewHolder)
-            this.temporaryViewList.add(unitViewHolder)
+            val unitView = this.factory.build(unit, measuredCellSide, this.context, type)
+            this.constraintLayout.addView(unitView)
+            this.temporaryViewList.add(unitView)
         }
         this.constraintSet.clone(this.constraintLayout)
         //Move units:
-        for (holder in this.temporaryViewList) {
-            val displayedViewId = holder.displayedView.id
-            val pivot = holder.entity.pivot!!
+        for (view in this.temporaryViewList) {
+            val displayedViewId = view.displayedView.id
+            val pivot = view.entity.pivot!!
             val x = pivot.x * measuredCellSide
             val y = pivot.y * measuredCellSide
             this.constraintSet.moveTo(displayedViewId, constraintLayoutId, x, y)
@@ -32,4 +32,8 @@ class BUnitViewRender(private val units: Map<Int, BUnit>) : BViewRender<BUnit, B
         this.constraintSet.applyTo(this.constraintLayout)
         this.temporaryViewList.clear()
     }
+
+    class ViewFactory : BViewRender.ViewFactory<BUnit, BUnitView>()
+
+    interface ViewBuilder : BViewRender.ViewBuilder<BUnit, BUnitView>
 }

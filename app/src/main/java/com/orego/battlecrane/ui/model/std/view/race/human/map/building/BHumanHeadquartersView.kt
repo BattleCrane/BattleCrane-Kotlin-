@@ -7,6 +7,7 @@ import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.ui.model.api.render.BViewRender
+import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 import com.orego.battlecrane.ui.util.asSimple
 
@@ -24,11 +25,11 @@ class BHumanHeadquartersView(unit: BHumanHeadquarters, measuredCellSide: Int, co
             .asSimple(context, measuredCellSide, HUMAN_HEADQUARTERS_IMAGE_ID)
     }
 
-    class Builder : BViewRender.ViewBuilder<BUnit, BUnitView> {
+    class Builder : BUnitViewRender.ViewBuilder {
 
         override val type: String = BHumanHeadquarters::class.java.name
 
-        override fun build(value: BUnit, measuredCellSize: Int, context: Context): BUnitView =
-            BHumanHeadquartersView(value as BHumanHeadquarters, measuredCellSize, context)
+        override fun build(value: BUnit, dimension: Int, context: Context): BUnitView =
+            BHumanHeadquartersView(value as BHumanHeadquarters, dimension, context)
     }
 }

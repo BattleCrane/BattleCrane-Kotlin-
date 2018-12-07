@@ -4,8 +4,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.orego.battlecrane.ui.model.api.view.BView
 
-fun ConstraintLayout.addView(holder: BView<*>) {
-    this.addView(holder.displayedView)
+fun ConstraintLayout.addView(view: BView<*>) {
+    this.addView(view.displayedView)
 }
 
 fun ConstraintSet.moveTo(viewId: Int, layoutId: Int, x: Int, y: Int) {

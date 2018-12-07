@@ -6,7 +6,7 @@ object BIdGenerator {
 
     private var actionIdCounter : Long = 0
 
-    fun generateUnitId() = unitIdCounter++
+    fun generateUnitId() = this.unitIdCounter++
 
-    fun generateActionId() = actionIdCounter++
+    fun generateActionId() = this.actionIdCounter++
 }

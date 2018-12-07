@@ -8,12 +8,8 @@ import com.orego.battlecrane.bc.api.model.contract.BHealthable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
-class BHumanGenerator(gameContext: BGameContext, owner : BPlayer) : BUnit(gameContext),
-    BHumanBuilding, BHealthable,
-    BLevelable {
-    override fun isPlaced(position: BPoint): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class BHumanGenerator(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gameContext, owner),
+    BHealthable, BLevelable {
 
     companion object {
 

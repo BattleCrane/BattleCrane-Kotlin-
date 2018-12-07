@@ -4,28 +4,30 @@ import androidx.lifecycle.ViewModel
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.ui.model.api.render.BViewRender
-import com.orego.battlecrane.ui.model.api.render.action.BActionRender
-import com.orego.battlecrane.ui.model.api.scenarioSupport.BUiScenarioSupport
+import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
+import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
+import com.orego.battlecrane.ui.model.api.scenarioMaterials.BUiScenarioMaterials
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 
 class BViewFactoryViewModel : ViewModel() {
 
-    val mapFactory = BViewRender.ViewFactory<BUnit, BUnitView>()
+    val unitFactory = BUnitViewRender.ViewFactory()
 
-    val buildToolFactory = BActionRender.ViewFactory<BUnit>()
+    val buildActionFactory = BActionViewRender.ViewFactory()
 
-    val trainToolFactory = BActionRender.ViewFactory<BUnit>()
+    val trainActionFactory = BActionViewRender.ViewFactory()
 
-    val bonusToolFactory = BActionRender.ViewFactory<BAction>()
+    val bonusActionFactory = BActionViewRender.ViewFactory()
 
-    fun install(scenarioSupport: BUiScenarioSupport) {
-        scenarioSupport.unitBuilders.forEach { this.mapFactory.addBuilder(it) }
-        scenarioSupport.buildingToolsBuilders.forEach { this.buildToolFactory.addBuilder(it) }
-        scenarioSupport.trainToolsBuilders.forEach { this.trainToolFactory.addBuilder(it) }
-        scenarioSupport.bonusToolsBuilders.forEach { this.bonusToolFactory.addBuilder(it) }
-        this.buildToolFactory.defaultBuilder = scenarioSupport.defaultUnitToolBuilder
-        this.trainToolFactory.defaultBuilder = scenarioSupport.defaultUnitToolBuilder
+    fun install(scenarioSupport: BUiScenarioMaterials) {
+        scenarioSupport.unitBuilders.forEach { this.unitFactory.addBuilder(it) }
+        scenarioSupport.buildingActionBuilders.forEach { this.buildActionFactory.addBuilder(it) }
+        scenarioSupport.trainActionBuilders.forEach { this.trainActionFactory.addBuilder(it) }
+        scenarioSupport.bonusActionBuilders.forEach { this.bonusActionFactory.addBuilder(it) }
+        //Set default builder:
+        this.buildActionFactory.defaultBuilder = scenarioSupport.defaultActionBuilder
+        this.trainActionFactory.defaultBuilder = scenarioSupport.defaultActionBuilder
         //TODO: MAKE BONUSES:
-//        this.bonusToolFactory.defaultBuilder = scenarioSupport.defaultBonusToolBuilder
+//        this.bonusActionFactory.defaultBuilder = scenarioSupport.defaultBonusToolBuilder
     }
 }

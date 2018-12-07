@@ -2,15 +2,16 @@ package com.orego.battlecrane.ui.model.std.view.race.human
 
 import com.orego.battlecrane.ui.model.std.view.race.human.map.building.*
 import com.orego.battlecrane.ui.model.std.view.race.human.map.infantry.BHumanMarineView
+import com.orego.battlecrane.ui.model.std.view.race.human.map.vehicle.BHumanTankView
 import com.orego.battlecrane.ui.model.std.view.race.human.tool.building.*
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry.BHumanMarine1ToolView
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry.BHumanMarine2ToolView
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry.BHumanMarine3ToolView
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle.BHumanTank1ToolView
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle.BHumanTank2ToolView
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle.BHumanTank3ToolView
+import com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry.BHumanTrainMarineLvl1View
+import com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry.BHumanTrainMarineLvl2View
+import com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry.BHumanTrainMarineLvl3View
+import com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle.BHumanTrainTankLvl1View
+import com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle.BHumanTrainTankLvl2View
+import com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle.BHumanTrainTankLvl3View
 
-object BHumanViewBuilders {
+class BHumanViewBuilders {
 
     val units = setOf(
         //Buildings:
@@ -22,24 +23,24 @@ object BHumanViewBuilders {
         BHumanWallView.Builder(),
         //Army:
         BHumanMarineView.Builder(),
-        BHumanTurretView.Builder()
+        BHumanTankView.Builder()
     )
     val buildingTools = setOf(
-        BHumanBarracksToolView.Builder(),
-        BHumanFactoryToolView.Builder(),
-        BHumanGeneratorToolView.Builder(),
-        BHumanTurretToolView.Builder(),
-        BHumanWallToolView.Builder(),
-        BHumanUpgradeToolView.Builder()
+        BHumanBuildBarracksView.Builder(),
+        BHumanBuildFactoryView.Builder(),
+        BHumanBuildGeneratorView.Builder(),
+        BHumanBuildTurretView.Builder(),
+        BHumanBuildWallView.Builder(),
+        BHumanUpgradeBuildingView.Builder()
     )
 
     val armyTools = setOf(
-        BHumanMarine1ToolView.Builder(),
-        BHumanMarine2ToolView.Builder(),
-        BHumanMarine3ToolView.Builder(),
-        BHumanTank1ToolView.Builder(),
-        BHumanTank2ToolView.Builder(),
-        BHumanTank3ToolView.Builder()
+        BHumanTrainMarineLvl1View.Builder(),
+        BHumanTrainMarineLvl2View.Builder(),
+        BHumanTrainMarineLvl3View.Builder(),
+        BHumanTrainTankLvl1View.Builder(),
+        BHumanTrainTankLvl2View.Builder(),
+        BHumanTrainTankLvl3View.Builder()
     )
 
     //TODO: LATER:

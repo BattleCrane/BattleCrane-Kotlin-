@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 
-abstract class BViewRender<K, V> {
+abstract class BViewRender<K : Any, V : Any> {
 
     private var isInstalled = false
 
@@ -29,7 +29,7 @@ abstract class BViewRender<K, V> {
         this.draw()
     }
 
-    open class ViewFactory<K, V> {
+    open class ViewFactory<K : Any, V : Any> {
 
         private val builderMap = mutableMapOf<String, ViewBuilder<K, V>>()
 
@@ -43,24 +43,20 @@ abstract class BViewRender<K, V> {
             }
         }
 
-        fun build(unit: K, measuredCellSize: Int, context: Context, type: String): V {
+        fun build(unit: K, dimension: Int, context: Context, type: String): V {
             val builder = this.builderMap[type]
-            return if (builder != null) {
-                builder.build(unit, measuredCellSize, context)
-            } else {
-                this.buildByDefault(unit, measuredCellSize, context, type)
-            }
+            return builder?.build(unit, dimension, context) ?: this.buildByDefault(unit, dimension, context, type)
         }
 
-        open fun buildByDefault(unit: K, measuredCellSize: Int, context: Context, type: String) : V {
+        open fun buildByDefault(unit: K, dimension: Int, context: Context, type: String): V {
             throw IllegalStateException("Not supported type!")
         }
     }
 
-    interface ViewBuilder<K, V> {
+    interface ViewBuilder<K : Any, V : Any> {
 
         val type: String
 
-        fun build(value: K, measuredCellSize: Int, context: Context): V
+        fun build(value: K, dimension: Int, context: Context): V
     }
 }

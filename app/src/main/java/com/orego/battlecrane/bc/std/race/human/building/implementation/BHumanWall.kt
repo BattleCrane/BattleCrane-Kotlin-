@@ -7,11 +7,8 @@ import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.model.contract.BHealthable
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
-class BHumanWall(gameContext: BGameContext, owner : BPlayer) : BUnit(gameContext),
-    BHumanBuilding, BHealthable {
-    override fun isPlaced(position: BPoint): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+class BHumanWall(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gameContext, owner),
+    BHealthable {
 
     companion object {
 

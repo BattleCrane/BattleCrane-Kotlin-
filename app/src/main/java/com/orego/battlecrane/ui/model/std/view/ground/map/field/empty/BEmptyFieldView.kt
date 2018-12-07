@@ -6,6 +6,7 @@ import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.model.api.render.BViewRender
+import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 import com.orego.battlecrane.ui.util.asSimple
 
@@ -18,11 +19,11 @@ class BEmptyFieldView(unit: BEmptyField, measuredCellSize: Int, context: Context
 
     override val displayedView = ImageView(context).asSimple(context, measuredCellSize, EMPTY_FIELD_IMAGE_ID)
 
-    class Builder : BViewRender.ViewBuilder<BUnit, BUnitView> {
+    class Builder : BUnitViewRender.ViewBuilder {
 
         override val type: String = BEmptyField::class.java.name
 
-        override fun build(value: BUnit, measuredCellSize: Int, context: Context): BUnitView =
-            BEmptyFieldView(value as BEmptyField, measuredCellSize, context)
+        override fun build(value: BUnit, dimension: Int, context: Context): BUnitView =
+            BEmptyFieldView(value as BEmptyField, dimension, context)
     }
 }
