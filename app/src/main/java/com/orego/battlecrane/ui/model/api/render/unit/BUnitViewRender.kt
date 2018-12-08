@@ -11,12 +11,12 @@ class BUnitViewRender(private val units: Map<Long, BUnit>) : BViewRender<BUnit, 
 
     override fun draw() {
         //Map relation is 1:1:
-        val measuredCellSide = this.constraintLayout.measuredWidth / MAP_SIZE
+        val dimension = this.constraintLayout.measuredWidth / MAP_SIZE
         val constraintLayoutId = this.constraintLayout.id
         //Draw units:
         for (unit in this.units.values) {
             val type = unit::class.java.name
-            val unitView = this.factory.build(unit, measuredCellSide, this.context, type)
+            val unitView = this.factory.build(unit, dimension, this.context, type)
             this.constraintLayout.addView(unitView)
             this.temporaryViewList.add(unitView)
         }
@@ -25,8 +25,8 @@ class BUnitViewRender(private val units: Map<Long, BUnit>) : BViewRender<BUnit, 
         for (view in this.temporaryViewList) {
             val displayedViewId = view.displayedView.id
             val pivot = view.entity.pivot!!
-            val x = pivot.x * measuredCellSide
-            val y = pivot.y * measuredCellSide
+            val x = pivot.x * dimension
+            val y = pivot.y * dimension
             this.constraintSet.moveTo(displayedViewId, constraintLayoutId, x, y)
         }
         this.constraintSet.applyTo(this.constraintLayout)

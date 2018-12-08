@@ -57,7 +57,11 @@ class BBattleFragment : BFragment() {
                 .get(BViewFactoryViewModel::class.java)
         }
 
-        private val mapRender by lazy {
+        /**
+         * Renders units on the map.
+         */
+
+        private val unitRender by lazy {
             BUnitViewRender(this.gameContext.mapManager.unitHeap)
         }
 
@@ -76,7 +80,7 @@ class BBattleFragment : BFragment() {
 
         fun prepareMap(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
-                this.mapRender.install(
+                this.unitRender.install(
                     this@BBattleFragment.fragment_battle_map_constraint_layout,
                     this.viewFactoryViewModel.unitFactory,
                     this.applicationContext

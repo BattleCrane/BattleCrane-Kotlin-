@@ -1,13 +1,10 @@
-package com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry
+package com.orego.battlecrane.ui.model.std.view.race.human.action.infantry
 
 import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.action.BAction
-import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.action.train.BHumanTrainMarineLvl2
-import com.orego.battlecrane.bc.std.race.human.infantry.implementation.BHumanMarine
-import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.asSimple

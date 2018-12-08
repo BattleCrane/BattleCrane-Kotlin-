@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.api.manager.playerManager.player
 import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.model.action.BAction
 
-class BPlayer {
+class BPlayer(id: Long) {
 
     lateinit var tools: Tools
 
@@ -33,11 +33,11 @@ class BPlayer {
 
     abstract class Tools(
 
-        val buildingStack : MutableSet<Pair<BAction, Int>>,
+        val buildingStack: MutableSet<Pair<BAction, Int>>,
 
-        val armyStack : MutableSet<Pair<BAction, Int>>,
+        val armyStack: MutableSet<Pair<BAction, Int>>,
 
-        val bonusStack : MutableSet<Pair<BAction, Int>>
+        val bonusStack: MutableSet<Pair<BAction, Int>>
     ) {
 
         companion object {
@@ -46,5 +46,10 @@ class BPlayer {
         }
 
         var resourceCount: Int = DEFAULT_RESOURCE_COUNT
+    }
+
+    object Builder {
+
+        fun id(id: Long) = BPlayer(id)
     }
 }

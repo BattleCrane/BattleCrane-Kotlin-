@@ -31,7 +31,6 @@ public final class BMapManager {
         return isPlaced;
     }
 
-
     public final boolean inBounds(final int x, final int y) {
         return x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE;
     }
@@ -66,6 +65,10 @@ public final class BMapManager {
         }
 
         //TODO: Unbind.
+
+        public final boolean hasBoundUnit(final int x, final int y) {
+            return BMapManager.this.matrix[x][y].getAttachedUnit() != null;
+        }
     }
 
     public BMapManager(final BGameScenario scenario, final BGameContext gameContext) {

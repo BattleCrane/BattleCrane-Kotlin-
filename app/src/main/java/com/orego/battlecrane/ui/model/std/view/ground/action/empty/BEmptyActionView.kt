@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model.std.view.ground.tool.empty
+package com.orego.battlecrane.ui.model.std.view.ground.action.empty
 
 import android.content.Context
 import android.widget.ImageView

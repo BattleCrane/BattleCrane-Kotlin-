@@ -1,18 +1,15 @@
-package com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle
+package com.orego.battlecrane.ui.model.std.view.race.human.action.vehicle
 
 import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.action.BAction
-import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.std.race.human.action.train.BHumanTrainTankLvl2
-import com.orego.battlecrane.bc.std.race.human.vehicle.implementation.BHumanTank
-import com.orego.battlecrane.ui.model.api.render.BViewRender
+import com.orego.battlecrane.bc.std.race.human.action.train.BHumanTrainTankLvl3
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.asSimple
 
-class BHumanTrainTankLvl2View(action: BHumanTrainTankLvl2, dimension: Int, context: Context) : BActionView(action) {
+class BHumanTrainTankLvl3View(action: BHumanTrainTankLvl3, dimension: Int, context: Context) : BActionView(action) {
 
     companion object {
 
@@ -24,8 +21,8 @@ class BHumanTrainTankLvl2View(action: BHumanTrainTankLvl2, dimension: Int, conte
     class Builder : BActionViewRender.ViewBuilder {
 
         override fun build(value: BAction, dimension: Int, context: Context) =
-            BHumanTrainTankLvl2View(value as BHumanTrainTankLvl2, dimension, context)
+            BHumanTrainTankLvl3View(value as BHumanTrainTankLvl3, dimension, context)
 
-        override val type: String = BHumanTrainTankLvl2::class.java.name
+        override val type: String = BHumanTrainTankLvl3::class.java.name
     }
 }

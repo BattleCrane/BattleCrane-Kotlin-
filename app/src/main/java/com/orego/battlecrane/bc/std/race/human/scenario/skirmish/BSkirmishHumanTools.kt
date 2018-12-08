@@ -6,6 +6,7 @@ import com.orego.battlecrane.bc.std.race.human.action.build.*
 
 class BSkirmishHumanTools(gameContext: BGameContext, player: BPlayer) : BPlayer.Tools(
 
+    //TODO: MAKE INIT FUNCTION:
     mutableSetOf(
         BHumanBuildBarracks(gameContext, player) to 1,
         BHumanBuildFactory(gameContext, player) to 1,

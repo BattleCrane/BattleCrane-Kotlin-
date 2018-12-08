@@ -3,13 +3,13 @@ package com.orego.battlecrane.ui.model.std.view.race.human
 import com.orego.battlecrane.ui.model.std.view.race.human.map.building.*
 import com.orego.battlecrane.ui.model.std.view.race.human.map.infantry.BHumanMarineView
 import com.orego.battlecrane.ui.model.std.view.race.human.map.vehicle.BHumanTankView
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.building.*
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry.BHumanTrainMarineLvl1View
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry.BHumanTrainMarineLvl2View
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.infantry.BHumanTrainMarineLvl3View
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle.BHumanTrainTankLvl1View
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle.BHumanTrainTankLvl2View
-import com.orego.battlecrane.ui.model.std.view.race.human.tool.vehicle.BHumanTrainTankLvl3View
+import com.orego.battlecrane.ui.model.std.view.race.human.action.building.*
+import com.orego.battlecrane.ui.model.std.view.race.human.action.infantry.BHumanTrainMarineLvl1View
+import com.orego.battlecrane.ui.model.std.view.race.human.action.infantry.BHumanTrainMarineLvl2View
+import com.orego.battlecrane.ui.model.std.view.race.human.action.infantry.BHumanTrainMarineLvl3View
+import com.orego.battlecrane.ui.model.std.view.race.human.action.vehicle.BHumanTrainTankLvl1View
+import com.orego.battlecrane.ui.model.std.view.race.human.action.vehicle.BHumanTrainTankLvl2View
+import com.orego.battlecrane.ui.model.std.view.race.human.action.vehicle.BHumanTrainTankLvl3View
 
 class BHumanViewBuilders {
 

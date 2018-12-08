@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model.std.view.race.human.tool.building
+package com.orego.battlecrane.ui.model.std.view.race.human.action.building
 
 import android.content.Context
 import android.widget.ImageView
