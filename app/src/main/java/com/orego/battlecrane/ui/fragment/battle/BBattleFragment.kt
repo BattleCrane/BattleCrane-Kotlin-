@@ -42,8 +42,6 @@ class BBattleFragment : BFragment() {
 //        this.presenter.prepareBonusTools(this.fragment_battle_reinforcements_tools)
     }
 
-
-
     inner class Presenter : BFragment.BPresenter() {
 
         private val gameContext by lazy {
