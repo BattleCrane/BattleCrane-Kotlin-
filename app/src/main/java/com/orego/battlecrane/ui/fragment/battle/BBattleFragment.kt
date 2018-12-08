@@ -35,7 +35,6 @@ class BBattleFragment : BFragment() {
 
     override fun onStart() {
         super.onStart()
-
         this.presenter.prepareMap(this.fragment_battle_map_constraint_layout)
         this.presenter.prepareBuildTools(this.fragment_battle_build_actions)
         this.presenter.prepareTrainTools(this.fragment_battle_train_actions)
