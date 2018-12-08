@@ -21,30 +21,25 @@ abstract class BActionViewRender(
         val dimension = this.constraintLayout.measuredWidth / this.columnCount
         val constraintLayoutId = this.constraintLayout.id
         var index = 0
-        //Draw tools:
-
+        val actionCount = stack.size
+        //Draw actions:
         for (x in 0 until this.columnCount) {
             for (y in 0 until this.rowCount) {
-                println("IIIII: $index")
-                index++
-            }
-        }
-        index = 0
-
-        //TODO: REVERSE, ITERATE OVER STACK AND INMCREASE X & Y!!
-        for (x in 0 until this.columnCount) {
-            for (y in 0 until this.rowCount) {
-                println("VVVIIIII: $index")
-                //TODO: MAKE MORE COMPLETABLE INFORMATION ABOUT ACTION: (WHILE SIMPLE)
-                val action = stack[index].first
-                //TODO REMOVE TYPE:
-                val type = action::class.java.name
-                println("ACTION TYPE: $type")
-                val view = this.factory.build(action, dimension, this.context, type)
-                view.position = BPoint(x, y)
-                this.constraintLayout.addView(view)
-                this.temporaryViewList.add(view)
-                index++
+                if (index < actionCount) {
+                    println("VVVIIIII: $index")
+                    //TODO: MAKE MORE COMPLETABLE INFORMATION ABOUT ACTION: (WHILE SIMPLE)
+                    val action = stack[index].first
+                    //TODO REMOVE TYPE:
+                    val type = action::class.java.name
+                    println("ACTION TYPE: $type")
+                    val view = this.factory.build(action, dimension, this.context, type)
+                    view.position = BPoint(x, y)
+                    this.constraintLayout.addView(view)
+                    this.temporaryViewList.add(view)
+                    index++
+                } else {
+                    break
+                }
             }
         }
         this.constraintSet.clone(this.constraintLayout)

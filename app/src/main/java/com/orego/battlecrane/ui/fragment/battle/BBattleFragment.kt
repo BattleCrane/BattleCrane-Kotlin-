@@ -11,7 +11,9 @@ import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.model.api.render.action.BBuildViewRender
 import com.orego.battlecrane.ui.model.api.render.action.BTrainViewRender
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
+import com.orego.battlecrane.ui.util.hide
 import com.orego.battlecrane.ui.util.onMeasured
+import com.orego.battlecrane.ui.util.show
 import com.orego.battlecrane.ui.viewModel.BViewFactoryViewModel
 import kotlinx.android.synthetic.main.fragment_battle.*
 
@@ -22,13 +24,25 @@ class BBattleFragment : BFragment() {
     override fun onCreateContentView(i: LayoutInflater, c: ViewGroup?, b: Bundle?): View? = i
         .inflate(R.layout.fragment_battle, c, false)!!
 
+    override fun onContentViewCreated() {
+        this.initListeners()
+    }
+
+    //TODO: MAKE NORMAL LISTENER INIT!
+    private fun initListeners() {
+        this.fragment_battle_to_build_constraint_layout.setOnClickListener { this.fragment_battle_build_actions.show(); it.hide() }
+    }
+
     override fun onStart() {
         super.onStart()
+
         this.presenter.prepareMap(this.fragment_battle_map_constraint_layout)
-        this.presenter.prepareBuildTools(this.fragment_battle_build_tools)
-        this.presenter.prepareTrainTools(this.fragment_battle_train_tools)
+        this.presenter.prepareBuildTools(this.fragment_battle_build_actions)
+        this.presenter.prepareTrainTools(this.fragment_battle_train_actions)
 //        this.presenter.prepareBonusTools(this.fragment_battle_reinforcements_tools)
     }
+
+
 
     inner class Presenter : BFragment.BPresenter() {
 
@@ -76,7 +90,7 @@ class BBattleFragment : BFragment() {
         fun prepareBuildTools(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
                 this.buildViewRender.install(
-                    this@BBattleFragment.fragment_battle_build_tools,
+                    this@BBattleFragment.fragment_battle_build_actions,
                     this.viewFactoryViewModel.buildActionFactory,
                     this.applicationContext
                 )
@@ -86,7 +100,7 @@ class BBattleFragment : BFragment() {
         fun prepareTrainTools(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
                 this.trainViewRender.install(
-                    this@BBattleFragment.fragment_battle_train_tools,
+                    this@BBattleFragment.fragment_battle_train_actions,
                     this.viewFactoryViewModel.trainActionFactory,
                     this.applicationContext
                 )
