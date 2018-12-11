@@ -3,6 +3,7 @@ package com.orego.battlecrane.bc.std.race.human.action.train
 import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BTargetable
 import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.vehicle.implementation.BHumanTank
@@ -18,5 +19,14 @@ class BHumanTrainTankLvl3(gameContext: BGameContext, owner: BPlayer) : BHumanAct
             return manager.createUnit(tank, this.targetPosition)
         }
         return false
+    }
+
+    class Producer(context: BGameContext, owner: BPlayer) : BAction.Producer(context, owner) {
+
+        override fun produceToStackByAbility(stack: MutableSet<BAction>, abilityCount: Int) {
+            if (abilityCount > 0) {
+                stack.add(BHumanTrainTankLvl3(context, owner))
+            }
+        }
     }
 }

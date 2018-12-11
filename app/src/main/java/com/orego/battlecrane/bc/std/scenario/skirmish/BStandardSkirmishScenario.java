@@ -8,7 +8,7 @@ import com.orego.battlecrane.bc.api.scenario.BGameScenario;
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField;
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters;
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanWall;
-import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BSkirmishHumanAdjutant;
+import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BHumanAdjutant;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -62,8 +62,8 @@ public final class BStandardSkirmishScenario implements BGameScenario {
         final BPlayer redPlayer = new BPlayer(0);
         final BPlayer bluePlayer = new BPlayer(1);
         //Set adjutant:
-        redPlayer.setAdjutant(new BSkirmishHumanAdjutant(context, redPlayer));
-        bluePlayer.setAdjutant(new BSkirmishHumanAdjutant(context, bluePlayer));
+        redPlayer.setAdjutant(new BHumanAdjutant(context, redPlayer));
+        bluePlayer.setAdjutant(new BHumanAdjutant(context, bluePlayer));
         //Set enemies:
         redPlayer.addEnemy(bluePlayer);
         bluePlayer.addEnemy(redPlayer);
