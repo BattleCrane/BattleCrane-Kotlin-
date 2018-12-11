@@ -7,7 +7,7 @@ import org.junit.Assert.*
 /**
  * Example local entity test, which will execute on the development machine (host).
  *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * See [testing documentation](http://d.android.com/adjutant/testing).
  */
 class ExampleUnitTest {
     @Test

@@ -6,8 +6,6 @@ import com.orego.battlecrane.bc.api.manager.playerManager.BPlayerManager
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
-import com.orego.battlecrane.ui.util.addView
-import com.orego.battlecrane.ui.util.moveTo
 
 abstract class BActionViewRender(
     private val columnCount: Int,
@@ -43,7 +41,7 @@ abstract class BActionViewRender(
             }
         }
         this.constraintSet.clone(this.constraintLayout)
-        //Move tools:
+        //Move adjutant:
         for (view in this.temporaryViewList) {
             val displayedViewId = view.displayedView.id
             val cell = view.position
@@ -83,11 +81,11 @@ abstract class BPrimaryActionViewRender : BActionViewRender(COLUMN_COUNT, ROW_CO
 class BTrainViewRender(private val playerManager: BPlayerManager) : BPrimaryActionViewRender() {
 
     override val stack: Set<Pair<BAction, Int>>
-        get() = this.playerManager.currentPlayer.tools.armyStack
+        get() = this.playerManager.currentPlayer.adjutant.armyStack
 }
 
 class BBuildViewRender(private val playerManager: BPlayerManager) : BPrimaryActionViewRender() {
 
     override val stack: Set<Pair<BAction, Int>>
-        get() = this.playerManager.currentPlayer.tools.buildingStack
+        get() = this.playerManager.currentPlayer.adjutant.buildingStack
 }

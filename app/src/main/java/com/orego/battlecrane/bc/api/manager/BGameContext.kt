@@ -6,7 +6,15 @@ import com.orego.battlecrane.bc.api.scenario.BGameScenario
 
 class BGameContext(scenario: BGameScenario) {
 
-    val mapManager = BMapManager(scenario, this)
+    /**
+     * Firstly create player manager.
+     */
 
     val playerManager = BPlayerManager(scenario, this)
+
+    /**
+     * Secondly -- map manager
+     */
+
+    val mapManager = BMapManager(scenario, this)
 }

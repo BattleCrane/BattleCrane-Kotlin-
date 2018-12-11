@@ -2,14 +2,13 @@ package com.orego.battlecrane.bc.std.scenario.skirmish;
 
 import com.orego.battlecrane.bc.api.manager.BGameContext;
 import com.orego.battlecrane.bc.api.manager.mapManager.BMapManager;
-import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint;
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer;
 import com.orego.battlecrane.bc.api.model.unit.BUnit;
 import com.orego.battlecrane.bc.api.scenario.BGameScenario;
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField;
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters;
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanWall;
-import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.BSkirmishHumanTools;
+import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BSkirmishHumanAdjutant;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -62,9 +61,9 @@ public final class BStandardSkirmishScenario implements BGameScenario {
         final List<BPlayer> playerList = new ArrayList<>();
         final BPlayer redPlayer = new BPlayer(0);
         final BPlayer bluePlayer = new BPlayer(1);
-        //Set tools:
-        redPlayer.setTools(new BSkirmishHumanTools(context, redPlayer));
-        bluePlayer.setTools(new BSkirmishHumanTools(context, bluePlayer));
+        //Set adjutant:
+        redPlayer.setAdjutant(new BSkirmishHumanAdjutant(context, redPlayer));
+        bluePlayer.setAdjutant(new BSkirmishHumanAdjutant(context, bluePlayer));
         //Set enemies:
         redPlayer.addEnemy(bluePlayer);
         bluePlayer.addEnemy(redPlayer);
