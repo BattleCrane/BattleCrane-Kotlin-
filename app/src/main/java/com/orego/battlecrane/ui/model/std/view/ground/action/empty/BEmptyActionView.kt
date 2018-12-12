@@ -8,7 +8,7 @@ import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.asSimple
 
-class BEmptyActionView(action : BAction, dimension: Int, context: Context) : BActionView(action) {
+class BEmptyActionView(ability : BAction, dimension: Int, context: Context) : BActionView(ability) {
 
     override val displayedView = ImageView(context).asSimple(context, dimension, ACTION_DRAWABLE)
 

@@ -6,10 +6,11 @@ import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.model.contract.BHealthable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
+import com.orego.battlecrane.bc.api.model.contract.BProducable
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
 class BHumanBarracks(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gameContext, owner),
-    BHealthable, BLevelable {
+    BHealthable, BLevelable, BProducable {
 
     companion object {
 
@@ -57,4 +58,6 @@ class BHumanBarracks(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding
     override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
 
     override val levelDownObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+
+    override var isReadyToProduce = false
 }

@@ -6,10 +6,11 @@ import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.model.contract.BHealthable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
+import com.orego.battlecrane.bc.api.model.contract.BProducable
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
 class BHumanGenerator(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gameContext, owner),
-    BHealthable, BLevelable {
+    BHealthable, BLevelable, BProducable {
 
     companion object {
 
@@ -41,6 +42,8 @@ class BHumanGenerator(gameContext: BGameContext, owner: BPlayer) : BHumanBuildin
 
     override var maxLevel =
         DEFAULT_MAX_LEVEL
+
+    override var isReadyToProduce: Boolean = false
 
     override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
 

@@ -20,13 +20,4 @@ class BHumanBuildBarracks(gameContext: BGameContext, owner: BPlayer) : BHumanAct
         }
         return false
     }
-
-    class Producer(context: BGameContext, owner: BPlayer) : BAction.Producer(context, owner) {
-
-        override fun produceToStackByAbility(stack: MutableSet<BAction>, abilityCount: Int) {
-            if (abilityCount > 0) {
-                stack.add(BHumanBuildBarracks(context, owner))
-            }
-        }
-    }
 }

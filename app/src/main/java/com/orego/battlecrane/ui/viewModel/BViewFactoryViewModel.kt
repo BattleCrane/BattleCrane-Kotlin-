@@ -1,13 +1,9 @@
 package com.orego.battlecrane.ui.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.orego.battlecrane.bc.api.model.action.BAction
-import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.scenarioMaterials.BUiScenarioMaterials
-import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 
 class BViewFactoryViewModel : ViewModel() {
 

@@ -25,8 +25,8 @@ abstract class BAction(
         fun onActionPerformed()
     }
 
-    abstract class Producer(protected val context: BGameContext, protected val owner: BPlayer) {
+    interface Factory {
 
-        abstract fun produceToStackByAbility(stack: MutableSet<BAction>, abilityCount : Int)
+        fun create() :BAction
     }
 }

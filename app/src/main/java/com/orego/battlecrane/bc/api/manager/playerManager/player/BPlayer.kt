@@ -1,12 +1,15 @@
 package com.orego.battlecrane.bc.api.manager.playerManager.player
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
+import com.orego.battlecrane.bc.api.manager.mechanics.adjutant.BAdjutant
+import com.orego.battlecrane.bc.api.manager.mechanics.turnTimer.BTurnTimer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 
-class BPlayer(context: BGameContext, id: Long, builder : BAdjutant.Builder) {
+class BPlayer(context: BGameContext, private val id: Long, builder : BAdjutant.Builder) {
 
     val adjutant: BAdjutant = builder.build(context, this)
+
+    val turnTimer = BTurnTimer(this.adjutant)
 
     private val allies = mutableSetOf<BPlayer>()
 

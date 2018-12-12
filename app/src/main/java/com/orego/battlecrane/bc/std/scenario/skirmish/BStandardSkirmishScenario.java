@@ -24,7 +24,7 @@ public final class BStandardSkirmishScenario implements BGameScenario {
             @NotNull final BMapManager.BMapHolder mapHolder,
             @NotNull final BGameContext context
     ) {
-        //Fill start player position:
+        //Fill launch player position:
         final List<BPlayer> players = context.getPlayerManager().getPlayers();
         if (players.size() == 2) {
             //Get players:

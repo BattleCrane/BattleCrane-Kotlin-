@@ -6,7 +6,6 @@ import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BTargetable
 import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
-import com.orego.battlecrane.bc.std.race.human.action.build.BHumanBuildBarracks
 import com.orego.battlecrane.bc.std.race.human.infantry.implementation.BHumanMarine
 
 class BHumanTrainMarineLvl1(gameContext: BGameContext, owner : BPlayer) : BHumanAction(gameContext, owner), BTargetable {
@@ -25,7 +24,7 @@ class BHumanTrainMarineLvl1(gameContext: BGameContext, owner : BPlayer) : BHuman
         return false
     }
 
-    class Producer(context: BGameContext, owner: BPlayer) : BAction.Producer(context, owner) {
+    class Producer(context: BGameContext, owner: BPlayer) : BAction.Factory(context, owner) {
 
         override fun produceToStackByAbility(stack: MutableSet<BAction>, abilityCount: Int) {
             if (abilityCount > 0) {

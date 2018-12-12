@@ -29,7 +29,7 @@ class BHumanUpgradeBuilding(gameContext: BGameContext, owner: BPlayer) : BHumanA
         return false
     }
 
-    class Producer(context: BGameContext, owner: BPlayer) : BAction.Producer(context, owner) {
+    class Producer(context: BGameContext, owner: BPlayer) : BAction.Factory(context, owner) {
 
         override fun produceToStackByAbility(stack: MutableSet<BAction>, abilityCount: Int) {
             if (abilityCount > 0) {

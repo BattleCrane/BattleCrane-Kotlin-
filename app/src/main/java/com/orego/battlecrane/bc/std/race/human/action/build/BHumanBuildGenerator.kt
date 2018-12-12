@@ -20,30 +20,4 @@ class BHumanBuildGenerator(gameContext: BGameContext, owner: BPlayer) : BHumanAc
         }
         return false
     }
-
-    class Producer(context: BGameContext, owner: BPlayer) : BAction.Producer(context, owner) {
-
-        companion object {
-
-            private const val GENERATOR_LIMIT = 2
-        }
-
-        private val unitHeap by lazy { context.mapManager.unitHeap.values }
-
-        override fun produceToStackByAbility(stack: MutableSet<BAction>, abilityCount: Int) {
-            if (abilityCount > 0) {
-                var generatorCount = 0
-                this.unitHeap.forEach { unit ->
-                    if (this.owner.owns(unit) && unit is BHumanGenerator) {
-                        if (generatorCount == GENERATOR_LIMIT) {
-                            return
-                        } else {
-                            generatorCount++
-                        }
-                    }
-                }
-                stack.add(BHumanBuildGenerator(this.context, this.owner))
-            }
-        }
-    }
 }

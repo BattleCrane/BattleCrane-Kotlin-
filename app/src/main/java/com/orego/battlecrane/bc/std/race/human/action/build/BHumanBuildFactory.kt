@@ -21,28 +21,4 @@ class BHumanBuildFactory(gameContext: BGameContext, owner: BPlayer) : BHumanActi
         }
         return false
     }
-
-    class Producer(context: BGameContext, owner: BPlayer) : BAction.Producer(context, owner) {
-
-        private val unitHeap by lazy { context.mapManager.unitHeap.values }
-
-        override fun produceToStackByAbility(stack: MutableSet<BAction>, abilityCount: Int) {
-            if (abilityCount > 0) {
-                var barracksCount = 0
-                var factoryCount = 0
-                this.unitHeap.forEach { unit ->
-                    if (this.owner.owns(unit)) {
-                        when (unit) {
-                            is BHumanBarracks -> barracksCount++
-                            is BHumanFactory -> factoryCount++
-                        }
-                    }
-                }
-                val comparison = barracksCount - factoryCount
-                if (comparison > 0) {
-                    stack.add(BHumanBuildFactory(this.context, this.owner))
-                }
-            }
-        }
-    }
 }
