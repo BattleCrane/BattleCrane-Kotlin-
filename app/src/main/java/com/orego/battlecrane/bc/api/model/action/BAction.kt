@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 
 abstract class BAction(
-    protected val gameContext: BGameContext,
+    protected val context: BGameContext,
     protected var owner: BPlayer? = null
 ) {
 

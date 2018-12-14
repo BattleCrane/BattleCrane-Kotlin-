@@ -1,10 +1,12 @@
 package com.orego.battlecrane.bc.api.model.contract
 
+import com.orego.battlecrane.bc.api.manager.BGameContext
+import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.model.action.BAction
+
 interface BAttackable {
 
     var damage: Int
-
-    var attackTimes: Int
 
     var isAttackEnable : Boolean
 
@@ -14,20 +16,11 @@ interface BAttackable {
 
     val attackEnableObserver : MutableMap<Long, AttackEnableListener>
 
-    fun attack(target: BHealthable) {
+    fun attack(target: BHitPointable) {
         if (this.isAttackEnable) {
-            this.attackObserver.values.forEach { it.onAttack() }
-            if (damage > 0) {
-                target.decreaseHealth(damage, this.damageObserver)
-            }
-        }
-    }
-
-    fun attack(damage: Int, target: BHealthable) {
-        if (this.isAttackEnable) {
-            this.attackObserver.values.forEach { it.onAttack() }
-            if (damage > 0) {
-                target.decreaseHealth(damage, this.damageObserver)
+            this.attackObserver.values.forEach { it.onAttackStarted() }
+            if (this.damage > 0) {
+                target.decreaseHitPoints(this.damage, this.damageObserver)
             }
         }
     }
@@ -37,6 +30,8 @@ interface BAttackable {
         this.attackEnableObserver.values.forEach { it.onAttackStateChanged(isAttackEnable) }
     }
 
+    fun getAttackAction(context: BGameContext, owner : BPlayer) : BAction
+
     interface DamageListener {
 
         fun onDamageDealt(oldHealth: Int, newHealth: Int, comparison: Int)
@@ -44,7 +39,7 @@ interface BAttackable {
 
     interface AttackListener {
 
-        fun onAttack()
+        fun onAttackStarted()
     }
 
     interface AttackEnableListener {

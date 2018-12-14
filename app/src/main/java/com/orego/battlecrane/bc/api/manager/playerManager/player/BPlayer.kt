@@ -25,7 +25,7 @@ class BPlayer(context: BGameContext, private val id: Long, builder : BAdjutant.B
 
     fun removeEnemy(player: BPlayer) = this.enemies.remove(player)
 
-    fun isEnemy(player: BPlayer) = this.enemies.contains(player)
+    fun isEnemy(player: BPlayer?) = this.enemies.contains(player)
 
     fun addAlly(player: BPlayer) = this.allies.add(player)
 

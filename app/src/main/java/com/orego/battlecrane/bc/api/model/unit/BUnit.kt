@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.util.BIdGenerator
 
 abstract class BUnit(
-    protected val gameContext: BGameContext,
+    protected val context: BGameContext,
     var owner: BPlayer? = null
 ) {
 
@@ -22,7 +22,7 @@ abstract class BUnit(
 
     val onDestroyListener = mutableMapOf<Long, OnDestroyListener>()
 
-    abstract fun isPlaced(position: BPoint) : Boolean
+    abstract fun isPlaced(position: BPoint): Boolean
 
     interface OnCreateListener {
 

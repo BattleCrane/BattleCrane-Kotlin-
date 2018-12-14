@@ -14,8 +14,8 @@ class BHumanBuildWall(gameContext: BGameContext, owner : BPlayer) : BHumanAction
 
     override fun performAction(): Boolean {
         if (this.targetPosition != null && this.owner != null) {
-            val wall = BHumanWall(this.gameContext, this.owner!!)
-            val manager = this.gameContext.mapManager
+            val wall = BHumanWall(this.context, this.owner!!)
+            val manager = this.context.mapManager
             return manager.createUnit(wall, this.targetPosition)
         }
         return false

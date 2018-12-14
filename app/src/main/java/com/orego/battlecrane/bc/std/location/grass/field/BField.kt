@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.std.location.grass.field
 import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 
-abstract class BField(gameContext: BGameContext) : BUnit(gameContext) {
+abstract class BField(context: BGameContext) : BUnit(context) {
 
     companion object {
 

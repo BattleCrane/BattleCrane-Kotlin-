@@ -1,12 +1,12 @@
 package com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
+import com.orego.battlecrane.bc.api.manager.mechanics.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
-import com.orego.battlecrane.bc.api.manager.mechanics.adjutant.BAdjutant
+import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BProducable
 import com.orego.battlecrane.bc.std.race.human.action.build.*
-import com.orego.battlecrane.bc.std.race.human.action.train.*
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanFactory
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanGenerator
@@ -43,7 +43,11 @@ class BHumanAdjutant(
     override fun onTurnEnded() {
     }
 
-    inner class AlertManager {
+    /**
+     * AlertManager.
+     */
+
+    private inner class AlertManager {
 
         private val unitHeap by lazy {
             this@BHumanAdjutant.unitHeap
@@ -55,26 +59,33 @@ class BHumanAdjutant(
         }
 
         private fun activateAttackers() {
-            //TODO:
+            this.unitHeap
+                .filter { unit -> this@BHumanAdjutant.owner.owns(unit) && unit is BAttackable }
+                .map { unit -> unit as BAttackable }
+                .forEach { unit -> unit.isReadyToProduce = true }
         }
 
         private fun activateFactories() {
             this.unitHeap
                 .filter { unit -> this@BHumanAdjutant.owner.owns(unit) && unit is BProducable }
                 .map { unit -> unit as BProducable }
-                .forEach { unit -> unit.isReadyToProduce = true }
+                .forEach { unit -> unit.isProduceEnable = true }
         }
     }
 
-    inner class ResourceManager : BAdjutant.ResourceManager() {
+    /**
+     * Resource manager.
+     */
+
+    private inner class ResourceManager : BAdjutant.ResourceManager() {
 
         private val unitHeap by lazy {
             this@BHumanAdjutant.unitHeap
         }
 
-        val calculator = Calculator()
+        private val calculator = Calculator()
 
-        val resourceSupplier = ResourceSupplier()
+        private val resourceSupplier = ResourceSupplier()
 
         private var buildingActionCount = 0
 
@@ -130,13 +141,13 @@ class BHumanAdjutant(
          * Calculator.
          */
 
-        inner class Calculator {
+        private inner class Calculator {
 
             fun calcBuildingActionCount(): Int {
                 val owner = this@BHumanAdjutant.owner
                 var abilityCount = HEADQUARTERS_BUILD_ABILITY
                 this@ResourceManager.unitHeap.forEach { unit ->
-                    if (owner.owns(unit) && unit is BHumanGenerator && unit.isReadyToProduce) {
+                    if (owner.owns(unit) && unit is BHumanGenerator && unit.isProduceEnable) {
                         abilityCount++
                     }
                 }
@@ -167,7 +178,8 @@ class BHumanAdjutant(
                 this@ResourceManager.unitHeap.forEach { unit ->
                     if (this@BHumanAdjutant.owner.owns(unit)
                         && unit is BHumanGenerator
-                        && unit.isReadyToProduce) {
+                        && unit.isProduceEnable
+                    ) {
                         if (generatorCount == GENERATOR_LIMIT) {
                             return@forEach
                         } else {
@@ -184,7 +196,7 @@ class BHumanAdjutant(
                 this@ResourceManager.unitHeap.forEach { unit ->
                     if (owner.owns(unit)
                         && unit is BHumanBarracks
-                        && unit.isReadyToProduce
+                        && unit.isProduceEnable
                     ) {
                         abilityCount++
                     }
@@ -199,7 +211,7 @@ class BHumanAdjutant(
                     if (owner.owns(unit)
                         && unit is BHumanBarracks
                         && unit.currentLevel > 1
-                        && unit.isReadyToProduce
+                        && unit.isProduceEnable
                     ) {
                         abilityCount++
                     }
@@ -214,7 +226,7 @@ class BHumanAdjutant(
                     if (owner.owns(unit)
                         && unit is BHumanBarracks
                         && unit.currentLevel > 2
-                        && unit.isReadyToProduce
+                        && unit.isProduceEnable
                     ) {
                         abilityCount++
                     }
@@ -262,7 +274,7 @@ class BHumanAdjutant(
             }
         }
 
-        inner class ResourceSupplier {
+        private inner class ResourceSupplier {
 
             fun suppy() {
                 this.supplyBuildings()
@@ -301,13 +313,13 @@ class BHumanAdjutant(
                     armyActions.add(BHumanTrainMarineLvl1(context, owner))
                 }
                 if (resourceManager.trainMarineLvl2ActionCount > 0) {
-                    armyActions.add(BHumanTrainMarineLvl2(context, owner))
+                    armyActions.add(TrainMarineLvl2(context, owner))
                 }
                 if (resourceManager.trainMarineLvl3ActionCount > 0) {
-                    armyActions.add(BHumanTrainMarineLvl3(context, owner))
+                    armyActions.add(TrainMarineLvl3(context, owner))
                 }
                 if (resourceManager.trainTankLvl1ActionCount > 0) {
-                    armyActions.add(BHumanTrainTankLvl1(context, owner))
+                    armyActions.add(TrainTank(context, owner))
                 }
                 if (resourceManager.trainTankLvl2ActionCount > 0) {
                     armyActions.add(BHumanTrainTankLvl2(context, owner))

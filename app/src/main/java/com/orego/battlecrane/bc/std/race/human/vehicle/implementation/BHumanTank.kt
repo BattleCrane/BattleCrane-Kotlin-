@@ -3,11 +3,11 @@ package com.orego.battlecrane.bc.std.race.human.vehicle.implementation
 import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
-import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
-import com.orego.battlecrane.bc.api.model.contract.BHealthable
+import com.orego.battlecrane.bc.api.model.contract.BHitPointable
+import com.orego.battlecrane.bc.api.model.unit.BUnit
 
-open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, owner), BHealthable,
+open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, owner), BHitPointable,
     BAttackable {
     override fun isPlaced(position: BPoint): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -38,16 +38,16 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
     final override val horizontalSide =
         DEFAULT_HORIZONTAL_SIDE
 
-    final override var currentHealth =
+    final override var currentHitPoints =
         DEFAULT_MAX_HEALTH
 
-    final override var maxHealth =
+    final override var maxHitPoints =
         DEFAULT_MAX_HEALTH
 
     final override var damage =
         DEFAULT_DAMAGE
 
-    final override var attackTimes =
+    final override var isReadyToAttack =
         DEFAULT_ATTACK_TIMES
 
     final override var isAttackEnable =
@@ -57,9 +57,9 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
      * Observers.
      */
 
-    final override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    final override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 
-    final override val increaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    final override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 
     final override val damageObserver: MutableMap<Long, BAttackable.DamageListener> = mutableMapOf()
 

@@ -2,14 +2,13 @@ package com.orego.battlecrane.bc.std.race.human.building.implementation
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
-import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
-import com.orego.battlecrane.bc.api.model.contract.BHealthable
+import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
 class BHumanHeadquarters(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gameContext, owner),
-    BHealthable, BLevelable, BAttackable {
+    BHitPointable, BLevelable, BAttackable {
 
     companion object {
 
@@ -40,10 +39,10 @@ class BHumanHeadquarters(gameContext: BGameContext, owner: BPlayer) : BHumanBuil
     override val horizontalSide =
         DEFAULT_HORIZONTAL_SIDE
 
-    override var currentHealth =
+    override var currentHitPoints =
         DEFAULT_MAX_HEALTH
 
-    override var maxHealth =
+    override var maxHitPoints =
         DEFAULT_MAX_HEALTH
 
     override var currentLevel =
@@ -55,7 +54,7 @@ class BHumanHeadquarters(gameContext: BGameContext, owner: BPlayer) : BHumanBuil
     override var damage =
         DEFAULT_DAMAGE
 
-    override var attackTimes =
+    override var isReadyToAttack =
         DEFAULT_ATTACK_TIMES
 
     override var isAttackEnable =
@@ -65,13 +64,13 @@ class BHumanHeadquarters(gameContext: BGameContext, owner: BPlayer) : BHumanBuil
      * Observers.
      */
 
-    override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 
-    override val increaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 
-    override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+    override val levelUpObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
 
-    override val levelDownObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+    override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
 
     override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
 

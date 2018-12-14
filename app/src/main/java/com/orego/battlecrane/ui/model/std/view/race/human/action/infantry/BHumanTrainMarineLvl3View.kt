@@ -4,12 +4,11 @@ import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.action.BAction
-import com.orego.battlecrane.bc.std.race.human.action.train.BHumanTrainMarineLvl3
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.asSimple
 
-class BHumanTrainMarineLvl3View(action: BHumanTrainMarineLvl3, dimension: Int, context: Context) : BActionView(action) {
+class BHumanTrainMarineLvl3View(action: TrainMarineLvl3, dimension: Int, context: Context) : BActionView(action) {
 
     companion object {
 
@@ -21,8 +20,8 @@ class BHumanTrainMarineLvl3View(action: BHumanTrainMarineLvl3, dimension: Int, c
     class Builder : BActionViewRender.ViewBuilder {
 
         override fun build(value: BAction, dimension: Int, context: Context) =
-            BHumanTrainMarineLvl3View(value as BHumanTrainMarineLvl3, dimension, context)
+            BHumanTrainMarineLvl3View(value as TrainMarineLvl3, dimension, context)
 
-        override val type: String = BHumanTrainMarineLvl3::class.java.name
+        override val type: String = TrainMarineLvl3::class.java.name
     }
 }

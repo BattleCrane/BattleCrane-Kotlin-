@@ -3,14 +3,19 @@ package com.orego.battlecrane.bc.std.race.human.building.implementation
 import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
-import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.api.model.contract.BHealthable
+import com.orego.battlecrane.bc.api.model.action.BAction
+import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
+import com.orego.battlecrane.bc.api.model.contract.BProducable
+import com.orego.battlecrane.bc.api.model.contract.BTargetable
+import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
+import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
+import com.orego.battlecrane.bc.std.race.human.vehicle.implementation.BHumanTank
 
 class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner),
-    BHealthable, BLevelable {
-
+    BHitPointable, BLevelable, BProducable {
 
     companion object {
 
@@ -25,29 +30,75 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
         private const val DEFAULT_MAX_LEVEL = 3
     }
 
-    override val verticalSide =
-        DEFAULT_VERTICAL_SIDE
+    /**
+     * properties.
+     */
 
-    override val horizontalSide =
-        DEFAULT_HORIZONTAL_SIDE
+    override val verticalSide = DEFAULT_VERTICAL_SIDE
 
-    override var currentHealth =
-        DEFAULT_MAX_HEALTH
+    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
 
-    override var maxHealth =
-        DEFAULT_MAX_HEALTH
+    override var currentHitPoints = DEFAULT_MAX_HEALTH
 
-    override var currentLevel =
-        DEFAULT_LEVEL
+    override var maxHitPoints = DEFAULT_MAX_HEALTH
 
-    override var maxLevel =
-        DEFAULT_MAX_LEVEL
+    override var currentLevel = DEFAULT_LEVEL
 
-    override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    override var maxLevel = DEFAULT_MAX_LEVEL
 
-    override val increaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    override var isProduceEnable = false
 
-    override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+    /**
+     * Observers.
+     */
 
-    override val levelDownObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+    override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
+
+    override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
+
+    override val levelUpObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
+
+    override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
+
+    override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
+
+    override fun getProduceActions(context: BGameContext, owner: BPlayer): Set<BAction> {
+        val actionSet = mutableSetOf<BAction>()
+        if (this.isProduceEnable) {
+            actionSet.add(TrainTank { unit -> this.owner!!.owns(unit) })
+            if (this.currentLevel > 1) {
+                actionSet.add(TrainTank { unit -> !this.owner!!.isEnemy(unit.owner) })
+                if (this.currentLevel > 2) {
+                    actionSet.add(TrainTank { true })
+                }
+            }
+        }
+        return actionSet
+    }
+
+    /**
+     * Action.
+     */
+
+    inner class TrainTank(private val cond: (BUnit) -> Boolean) : BHumanAction(this.context, this.owner!!),
+        BTargetable {
+
+        override var targetPosition: BPoint? = null
+
+        override fun performAction(): Boolean {
+            if (this.targetPosition != null) {
+                val tank = BHumanTank(this.context, this.owner!!)
+                val manager = this.context.mapManager
+                val unit = manager.getUnitByPosition(this.targetPosition)
+                if (unit is BEmptyField && this.cond(unit)) {
+                    val isSuccessful = manager.createUnit(tank, this.targetPosition)
+                    if (isSuccessful) {
+                        this@BHumanFactory.isProduceEnable = false
+                    }
+                    return isSuccessful
+                }
+            }
+            return false
+        }
+    }
 }

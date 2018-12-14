@@ -5,4 +5,4 @@ import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.std.race.human.BHumanRace
 
-abstract class BHumanAction(gameContext: BGameContext, owner: BPlayer) : BAction(gameContext, owner), BHumanRace
+abstract class BHumanAction(context: BGameContext, owner: BPlayer) : BAction(context, owner), BHumanRace

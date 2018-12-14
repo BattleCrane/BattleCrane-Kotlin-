@@ -1,14 +1,12 @@
 package com.orego.battlecrane.bc.std.race.human.building.implementation
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
-import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.api.model.contract.BHealthable
+import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
 class BHumanWall(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gameContext, owner),
-    BHealthable {
+    BHitPointable {
 
     companion object {
 
@@ -29,17 +27,17 @@ class BHumanWall(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gam
     override val horizontalSide =
         DEFAULT_HORIZONTAL_SIDE
 
-    override var currentHealth =
+    override var currentHitPoints =
         DEFAULT_MAX_HEALTH
 
-    override var maxHealth =
+    override var maxHitPoints =
         DEFAULT_MAX_HEALTH
 
     /**
      * Observers.
      */
 
-    override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 
-    override val increaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 }

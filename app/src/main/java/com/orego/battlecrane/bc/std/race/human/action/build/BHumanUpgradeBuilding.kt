@@ -20,7 +20,7 @@ class BHumanUpgradeBuilding(gameContext: BGameContext, owner: BPlayer) : BHumanA
 
     override fun performAction(): Boolean {
         if (this.targetPosition != null && this.owner != null) {
-            val manager = this.gameContext.mapManager
+            val manager = this.context.mapManager
             val unit = manager.getUnitByPosition(this.targetPosition)
             if (unit is BLevelable && unit is BHumanBuilding) {
                 return unit.increaseLevel(DEFAULT_BUILDING_UPGRADE)

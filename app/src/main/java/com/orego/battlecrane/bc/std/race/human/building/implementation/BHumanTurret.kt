@@ -1,16 +1,15 @@
 package com.orego.battlecrane.bc.std.race.human.building.implementation
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
-import com.orego.battlecrane.bc.api.util.BIdGenerator
-import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
-import com.orego.battlecrane.bc.api.model.contract.BHealthable
+import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
+import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.api.util.BIdGenerator
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
-class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner), BHealthable,
+class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner), BHitPointable,
     BLevelable, BAttackable {
 
     companion object {
@@ -44,10 +43,10 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
     override val horizontalSide =
         DEFAULT_HORIZONTAL_SIDE
 
-    override var currentHealth =
+    override var currentHitPoints =
         DEFAULT_MAX_HEALTH
 
-    override var maxHealth =
+    override var maxHitPoints =
         DEFAULT_MAX_HEALTH
 
     override var currentLevel =
@@ -59,7 +58,7 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
     override var damage =
         DEFAULT_DAMAGE
 
-    override var attackTimes =
+    override var isReadyToAttack =
         DEFAULT_ATTACK_TIMES
 
     override var isAttackEnable =
@@ -72,13 +71,13 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
      * Observers.
      */
 
-    override val decreaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 
-    override val increaseHealthObserver: MutableMap<Long, BHealthable.Listener> = mutableMapOf()
+    override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 
-    override val levelUpObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+    override val levelUpObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
 
-    override val levelDownObserver: MutableMap<Long, BLevelable.LevelListener> = mutableMapOf()
+    override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
 
     override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
 
@@ -99,8 +98,8 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
      */
 
     fun attackInRadius() {
-        val mapManager = this.gameContext.mapManager
-        val playerManager = this.gameContext.playerManager
+        val mapManager = this.context.mapManager
+        val playerManager = this.context.playerManager
         //"Пирамидальный сдвиг": с каждой итерируется по горизонтали с формулой 2i -1
         var countShift = 0
         val x = this.pivot!!.x
@@ -110,7 +109,7 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
                 if (mapManager.inBounds(i, j)) {
                     val currentUnit = mapManager.getUnitByPosition(i, j)
                     val isEnemy = playerManager.isEnemies(this, currentUnit)
-                    if (isEnemy && currentUnit is BHealthable) {
+                    if (isEnemy && currentUnit is BHitPointable) {
                         this.attack(currentUnit)
                     }
                 }
