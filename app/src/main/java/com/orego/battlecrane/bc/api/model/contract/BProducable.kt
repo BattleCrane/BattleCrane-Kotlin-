@@ -11,8 +11,10 @@ interface BProducable {
     var isProduceStateChangedObserver : MutableMap<Long, Listener>
 
     fun switchProduceEnable(isProduceEnable : Boolean) {
-        this.isProduceEnable = isProduceEnable
-        this.isProduceStateChangedObserver.values.forEach { it.onProduceStateChanged(isProduceEnable) }
+        if (this.isProduceEnable != isProduceEnable) {
+            this.isProduceEnable = isProduceEnable
+            this.isProduceStateChangedObserver.values.forEach { it.onProduceStateChanged(isProduceEnable) }
+        }
     }
 
     fun getProduceActions(context: BGameContext, owner : BPlayer) : Set<BAction>

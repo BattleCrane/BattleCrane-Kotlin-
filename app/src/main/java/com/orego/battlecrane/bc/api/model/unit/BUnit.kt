@@ -18,19 +18,13 @@ abstract class BUnit(
 
     abstract val horizontalSide: Int
 
-    val onCreateObserver = mutableMapOf<Long, OnCreateListener>()
-
-    val onDestroyListener = mutableMapOf<Long, OnDestroyListener>()
-
     abstract fun isPlaced(position: BPoint): Boolean
 
-    interface OnCreateListener {
+    open fun onTurnStarted() {
 
-        fun onCreate(unit: BUnit)
     }
 
-    interface OnDestroyListener {
+    open fun onTurnEnded() {
 
-        fun onDestroy(unit: BUnit)
     }
 }

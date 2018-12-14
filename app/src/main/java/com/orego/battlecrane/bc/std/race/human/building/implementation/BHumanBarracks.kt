@@ -9,7 +9,6 @@ import com.orego.battlecrane.bc.api.model.contract.BLevelable
 import com.orego.battlecrane.bc.api.model.contract.BProducable
 import com.orego.battlecrane.bc.api.model.contract.BTargetable
 import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.infantry.implementation.BHumanMarine
@@ -75,6 +74,13 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
             }
         }
 
+    override fun onTurnStarted() {
+        this.switchProduceEnable(true)
+    }
+
+    override fun onTurnEnded() {
+        this.switchProduceEnable(false)
+    }
 
     /**
      * Action.
@@ -90,7 +96,7 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
                 val marine = BHumanMarine(this.context, this.owner!!)
                 val manager = this.context.mapManager
                 val unit = manager.getUnitByPosition(this.targetPosition)
-                if (unit is BEmptyField && this.createCond(unit)) {
+                if (this.createCond(unit)) {
                     val isSuccessful = manager.createUnit(marine, this.targetPosition)
                     if (isSuccessful) {
                         this@BHumanBarracks.switchProduceEnable(false)

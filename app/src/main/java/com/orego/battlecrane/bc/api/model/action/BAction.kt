@@ -13,7 +13,7 @@ abstract class BAction(
     fun perform(): Boolean {
         val isSuccessful = this.performAction()
         if (isSuccessful) {
-            this.actionObservers.values.forEach { it.onActionPerformed() }
+            this.actionObservers.values.forEach { it.onActionPerformed(this) }
         }
         return isSuccessful
     }
@@ -22,7 +22,7 @@ abstract class BAction(
 
     interface Listener {
 
-        fun onActionPerformed()
+        fun onActionPerformed(action: BAction)
     }
 
     interface Factory {

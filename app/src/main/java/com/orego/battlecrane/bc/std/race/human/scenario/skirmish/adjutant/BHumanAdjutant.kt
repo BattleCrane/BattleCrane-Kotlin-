@@ -6,6 +6,7 @@ import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BProducable
+import com.orego.battlecrane.bc.api.util.BIdGenerator
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanFactory
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
@@ -113,6 +114,13 @@ class BHumanAdjutant(
                     is BHumanHeadquarters.Build -> this.buildingActions += action
                     is BHumanBarracks.TrainMarine -> this.armyActions += action
                     is BHumanFactory.TrainTank -> this.armyActions += action
+                }
+                action.actionObservers[BIdGenerator.generateActionId()] = object
+                    : BAction.Listener {
+
+                    override fun onActionPerformed(action: BAction) {
+                        this@ResourceManager.refreshResources()
+                    }
                 }
             }
         }

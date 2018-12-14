@@ -21,17 +21,13 @@ class BHumanWall(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gam
      * Properties.
      */
 
-    override val verticalSide =
-        DEFAULT_VERTICAL_SIDE
+    override val verticalSide = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSide =
-        DEFAULT_HORIZONTAL_SIDE
+    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
 
-    override var currentHitPoints =
-        DEFAULT_MAX_HEALTH
+    override var currentHitPoints = DEFAULT_MAX_HEALTH
 
-    override var maxHitPoints =
-        DEFAULT_MAX_HEALTH
+    override var maxHitPoints = DEFAULT_MAX_HEALTH
 
     /**
      * Observers.

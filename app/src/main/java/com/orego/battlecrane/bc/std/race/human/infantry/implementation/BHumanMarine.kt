@@ -3,17 +3,18 @@ package com.orego.battlecrane.bc.std.race.human.infantry.implementation
 import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
+import com.orego.battlecrane.bc.api.model.contract.BTargetable
 import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.infantry.BHumanInfantry
 
 open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, owner),
     BHumanInfantry, BHitPointable, BAttackable {
 
-    override fun isPlaced(position: BPoint): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun isPlaced(position: BPoint) = position.attachedUnit is BEmptyField
 
     companion object {
 
@@ -34,26 +35,17 @@ open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, 
      * Properties.
      */
 
-    final override val verticalSide =
-        DEFAULT_VERTICAL_SIDE
+    final override val verticalSide = DEFAULT_VERTICAL_SIDE
 
-    final override val horizontalSide =
-        DEFAULT_HORIZONTAL_SIDE
+    final override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
 
-    final override var currentHitPoints =
-        DEFAULT_MAX_HEALTH
+    final override var currentHitPoints = DEFAULT_MAX_HEALTH
 
-    final override var maxHitPoints =
-        DEFAULT_MAX_HEALTH
+    final override var maxHitPoints = DEFAULT_MAX_HEALTH
 
-    final override var damage =
-        DEFAULT_DAMAGE
+    final override var damage = DEFAULT_DAMAGE
 
-    final override var isReadyToAttack =
-        DEFAULT_ATTACK_TIMES
-
-    final override var isAttackEnable =
-        DEFAULT_IS_ATTACK_ENABLE
+    final override var isAttackEnable = DEFAULT_IS_ATTACK_ENABLE
 
     /**
      * Observers.
@@ -68,4 +60,31 @@ open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, 
     final override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
 
     final override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
+
+    override fun onTurnStarted() {
+        this.switchAttackEnable(true)
+    }
+
+    override fun onTurnEnded() {
+        this.switchAttackEnable(false)
+    }
+
+    override fun getAttackAction(): BAction? {
+        return if (this.isAttackEnable) {
+            Attack()
+        } else {
+            null
+        }
+    }
+
+    inner class Attack : BAction(this.context, this.owner), BTargetable {
+
+        override var targetPosition: BPoint? = null
+
+        override fun performAction(): Boolean {
+            //TODO MAKE SHOT:
+            this@BHumanMarine.switchAttackEnable(false)
+            return true
+        }
+    }
 }

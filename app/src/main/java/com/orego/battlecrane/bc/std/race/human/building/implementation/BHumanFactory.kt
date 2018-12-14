@@ -75,6 +75,14 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
             }
         }
 
+    override fun onTurnStarted() {
+        this.switchProduceEnable(true)
+    }
+
+    override fun onTurnEnded() {
+        this.switchProduceEnable(false)
+    }
+
     /**
      * Action.
      */

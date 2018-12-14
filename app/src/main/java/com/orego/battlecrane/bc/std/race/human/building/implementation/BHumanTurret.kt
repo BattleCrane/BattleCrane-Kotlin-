@@ -2,11 +2,10 @@ package com.orego.battlecrane.bc.std.race.human.building.implementation
 
 import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
-import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.api.util.BIdGenerator
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
 class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner), BHitPointable,
@@ -37,35 +36,30 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
      * Properties.
      */
 
-    override val verticalSide =
-        DEFAULT_VERTICAL_SIDE
+    override val verticalSide = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSide =
-        DEFAULT_HORIZONTAL_SIDE
+    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
 
-    override var currentHitPoints =
-        DEFAULT_MAX_HEALTH
+    override var currentHitPoints = DEFAULT_MAX_HEALTH
 
-    override var maxHitPoints =
-        DEFAULT_MAX_HEALTH
+    override var maxHitPoints = DEFAULT_MAX_HEALTH
 
-    override var currentLevel =
-        DEFAULT_LEVEL
+    override var currentLevel = DEFAULT_LEVEL
 
-    override var maxLevel =
-        DEFAULT_MAX_LEVEL
+    override var maxLevel = DEFAULT_MAX_LEVEL
 
-    override var damage =
-        DEFAULT_DAMAGE
+    override var damage = DEFAULT_DAMAGE
 
-    override var isReadyToAttack =
-        DEFAULT_ATTACK_TIMES
+    override var isAttackEnable = DEFAULT_IS_ATTACK_ENABLE
 
-    override var isAttackEnable =
-        DEFAULT_IS_ATTACK_ENABLE
+    var radiusAttack = DEFAULT_RADIUS_ATTACK
 
-    var radiusAttack =
-        DEFAULT_RADIUS_ATTACK
+    var lastAttack = Attack()
+
+    //TODO: CREATING PIPELINE!!!
+    init {
+        this.lastAttack.perform()
+    }
 
     /**
      * Observers.
@@ -85,12 +79,23 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
 
     override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
 
-    /**
-     * Init.
-     */
+    override fun getAttackAction(): BAction? {
+        return if (this.isAttackEnable) {
+            Attack()
+        } else {
+            null
+        }
+    }
 
-    init {
-        this.onCreateObserver[BIdGenerator.generateActionId()] = OnCreateTurretListener()
+    override fun onTurnStarted() {
+        this.switchAttackEnable(true)
+        this.lastAttack = Attack()
+        this.lastAttack.perform()
+
+    }
+
+    override fun onTurnEnded() {
+        this.switchAttackEnable(false)
     }
 
     /**
@@ -122,14 +127,12 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
         }
     }
 
-    /**
-     * Listenres.
-     */
+    inner class Attack : BAction(this.context, this.owner) {
 
-    private inner class OnCreateTurretListener : OnCreateListener {
-
-        override fun onCreate(unit: BUnit) {
+        override fun performAction(): Boolean {
             this@BHumanTurret.attackInRadius()
+            this@BHumanTurret.switchAttackEnable(false)
+            return true
         }
     }
 }

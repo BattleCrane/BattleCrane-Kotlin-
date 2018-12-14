@@ -24,8 +24,10 @@ interface BAttackable {
     }
 
     fun switchAttackEnable(isAttackEnable: Boolean) {
-        this.isAttackEnable = isAttackEnable
-        this.attackEnableObserver.values.forEach { it.onAttackStateChanged(isAttackEnable) }
+        if (this.isAttackEnable != isAttackEnable) {
+            this.isAttackEnable = isAttackEnable
+            this.attackEnableObserver.values.forEach { it.onAttackStateChanged(isAttackEnable) }
+        }
     }
 
     fun getAttackAction() : BAction?
