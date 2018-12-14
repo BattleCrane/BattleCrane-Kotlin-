@@ -6,10 +6,9 @@ import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BProducable
-import com.orego.battlecrane.bc.std.race.human.action.build.*
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanFactory
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanGenerator
+import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
 
 class BHumanAdjutant(
     context: BGameContext,
@@ -17,12 +16,6 @@ class BHumanAdjutant(
     bonusFactories: MutableSet<BAction.Factory>
 ) : BAdjutant(context, owner, bonusFactories) {
 
-    companion object {
-
-        private const val HEADQUARTERS_BUILD_ABILITY = 1
-
-        private const val GENERATOR_LIMIT = 2
-    }
 
     private val unitHeap by lazy {
         this.context.mapManager.unitHeap.values
@@ -49,12 +42,9 @@ class BHumanAdjutant(
 
     private inner class AlertManager {
 
-        private val unitHeap by lazy {
-            this@BHumanAdjutant.unitHeap
-        }
 
         fun activateUnits() {
-            this.activateFactories()
+            this.activateProducers()
             this.activateAttackers()
         }
 
@@ -62,14 +52,11 @@ class BHumanAdjutant(
             this.unitHeap
                 .filter { unit -> this@BHumanAdjutant.owner.owns(unit) && unit is BAttackable }
                 .map { unit -> unit as BAttackable }
-                .forEach { unit -> unit.isReadyToProduce = true }
+                .forEach { unit -> unit.switchAttackEnable(true) }
         }
 
-        private fun activateFactories() {
-            this.unitHeap
-                .filter { unit -> this@BHumanAdjutant.owner.owns(unit) && unit is BProducable }
-                .map { unit -> unit as BProducable }
-                .forEach { unit -> unit.isProduceEnable = true }
+        private fun activateProducers() {
+
         }
     }
 
@@ -79,253 +66,41 @@ class BHumanAdjutant(
 
     private inner class ResourceManager : BAdjutant.ResourceManager() {
 
-        private val unitHeap by lazy {
-            this@BHumanAdjutant.unitHeap
-        }
-
-        private val calculator = Calculator()
-
-        private val resourceSupplier = ResourceSupplier()
-
-        private var buildingActionCount = 0
-
-        private var factoryActionCount = 0
-
-        private var generatorActionCount = 0
-
-        private var trainMarineLvl1ActionCount = 0
-
-        private var trainMarineLvl2ActionCount = 0
-
-        private var trainMarineLvl3ActionCount = 0
-
-        private var trainTankLvl1ActionCount = 0
-
-        private var trainTankLvl2ActionCount = 0
-
-        private var trainTankLvl3ActionCount = 0
-
         fun loadResources() {
-            this.calcResources()
-            this.supplyResources()
-        }
-
-        private fun calcResources() {
+            val context = this@BHumanAdjutant.context
+            val owner = this@BHumanAdjutant.owner
+            this.buildingActions.clear()
+            this.armyActions.clear()
+            //Update:
             this.influenceCount++
-            this.buildingActionCount = this.calculator.calcBuildingActionCount()
-            if (this.buildingActionCount > 0) {
-                this.factoryActionCount = this.calculator.calcFactoryActionCount()
-                this.generatorActionCount = this.calculator.calcGeneratorActionCount()
-            }
-            this.trainMarineLvl1ActionCount = this.calculator.calcTrainMarineLvl1ActionCount()
-            if (this.trainMarineLvl1ActionCount > 0) {
-                this.trainMarineLvl2ActionCount = this.calculator.calcTrainMarineLvl2ActionCount()
-                if (this.trainMarineLvl2ActionCount > 0) {
-                    this.trainMarineLvl3ActionCount = this.calculator.calcTrainMarineLvl3ActionCount()
+            this@BHumanAdjutant.unitHeap
+                .filter { unit -> unit is BProducable && owner.owns(unit) }
+                .forEach { unit ->
+                    unit as BProducable
+                    unit.switchProduceEnable(true)
+                    this.collect(unit.getProduceActions(context, owner))
                 }
-            }
-            this.trainTankLvl1ActionCount = this.calculator.calcTrainTankLvl1ActionCount()
-            if (this.trainTankLvl1ActionCount > 0) {
-                this.trainTankLvl2ActionCount = this.calculator.calcTrainTankLvl2ActionCount()
-                if (this.trainTankLvl2ActionCount > 0) {
-                    this.trainTankLvl3ActionCount = this.calculator.calcTrainTankLvl3ActionCount()
-                }
-            }
         }
 
-        private fun supplyResources() {
-            this.resourceSupplier.suppy()
+        fun refreshResources() {
+            val context = this@BHumanAdjutant.context
+            val owner = this@BHumanAdjutant.owner
+            this.buildingActions.clear()
+            this.armyActions.clear()
+            this@BHumanAdjutant.unitHeap
+                .filter { unit -> unit is BProducable && owner.owns(unit) }
+                .forEach { unit ->
+                    unit as BProducable
+                    this.collect(unit.getProduceActions(context, owner))
+                }
         }
 
-        /**
-         * Calculator.
-         */
-
-        private inner class Calculator {
-
-            fun calcBuildingActionCount(): Int {
-                val owner = this@BHumanAdjutant.owner
-                var abilityCount = HEADQUARTERS_BUILD_ABILITY
-                this@ResourceManager.unitHeap.forEach { unit ->
-                    if (owner.owns(unit) && unit is BHumanGenerator && unit.isProduceEnable) {
-                        abilityCount++
-                    }
-                }
-                return abilityCount
-            }
-
-            fun calcFactoryActionCount(): Int {
-                var barracksCount = 0
-                var factoryCount = 0
-                this@ResourceManager.unitHeap.forEach { unit ->
-                    if (this@BHumanAdjutant.owner.owns(unit)) {
-                        when (unit) {
-                            is BHumanBarracks -> barracksCount++
-                            is BHumanFactory -> factoryCount++
-                        }
-                    }
-                }
-                val comparison = barracksCount - factoryCount
-                return if (comparison > 0) {
-                    comparison
-                } else {
-                    0
-                }
-            }
-
-            fun calcGeneratorActionCount(): Int {
-                var generatorCount = 0
-                this@ResourceManager.unitHeap.forEach { unit ->
-                    if (this@BHumanAdjutant.owner.owns(unit)
-                        && unit is BHumanGenerator
-                        && unit.isProduceEnable
-                    ) {
-                        if (generatorCount == GENERATOR_LIMIT) {
-                            return@forEach
-                        } else {
-                            generatorCount++
-                        }
-                    }
-                }
-                return generatorCount
-            }
-
-            fun calcTrainMarineLvl1ActionCount(): Int {
-                val owner = this@BHumanAdjutant.owner
-                var abilityCount = 0
-                this@ResourceManager.unitHeap.forEach { unit ->
-                    if (owner.owns(unit)
-                        && unit is BHumanBarracks
-                        && unit.isProduceEnable
-                    ) {
-                        abilityCount++
-                    }
-                }
-                return abilityCount
-            }
-
-            fun calcTrainMarineLvl2ActionCount(): Int {
-                val owner = this@BHumanAdjutant.owner
-                var abilityCount = 0
-                this@ResourceManager.unitHeap.forEach { unit ->
-                    if (owner.owns(unit)
-                        && unit is BHumanBarracks
-                        && unit.currentLevel > 1
-                        && unit.isProduceEnable
-                    ) {
-                        abilityCount++
-                    }
-                }
-                return abilityCount
-            }
-
-            fun calcTrainMarineLvl3ActionCount(): Int {
-                val owner = this@BHumanAdjutant.owner
-                var abilityCount = 0
-                this@ResourceManager.unitHeap.forEach { unit ->
-                    if (owner.owns(unit)
-                        && unit is BHumanBarracks
-                        && unit.currentLevel > 2
-                        && unit.isProduceEnable
-                    ) {
-                        abilityCount++
-                    }
-                }
-                return abilityCount
-            }
-
-            fun calcTrainTankLvl1ActionCount(): Int {
-                val owner = this@BHumanAdjutant.owner
-                var abilityCount = 0
-                this@ResourceManager.unitHeap.forEach { unit ->
-                    if (owner.owns(unit) && unit is BHumanFactory) {
-                        abilityCount++
-                    }
-                }
-                return abilityCount
-            }
-
-            fun calcTrainTankLvl2ActionCount(): Int {
-                val owner = this@BHumanAdjutant.owner
-                var abilityCount = 0
-                this@ResourceManager.unitHeap.forEach { unit ->
-                    if (owner.owns(unit)
-                        && unit is BHumanFactory
-                        && unit.currentLevel > 1
-                    ) {
-                        abilityCount++
-                    }
-                }
-                return abilityCount
-            }
-
-            fun calcTrainTankLvl3ActionCount(): Int {
-                val owner = this@BHumanAdjutant.owner
-                var abilityCount = 0
-                this@ResourceManager.unitHeap.forEach { unit ->
-                    if (owner.owns(unit)
-                        && unit is BHumanFactory
-                        && unit.currentLevel > 2
-                    ) {
-                        abilityCount++
-                    }
-                }
-                return abilityCount
-            }
-        }
-
-        private inner class ResourceSupplier {
-
-            fun suppy() {
-                this.supplyBuildings()
-                this.supplyArmy()
-            }
-
-            private fun supplyBuildings() {
-                val context = this@BHumanAdjutant.context
-                val resourceManager = this@ResourceManager
-                val owner = this@BHumanAdjutant.owner
-                if (resourceManager.buildingActionCount > 0) {
-                    val buildingActions = resourceManager.buildingActions
-                    buildingActions.addAll(
-                        setOf(
-                            BHumanBuildBarracks(context, owner),
-                            BHumanBuildTurret(context, owner),
-                            BHumanBuildWall(context, owner),
-                            BHumanUpgradeBuilding(context, owner)
-                        )
-                    )
-                    if (resourceManager.factoryActionCount > 0) {
-                        buildingActions.add(BHumanBuildFactory(context, owner))
-                    }
-                    if (resourceManager.generatorActionCount > 0) {
-                        buildingActions.add(BHumanBuildGenerator(context, owner))
-                    }
-                }
-            }
-
-            private fun supplyArmy() {
-                val context = this@BHumanAdjutant.context
-                val resourceManager = this@ResourceManager
-                val owner = this@BHumanAdjutant.owner
-                val armyActions = resourceManager.buildingActions
-                if (resourceManager.trainMarineLvl1ActionCount > 0) {
-                    armyActions.add(BHumanTrainMarineLvl1(context, owner))
-                }
-                if (resourceManager.trainMarineLvl2ActionCount > 0) {
-                    armyActions.add(TrainMarineLvl2(context, owner))
-                }
-                if (resourceManager.trainMarineLvl3ActionCount > 0) {
-                    armyActions.add(TrainMarineLvl3(context, owner))
-                }
-                if (resourceManager.trainTankLvl1ActionCount > 0) {
-                    armyActions.add(TrainTank(context, owner))
-                }
-                if (resourceManager.trainTankLvl2ActionCount > 0) {
-                    armyActions.add(BHumanTrainTankLvl2(context, owner))
-                }
-                if (resourceManager.trainTankLvl3ActionCount > 0) {
-                    armyActions.add(BHumanTrainTankLvl3(context, owner))
+        private fun collect(actions : Set<BAction>) {
+            actions.forEach { action ->
+                when (action){
+                    is BHumanHeadquarters.Build -> this.buildingActions += action
+                    is BHumanBarracks.TrainMarine -> this.armyActions += action
+                    is BHumanFactory.TrainTank -> this.armyActions += action
                 }
             }
         }

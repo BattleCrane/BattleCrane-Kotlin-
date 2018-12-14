@@ -62,26 +62,25 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
 
     override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
 
-    override fun getProduceActions(context: BGameContext, owner: BPlayer): Set<BAction> {
-        val actionSet = mutableSetOf<BAction>()
-        if (this.isProduceEnable) {
-            actionSet.add(TrainMarine { unit -> this.owner!!.owns(unit) })
-            if (this.currentLevel > 1) {
-                actionSet.add(TrainMarine { unit -> !this.owner!!.isEnemy(unit.owner) })
-                if (this.currentLevel > 2) {
-                    actionSet.add(TrainMarine { true })
+    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
+        .also {
+            if (this.isProduceEnable) {
+                it.add(TrainMarine { unit -> this.owner!!.owns(unit) })
+                if (this.currentLevel > 1) {
+                    it.add(TrainMarine { unit -> !this.owner!!.isEnemy(unit.owner) })
+                    if (this.currentLevel > 2) {
+                        it.add(TrainMarine { true })
+                    }
                 }
             }
         }
-        return actionSet
-    }
 
 
     /**
      * Action.
      */
 
-    inner class TrainMarine(private val cond: (BUnit) -> Boolean) : BHumanAction(this.context, this.owner!!),
+    inner class TrainMarine(private val createCond: (BUnit) -> Boolean) : BHumanAction(this.context, this.owner!!),
         BTargetable {
 
         override var targetPosition: BPoint? = null
@@ -91,10 +90,10 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
                 val marine = BHumanMarine(this.context, this.owner!!)
                 val manager = this.context.mapManager
                 val unit = manager.getUnitByPosition(this.targetPosition)
-                if (unit is BEmptyField && this.cond(unit)) {
+                if (unit is BEmptyField && this.createCond(unit)) {
                     val isSuccessful = manager.createUnit(marine, this.targetPosition)
                     if (isSuccessful) {
-                        this@BHumanBarracks.isProduceEnable = false
+                        this@BHumanBarracks.switchProduceEnable(false)
                     }
                     return isSuccessful
                 }

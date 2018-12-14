@@ -45,7 +45,7 @@ abstract class BAdjutant(
 //
 //    val actionSet  = mutableSetOf<BAction>()
 //
-//    var abilityCount = 0
+//    var buildActionCount = 0
 //        set(value) {
 //            this.actionSet.clear()
 //            this.producerSet.forEach {
@@ -60,10 +60,10 @@ abstract class BAdjutant(
 //    protected abstract fun calcTrainMarineLvl1ActionCount() : Int
 //
 //    fun calc() {
-//        this.abilityCount = this.calcTrainMarineLvl1ActionCount()
+//        this.buildActionCount = this.calcTrainMarineLvl1ActionCount()
 //    }
 //
 //    override fun onActionPerformed() {
-//        this.abilityCount = this.abilityCount - 1
+//        this.buildActionCount = this.buildActionCount - 1
 //    }
 //}

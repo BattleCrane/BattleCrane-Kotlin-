@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
-class BHumanGenerator(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gameContext, owner),
+class BHumanGenerator(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner),
     BHitPointable, BLevelable {
 
     companion object {
@@ -22,6 +22,10 @@ class BHumanGenerator(gameContext: BGameContext, owner: BPlayer) : BHumanBuildin
         private const val DEFAULT_MAX_LEVEL = 3
     }
 
+    /**
+     * Properties.
+     */
+
     override val verticalSide = DEFAULT_VERTICAL_SIDE
 
     override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
@@ -33,6 +37,10 @@ class BHumanGenerator(gameContext: BGameContext, owner: BPlayer) : BHumanBuildin
     override var currentLevel = DEFAULT_LEVEL
 
     override var maxLevel = DEFAULT_MAX_LEVEL
+
+    /**
+     * Observers.
+     */
 
     override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 

@@ -4,12 +4,11 @@ import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.action.BAction
-import com.orego.battlecrane.bc.std.race.human.action.build.BHumanBuildBarracks
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.asSimple
 
-class BHumanBuildBarracksView(action: BHumanBuildBarracks, dimension: Int, context: Context) : BActionView(action) {
+class BHumanBuildBarracksView(action: BuildBarracks, dimension: Int, context: Context) : BActionView(action) {
 
     override val displayedView = ImageView(context).asSimple(context, dimension, IMAGE_ID)
 
@@ -21,8 +20,8 @@ class BHumanBuildBarracksView(action: BHumanBuildBarracks, dimension: Int, conte
     class Builder : BActionViewRender.ViewBuilder {
 
         override fun build(value: BAction, dimension: Int, context: Context) =
-            BHumanBuildBarracksView(value as BHumanBuildBarracks, dimension, context)
+            BHumanBuildBarracksView(value as BuildBarracks, dimension, context)
 
-        override val type: String = BHumanBuildBarracks::class.java.name
+        override val type: String = BuildBarracks::class.java.name
     }
 }

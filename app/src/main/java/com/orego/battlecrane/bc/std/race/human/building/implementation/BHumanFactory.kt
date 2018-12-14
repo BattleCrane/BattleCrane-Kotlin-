@@ -31,7 +31,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
     }
 
     /**
-     * properties.
+     * Properties.
      */
 
     override val verticalSide = DEFAULT_VERTICAL_SIDE
@@ -62,19 +62,18 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
 
     override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
 
-    override fun getProduceActions(context: BGameContext, owner: BPlayer): Set<BAction> {
-        val actionSet = mutableSetOf<BAction>()
-        if (this.isProduceEnable) {
-            actionSet.add(TrainTank { unit -> this.owner!!.owns(unit) })
-            if (this.currentLevel > 1) {
-                actionSet.add(TrainTank { unit -> !this.owner!!.isEnemy(unit.owner) })
-                if (this.currentLevel > 2) {
-                    actionSet.add(TrainTank { true })
+    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
+        .also {
+            if (this.isProduceEnable) {
+                it.add(TrainTank { unit -> this.owner!!.owns(unit) })
+                if (this.currentLevel > 1) {
+                    it.add(TrainTank { unit -> !this.owner!!.isEnemy(unit.owner) })
+                    if (this.currentLevel > 2) {
+                        it.add(TrainTank { true })
+                    }
                 }
             }
         }
-        return actionSet
-    }
 
     /**
      * Action.
@@ -93,7 +92,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
                 if (unit is BEmptyField && this.cond(unit)) {
                     val isSuccessful = manager.createUnit(tank, this.targetPosition)
                     if (isSuccessful) {
-                        this@BHumanFactory.isProduceEnable = false
+                        this@BHumanFactory.switchProduceEnable(false)
                     }
                     return isSuccessful
                 }
