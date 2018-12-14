@@ -17,7 +17,9 @@ abstract class BAdjutant(
 
     abstract inner class ResourceManager {
 
-        var influenceCount = 0
+        var currentInfluenceCount = 0
+
+        var receivedInfluenceCount = 0
 
         val buildingActions = mutableSetOf<BAction>()
 
@@ -33,37 +35,3 @@ abstract class BAdjutant(
         fun build(context: BGameContext, owner: BPlayer): BAdjutant
     }
 }
-
-
-///**
-// * Assistant.
-// */
-//
-//abstract class BAssistant : BAction.Listener {
-//
-//    abstract val producerSet : MutableSet<BAction.Factory>
-//
-//    val actionSet  = mutableSetOf<BAction>()
-//
-//    var buildActionCount = 0
-//        set(value) {
-//            this.actionSet.clear()
-//            this.producerSet.forEach {
-//                it.produceToStackByAbility(this.actionSet, value)
-//            }
-//            this.actionSet.forEach {
-//                it.actionObservers[BIdGenerator.generateActionId()] = this
-//            }
-//            field = value
-//        }
-//
-//    protected abstract fun calcTrainMarineLvl1ActionCount() : Int
-//
-//    fun calc() {
-//        this.buildActionCount = this.calcTrainMarineLvl1ActionCount()
-//    }
-//
-//    override fun onActionPerformed() {
-//        this.buildActionCount = this.buildActionCount - 1
-//    }
-//}

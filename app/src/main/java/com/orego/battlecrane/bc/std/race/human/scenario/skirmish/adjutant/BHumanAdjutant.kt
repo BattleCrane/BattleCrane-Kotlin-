@@ -16,46 +16,55 @@ class BHumanAdjutant(
     bonusFactories: MutableSet<BAction.Factory>
 ) : BAdjutant(context, owner, bonusFactories) {
 
+    companion object {
+
+        private const val MAX_RECEIVED_INFLUENCE_COUNT = 20
+
+        private const val TURN_INFLUENCE_COUNT = 1
+    }
 
     private val unitHeap by lazy {
         this.context.mapManager.unitHeap.values
     }
 
-    private val alertManager = AlertManager()
-
     private val resourceManager = ResourceManager()
+
+    private val attackManager = AttackManager()
 
     override fun onGameStarted() {
     }
 
     override fun onTurnStarted() {
-        this.alertManager.activateUnits()
         this.resourceManager.loadResources()
+        this.attackManager.startTurn()
     }
 
     override fun onTurnEnded() {
     }
 
     /**
-     * AlertManager.
+     * AttackManager.
      */
 
-    private inner class AlertManager {
+    private inner class AttackManager {
 
-
-        fun activateUnits() {
-            this.activateProducers()
-            this.activateAttackers()
+        fun startTurn() {
+            this.activateUnits()
+            val isHeadquartersShotIsReady =
+                this@BHumanAdjutant.resourceManager.receivedInfluenceCount == MAX_RECEIVED_INFLUENCE_COUNT
+            if (isHeadquartersShotIsReady) {
+                this.makeHeadquatersShot()
+            }
         }
 
-        private fun activateAttackers() {
-            this.unitHeap
+        fun activateUnits() {
+            this@BHumanAdjutant.unitHeap
                 .filter { unit -> this@BHumanAdjutant.owner.owns(unit) && unit is BAttackable }
                 .map { unit -> unit as BAttackable }
                 .forEach { unit -> unit.switchAttackEnable(true) }
         }
 
-        private fun activateProducers() {
+        private fun makeHeadquatersShot() {
 
         }
     }
@@ -72,7 +81,10 @@ class BHumanAdjutant(
             this.buildingActions.clear()
             this.armyActions.clear()
             //Update:
-            this.influenceCount++
+            if (this.receivedInfluenceCount < MAX_RECEIVED_INFLUENCE_COUNT) {
+                this.currentInfluenceCount += TURN_INFLUENCE_COUNT
+                this.receivedInfluenceCount += TURN_INFLUENCE_COUNT
+            }
             this@BHumanAdjutant.unitHeap
                 .filter { unit -> unit is BProducable && owner.owns(unit) }
                 .forEach { unit ->
@@ -95,9 +107,9 @@ class BHumanAdjutant(
                 }
         }
 
-        private fun collect(actions : Set<BAction>) {
+        private fun collect(actions: Set<BAction>) {
             actions.forEach { action ->
-                when (action){
+                when (action) {
                     is BHumanHeadquarters.Build -> this.buildingActions += action
                     is BHumanBarracks.TrainMarine -> this.armyActions += action
                     is BHumanFactory.TrainTank -> this.armyActions += action

@@ -1,7 +1,5 @@
 package com.orego.battlecrane.bc.api.model.contract
 
-import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 
 interface BAttackable {
@@ -30,7 +28,7 @@ interface BAttackable {
         this.attackEnableObserver.values.forEach { it.onAttackStateChanged(isAttackEnable) }
     }
 
-    fun getAttackAction(context: BGameContext, owner : BPlayer) : BAction
+    fun getAttackAction() : BAction?
 
     interface DamageListener {
 

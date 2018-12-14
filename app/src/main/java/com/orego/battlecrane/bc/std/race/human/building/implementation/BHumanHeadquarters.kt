@@ -4,12 +4,15 @@ import com.orego.battlecrane.bc.api.manager.BGameContext
 import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
-import com.orego.battlecrane.bc.api.model.contract.*
+import com.orego.battlecrane.bc.api.model.contract.BHitPointable
+import com.orego.battlecrane.bc.api.model.contract.BLevelable
+import com.orego.battlecrane.bc.api.model.contract.BProducable
+import com.orego.battlecrane.bc.api.model.contract.BTargetable
 import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 
 class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner),
-    BHitPointable, BLevelable, BAttackable, BProducable {
+    BHitPointable, BLevelable, BProducable {
 
     companion object {
 
@@ -52,10 +55,6 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
 
     override var maxLevel = DEFAULT_MAX_LEVEL
 
-    override var damage = DEFAULT_DAMAGE
-
-    override var isAttackEnable = DEFAULT_IS_ATTACK_ENABLE
-
     /**
      * Observers.
      */
@@ -68,16 +67,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
 
     override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
 
-    override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
-
-    override val damageObserver: MutableMap<Long, BAttackable.DamageListener> = mutableMapOf()
-
-    override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
-
     override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
-
-    override fun getAttackAction(context: BGameContext, owner: BPlayer): BAction {
-    }
 
     override var isProduceEnable: Boolean
         get () = this.buildDeveloper.buildActionCount > 0
@@ -148,8 +138,6 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
             return false
         }
     }
-
-    class Attack
 
     /**
      * Build developer.
