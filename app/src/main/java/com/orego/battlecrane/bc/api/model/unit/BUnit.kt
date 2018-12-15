@@ -14,9 +14,9 @@ abstract class BUnit(
 
     var pivot: BPoint? = null
 
-    abstract val verticalSide: Int
+    abstract val verticalSize: Int
 
-    abstract val horizontalSide: Int
+    abstract val horizontalSize: Int
 
     abstract fun isPlaced(position: BPoint): Boolean
 

@@ -19,14 +19,27 @@ public final class BMapManager {
     private final BMapHolder mapHolder = new BMapHolder();
 
     public final boolean createUnit(final BUnit unit, final BPoint pivot) {
-        final boolean isPlaced = unit.isPlaced(pivot);
-        if (isPlaced) {
-            //Attach unit on matrix:
-            this.mapHolder.bindUnitTo(unit, pivot.getX(), pivot.getY());
-            //Launch lifecycle:
-            unit.onCreate();
+        final int startX = pivot.getX();
+        final int startY = pivot.getY();
+        final int endX = startX + unit.getHorizontalSize();
+        final int endY = startX + unit.getVerticalSize();
+        if (this.inBounds(startX, startY)
+                && this.inBounds(startX, endY)
+                && this.inBounds(endX, startY)
+                && this.inBounds(endX, endY)) {
+            if (unit.isPlaced(pivot)) {
+                //Attach unit on matrix:
+                this.mapHolder.bindUnitTo(unit, startX, startY);
+                //Launch lifecycle:
+                unit.onCreate();
+                return true;
+            }
         }
-        return isPlaced;
+        return false;
+    }
+
+    public final boolean inBounds(final BPoint point) {
+        return this.inBounds(point.getX(), point.getY());
     }
 
     public final boolean inBounds(final int x, final int y) {
@@ -45,8 +58,8 @@ public final class BMapManager {
 
         //TODO: Handling errors: cell was attached, index out bound etc:
         public final void bindUnitTo(final BUnit unit, final int x, final int y) {
-            final int horizontalSide = unit.getHorizontalSide();
-            final int verticalSide = unit.getVerticalSide();
+            final int horizontalSide = unit.getHorizontalSize();
+            final int verticalSide = unit.getVerticalSize();
             final BPoint pivot = BMapManager.this.matrix[x][y];
             //Attach pivot to entity:
             unit.setPivot(pivot);

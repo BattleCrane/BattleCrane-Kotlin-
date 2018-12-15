@@ -13,6 +13,7 @@ import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.infantry.implementation.BHumanMarine
 
+
 class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner), BHitPointable,
     BLevelable, BProducable {
 
@@ -33,9 +34,9 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
      * Properties.
      */
 
-    override val verticalSide = DEFAULT_VERTICAL_SIDE
+    override val verticalSize = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
+    override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
 
     override var currentHitPoints = DEFAULT_MAX_HEALTH
 

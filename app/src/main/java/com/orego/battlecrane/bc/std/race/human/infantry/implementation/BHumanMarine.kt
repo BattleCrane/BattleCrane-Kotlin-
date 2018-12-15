@@ -29,9 +29,9 @@ open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, 
      * Properties.
      */
 
-    final override val verticalSide = DEFAULT_VERTICAL_SIDE
+    final override val verticalSize = DEFAULT_VERTICAL_SIDE
 
-    final override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
+    final override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
 
     final override var currentHitPoints = DEFAULT_MAX_HEALTH
 
