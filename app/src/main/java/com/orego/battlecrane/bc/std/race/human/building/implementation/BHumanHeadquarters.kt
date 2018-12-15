@@ -108,21 +108,19 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
      */
 
     override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
-        .also {
+        .also { set ->
             if (this.isProduceEnable) {
-                it.addAll(setOf(
-                    this.buildBarracksFactory.create(),
-                    this.buildTurretFactory.create(),
-                    this.buildWallFactory.create()
-                ))
+                this.buildBarracksFactory.create()?.let { set.add(it) }
+                this.buildTurretFactory.create()?.let { set.add(it) }
+                this.buildWallFactory.create()?.let { set.add(it) }
                 if (this.buildDeveloper.canFactoryBuild()) {
-                    it.add(this.buildFactoryFactory.create())
+                    this.buildFactoryFactory.create()?.let { set.add(it) }
                 }
                 if (this.buildDeveloper.canGeneratorBuild()) {
-                    it.add(this.buildGeneratorFactory.create())
+                    this.buildGeneratorFactory.create()?.let { set.add(it) }
                 }
                 if (this.buildDeveloper.canUpgrade()) {
-                    it.add(this.upgrageBuildingFactory.create())
+                    this.upgrageBuildingFactory.create()?.let { set.add(it) }
                 }
             }
         }

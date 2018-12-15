@@ -8,12 +8,10 @@ import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BTargetable
 import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 
 open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, owner), BHitPointable,
     BAttackable {
-    override fun isPlaced(position: BPoint): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     companion object {
 
@@ -24,8 +22,6 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
         private const val DEFAULT_MAX_HEALTH = 2
 
         private const val DEFAULT_DAMAGE = 2
-
-        private const val DEFAULT_ATTACK_TIMES = 1
 
         private const val DEFAULT_IS_ATTACK_ENABLE = true
     }
@@ -60,6 +56,16 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
 
     final override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
 
+    /**
+     * Unit.
+     */
+
+    override fun isPlaced(position: BPoint) = position.attachedUnit is BEmptyField
+
+    /**
+     * Lifecycle.
+     */
+
     override fun onTurnStarted() {
         this.switchAttackEnable(true)
     }
@@ -68,6 +74,10 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
         this.switchAttackEnable(false)
     }
 
+    /**
+     * Action function.
+     */
+
     override fun getAttackAction(): BAction? {
         return if (this.isAttackEnable) {
             Attack()
@@ -75,6 +85,10 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
             null
         }
     }
+
+    /**
+     * Action.
+     */
 
     inner class Attack : BAction(this.context, this.owner), BTargetable {
 

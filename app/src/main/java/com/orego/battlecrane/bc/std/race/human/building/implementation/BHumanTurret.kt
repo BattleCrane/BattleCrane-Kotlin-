@@ -52,7 +52,7 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
 
     var radiusAttack = DEFAULT_RADIUS_ATTACK
 
-    var lastAttack = Attack()
+    var currentAttack = Attack()
 
     /**
      * Observers.
@@ -74,20 +74,20 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
 
     override fun getAttackAction(): BAction? {
         return if (this.isAttackEnable) {
-            Attack()
+            this.currentAttack
         } else {
             null
         }
     }
 
     override fun onCreate() {
-        this.lastAttack.perform()
+        this.currentAttack.perform()
     }
 
     override fun onTurnStarted() {
         this.switchAttackEnable(true)
-        this.lastAttack = Attack()
-        this.lastAttack.perform()
+        this.currentAttack = Attack()
+        this.currentAttack.perform()
 
     }
 

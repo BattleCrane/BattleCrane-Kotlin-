@@ -14,8 +14,6 @@ import com.orego.battlecrane.bc.std.race.human.infantry.BHumanInfantry
 open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, owner),
     BHumanInfantry, BHitPointable, BAttackable {
 
-    override fun isPlaced(position: BPoint) = position.attachedUnit is BEmptyField
-
     companion object {
 
         private const val DEFAULT_VERTICAL_SIDE = 1
@@ -25,10 +23,6 @@ open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, 
         private const val DEFAULT_MAX_HEALTH = 1
 
         private const val DEFAULT_DAMAGE = 1
-
-        private const val DEFAULT_ATTACK_TIMES = 1
-
-        private const val DEFAULT_IS_ATTACK_ENABLE = true
     }
 
     /**
@@ -45,7 +39,7 @@ open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, 
 
     final override var damage = DEFAULT_DAMAGE
 
-    final override var isAttackEnable = DEFAULT_IS_ATTACK_ENABLE
+    final override var isAttackEnable = false
 
     /**
      * Observers.
@@ -60,6 +54,16 @@ open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, 
     final override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
 
     final override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
+
+    /**
+     * Unit.
+     */
+
+    override fun isPlaced(position: BPoint) = position.attachedUnit is BEmptyField
+
+    /**
+     * Lifecycle.
+     */
 
     override fun onTurnStarted() {
         this.switchAttackEnable(true)
