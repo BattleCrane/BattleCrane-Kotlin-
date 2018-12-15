@@ -24,7 +24,6 @@ interface BLevelable {
         return hasIncreased
     }
 
-    //TODO: MAKE BOOLEAN
     fun decreaseLevel(range: Int) : Boolean {
         val hasDecreased = range > 0 && this.currentLevel > 1
         if (hasDecreased) {

@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bc.std.race.human.building.implementation
 
-import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
@@ -55,6 +55,14 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
 
     override var maxLevel = DEFAULT_MAX_LEVEL
 
+    override var isProduceEnable: Boolean
+        get () = this.buildDeveloper.buildActionCount > 0
+        set(isEnable) {
+            if (isEnable) {
+                this.buildDeveloper.initBuildActionCount()
+            }
+        }
+
     /**
      * Observers.
      */
@@ -69,13 +77,9 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
 
     override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
 
-    override var isProduceEnable: Boolean
-        get () = this.buildDeveloper.buildActionCount > 0
-        set(isEnable) {
-            if (isEnable) {
-                this.buildDeveloper.initBuildActionCount()
-            }
-        }
+    /**
+     * Companions.
+     */
 
     val buildDeveloper = BuildDeveloper()
 
@@ -143,6 +147,13 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
                 }
             }
             return false
+        }
+    }
+
+    inner class BuildActionFactory : BAction.Factory {
+
+        override fun createAction(): BAction {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         }
     }
 

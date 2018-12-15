@@ -3,14 +3,16 @@ package com.orego.battlecrane.ui.fragment.battleLoading
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bc.api.manager.BGameContext
+import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
-import com.orego.battlecrane.ui.viewModel.BViewFactoryViewModel
 import com.orego.battlecrane.ui.viewModel.BUiScenarioSupportViewModel
-import kotlinx.coroutines.*
+import com.orego.battlecrane.ui.viewModel.BViewFactoryViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 //TODO MAKE OVER BATTLE FRAGMENT!!!
 class BBattleLoadingFragment : BFragment() {

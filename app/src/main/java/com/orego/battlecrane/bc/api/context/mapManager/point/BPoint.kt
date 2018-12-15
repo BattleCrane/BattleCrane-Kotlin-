@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.api.manager.mapManager.point
+package com.orego.battlecrane.bc.api.context.mapManager.point
 
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 

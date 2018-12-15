@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bc.std.race.human.building.implementation
 
-import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
@@ -47,6 +47,10 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
 
     override var isProduceEnable = false
 
+    /**
+     * Observers.
+     */
+
     override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
 
     override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
@@ -55,20 +59,22 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
 
     override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
 
+    override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
+
     /**
-     * Observers.
+     * Companions.
      */
 
-    override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
+    val actionFactory = TrainMarineFactory()
 
     override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
         .also {
             if (this.isProduceEnable) {
-                it.add(TrainMarine { unit -> this.owner!!.owns(unit) })
+                it.add(this.actionFactory.createTrainMarineLvl1Action())
                 if (this.currentLevel > 1) {
-                    it.add(TrainMarine { unit -> !this.owner!!.isEnemy(unit.owner) })
+                    it.add(this.actionFactory.createTrainMarineLvl2Action())
                     if (this.currentLevel > 2) {
-                        it.add(TrainMarine { true })
+                        it.add(this.actionFactory.createTrainMarineLvl3Action())
                     }
                 }
             }
@@ -106,5 +112,27 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
             }
             return false
         }
+    }
+
+    /**
+     * Factories.
+     */
+
+    inner class TrainMarineLvl1Factory : BAction.Factory {
+
+        override fun createAction() =     TrainMarine { unit -> this@BHumanBarracks.owner!!.owns(unit) }
+    }
+
+    //TODO MAKE PIPELINE:
+    inner class TrainMarineFactory {
+
+        fun createTrainMarineLvl1Action() =
+
+
+        fun createTrainMarineLvl2Action() =
+            TrainMarine { unit -> !this@BHumanBarracks.owner!!.isEnemy(unit.owner) }
+
+        fun createTrainMarineLvl3Action() =
+            TrainMarine { true }
     }
 }

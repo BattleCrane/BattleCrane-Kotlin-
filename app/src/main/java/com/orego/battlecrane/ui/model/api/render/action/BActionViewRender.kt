@@ -1,8 +1,8 @@
 package com.orego.battlecrane.ui.model.api.render.action
 
 import android.content.Context
-import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.manager.playerManager.BPlayerManager
+import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
+import com.orego.battlecrane.bc.api.context.playerManager.BPlayerManager
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView

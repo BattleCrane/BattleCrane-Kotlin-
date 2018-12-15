@@ -1,9 +1,9 @@
-package com.orego.battlecrane.bc.api.manager.mapManager;
+package com.orego.battlecrane.bc.api.context.mapManager;
 
-import com.orego.battlecrane.bc.api.manager.BGameContext;
-import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint;
-import com.orego.battlecrane.bc.api.scenario.BGameScenario;
+import com.orego.battlecrane.bc.api.context.BGameContext;
+import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint;
 import com.orego.battlecrane.bc.api.model.unit.BUnit;
+import com.orego.battlecrane.bc.api.scenario.BGameScenario;
 
 import java.util.HashMap;
 import java.util.Map;

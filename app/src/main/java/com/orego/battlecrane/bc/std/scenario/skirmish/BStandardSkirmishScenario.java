@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bc.std.scenario.skirmish;
 
-import com.orego.battlecrane.bc.api.manager.BGameContext;
-import com.orego.battlecrane.bc.api.manager.mapManager.BMapManager;
-import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer;
+import com.orego.battlecrane.bc.api.context.BGameContext;
+import com.orego.battlecrane.bc.api.context.mapManager.BMapManager;
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer;
 import com.orego.battlecrane.bc.api.model.unit.BUnit;
 import com.orego.battlecrane.bc.api.scenario.BGameScenario;
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.orego.battlecrane.bc.api.manager.mapManager.BMapManager.MAP_SIZE;
+import static com.orego.battlecrane.bc.api.context.mapManager.BMapManager.MAP_SIZE;
 
 public final class BStandardSkirmishScenario implements BGameScenario {
 

@@ -1,9 +1,9 @@
 package com.orego.battlecrane.bc.api.model.action
 
-import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 
-abstract class BAction(
+abstract class BAction protected constructor(
     protected val context: BGameContext,
     protected var owner: BPlayer? = null
 ) {
@@ -25,8 +25,12 @@ abstract class BAction(
         fun onActionPerformed(action: BAction)
     }
 
-    interface Factory {
+    abstract class Factory(private val pipeline :BGameContext.PipeLine) {
 
-        fun create() :BAction
+        fun create() {
+
+        }
+
+        protected abstract fun createAction(): BAction
     }
 }

@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bc.api.scenario
 
-import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mapManager.BMapManager
-import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.mapManager.BMapManager
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 
 interface BGameScenario {
 

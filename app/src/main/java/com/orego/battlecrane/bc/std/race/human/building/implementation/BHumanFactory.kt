@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bc.std.race.human.building.implementation
 
-import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
@@ -62,14 +62,20 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
 
     override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
 
+    /**
+     * Companions.
+     */
+
+    val actionFactory = TrainTankFactory()
+
     override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
         .also {
             if (this.isProduceEnable) {
-                it.add(TrainTank { unit -> this.owner!!.owns(unit) })
+                it.add(this.actionFactory.createTrainTankLvl1Action())
                 if (this.currentLevel > 1) {
-                    it.add(TrainTank { unit -> !this.owner!!.isEnemy(unit.owner) })
+                    it.add(this.actionFactory.createTrainTankLvl2Action())
                     if (this.currentLevel > 2) {
-                        it.add(TrainTank { true })
+                        it.add(this.actionFactory.createTrainTankLvl3Action())
                     }
                 }
             }
@@ -107,5 +113,22 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
             }
             return false
         }
+    }
+
+    /**
+     * Factory.
+     */
+
+    //TODO MAKE PIPELINE:
+    inner class TrainTankFactory {
+
+        fun createTrainTankLvl1Action() =
+            TrainTank { unit -> this@BHumanFactory.owner!!.owns(unit) }
+
+        fun createTrainTankLvl2Action() =
+            TrainTank { unit -> !this@BHumanFactory.owner!!.isEnemy(unit.owner) }
+
+        fun createTrainTankLvl3Action() =
+            TrainTank { true }
     }
 }

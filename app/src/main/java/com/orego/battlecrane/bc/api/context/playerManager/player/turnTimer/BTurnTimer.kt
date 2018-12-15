@@ -1,6 +1,6 @@
-package com.orego.battlecrane.bc.api.manager.mechanics.turnTimer
+package com.orego.battlecrane.bc.api.context.playerManager.player.turnTimer
 
-import com.orego.battlecrane.bc.api.manager.mechanics.adjutant.BAdjutant
+import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.concurrent.timer
 

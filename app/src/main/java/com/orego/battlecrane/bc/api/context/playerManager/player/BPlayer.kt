@@ -1,13 +1,14 @@
-package com.orego.battlecrane.bc.api.manager.playerManager.player
+package com.orego.battlecrane.bc.api.context.playerManager.player
 
-import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mechanics.adjutant.BAdjutant
-import com.orego.battlecrane.bc.api.manager.mechanics.turnTimer.BTurnTimer
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
+import com.orego.battlecrane.bc.api.context.playerManager.player.turnTimer.BTurnTimer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 
 class BPlayer(context: BGameContext, private val id: Long, builder : BAdjutant.Builder) {
 
-    val adjutant: BAdjutant = builder.build(context, this)
+    //TODO WHILE WITHOUT BONUSES:
+    val adjutant: BAdjutant = builder.build(context, this, mutableSetOf())
 
     val turnTimer = BTurnTimer(this.adjutant)
 

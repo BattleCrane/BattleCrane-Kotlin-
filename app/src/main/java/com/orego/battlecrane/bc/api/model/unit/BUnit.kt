@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bc.api.model.unit
 
-import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.util.BIdGenerator
 
 abstract class BUnit(

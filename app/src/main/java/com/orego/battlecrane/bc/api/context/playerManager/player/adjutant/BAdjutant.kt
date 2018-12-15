@@ -1,7 +1,7 @@
-package com.orego.battlecrane.bc.api.manager.mechanics.adjutant;
+package com.orego.battlecrane.bc.api.context.playerManager.player.adjutant;
 
-import com.orego.battlecrane.bc.api.manager.BGameContext
-import com.orego.battlecrane.bc.api.manager.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 
 abstract class BAdjutant(
@@ -32,6 +32,10 @@ abstract class BAdjutant(
 
     interface Builder {
 
-        fun build(context: BGameContext, owner: BPlayer): BAdjutant
+        fun build(
+            context: BGameContext,
+            owner: BPlayer,
+            bonusFactories: MutableSet<BAction.Factory>
+        ): BAdjutant
     }
 }
