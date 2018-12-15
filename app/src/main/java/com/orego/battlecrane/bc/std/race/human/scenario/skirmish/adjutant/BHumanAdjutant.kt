@@ -28,7 +28,7 @@ class BHumanAdjutant(
         this.context.mapManager.unitHeap.values
     }
 
-    private val resourceManager = ResourceManager()
+    override val resourceManager = ResourceManager()
 
     private val attackManager = AttackManager()
 
@@ -74,13 +74,13 @@ class BHumanAdjutant(
      * Resource manager.
      */
 
-    private inner class ResourceManager : BAdjutant.ResourceManager() {
+    inner class ResourceManager : BAdjutant.ResourceManager() {
 
         fun loadResources() {
             val context = this@BHumanAdjutant.context
             val owner = this@BHumanAdjutant.owner
             this.buildingActions.clear()
-            this.armyActions.clear()
+            this.trainActions.clear()
             //Update:
             if (this.receivedInfluenceCount < MAX_RECEIVED_INFLUENCE_COUNT) {
                 this.currentInfluenceCount += TURN_INFLUENCE_COUNT
@@ -99,7 +99,7 @@ class BHumanAdjutant(
             val context = this@BHumanAdjutant.context
             val owner = this@BHumanAdjutant.owner
             this.buildingActions.clear()
-            this.armyActions.clear()
+            this.trainActions.clear()
             this@BHumanAdjutant.unitHeap
                 .filter { unit -> unit is BProducable && owner.owns(unit) }
                 .forEach { unit ->
@@ -112,8 +112,8 @@ class BHumanAdjutant(
             actions.forEach { action ->
                 when (action) {
                     is BHumanHeadquarters.Build -> this.buildingActions += action
-                    is BHumanBarracks.TrainMarine -> this.armyActions += action
-                    is BHumanFactory.TrainTank -> this.armyActions += action
+                    is BHumanBarracks.TrainMarine -> this.trainActions += action
+                    is BHumanFactory.TrainTank -> this.trainActions += action
                 }
                 action.actionObservers[BIdGenerator.generateActionId()] = object
                     : BAction.Listener {
@@ -124,5 +124,11 @@ class BHumanAdjutant(
                 }
             }
         }
+    }
+
+    class Builder : BAdjutant.Builder() {
+
+        override fun build(context: BGameContext, owner: BPlayer)
+                = BHumanAdjutant(context, owner, this.bonusFactories)
     }
 }

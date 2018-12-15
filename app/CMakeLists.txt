@@ -1,7 +1,7 @@
 # For more information about using CMake with Android Studio, read the
 # documentation: https://d.android.com/studio/projects/add-native-code.html
 
-# Sets the minimum version of CMake required to build the native library.
+# Sets the minimum version of CMake required to buildUnit the native library.
 
 cmake_minimum_required(VERSION 3.4.1)
 
@@ -23,7 +23,7 @@ add_library( # Sets the type of the library.
 # variable. Because CMake includes system libraries in the search path by
 # default, you only need to specify the type of the public NDK library
 # you want to add. CMake verifies that the library exists before
-# completing its build.
+# completing its buildUnit.
 
 find_library( # Sets the type of the path variable.
         log-lib
@@ -34,7 +34,7 @@ find_library( # Sets the type of the path variable.
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
+# buildUnit script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
         native-lib

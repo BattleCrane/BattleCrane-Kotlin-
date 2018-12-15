@@ -9,13 +9,16 @@ abstract class BAdjutant(
     protected val owner: BPlayer,
     protected val bonusFactories: MutableSet<BAction.Factory>
 ) {
+
+    open val resourceManager = ResourceManager()
+
     abstract fun onGameStarted()
 
     abstract fun onTurnStarted()
 
     abstract fun onTurnEnded()
 
-    abstract inner class ResourceManager {
+    open inner class ResourceManager {
 
         var currentInfluenceCount = 0
 
@@ -23,19 +26,17 @@ abstract class BAdjutant(
 
         val buildingActions = mutableSetOf<BAction>()
 
-        val armyActions = mutableSetOf<BAction>()
+        val trainActions = mutableSetOf<BAction>()
     }
 
     /**
      * Builder.
      */
 
-    interface Builder {
+    abstract class Builder {
 
-        fun build(
-            context: BGameContext,
-            owner: BPlayer,
-            bonusFactories: MutableSet<BAction.Factory>
-        ): BAdjutant
+        val bonusFactories = mutableSetOf<BAction.Factory>()
+
+        abstract fun build(context: BGameContext, owner: BPlayer): BAdjutant
     }
 }

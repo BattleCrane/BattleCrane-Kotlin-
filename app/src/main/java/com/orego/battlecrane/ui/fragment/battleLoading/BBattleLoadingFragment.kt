@@ -3,6 +3,7 @@ package com.orego.battlecrane.ui.fragment.battleLoading
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.ui.fragment.BFragment

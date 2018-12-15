@@ -4,6 +4,8 @@ import com.orego.battlecrane.bc.api.context.mapManager.BMapManager.MAP_SIZE
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
+import com.orego.battlecrane.ui.util.addView
+import com.orego.battlecrane.ui.util.moveTo
 
 class BUnitViewRender(private val units: Map<Long, BUnit>) : BViewRender<BUnit, BUnitView>() {
 

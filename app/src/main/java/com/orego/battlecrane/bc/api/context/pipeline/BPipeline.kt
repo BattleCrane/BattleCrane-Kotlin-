@@ -4,9 +4,9 @@ class BPipeline {
 
     private val pipeMap = mutableMapOf<String, Pipe>()
 
-    fun push(event: BEvent?) {
+    fun handle(event: BEvent?) {
         if (isValidEvent(event)) {
-            this.pipeMap.values.forEach { it.push(event) }
+            this.pipeMap.values.forEach { it.handle(event) }
         }
     }
 
@@ -21,16 +21,16 @@ class BPipeline {
 
         private val nodes = mutableListOf<Node>()
 
-        fun push(any: BEvent?) {
+        fun handle(any: BEvent?) {
             val startPosition = 0
-            return this.push(any, startPosition)
+            return this.handle(any, startPosition)
         }
 
-        private fun push(event: BEvent?, position: Int) {
+        private fun handle(event: BEvent?, position: Int) {
             if (isValidEvent(event)) {
                 if (position < this.nodes.size) {
                     this.nodes[position].handle(event)
-                    this.push(event, position + 1)
+                    this.handle(event, position + 1)
                 }
             }
         }

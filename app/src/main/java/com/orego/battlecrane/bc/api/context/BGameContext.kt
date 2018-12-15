@@ -8,7 +8,13 @@ import com.orego.battlecrane.bc.api.scenario.BGameScenario
 class BGameContext(scenario: BGameScenario) {
 
     /**
-     * Firstly createAction player manager.
+     * Pipeline.
+     */
+
+    val pipeline = BPipeline()
+
+    /**
+     * Player manager.
      */
 
     val playerManager = BPlayerManager(scenario, this)
@@ -18,10 +24,4 @@ class BGameContext(scenario: BGameScenario) {
      */
 
     val mapManager = BMapManager(scenario, this)
-
-    /**
-     * BPipeline.
-     */
-
-    val pipeline = BPipeline()
 }

@@ -13,6 +13,7 @@ import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.infantry.implementation.BHumanMarine
 
+
 class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner), BHitPointable,
     BLevelable, BProducable {
 
@@ -33,9 +34,9 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
      * Properties.
      */
 
-    override val verticalSide = DEFAULT_VERTICAL_SIDE
+    override val verticalSize = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
+    override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
 
     override var currentHitPoints = DEFAULT_MAX_HEALTH
 
@@ -106,17 +107,19 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
      * Action.
      */
 
-    inner class TrainMarine(private val createCond: (BUnit) -> Boolean) :
+    abstract inner class TrainMarine :
         BHumanAction(this.context, this.owner!!), BTargetable {
 
         override var targetPosition: BPoint? = null
+
+        protected abstract fun isTrainConditionPerformed(unit : BUnit) : Boolean
 
         override fun performAction(): Boolean {
             if (this.targetPosition != null) {
                 val marine = BHumanMarine(this.context, this.owner!!)
                 val manager = this.context.mapManager
                 val unit = manager.getUnitByPosition(this.targetPosition)
-                if (this.createCond(unit)) {
+                if (this.isTrainConditionPerformed(unit)) {
                     val isSuccessful = manager.createUnit(marine, this.targetPosition)
                     if (isSuccessful) {
                         this@BHumanBarracks.switchProduceEnable(false)
@@ -134,14 +137,24 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
 
     inner class TrainMarineLvl1Factory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() =
-            TrainMarine { unit -> this@BHumanBarracks.owner!!.owns(unit) }
+        override fun createAction() = Action()
+
+        inner class Action : TrainMarine() {
+
+            override fun isTrainConditionPerformed(unit: BUnit) =
+                this@BHumanBarracks.owner!!.owns(unit)
+        }
     }
 
     inner class TrainMarineLvl2Factory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() =
-            TrainMarine { unit -> !this@BHumanBarracks.owner!!.isEnemy(unit.owner) }
+        override fun createAction() = Action()
+
+        inner class Action : TrainMarine() {
+
+            override fun isTrainConditionPerformed(unit: BUnit) =
+                !this@BHumanBarracks.owner!!.isEnemy(unit.owner)
+        }
     }
 
     inner class TrainMarineLvl3Factory : BAction.Factory(this.pipeline) {

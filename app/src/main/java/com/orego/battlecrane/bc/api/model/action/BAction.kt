@@ -38,7 +38,7 @@ abstract class BAction protected constructor(
         fun create(): BAction? {
             val action = this.createAction()
             val createActionEvent = BEvent(BEventContract.CREATE, action)
-            this.pipeline.push(createActionEvent)
+            this.pipeline.handle(createActionEvent)
             return if (isValidEvent(createActionEvent)
                 && createActionEvent.name == BEventContract.CREATE
                 && createActionEvent.any is BAction

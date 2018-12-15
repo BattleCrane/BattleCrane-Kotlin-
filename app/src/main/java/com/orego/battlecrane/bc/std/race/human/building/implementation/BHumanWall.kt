@@ -21,9 +21,9 @@ class BHumanWall(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gam
      * Properties.
      */
 
-    override val verticalSide = DEFAULT_VERTICAL_SIDE
+    override val verticalSize = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
+    override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
 
     override var currentHitPoints = DEFAULT_MAX_HEALTH
 

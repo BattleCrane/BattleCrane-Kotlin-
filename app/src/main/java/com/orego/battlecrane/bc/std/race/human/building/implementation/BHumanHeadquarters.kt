@@ -37,9 +37,9 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
      * Properties.
      */
 
-    override val verticalSide = DEFAULT_VERTICAL_SIDE
+    override val verticalSize = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSide = DEFAULT_HORIZONTAL_SIDE
+    override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
 
     override var currentHitPoints = DEFAULT_MAX_HEALTH
 
@@ -129,14 +129,16 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
      * Actions.
      */
 
-    inner class Build(private val build: () -> BHumanBuilding) : BHumanAction(this.context, this.owner!!),
+    abstract inner class Build : BHumanAction(this.context, this.owner!!),
         BTargetable {
 
         override var targetPosition: BPoint? = null
 
+        protected abstract fun buildUnit(): BHumanBuilding
+
         override fun performAction(): Boolean {
             if (this.targetPosition != null && this.owner != null) {
-                val unit = this.build()
+                val unit = this.buildUnit()
                 val manager = this.context.mapManager
                 val isSuccessful = manager.createUnit(unit, this.targetPosition)
                 if (isSuccessful) {
@@ -164,42 +166,58 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         }
     }
 
-    /**
-     * Factories.
-     */
-
     inner class BuildBarracksFactory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() = Build {
-            BHumanBarracks(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+        override fun createAction() = Action()
+
+        inner class Action : Build() {
+
+            override fun buildUnit() =
+                BHumanBarracks(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
         }
     }
 
     inner class BuildTurretFactory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() = Build {
-            BHumanTurret(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+        override fun createAction() =  Action()
+
+        inner class Action : Build() {
+
+            override fun buildUnit() =
+                BHumanTurret(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
         }
     }
 
     inner class BuildWallFactory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() = Build {
-            BHumanWall(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+        override fun createAction() = Action()
+
+        inner class Action : Build() {
+
+            override fun buildUnit() =
+                BHumanWall(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
         }
     }
 
     inner class BuildFactoryFactory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() = Build {
-            BHumanFactory(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+        override fun createAction() = Action()
+
+        inner class Action : Build() {
+
+            override fun buildUnit() =
+                BHumanFactory(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
         }
     }
 
     inner class BuildGeneratorFactory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() = Build {
-            BHumanGenerator(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+        override fun createAction() =  Action()
+
+        inner class Action : Build() {
+
+            override fun buildUnit() =
+                BHumanGenerator(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
         }
     }
 

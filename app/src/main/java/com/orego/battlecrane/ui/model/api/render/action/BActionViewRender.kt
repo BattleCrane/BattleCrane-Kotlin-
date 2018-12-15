@@ -6,13 +6,15 @@ import com.orego.battlecrane.bc.api.context.playerManager.BPlayerManager
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
+import com.orego.battlecrane.ui.util.addView
+import com.orego.battlecrane.ui.util.moveTo
 
 abstract class BActionViewRender(
     private val columnCount: Int,
     private val rowCount: Int
 ) : BViewRender<BAction, BActionView>() {
 
-    abstract val stack: Set<Pair<BAction, Int>>
+    abstract val stack: Set<BAction>
 
     override fun draw() {
         val stack = this.stack.toList()
@@ -26,7 +28,7 @@ abstract class BActionViewRender(
                 if (index < actionCount) {
                     println("VVVIIIII: $index")
                     //TODO: MAKE MORE COMPLETABLE INFORMATION ABOUT ACTION: (WHILE SIMPLE)
-                    val action = stack[index].first
+                    val action = stack[index]
                     //TODO REMOVE TYPE:
                     val type = action::class.java.name
                     println("ACTION TYPE: $type")
@@ -80,12 +82,12 @@ abstract class BPrimaryActionViewRender : BActionViewRender(COLUMN_COUNT, ROW_CO
 
 class BTrainViewRender(private val playerManager: BPlayerManager) : BPrimaryActionViewRender() {
 
-    override val stack: Set<Pair<BAction, Int>>
-        get() = this.playerManager.currentPlayer.adjutant.armyStack
+    override val stack: Set<BAction>
+        get() = this.playerManager.currentPlayer.adjutant.resourceManager.trainActions
 }
 
 class BBuildViewRender(private val playerManager: BPlayerManager) : BPrimaryActionViewRender() {
 
-    override val stack: Set<Pair<BAction, Int>>
-        get() = this.playerManager.currentPlayer.adjutant.buildingStack
+    override val stack: Set<BAction>
+        get() = this.playerManager.currentPlayer.adjutant.resourceManager.buildingActions
 }

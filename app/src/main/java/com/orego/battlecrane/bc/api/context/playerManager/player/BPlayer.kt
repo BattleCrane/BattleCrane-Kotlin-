@@ -4,11 +4,14 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.context.playerManager.player.turnTimer.BTurnTimer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.api.util.BIdGenerator
 
-class BPlayer(context: BGameContext, private val id: Long, builder : BAdjutant.Builder) {
+class BPlayer(context: BGameContext, builder : BAdjutant.Builder) {
+
+    val id: Long = BIdGenerator.generatePlayerId()
 
     //TODO WHILE WITHOUT BONUSES:
-    val adjutant: BAdjutant = builder.build(context, this, mutableSetOf())
+    val adjutant: BAdjutant = builder.build(context, this)
 
     val turnTimer = BTurnTimer(this.adjutant)
 
