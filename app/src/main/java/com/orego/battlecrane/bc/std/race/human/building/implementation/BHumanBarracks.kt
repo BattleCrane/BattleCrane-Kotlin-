@@ -67,6 +67,10 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
 
     val actionFactory = TrainMarineFactory()
 
+    val pipeline by lazy {
+        this.context.pipeline
+    }
+
     override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
         .also {
             if (this.isProduceEnable) {
@@ -118,7 +122,7 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
      * Factories.
      */
 
-    inner class TrainMarineLvl1Factory : BAction.Factory {
+    inner class TrainMarineLvl1Factory : BAction.Factory() {
 
         override fun createAction() =     TrainMarine { unit -> this@BHumanBarracks.owner!!.owns(unit) }
     }

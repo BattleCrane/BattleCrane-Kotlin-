@@ -20,11 +20,23 @@ abstract class BUnit(
 
     abstract fun isPlaced(position: BPoint): Boolean
 
+    /**
+     * Unit lifecycle.
+     */
+
+    open fun onCreate() {
+
+    }
+
     open fun onTurnStarted() {
 
     }
 
     open fun onTurnEnded() {
+
+    }
+
+    open fun onDestroy() {
 
     }
 }

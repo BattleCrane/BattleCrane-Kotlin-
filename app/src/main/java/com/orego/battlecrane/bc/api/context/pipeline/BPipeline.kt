@@ -1,6 +1,6 @@
 package com.orego.battlecrane.bc.api.context.pipeline
 
-class PipeLine {
+class BPipeline {
 
     private val pipeMap = mutableMapOf<String, Pipe>()
 
