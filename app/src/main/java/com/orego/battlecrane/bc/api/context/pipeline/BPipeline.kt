@@ -4,13 +4,9 @@ class BPipeline {
 
     private val pipeMap = mutableMapOf<String, Pipe>()
 
-    fun push(any: List<Any?>) {
-        any.forEach { this.push(it) }
-    }
-
-    fun push(any: Any?) {
-        if (any != null) {
-            this.pipeMap.values.forEach { it.push(any) }
+    fun push(event: BEvent?) {
+        if (isValidEvent(event)) {
+            this.pipeMap.values.forEach { it.push(event) }
         }
     }
 
@@ -20,20 +16,21 @@ class BPipeline {
 
     operator fun get(name: String) = this.pipeMap[name]
 
+
     class Pipe(val name: String) {
 
         private val nodes = mutableListOf<Node>()
 
-        fun push(any: Any?) {
+        fun push(any: BEvent?) {
             val startPosition = 0
-            this.push(any, startPosition)
+            return this.push(any, startPosition)
         }
 
-        private fun push(any: Any?, position: Int) {
-            if (any != null) {
+        private fun push(event: BEvent?, position: Int) {
+            if (isValidEvent(event)) {
                 if (position < this.nodes.size) {
-                    val newAny = this.nodes[position].handle(any)
-                    this.push(newAny, position + 1)
+                    this.nodes[position].handle(event)
+                    this.push(event, position + 1)
                 }
             }
         }
@@ -42,7 +39,7 @@ class BPipeline {
 
             private val pipeMap = mutableMapOf<String, Pipe>()
 
-            abstract fun handle(any: Any?): Any?
+            abstract fun handle(event: BEvent?)
 
             fun add(pipe: Pipe) {
                 this.pipeMap[pipe.name] = pipe

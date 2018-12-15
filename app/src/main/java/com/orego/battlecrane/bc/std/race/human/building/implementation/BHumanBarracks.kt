@@ -65,24 +65,17 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
      * Companions.
      */
 
-    val actionFactory = TrainMarineFactory()
+    private val pipeline by lazy { this.context.pipeline }
 
-    val pipeline by lazy {
-        this.context.pipeline
-    }
+    val trainMarineLvl1Factory = TrainMarineLvl1Factory()
 
-    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
-        .also {
-            if (this.isProduceEnable) {
-                it.add(this.actionFactory.createTrainMarineLvl1Action())
-                if (this.currentLevel > 1) {
-                    it.add(this.actionFactory.createTrainMarineLvl2Action())
-                    if (this.currentLevel > 2) {
-                        it.add(this.actionFactory.createTrainMarineLvl3Action())
-                    }
-                }
-            }
-        }
+    val trainMarineLvl2Factory = TrainMarineLvl2Factory()
+
+    val trainMarineLvl3Factory = TrainMarineLvl3Factory()
+
+    /**
+     * Lifecycle.
+     */
 
     override fun onTurnStarted() {
         this.switchProduceEnable(true)
@@ -93,11 +86,28 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
     }
 
     /**
+     * Produce function.
+     */
+
+    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
+        .also { set ->
+            if (this.isProduceEnable) {
+                this.trainMarineLvl1Factory.create()?.let { set.add(it) }
+                if (this.currentLevel > 1) {
+                    this.trainMarineLvl2Factory.create()?.let { set.add(it) }
+                    if (this.currentLevel > 2) {
+                        this.trainMarineLvl3Factory.create()?.let { set.add(it) }
+                    }
+                }
+            }
+        }
+
+    /**
      * Action.
      */
 
-    inner class TrainMarine(private val createCond: (BUnit) -> Boolean) : BHumanAction(this.context, this.owner!!),
-        BTargetable {
+    inner class TrainMarine(private val createCond: (BUnit) -> Boolean) :
+        BHumanAction(this.context, this.owner!!), BTargetable {
 
         override var targetPosition: BPoint? = null
 
@@ -122,21 +132,21 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
      * Factories.
      */
 
-    inner class TrainMarineLvl1Factory : BAction.Factory() {
+    inner class TrainMarineLvl1Factory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() =     TrainMarine { unit -> this@BHumanBarracks.owner!!.owns(unit) }
+        override fun createAction() =
+            TrainMarine { unit -> this@BHumanBarracks.owner!!.owns(unit) }
     }
 
-    //TODO MAKE PIPELINE:
-    inner class TrainMarineFactory {
+    inner class TrainMarineLvl2Factory : BAction.Factory(this.pipeline) {
 
-        fun createTrainMarineLvl1Action() =
-
-
-        fun createTrainMarineLvl2Action() =
+        override fun createAction() =
             TrainMarine { unit -> !this@BHumanBarracks.owner!!.isEnemy(unit.owner) }
+    }
 
-        fun createTrainMarineLvl3Action() =
+    inner class TrainMarineLvl3Factory : BAction.Factory(this.pipeline) {
+
+        override fun createAction() =
             TrainMarine { true }
     }
 }

@@ -25,8 +25,6 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
 
         private const val DEFAULT_DAMAGE = 1
 
-        private const val DEFAULT_ATTACK_TIMES = 1
-
         private const val DEFAULT_IS_ATTACK_ENABLE = false
 
         private const val DEFAULT_RADIUS_ATTACK = 2
@@ -56,11 +54,6 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
 
     var lastAttack = Attack()
 
-    //TODO: CREATING PIPELINE!!!
-    init {
-        this.lastAttack.perform()
-    }
-
     /**
      * Observers.
      */
@@ -85,6 +78,10 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
         } else {
             null
         }
+    }
+
+    override fun onCreate() {
+        this.lastAttack.perform()
     }
 
     override fun onTurnStarted() {
@@ -126,6 +123,10 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
             }
         }
     }
+
+    /**
+     * Action.
+     */
 
     inner class Attack : BAction(this.context, this.owner) {
 

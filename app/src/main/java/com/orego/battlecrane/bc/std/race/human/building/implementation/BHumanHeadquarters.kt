@@ -26,12 +26,6 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
 
         private const val DEFAULT_MAX_LEVEL = 2
 
-        private const val DEFAULT_DAMAGE = 1
-
-        private const val DEFAULT_ATTACK_TIMES = 2
-
-        private const val DEFAULT_IS_ATTACK_ENABLE = false
-
         private const val HEADQUARTERS_BUILD_ABILITY = 1
 
         private const val GENERATOR_LIMIT = 2
@@ -81,27 +75,25 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
      * Companions.
      */
 
+    private val pipeline by lazy { this.context.pipeline }
+
     val buildDeveloper = BuildDeveloper()
 
-    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
-        .also {
-            if (this.isProduceEnable) {
-                it.addAll(setOf(
-                    Build { BHumanBarracks(context, owner) },
-                    Build { BHumanTurret(context, owner) },
-                    Build { BHumanWall(context, owner) }
-                ))
-                if (this.buildDeveloper.canFactoryBuild()) {
-                    it.add(Build { BHumanFactory(context, owner) })
-                }
-                if (this.buildDeveloper.canGeneratorBuild()) {
-                    it.add(Build { BHumanGenerator(context, owner) })
-                }
-                if (this.buildDeveloper.canUpgrade()) {
-                    it.add(UpgradeBuilding())
-                }
-            }
-        }
+    val buildBarracksFactory = BuildBarracksFactory()
+
+    val buildTurretFactory = BuildTurretFactory()
+
+    val buildWallFactory = BuildWallFactory()
+
+    val buildFactoryFactory = BuildFactoryFactory()
+
+    val buildGeneratorFactory = BuildGeneratorFactory()
+
+    val upgrageBuildingFactory = UpgrageBuildingFactory()
+
+    /**
+     * Lifecycle.
+     */
 
     override fun onTurnStarted() {
         this.switchProduceEnable(true)
@@ -110,6 +102,30 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
     override fun onTurnEnded() {
         this.switchProduceEnable(false)
     }
+
+    /**
+     * Producer function.
+     */
+
+    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
+        .also {
+            if (this.isProduceEnable) {
+                it.addAll(setOf(
+                    this.buildBarracksFactory.create(),
+                    this.buildTurretFactory.create(),
+                    this.buildWallFactory.create()
+                ))
+                if (this.buildDeveloper.canFactoryBuild()) {
+                    it.add(this.buildFactoryFactory.create())
+                }
+                if (this.buildDeveloper.canGeneratorBuild()) {
+                    it.add(this.buildGeneratorFactory.create())
+                }
+                if (this.buildDeveloper.canUpgrade()) {
+                    it.add(this.upgrageBuildingFactory.create())
+                }
+            }
+        }
 
     /**
      * Actions.
@@ -150,11 +166,48 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         }
     }
 
-    inner class BuildActionFactory : BAction.Factory {
+    /**
+     * Factories.
+     */
 
-        override fun createAction(): BAction {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    inner class BuildBarracksFactory : BAction.Factory(this.pipeline) {
+
+        override fun createAction() = Build {
+            BHumanBarracks(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
         }
+    }
+
+    inner class BuildTurretFactory : BAction.Factory(this.pipeline) {
+
+        override fun createAction() = Build {
+            BHumanTurret(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+        }
+    }
+
+    inner class BuildWallFactory : BAction.Factory(this.pipeline) {
+
+        override fun createAction() = Build {
+            BHumanWall(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+        }
+    }
+
+    inner class BuildFactoryFactory : BAction.Factory(this.pipeline) {
+
+        override fun createAction() = Build {
+            BHumanFactory(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+        }
+    }
+
+    inner class BuildGeneratorFactory : BAction.Factory(this.pipeline) {
+
+        override fun createAction() = Build {
+            BHumanGenerator(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+        }
+    }
+
+    inner class UpgrageBuildingFactory : BAction.Factory(this.pipeline) {
+
+        override fun createAction() = UpgradeBuilding()
     }
 
     /**

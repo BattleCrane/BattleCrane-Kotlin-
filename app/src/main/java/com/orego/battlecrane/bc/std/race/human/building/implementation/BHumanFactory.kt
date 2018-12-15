@@ -66,20 +66,18 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
      * Companions.
      */
 
-    val actionFactory = TrainTankFactory()
+    private val pipeline by lazy { this.context.pipeline }
 
-    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
-        .also {
-            if (this.isProduceEnable) {
-                it.add(this.actionFactory.createTrainTankLvl1Action())
-                if (this.currentLevel > 1) {
-                    it.add(this.actionFactory.createTrainTankLvl2Action())
-                    if (this.currentLevel > 2) {
-                        it.add(this.actionFactory.createTrainTankLvl3Action())
-                    }
-                }
-            }
-        }
+    val trainTankLvl1Factory = TrainTankLvl1Factory()
+
+    val trainTankLvl2Factory = TrainTankLvl2Factory()
+
+    val trainTankLvl3Factory = TrainTankLvl3Factory()
+
+
+    /**
+     * Lifecycle.
+     */
 
     override fun onTurnStarted() {
         this.switchProduceEnable(true)
@@ -88,6 +86,23 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
     override fun onTurnEnded() {
         this.switchProduceEnable(false)
     }
+
+    /**
+     * Producer function.
+     */
+
+    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
+        .also {
+            if (this.isProduceEnable) {
+                it.add(this.trainTankLvl1Factory.create())
+                if (this.currentLevel > 1) {
+                    it.add(this.trainTankLvl2Factory.create())
+                    if (this.currentLevel > 2) {
+                        it.add(this.trainTankLvl3Factory.create())
+                    }
+                }
+            }
+        }
 
     /**
      * Action.
@@ -116,19 +131,24 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
     }
 
     /**
-     * Factory.
+     * Factories.
      */
 
-    //TODO MAKE PIPELINE:
-    inner class TrainTankFactory {
+    inner class TrainTankLvl1Factory : BAction.Factory(this.pipeline) {
 
-        fun createTrainTankLvl1Action() =
+        override fun createAction() =
             TrainTank { unit -> this@BHumanFactory.owner!!.owns(unit) }
+    }
 
-        fun createTrainTankLvl2Action() =
+    inner class TrainTankLvl2Factory : BAction.Factory(this.pipeline) {
+
+        override fun createAction() =
             TrainTank { unit -> !this@BHumanFactory.owner!!.isEnemy(unit.owner) }
+    }
 
-        fun createTrainTankLvl3Action() =
+    inner class TrainTankLvl3Factory : BAction.Factory(this.pipeline) {
+
+        override fun createAction() =
             TrainTank { true }
     }
 }

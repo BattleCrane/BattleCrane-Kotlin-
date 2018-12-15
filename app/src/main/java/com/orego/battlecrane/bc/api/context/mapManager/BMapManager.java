@@ -12,8 +12,6 @@ public final class BMapManager {
 
     public static final int MAP_SIZE = 16;
 
-    private static final int MAP_RANGE = MAP_SIZE * MAP_SIZE;
-
     private final BPoint[][] matrix = new BPoint[MAP_SIZE][MAP_SIZE];
 
     private final Map<Long, BUnit> unitHeap = new HashMap<>();
@@ -25,8 +23,8 @@ public final class BMapManager {
         if (isPlaced) {
             //Attach unit on matrix:
             this.mapHolder.bindUnitTo(unit, pivot.getX(), pivot.getY());
-            //Notify subscribers:
-            unit.getOnCreateObserver().values().forEach(it -> it.onCreate(unit));
+            //Launch lifecycle:
+            unit.onCreate();
         }
         return isPlaced;
     }
