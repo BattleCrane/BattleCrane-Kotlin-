@@ -13,10 +13,10 @@ class BHumanBuildTurretView(action: BHumanHeadquarters.BuildTurretFactory.Action
 
     companion object {
 
-        private const val DRAWABLE = R.drawable.ic_action_name
+        private const val IMAGE_ID = R.drawable.human_action_build_turret
     }
 
-    override val displayedView = ImageView(context).asSimple(context, dimension, DRAWABLE)
+    override val displayedView = ImageView(context).asSimple(context, dimension, IMAGE_ID)
 
     class Builder : BActionViewRender.ViewBuilder {
 
