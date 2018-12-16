@@ -2,24 +2,39 @@ package com.orego.battlecrane.bc.api.context.playerManager.player
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
-import com.orego.battlecrane.bc.api.context.playerManager.player.turnTimer.BTurnTimer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.util.BIdGenerator
 
-class BPlayer(context: BGameContext, builder : BAdjutant.Builder) {
+class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
 
     val id: Long = BIdGenerator.generatePlayerId()
 
     //TODO WHILE WITHOUT BONUSES:
     val adjutant: BAdjutant = builder.build(context, this)
 
-    val turnTimer = BTurnTimer(this.adjutant)
-
     private val allies = mutableSetOf<BPlayer>()
 
     private val enemies = mutableSetOf<BPlayer>()
 
-    fun owns(unit : BUnit) = this == unit.owner
+    val onTurnFinishedObserver = mutableMapOf<Long, OnPlayerTurnFinishedListener>()
+
+    /**
+     * Game.
+     */
+
+    fun startTurn() {
+        this.adjutant.onTurnStarted()
+    }
+
+    fun finishTurn() {
+        this.adjutant.onTurnEnded()
+    }
+
+    /**
+     * Unit.
+     */
+
+    fun owns(unit: BUnit) = this == unit.owner
 
     /**
      * Player.
@@ -36,4 +51,13 @@ class BPlayer(context: BGameContext, builder : BAdjutant.Builder) {
     fun removeAlly(player: BPlayer) = this.allies.remove(player)
 
     fun isAlly(player: BPlayer) = this.allies.contains(player)
+
+    /**
+     * Listener.
+     */
+
+    interface OnPlayerTurnFinishedListener {
+
+        fun onPlayerTurnFinished(player: BPlayer)
+    }
 }

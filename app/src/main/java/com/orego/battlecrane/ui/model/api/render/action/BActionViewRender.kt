@@ -18,6 +18,7 @@ abstract class BActionViewRender(
 
     override fun draw() {
         val stack = this.stack.toList()
+        println("SIZEEEEEE    ${stack.size}")
         val dimension = this.constraintLayout.measuredWidth / this.columnCount
         val constraintLayoutId = this.constraintLayout.id
         var index = 0

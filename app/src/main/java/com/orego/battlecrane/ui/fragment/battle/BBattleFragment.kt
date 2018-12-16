@@ -36,12 +36,15 @@ class BBattleFragment : BFragment() {
         }
     }
 
+    //TODO: MAKE PRESENTER FUN START
+
     override fun onStart() {
         super.onStart()
         this.presenter.prepareMap(this.fragment_battle_map_constraint_layout)
         this.presenter.prepareBuildTools(this.fragment_battle_build_actions)
         this.presenter.prepareTrainTools(this.fragment_battle_train_actions)
 //        this.presenter.prepareBonusTools(this.fragment_battle_reinforcements_tools)
+        this.presenter.startGame()
     }
 
     inner class Presenter : BFragment.BPresenter() {
@@ -109,6 +112,10 @@ class BBattleFragment : BFragment() {
                     this.applicationContext
                 )
             }
+        }
+
+        fun startGame() {
+            this.gameContext.startGame()
         }
 
         //TODO: MAKE BONUSES!!!
