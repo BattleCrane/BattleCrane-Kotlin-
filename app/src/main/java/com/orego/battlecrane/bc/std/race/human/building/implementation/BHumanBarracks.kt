@@ -159,7 +159,11 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
 
     inner class TrainMarineLvl3Factory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() =
-            TrainMarine { true }
+        override fun createAction() = Action()
+
+        inner class Action : TrainMarine() {
+
+            override fun isTrainConditionPerformed(unit: BUnit) = true
+        }
     }
 }

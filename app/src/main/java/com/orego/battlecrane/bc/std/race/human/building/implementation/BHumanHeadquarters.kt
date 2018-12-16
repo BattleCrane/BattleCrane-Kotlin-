@@ -150,22 +150,6 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         }
     }
 
-    inner class UpgradeBuilding : BHumanAction(this.context, this.owner!!), BTargetable {
-
-        override var targetPosition: BPoint? = null
-
-        override fun performAction(): Boolean {
-            if (this.targetPosition != null && this.owner != null) {
-                val manager = this.context.mapManager
-                val unit = manager.getUnitByPosition(this.targetPosition)
-                if (unit is BLevelable && unit is BHumanBuilding) {
-                    return unit.increaseLevel(DEFAULT_BUILDING_UPGRADE)
-                }
-            }
-            return false
-        }
-    }
-
     inner class BuildBarracksFactory : BAction.Factory(this.pipeline) {
 
         override fun createAction() = Action()
@@ -223,7 +207,25 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
 
     inner class UpgrageBuildingFactory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() = UpgradeBuilding()
+        override fun createAction() = Action()
+
+        inner class Action : BHumanAction(
+            this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!
+        ), BTargetable {
+
+            override var targetPosition: BPoint? = null
+
+            override fun performAction(): Boolean {
+                if (this.targetPosition != null && this.owner != null) {
+                    val manager = this.context.mapManager
+                    val unit = manager.getUnitByPosition(this.targetPosition)
+                    if (unit is BLevelable && unit is BHumanBuilding) {
+                        return unit.increaseLevel(DEFAULT_BUILDING_UPGRADE)
+                    }
+                }
+                return false
+            }
+        }
     }
 
     /**

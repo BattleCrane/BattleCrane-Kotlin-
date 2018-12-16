@@ -108,17 +108,19 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
      * Action.
      */
 
-    inner class TrainTank(private val cond: (BUnit) -> Boolean) : BHumanAction(this.context, this.owner!!),
+    abstract inner class TrainTank : BHumanAction(this.context, this.owner!!),
         BTargetable {
 
         override var targetPosition: BPoint? = null
+
+        protected abstract fun isTrainConditionPerformed(unit : BUnit) : Boolean
 
         override fun performAction(): Boolean {
             if (this.targetPosition != null) {
                 val tank = BHumanTank(this.context, this.owner!!)
                 val manager = this.context.mapManager
                 val unit = manager.getUnitByPosition(this.targetPosition)
-                if (unit is BEmptyField && this.cond(unit)) {
+                if (unit is BEmptyField && this.isTrainConditionPerformed(unit)) {
                     val isSuccessful = manager.createUnit(tank, this.targetPosition)
                     if (isSuccessful) {
                         this@BHumanFactory.switchProduceEnable(false)
@@ -136,19 +138,34 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
 
     inner class TrainTankLvl1Factory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() =
-            TrainTank { unit -> this@BHumanFactory.owner!!.owns(unit) }
+
+        override fun createAction() = Action()
+
+        inner class Action : TrainTank() {
+
+            override fun isTrainConditionPerformed(unit: BUnit) =
+                this@BHumanFactory.owner!!.owns(unit)
+        }
     }
 
     inner class TrainTankLvl2Factory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() =
-            TrainTank { unit -> !this@BHumanFactory.owner!!.isEnemy(unit.owner) }
+        override fun createAction() = Action()
+
+        inner class Action : TrainTank() {
+
+            override fun isTrainConditionPerformed(unit: BUnit) =
+                !this@BHumanFactory.owner!!.isEnemy(unit.owner)
+        }
     }
 
     inner class TrainTankLvl3Factory : BAction.Factory(this.pipeline) {
 
-        override fun createAction() =
-            TrainTank { true }
+        override fun createAction() = Action()
+
+        inner class Action : TrainTank() {
+
+            override fun isTrainConditionPerformed(unit: BUnit) = true
+        }
     }
 }
