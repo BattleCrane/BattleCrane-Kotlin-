@@ -21,8 +21,8 @@ class BViewFactoryViewModel : ViewModel() {
         scenarioSupport.trainActionBuilders.forEach { this.trainActionFactory.addBuilder(it) }
         scenarioSupport.bonusActionBuilders.forEach { this.bonusActionFactory.addBuilder(it) }
         //Set default builder:
-        this.buildActionFactory.defaultBuilder = scenarioSupport.defaultActionBuilder
-        this.trainActionFactory.defaultBuilder = scenarioSupport.defaultActionBuilder
+//        this.buildActionFactory.defaultBuilder = scenarioSupport.defaultActionBuilder
+//        this.trainActionFactory.defaultBuilder = scenarioSupport.defaultActionBuilder
         //TODO: MAKE BONUSES:
 //        this.bonusActionFactory.defaultBuilder = scenarioSupport.defaultBonusToolBuilder
     }

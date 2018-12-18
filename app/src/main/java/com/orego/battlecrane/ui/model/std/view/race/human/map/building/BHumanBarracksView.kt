@@ -1,30 +1,34 @@
 package com.orego.battlecrane.ui.model.std.view.race.human.map.building
 
 import android.content.Context
-import android.view.View
 import android.widget.ImageView
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanBarracks
 import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.R
+import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanBarracks
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
 import com.orego.battlecrane.ui.util.asSimple
+import com.orego.battlecrane.ui.util.setImageById
 
-class BHumanBarracksView(unit: BHumanBarracks, measuredCellSide: Int, context: Context) : BUnitView(unit) {
+class BHumanBarracksView(
+    override val entity: BHumanBarracks, dimension: Int, private val context: Context
+) : BUnitView(entity) {
 
-    override val displayedView: View
+    override val displayedView: ImageView
 
-    companion object {
-
-        private const val IMAGE_ID = R.drawable.ic_action_name_2
-    }
+    private val imageMatrix = listOf<List<List<Int>>>()
 
     init {
-        this.displayedView = ImageView(context).asSimple(context, measuredCellSide,
-            IMAGE_ID
+        this.displayedView = ImageView(context).asSimple(
+            context, dimension, this.getImageId()
         )
     }
 
+    private fun getImageId() =
+        this.imageMatrix[this.entity.owner!!.id as Int][this.entity.currentLevel - 1][this.entity.currentHitPoints - 1]
+
+    override fun refresh() {
+        this.displayedView.setImageById(this.context, this.getImageId())
+    }
 
     class Builder : BUnitViewRender.ViewBuilder {
 

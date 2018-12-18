@@ -13,7 +13,7 @@ class BHumanUpgradeBuildingView(action: BHumanHeadquarters.UpgrageBuildingFactor
 
     companion object {
 
-        private const val DRAWABLE = R.drawable.ic_action_name
+        private const val DRAWABLE = R.drawable.human_action_upgrade_building
     }
 
     override val displayedView = ImageView(context).asSimple(context, dimension, DRAWABLE)

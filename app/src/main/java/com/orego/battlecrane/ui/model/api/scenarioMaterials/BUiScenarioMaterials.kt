@@ -13,6 +13,4 @@ abstract class BUiScenarioMaterials(val gameScenario: BGameScenario) {
     abstract val trainActionBuilders: Set<BActionViewRender.ViewBuilder>
 
     abstract val bonusActionBuilders: Set<BActionViewRender.ViewBuilder>
-
-    abstract val defaultActionBuilder: BActionViewRender.ViewBuilder
 }

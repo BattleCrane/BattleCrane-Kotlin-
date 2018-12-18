@@ -16,7 +16,7 @@ class BHumanTrainTankLvl2View(
 
     companion object {
 
-        private const val DRAWABLE = R.drawable.ic_action_name
+        private const val DRAWABLE = R.drawable.human_action_train_tank_lvl_2
     }
 
     override val displayedView = ImageView(context).asSimple(context, dimension, DRAWABLE)

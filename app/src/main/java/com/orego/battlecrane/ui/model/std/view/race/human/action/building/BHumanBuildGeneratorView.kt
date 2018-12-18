@@ -13,7 +13,7 @@ class BHumanBuildGeneratorView(action: BHumanHeadquarters.BuildGeneratorFactory.
 
     companion object {
 
-        private const val DRAWABLE = R.drawable.ic_action_name
+        private const val DRAWABLE = R.drawable.human_action_build_generator
     }
 
     override val displayedView = ImageView(context).asSimple(context, dimension, DRAWABLE)

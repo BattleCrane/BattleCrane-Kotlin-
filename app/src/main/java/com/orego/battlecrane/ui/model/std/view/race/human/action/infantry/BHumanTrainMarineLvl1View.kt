@@ -13,7 +13,7 @@ class BHumanTrainMarineLvl1View(action: BHumanBarracks.TrainMarineLvl1Factory.Ac
 
     companion object {
 
-        private const val DRAWABLE = R.drawable.ic_action_name
+        private const val DRAWABLE = R.drawable.human_action_train_marine_lvl_1
     }
 
     override val displayedView = ImageView(context).asSimple(context, dimension, DRAWABLE)

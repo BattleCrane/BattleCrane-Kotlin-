@@ -6,14 +6,11 @@ import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.scenarioMaterials.BUiScenarioMaterials
 import com.orego.battlecrane.ui.model.std.view.ground.map.field.destroyed.BDestroyedFieldView
 import com.orego.battlecrane.ui.model.std.view.ground.map.field.empty.BEmptyFieldView
-import com.orego.battlecrane.ui.model.std.view.ground.action.empty.BEmptyActionView
 import com.orego.battlecrane.ui.model.std.view.race.human.BHumanViewBuilders
 
 class BUiStandardSkirmishScenarioMaterials : BUiScenarioMaterials(BStandardSkirmishScenario()) {
 
     override val unitBuilders = mutableSetOf<BUnitViewRender.ViewBuilder>()
-
-    override val defaultActionBuilder = BEmptyActionView.Builder()
 
     private val humanViewBuilders = BHumanViewBuilders()
 
