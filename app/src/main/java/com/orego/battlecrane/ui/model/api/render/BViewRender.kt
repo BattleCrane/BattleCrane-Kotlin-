@@ -3,6 +3,7 @@ package com.orego.battlecrane.ui.model.api.render
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import com.orego.battlecrane.ui.model.api.modeController.BClickController
 
 abstract class BViewRender<K : Any, V : Any> {
 
@@ -14,17 +15,26 @@ abstract class BViewRender<K : Any, V : Any> {
 
     protected lateinit var constraintLayout: ConstraintLayout
 
+    protected lateinit var clickController: BClickController
+
     protected val constraintSet = ConstraintSet()
 
-    protected val temporaryViewList: MutableList<V> = mutableListOf()
+    protected val viewList: MutableList<V> = mutableListOf()
 
     abstract fun draw()
 
-    fun install(constraintLayout: ConstraintLayout, factory: ViewFactory<K, V>, context: Context) {
+    fun install(
+        constraintLayout: ConstraintLayout,
+        factory: ViewFactory<K, V>,
+        clickController: BClickController,
+        context: Context
+    ) {
         if (!this.isInstalled) {
             this.factory = factory
             this.constraintLayout = constraintLayout
             this.context = context
+            this.clickController = clickController
+            this.isInstalled = true
         }
         this.draw()
     }

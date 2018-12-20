@@ -13,6 +13,7 @@ import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
 import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BHumanAdjutant
 import com.orego.battlecrane.ui.fragment.BFragment
+import com.orego.battlecrane.ui.model.api.modeController.BClickController
 import com.orego.battlecrane.ui.model.api.render.action.BBuildViewRender
 import com.orego.battlecrane.ui.model.api.render.action.BTrainViewRender
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
@@ -69,6 +70,8 @@ class BBattleFragment : BFragment() {
          * Renders units on the map.
          */
 
+        private val modeController = BClickController()
+
         private val unitRender by lazy {
             BUnitViewRender(this.gameContext.mapManager.unitHeap)
         }
@@ -81,14 +84,14 @@ class BBattleFragment : BFragment() {
             BTrainViewRender(this.gameContext.playerManager)
         }
 
-        private val raceController by lazy {
-            RaceToolController(this.applicationContext)
-        }
-
         //TODO: MAKE BONUS:
 //        private val bonusToolRender by lazy {
 //            BBonusToolRender(this.context.playerManager)
 //        }
+
+        private val raceController by lazy {
+            RaceToolController(this.applicationContext)
+        }
 
         fun start() {
             this.initRaceController()
@@ -104,6 +107,7 @@ class BBattleFragment : BFragment() {
                 this.unitRender.install(
                     this@BBattleFragment.fragment_battle_map_constraint_layout,
                     this.viewFactoryViewModel.unitFactory,
+                    this.modeController,
                     this.applicationContext
                 )
             }
@@ -114,6 +118,7 @@ class BBattleFragment : BFragment() {
                 this.buildViewRender.install(
                     this@BBattleFragment.fragment_battle_build_actions,
                     this.viewFactoryViewModel.buildActionFactory,
+                    this.modeController,
                     this.applicationContext
                 )
             }
@@ -124,6 +129,7 @@ class BBattleFragment : BFragment() {
                 this.trainViewRender.install(
                     this@BBattleFragment.fragment_battle_train_actions,
                     this.viewFactoryViewModel.trainActionFactory,
+                    this.modeController,
                     this.applicationContext
                 )
             }

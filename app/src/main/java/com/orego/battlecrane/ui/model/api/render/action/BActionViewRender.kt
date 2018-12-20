@@ -27,16 +27,16 @@ abstract class BActionViewRender(
         for (x in 0 until this.columnCount) {
             for (y in 0 until this.rowCount) {
                 if (index < actionCount) {
-                    println("VVVIIIII: $index")
                     //TODO: MAKE MORE COMPLETABLE INFORMATION ABOUT ACTION: (WHILE SIMPLE)
                     val action = stack[index]
                     //TODO REMOVE TYPE:
                     val type = action::class.java.name
                     println("ACTION TYPE: $type")
                     val view = this.factory.build(action, dimension, this.context, type)
-                    view.position = BPoint(x, y)
+                    view.clickController = this.clickController
+                    view.stackPosition = BPoint(x, y)
                     this.constraintLayout.addView(view)
-                    this.temporaryViewList.add(view)
+                    this.viewList.add(view)
                     index++
                 } else {
                     break
@@ -45,15 +45,15 @@ abstract class BActionViewRender(
         }
         this.constraintSet.clone(this.constraintLayout)
         //Move adjutant:
-        for (view in this.temporaryViewList) {
+        for (view in this.viewList) {
             val displayedViewId = view.displayedView.id
-            val cell = view.position
+            val cell = view.stackPosition
             val x = cell.x * dimension
             val y = cell.y * dimension
             this.constraintSet.moveTo(displayedViewId, constraintLayoutId, x, y)
         }
         this.constraintSet.applyTo(this.constraintLayout)
-        this.temporaryViewList.clear()
+        this.viewList.clear()
     }
 
     class ViewFactory : BViewRender.ViewFactory<BAction, BActionView>() {

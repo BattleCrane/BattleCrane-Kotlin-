@@ -19,12 +19,33 @@ import static com.orego.battlecrane.bc.api.context.mapManager.BMapManager.MAP_SI
 
 public final class BStandardSkirmishScenario implements BGameScenario {
 
+    @NotNull
+    @Override
+    public final List<BPlayer> initPlayerList(final @NotNull BGameContext context) {
+        final List<BPlayer> playerList = new ArrayList<>();
+        final BPlayer redPlayer = new BPlayer(context, new BHumanAdjutant.Builder());
+        final BPlayer bluePlayer = new BPlayer(context, new BHumanAdjutant.Builder());
+        //Set enemies:
+        redPlayer.addEnemy(bluePlayer);
+        bluePlayer.addEnemy(redPlayer);
+        //Add in player list:
+        playerList.add(bluePlayer);
+        playerList.add(redPlayer);
+        return playerList;
+    }
+
+    @NotNull
+    @Override
+    public final BPlayer getStartPlayer(final List<BPlayer> players) {
+        return players.get(new Random().nextInt(1));
+    }
+
     @Override
     public final void initMap(
             @NotNull final BMapManager.BMapHolder mapHolder,
             @NotNull final BGameContext context
     ) {
-        //Fill startTurn player position:
+        //Fill startTurn player stackPosition:
         final List<BPlayer> players = context.getPlayerManager().getPlayers();
         if (players.size() == 2) {
             //Get players:
@@ -52,26 +73,5 @@ public final class BStandardSkirmishScenario implements BGameScenario {
                 }
             }
         }
-    }
-
-    @NotNull
-    @Override
-    public final List<BPlayer> initPlayerList(final @NotNull BGameContext context) {
-        final List<BPlayer> playerList = new ArrayList<>();
-        final BPlayer redPlayer = new BPlayer(context, new BHumanAdjutant.Builder());
-        final BPlayer bluePlayer = new BPlayer(context, new BHumanAdjutant.Builder());
-        //Set enemies:
-        redPlayer.addEnemy(bluePlayer);
-        bluePlayer.addEnemy(redPlayer);
-        //Add in player list:
-        playerList.add(bluePlayer);
-        playerList.add(redPlayer);
-        return playerList;
-    }
-
-    @NotNull
-    @Override
-    public final BPlayer getStartPlayer(final List<BPlayer> players) {
-        return players.get(new Random().nextInt(1));
     }
 }
