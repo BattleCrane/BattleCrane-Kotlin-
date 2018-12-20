@@ -1,27 +1,42 @@
 package com.orego.battlecrane.ui.model.std.view.race.human.unit.building
 
 import android.content.Context
-import android.view.View
 import android.widget.ImageView
-import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanWall
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
-import com.orego.battlecrane.ui.util.byResource
+import com.orego.battlecrane.ui.util.byAssets
+import com.orego.battlecrane.ui.util.setImageByAssets
 
-class BHumanWallView(unit: BHumanWall, measuredCellSide: Int, context: Context) : BUnitView(unit) {
-
-    override val displayedView: View
+class BHumanWallView(
+    override val entity: BHumanWall, dimension: Int, private val context: Context
+) : BUnitView(entity) {
+    override val displayedView: ImageView
 
     companion object {
 
-        private const val HUMAN_WALL_IMAGE_ID = R.drawable.ic_action_name_2
+        private val COLOR_MAP = mapOf(
+            1.toLong() to "blue",
+            2.toLong() to "red"
+        )
     }
 
     init {
-        this.displayedView = ImageView(context)
-            .byResource(context, measuredCellSide, HUMAN_WALL_IMAGE_ID)
+        val width = dimension * this.entity.horizontalSize
+        val height = dimension * this.entity.verticalSize
+        this.displayedView = ImageView(context).byAssets(
+            context, width, height, this.getPath()
+        )
+    }
+
+    private fun getPath() =
+        "race/human/unit/headquarters/" +
+                "${COLOR_MAP[this.entity.owner!!.id]}/" +
+                "${this.entity.currentHitPoints}"
+
+    override fun refresh() {
+        this.displayedView.setImageByAssets(this.context, this.getPath())
     }
 
     class Builder : BUnitViewRender.ViewBuilder {

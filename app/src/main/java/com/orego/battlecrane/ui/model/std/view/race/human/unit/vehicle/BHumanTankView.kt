@@ -1,28 +1,49 @@
 package com.orego.battlecrane.ui.model.std.view.race.human.unit.vehicle
 
 import android.content.Context
-import android.view.View
 import android.widget.ImageView
-import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.vehicle.implementation.BHumanTank
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
-import com.orego.battlecrane.ui.util.byResource
+import com.orego.battlecrane.ui.util.byAssets
+import com.orego.battlecrane.ui.util.setImageByAssets
 
-class BHumanTankView(unit: BHumanTank, measuredCellSide: Int, context: Context) : BUnitView(unit) {
+class BHumanTankView(
+    override val entity: BHumanTank, dimension: Int, private val context: Context
+) : BUnitView(entity) {
 
-    override val displayedView: View
+    override val displayedView: ImageView
 
     companion object {
 
-        private const val HUMAN_TANK_IMAGE_ID = R.drawable.ic_action_name_2
+        private val COLOR_MAP = mapOf(
+            1.toLong() to "blue",
+            2.toLong() to "red"
+        )
     }
 
     init {
-        this.displayedView = ImageView(context).byResource(context, measuredCellSide,
-            HUMAN_TANK_IMAGE_ID
+        val width = dimension * this.entity.horizontalSize
+        val height = dimension * this.entity.verticalSize
+        this.displayedView = ImageView(context).byAssets(
+            context, width, height, this.getPath()
         )
+    }
+
+    private fun getPath() =
+        "race/human/unit/tank/" +
+                "${COLOR_MAP[this.entity.owner!!.id]}/" +
+                "${this.entity.currentHitPoints}_${
+                if (this.entity.isAttackEnable) {
+                    "active"
+                } else {
+                    "passive"
+                }
+                }"
+
+    override fun refresh() {
+        this.displayedView.setImageByAssets(this.context, this.getPath())
     }
     
     class Builder : BUnitViewRender.ViewBuilder {
