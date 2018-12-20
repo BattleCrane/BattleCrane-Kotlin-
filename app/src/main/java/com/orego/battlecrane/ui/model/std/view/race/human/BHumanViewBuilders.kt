@@ -1,8 +1,8 @@
 package com.orego.battlecrane.ui.model.std.view.race.human
 
-import com.orego.battlecrane.ui.model.std.view.race.human.map.building.*
-import com.orego.battlecrane.ui.model.std.view.race.human.map.infantry.BHumanMarineView
-import com.orego.battlecrane.ui.model.std.view.race.human.map.vehicle.BHumanTankView
+import com.orego.battlecrane.ui.model.std.view.race.human.unit.building.*
+import com.orego.battlecrane.ui.model.std.view.race.human.unit.infantry.BHumanMarineView
+import com.orego.battlecrane.ui.model.std.view.race.human.unit.vehicle.BHumanTankView
 import com.orego.battlecrane.ui.model.std.view.race.human.action.building.*
 import com.orego.battlecrane.ui.model.std.view.race.human.action.infantry.BHumanTrainMarineLvl1View
 import com.orego.battlecrane.ui.model.std.view.race.human.action.infantry.BHumanTrainMarineLvl2View

@@ -4,19 +4,18 @@ import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.destroyed.BDestroyedField
-import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.map.BUnitView
-import com.orego.battlecrane.ui.util.asSimple
+import com.orego.battlecrane.ui.util.byAssets
 
-class BDestroyedFieldView(unit: BDestroyedField, measuredCellSize: Int, context: Context) : BUnitView(unit) {
+class BDestroyedFieldView(unit: BDestroyedField, dimension: Int, context: Context) : BUnitView(unit) {
 
     companion object {
 
-        private const val IMAGE_ID = R.drawable.std_grass_unit_destroyed_field
+        private const val PATH = "std/grass/unit/destroyed_field.png"
     }
 
-    override val displayedView = ImageView(context).asSimple(context, measuredCellSize, IMAGE_ID)
+    override val displayedView = ImageView(context).byAssets(context, dimension, dimension, PATH)
 
     class Builder : BUnitViewRender.ViewBuilder {
 

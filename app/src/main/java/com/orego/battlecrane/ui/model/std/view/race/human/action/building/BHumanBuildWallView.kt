@@ -7,16 +7,18 @@ import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
-import com.orego.battlecrane.ui.util.asSimple
+import com.orego.battlecrane.ui.util.byAssets
+import com.orego.battlecrane.ui.util.byResource
 
-class BHumanBuildWallView(action: BHumanHeadquarters.BuildWallFactory.Action, dimension: Int, context: Context) : BActionView(action) {
+class BHumanBuildWallView(action: BHumanHeadquarters.BuildWallFactory.Action, dimension: Int, context: Context) :
+    BActionView(action) {
 
     companion object {
 
-        private const val DRAWABLE = R.drawable.human_action_build_wall
+        private const val PATH = "race/human/action/build_wall.png"
     }
 
-    override val displayedView = ImageView(context).asSimple(context, dimension, DRAWABLE)
+    override val displayedView = ImageView(context).byAssets(context, dimension, dimension, PATH)
 
     class Builder : BActionViewRender.ViewBuilder {
 

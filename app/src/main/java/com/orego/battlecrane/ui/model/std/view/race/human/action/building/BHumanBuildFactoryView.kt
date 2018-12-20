@@ -7,7 +7,8 @@ import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
-import com.orego.battlecrane.ui.util.asSimple
+import com.orego.battlecrane.ui.util.byAssets
+import com.orego.battlecrane.ui.util.byResource
 
 class BHumanBuildFactoryView(
     action: BHumanHeadquarters.BuildFactoryFactory.Action, dimension: Int, context: Context
@@ -15,14 +16,11 @@ class BHumanBuildFactoryView(
 
     companion object {
 
-        private const val UNIT_NAME = "ViewFactory"
-
-        private const val UNIT_DESCRIPTION = "Deal 1 damage"
-
-        private const val IMAGE_ID = R.drawable.human_action_build_factory
+        private const val PATH = "race/human/action/build_factiory.png"
     }
 
-    override val displayedView = ImageView(context).asSimple(context, dimension, IMAGE_ID)
+    override val displayedView = ImageView(context)
+        .byAssets(context, dimension, dimension, PATH)
 
     class Builder : BActionViewRender.ViewBuilder {
         override fun build(value: BAction, dimension: Int, context: Context) =
