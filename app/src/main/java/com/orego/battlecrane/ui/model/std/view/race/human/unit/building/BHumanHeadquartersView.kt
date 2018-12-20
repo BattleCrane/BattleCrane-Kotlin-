@@ -5,7 +5,7 @@ import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
-import com.orego.battlecrane.ui.model.api.view.map.BUnitView
+import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.byAssets
 import com.orego.battlecrane.ui.util.setImageByAssets
 
@@ -26,15 +26,15 @@ class BHumanHeadquartersView(
     init {
         val width = dimension * this.entity.horizontalSize
         val height = dimension * this.entity.verticalSize
-        this.displayedView = ImageView(context).byAssets(
-            context, width, height, this.getPath()
+        this.displayedView = ImageView(this.context).byAssets(
+            this.context, width, height, this.getPath()
         )
     }
 
     private fun getPath() =
         "race/human/unit/headquarters/" +
                 "${COLOR_MAP[this.entity.owner!!.id]}/" +
-                "${this.entity.currentHitPoints}"
+                "${this.entity.currentHitPoints}.png"
 
     override fun refresh() {
         this.displayedView.setImageByAssets(this.context, this.getPath())

@@ -1,5 +1,6 @@
 package com.orego.battlecrane.ui.fragment.battle
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,12 +8,17 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
+import com.orego.battlecrane.bc.api.context.playerManager.BPlayerManager
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
+import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
+import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BHumanAdjutant
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.model.api.render.action.BBuildViewRender
 import com.orego.battlecrane.ui.model.api.render.action.BTrainViewRender
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.util.hide
 import com.orego.battlecrane.ui.util.onMeasured
+import com.orego.battlecrane.ui.util.setImageByAssets
 import com.orego.battlecrane.ui.util.show
 import com.orego.battlecrane.ui.viewModel.BViewFactoryViewModel
 import kotlinx.android.synthetic.main.fragment_battle.*
@@ -40,11 +46,7 @@ class BBattleFragment : BFragment() {
 
     override fun onStart() {
         super.onStart()
-        this.presenter.prepareMap(this.fragment_battle_map_constraint_layout)
-        this.presenter.prepareBuildTools(this.fragment_battle_build_actions)
-        this.presenter.prepareTrainTools(this.fragment_battle_train_actions)
-//        this.presenter.prepareBonusTools(this.fragment_battle_reinforcements_tools)
-        this.presenter.startGame()
+        this.presenter.start()
     }
 
     inner class Presenter : BFragment.BPresenter() {
@@ -79,12 +81,25 @@ class BBattleFragment : BFragment() {
             BTrainViewRender(this.gameContext.playerManager)
         }
 
+        private val raceController by lazy {
+            RaceToolController(this.applicationContext)
+        }
+
         //TODO: MAKE BONUS:
 //        private val bonusToolRender by lazy {
 //            BBonusToolRender(this.context.playerManager)
 //        }
 
-        fun prepareMap(constraintLayout: ConstraintLayout) {
+        fun start() {
+            this.initRaceController()
+            this.prepareMap(this@BBattleFragment.fragment_battle_map_constraint_layout)
+            this.prepareBuildTools(this@BBattleFragment.fragment_battle_build_actions)
+            this.prepareTrainTools(this@BBattleFragment.fragment_battle_train_actions)
+//        this.prepareBonusTools(this@BBattleFragment.fragment_battle_reinforcements_tools)
+            this.startGame()
+        }
+
+        private fun prepareMap(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
                 this.unitRender.install(
                     this@BBattleFragment.fragment_battle_map_constraint_layout,
@@ -94,7 +109,7 @@ class BBattleFragment : BFragment() {
             }
         }
 
-        fun prepareBuildTools(constraintLayout: ConstraintLayout) {
+        private fun prepareBuildTools(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
                 this.buildViewRender.install(
                     this@BBattleFragment.fragment_battle_build_actions,
@@ -104,7 +119,7 @@ class BBattleFragment : BFragment() {
             }
         }
 
-        fun prepareTrainTools(constraintLayout: ConstraintLayout) {
+        private fun prepareTrainTools(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
                 this.trainViewRender.install(
                     this@BBattleFragment.fragment_battle_train_actions,
@@ -114,12 +129,12 @@ class BBattleFragment : BFragment() {
             }
         }
 
-        fun startGame() {
-            this.gameContext.startGame()
+        private fun initRaceController() {
+            this.raceController.init()
         }
 
         //TODO: MAKE BONUSES!!!
-//        fun prepareBonusTools(constraintLayout: ConstraintLayout) {
+//        private fun prepareBonusTools(constraintLayout: ConstraintLayout) {
 //            constraintLayout.onMeasured {
 //                this.bonusToolRender.install(
 //                    this@BBattleFragment.fragment_battle_reinforcements_tools,
@@ -128,5 +143,44 @@ class BBattleFragment : BFragment() {
 //                )
 //            }
 //        }
+
+        private fun startGame() {
+            this.gameContext.startGame()
+        }
+
+        inner class RaceToolController(private val context: Context) {
+
+            private val racePathMap = mutableMapOf<Class<out BAdjutant>, RacePaths>()
+
+            init {
+                this.racePathMap[BHumanAdjutant::class.java] = RacePaths(
+                    "race/human/button/build.png",
+                    "race/human/button/train.png"
+                )
+            }
+
+            fun init() {
+                this@Presenter.gameContext.playerManager.addOnTurnListener(object : BPlayerManager.TurnListener {
+
+                    override fun onTurnStarted(player: BPlayer) {
+                        val racePaths = this@RaceToolController.racePathMap[player.adjutant::class.java]!!
+                        this@BBattleFragment.fragment_battle_to_build_image_view.setImageByAssets(
+                            context,
+                            racePaths.buildPath
+                        )
+                        this@BBattleFragment.fragment_battle_to_train_image_view.setImageByAssets(
+                            context,
+                            racePaths.trainPath
+                        )
+                    }
+
+                    override fun onTurnFinished(player: BPlayer) {
+
+                    }
+                })
+            }
+
+            inner class RacePaths(val buildPath: String, val trainPath: String)
+        }
     }
 }

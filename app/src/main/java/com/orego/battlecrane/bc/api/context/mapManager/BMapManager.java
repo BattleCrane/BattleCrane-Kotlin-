@@ -90,8 +90,8 @@ public final class BMapManager {
             //Attach pivot to entity:
             unit.setPivot(pivot);
             //Attach entity to matrix:
-            for (int i = x; i < horizontalSide; i++) {
-                for (int j = y; j < verticalSide; j++) {
+            for (int i = x; i < x + horizontalSide; i++) {
+                for (int j = y; j < y + verticalSide; j++) {
                     final BPoint point = BMapManager.this.matrix[i][j];
                     point.setAttachedUnit(unit);
                 }

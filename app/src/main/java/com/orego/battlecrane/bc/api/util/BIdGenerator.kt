@@ -6,7 +6,7 @@ object BIdGenerator {
 
     private var actionIdCounter : Long = 0
 
-    private var playerIdConter : Long = 0
+    private var playerIdConter : Long = 1
 
     fun generateUnitId() = this.unitIdCounter++
 

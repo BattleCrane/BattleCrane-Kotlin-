@@ -37,7 +37,7 @@
 
             <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="0dp" app:srcCompat="@drawable/button_build"
+                    android:layout_height="0dp"
                     android:id="@+id/fragment_battle_to_build_image_view" app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="32dp"
@@ -75,10 +75,9 @@
             android:layout_marginBottom="32dp"
             android:visibility="visible"
             android:layout_width="0dp"
-            android:layout_height="0dp" tools:background="@color/colorPrimaryDark"
-            android:background="@color/colorPrimary" android:backgroundTint="@color/colorPrimaryDark"
+            android:layout_height="0dp"
             app:layout_constraintVertical_bias="0.555"
-            app:layout_constraintDimensionRatio="1:1">
+            app:layout_constraintDimensionRatio="1:1" android:background="@color/colorPrimary">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -126,7 +125,7 @@
 
             <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="0dp" app:srcCompat="@drawable/button_train"
+                    android:layout_height="0dp"
                     android:id="@+id/fragment_battle_to_train_image_view" app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="32dp"

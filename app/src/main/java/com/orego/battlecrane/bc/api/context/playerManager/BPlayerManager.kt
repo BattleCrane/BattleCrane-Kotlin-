@@ -23,9 +23,11 @@ class BPlayerManager(scenario: BGameScenario, context: BGameContext) {
 
     var currentPlayer: BPlayer = scenario.getStartPlayer(this.players)
 
-    var playerPointer  = this.players.indexOf(this.currentPlayer)
+    private var playerPointer  = this.players.indexOf(this.currentPlayer)
 
-    val turnAssistant = BTurnAssistant()
+    private val turnAssistant = BTurnAssistant()
+
+    private val turnObserver = mutableMapOf<Long, TurnListener>()
 
     fun isEnemies(unit1: BUnit, unit2: BUnit): Boolean {
         val owner1 = unit1.owner
@@ -41,6 +43,11 @@ class BPlayerManager(scenario: BGameScenario, context: BGameContext) {
 
     }
 
+    fun addOnTurnListener(listener : TurnListener) : Long {
+        val id = BIdGenerator.generateActionId()
+        this.turnObserver[id] = listener
+        return id
+    }
 
     inner class BTurnAssistant {
 
@@ -52,6 +59,7 @@ class BPlayerManager(scenario: BGameScenario, context: BGameContext) {
 
             override fun onPlayerTurnFinished(player: BPlayer) {
                 player.onTurnFinishedObserver.remove(this@BTurnAssistant.listenerId)
+                this@BPlayerManager.turnObserver.values.forEach { it.onTurnFinished(player) }
                 this@BTurnAssistant.finishTurn()
             }
         }
@@ -60,6 +68,7 @@ class BPlayerManager(scenario: BGameScenario, context: BGameContext) {
             player.onTurnFinishedObserver[listenerId] = this.onPlayerTurnFinished
             if (turnTime != null) {
                 player.startTurn()
+                this@BPlayerManager.turnObserver.values.forEach { it.onTurnStarted(player) }
                 this.timeLeft.set(turnTime)
                 timer(name = TIMER_NAME, period = SECOND) {
                     val time = timeLeft.get()
@@ -84,5 +93,12 @@ class BPlayerManager(scenario: BGameScenario, context: BGameContext) {
             this@BPlayerManager.currentPlayer = nextPlayer
             this.startTurn(nextPlayer)
         }
+    }
+
+    interface TurnListener {
+
+        fun onTurnStarted(player: BPlayer)
+
+        fun onTurnFinished(player: BPlayer)
     }
 }

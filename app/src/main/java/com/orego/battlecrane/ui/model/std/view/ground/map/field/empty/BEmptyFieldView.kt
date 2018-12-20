@@ -5,7 +5,7 @@ import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
-import com.orego.battlecrane.ui.model.api.view.map.BUnitView
+import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.byAssets
 
 class BEmptyFieldView(unit: BEmptyField, dimension: Int, context: Context) : BUnitView(unit) {

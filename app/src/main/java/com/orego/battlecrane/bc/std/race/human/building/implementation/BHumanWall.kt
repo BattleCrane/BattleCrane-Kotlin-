@@ -12,7 +12,7 @@ class BHumanWall(gameContext: BGameContext, owner: BPlayer) : BHumanBuilding(gam
 
         private const val DEFAULT_VERTICAL_SIDE = 1
 
-        private const val DEFAULT_HORIZONTAL_SIDE = 2
+        private const val DEFAULT_HORIZONTAL_SIDE = 1
 
         private const val DEFAULT_MAX_HEALTH = 4
     }
