@@ -16,6 +16,7 @@ fun ImageView.setImageByAssets(context: Context, path: String) {
     this.setImageDrawable(drawable)
 }
 
+//TODO: REMOVE CONTEXT PARAM!!!
 fun ImageView.byResource(context: Context, width: Int, heigth: Int, resourceId: Int): ImageView {
     this.id = View.generateViewId()
     this.setImageById(context, resourceId)
