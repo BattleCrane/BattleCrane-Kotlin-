@@ -107,7 +107,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
      * Producer function.
      */
 
-    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
+    override fun pushProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
         .also { set ->
             if (this.isProduceEnable) {
                 this.buildBarracksFactory.create()?.let { set.add(it) }

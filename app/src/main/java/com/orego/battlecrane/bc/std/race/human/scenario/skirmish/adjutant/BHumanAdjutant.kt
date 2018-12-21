@@ -1,6 +1,11 @@
 package com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.eventPipeline.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.BOnCreateActionNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.node.BOnCreateUnitNode
 import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.action.BAction
@@ -76,6 +81,17 @@ class BHumanAdjutant(
 
     inner class ResourceManager : BAdjutant.ResourceManager() {
 
+        init {
+            val pipeline = this@BHumanAdjutant.context.pipeline
+            val actionPipe = pipeline.findPipe(BActionPipe.NAME)!!
+            actionPipe
+                .findPipe(BOnCreateActionNode.DEFAULT_PIPE_NAME)!!
+                .addNode(OnActionCreatedNode())
+            actionPipe
+                .findPipe(BOnPerformActionNode.DEFAULT_PIPE_NAME)!!
+                .addNode(OnActionPerformedNode())
+        }
+
         fun loadResources() {
             val context = this@BHumanAdjutant.context
             val owner = this@BHumanAdjutant.owner
@@ -91,44 +107,68 @@ class BHumanAdjutant(
                 .forEach { unit ->
                     unit as BProducable
                     unit.switchProduceEnable(true)
-                    this.collect(unit.getProduceActions(context, owner))
+                    unit.pushProduceActions(context, owner)
                 }
         }
 
-        fun refreshResources() {
-            val context = this@BHumanAdjutant.context
-            val owner = this@BHumanAdjutant.owner
-            this.buildingActions.clear()
-            this.trainActions.clear()
-            this@BHumanAdjutant.unitHeap
-                .filter { unit -> unit is BProducable && owner.owns(unit) }
-                .forEach { unit ->
-                    unit as BProducable
-                    this.collect(unit.getProduceActions(context, owner))
-                }
-        }
+        /**
+         * Collects actions after creating.
+         */
 
-        private fun collect(actions: Set<BAction>) {
-            actions.forEach { action ->
-                when (action) {
-                    is BHumanHeadquarters.Build -> this.buildingActions += action
-                    is BHumanBarracks.TrainMarine -> this.trainActions += action
-                    is BHumanFactory.TrainTank -> this.trainActions += action
-                }
-                action.actionObservers[BIdGenerator.generateActionId()] = object
-                    : BAction.Listener {
+        inner class OnActionCreatedNode : BEventPipeline.Pipe.Node(this@BHumanAdjutant.context) {
 
-                    override fun onActionPerformed(action: BAction) {
-                        this@ResourceManager.refreshResources()
+            override val name = "ACTION_LOADER_NODE"
+
+            override fun handle(event: BEvent) {
+                val bundle = event.any!! as BOnCreateActionNode.Bundle
+                val action = bundle.action
+                if (this@BHumanAdjutant.owner == action.owner) {
+                    when (action) {
+                        is BHumanHeadquarters.Build -> this@ResourceManager.buildingActions += action
+                        is BHumanBarracks.TrainMarine -> this@ResourceManager.trainActions += action
+                        is BHumanFactory.TrainTank -> this@ResourceManager.trainActions += action
                     }
                 }
             }
         }
+
+        /**
+         * Refresh action list after action running.
+         */
+
+        inner class OnActionPerformedNode : BEventPipeline.Pipe.Node(this@BHumanAdjutant.context) {
+
+            override val name = "ACTION_PERFORMED_NODE"
+
+            override fun handle(event: BEvent) {
+                val bundle = event.any!! as BOnCreateActionNode.Bundle
+                val action = bundle.action
+                if (this@BHumanAdjutant.owner == action.owner) {
+                    this.refreshResources()
+                }
+            }
+
+            fun refreshResources() {
+                val context = this@BHumanAdjutant.context
+                val owner = this@BHumanAdjutant.owner
+                this@ResourceManager.buildingActions.clear()
+                this@ResourceManager.trainActions.clear()
+                this@BHumanAdjutant.unitHeap
+                    .filter { unit -> unit is BProducable && owner.owns(unit) }
+                    .forEach { unit ->
+                        unit as BProducable
+                        unit.pushProduceActions(context, owner)
+                    }
+            }
+        }
     }
+
+    /**
+     * Builder.
+     */
 
     class Builder : BAdjutant.Builder() {
 
-        override fun build(context: BGameContext, owner: BPlayer)
-                = BHumanAdjutant(context, owner, this.bonusFactories)
+        override fun build(context: BGameContext, owner: BPlayer) = BHumanAdjutant(context, owner, this.bonusFactories)
     }
 }

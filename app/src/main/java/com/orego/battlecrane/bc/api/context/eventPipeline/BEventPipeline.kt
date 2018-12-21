@@ -35,11 +35,21 @@ class BEventPipeline(context: BGameContext) {
         this.pipeMap[pipe.name] = pipe
     }
 
-    fun <T : Pipe.Node> findNode(name: String): T? {
+    fun findNode(name: String): Pipe.Node? {
         for (pipe in this.pipeMap.values) {
             val node = pipe.findNode(name)
             if (node != null) {
-                return node as T
+                return node
+            }
+        }
+        return null
+    }
+
+    fun findPipe(name: String): Pipe? {
+        for (pipe in this.pipeMap.values) {
+            val result = pipe.findPipe(name)
+            if (result != null) {
+                return result
             }
         }
         return null
@@ -71,6 +81,10 @@ class BEventPipeline(context: BGameContext) {
             }
         }
 
+        fun addNode(node: Node) {
+            this.nodes.add(node)
+        }
+
         fun findNode(name: String): Node? {
             for (node in this.nodes) {
                 val result = node.findNode(name)
@@ -79,6 +93,20 @@ class BEventPipeline(context: BGameContext) {
                 }
             }
             return null
+        }
+
+        fun findPipe(name: String) : Pipe? {
+            if (this.name == name) {
+                return this
+            } else {
+                for (node in this.nodes) {
+                    val result = node.findPipe(name)
+                    if (result != null){
+                        return result
+                    }
+                }
+                return null
+            }
         }
 
         /**
@@ -109,6 +137,16 @@ class BEventPipeline(context: BGameContext) {
                     }
                     return null
                 }
+            }
+
+            fun findPipe(name : String) : Pipe? {
+                for (pipe in this.pipeMap.values) {
+                    val result = pipe.findPipe(name)
+                    if (result != null) {
+                        return result
+                    }
+                }
+                return null
             }
         }
     }

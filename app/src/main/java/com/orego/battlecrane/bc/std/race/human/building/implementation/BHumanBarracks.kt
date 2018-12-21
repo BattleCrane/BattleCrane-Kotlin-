@@ -1,6 +1,8 @@
 package com.orego.battlecrane.bc.std.race.human.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.eventPipeline.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.BOnCreateActionNode
 import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
@@ -90,7 +92,7 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
      * Produce function.
      */
 
-    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
+    override fun pushProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
         .also { set ->
             if (this.isProduceEnable) {
                 this.trainMarineLvl1Factory.create()?.let { set.add(it) }
@@ -120,6 +122,9 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
                 val manager = this.context.mapManager
                 val unit = manager.getUnitByPosition(this.targetPosition)
                 if (this.isTrainConditionPerformed(unit)) {
+
+
+
                     val isSuccessful = manager.createUnit(marine, this.targetPosition)
                     if (isSuccessful) {
                         this@BHumanBarracks.switchProduceEnable(false)

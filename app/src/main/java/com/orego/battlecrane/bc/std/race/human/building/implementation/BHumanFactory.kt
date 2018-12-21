@@ -91,7 +91,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
      * Producer function.
      */
 
-    override fun getProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
+    override fun pushProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
         .also { set ->
             if (this.isProduceEnable) {
                 this.trainTankLvl1Factory.create()?.let { set.add(it) }

@@ -22,13 +22,6 @@ abstract class BAction protected constructor(
         return isSuccessful
     }
 
-    val actionObservers = mutableMapOf<Long, Listener>()
-
-    interface Listener {
-
-        fun onActionPerformed(action: BAction)
-    }
-
     /**
      * Factory.
      */

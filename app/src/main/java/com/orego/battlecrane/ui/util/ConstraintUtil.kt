@@ -4,8 +4,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import com.orego.battlecrane.ui.model.api.view.BView
 
-fun ConstraintLayout.addView(view: BView<*>) {
-    this.addView(view.displayedView)
+fun ConstraintLayout.addView(viewHolder: BView<*>) {
+    this.addView(viewHolder.displayedView)
 }
 
 //TODO REMOVE PARAM LAYOUT_ID!!!

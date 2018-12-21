@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.BOnCreateActionNode
 
 class BActionPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
 
@@ -9,8 +10,10 @@ class BActionPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
 
         const val NAME = "NAME"
     }
+
     override val name = NAME
 
-    override val nodes: MutableList<Node>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val nodes = mutableListOf<Node>(
+        BActionNode(context)
+    )
 }

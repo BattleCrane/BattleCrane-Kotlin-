@@ -17,7 +17,7 @@ interface BProducable {
         }
     }
 
-    fun getProduceActions(context: BGameContext, owner : BPlayer) : Set<BAction>
+    fun pushProduceActions(context: BGameContext, owner : BPlayer)
 
     interface Listener {
 
