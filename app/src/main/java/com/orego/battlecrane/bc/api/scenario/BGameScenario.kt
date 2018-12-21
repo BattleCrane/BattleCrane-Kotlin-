@@ -8,7 +8,7 @@ interface BGameScenario {
 
     fun getStartPlayer(players: List<BPlayer>): BPlayer
 
-    fun initMap(mapHolder: BMapManager.BMapHolder, context: BGameContext)
+    fun initMap(mapManager: BMapManager, context: BGameContext)
 
     fun initPlayerList(context: BGameContext): List<BPlayer>
 }

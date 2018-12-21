@@ -27,11 +27,11 @@ abstract class BActionViewRender(
         for (x in 0 until this.columnCount) {
             for (y in 0 until this.rowCount) {
                 if (index < actionCount) {
-                    //TODO: MAKE MORE COMPLETABLE INFORMATION ABOUT ACTION: (WHILE SIMPLE)
+                    //TODO: MAKE MORE COMPLETABLE INFORMATION ABOUT NAME: (WHILE SIMPLE)
                     val action = stack[index]
                     //TODO REMOVE TYPE:
                     val type = action::class.java.name
-                    println("ACTION TYPE: $type")
+                    println("NAME TYPE: $type")
                     val view = this.factory.build(action, dimension, this.context, type)
                     view.clickController = this.clickController
                     view.stackPosition = BPoint(x, y)

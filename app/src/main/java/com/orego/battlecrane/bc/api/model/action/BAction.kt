@@ -1,15 +1,15 @@
 package com.orego.battlecrane.bc.api.model.action
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.BEventContract
-import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
-import com.orego.battlecrane.bc.api.context.pipeline.isValidEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.BContract
+import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.BOnCreateActionNode
 import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 
 abstract class BAction protected constructor(
     protected val context: BGameContext,
-    protected var owner: BPlayer? = null
+    var owner: BPlayer? = null
 ) {
 
     protected abstract fun performAction(): Boolean
@@ -33,20 +33,12 @@ abstract class BAction protected constructor(
      * Factory.
      */
 
-    abstract class Factory(private val pipeline: BPipeline) {
+    abstract class Factory(private val eventPipeline: BEventPipeline) {
 
-        fun create(): BAction? {
+        fun create() {
             val action = this.createAction()
-            val createActionEvent = BEvent(BEventContract.CREATE, action)
-            this.pipeline.handle(createActionEvent)
-            return if (isValidEvent(createActionEvent)
-                && createActionEvent.name == BEventContract.CREATE
-                && createActionEvent.any is BAction
-            ) {
-                createActionEvent.any
-            } else {
-                null
-            }
+            val createActionEvent = BEvent(BOnCreateActionNode.NAME, action)
+            this.eventPipeline.pushEvent(createActionEvent)
         }
 
         protected abstract fun createAction(): BAction

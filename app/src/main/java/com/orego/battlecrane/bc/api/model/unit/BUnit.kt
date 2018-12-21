@@ -10,9 +10,9 @@ abstract class BUnit(
     var owner: BPlayer? = null
 ) {
 
-    val unitId = BIdGenerator.generateUnitId()
-
     var pivot: BPoint? = null
+
+    val unitId = BIdGenerator.generateUnitId()
 
     abstract val verticalSize: Int
 
