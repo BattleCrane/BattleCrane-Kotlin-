@@ -2,7 +2,8 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.BOnCreateActionNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.BActionNode
+import com.orego.battlecrane.bc.api.model.action.BAction
 
 class BActionPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
 
@@ -13,7 +14,11 @@ class BActionPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
 
     override val name = NAME
 
-    override val nodes = mutableListOf<Node>(
-        BActionNode(context)
-    )
+    override val nodes = mutableListOf<Node>(BActionNode(context))
+
+    /**
+     * Bundle.
+     */
+
+    data class Bundle(val action: BAction)
 }

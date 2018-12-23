@@ -1,10 +1,9 @@
 package com.orego.battlecrane.bc.api.model.action
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEvent
-import com.orego.battlecrane.bc.api.context.eventPipeline.BContract
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.BOnCreateActionNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.node.BOnCreateActionNode
 import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 
 abstract class BAction protected constructor(
@@ -30,7 +29,8 @@ abstract class BAction protected constructor(
 
         fun create() {
             val action = this.createAction()
-            val createActionEvent = BEvent(BOnCreateActionNode.NAME, action)
+            val createActionEvent =
+                BEvent(BOnCreateActionNode.NAME, action)
             this.eventPipeline.pushEvent(createActionEvent)
         }
 

@@ -1,8 +1,10 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.BUnitPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.util.EventUtil
 
 class BEventPipeline(context: BGameContext) {
 
@@ -16,7 +18,7 @@ class BEventPipeline(context: BGameContext) {
     )
 
     fun pushEvent(event: BEvent?) {
-        if (BContract.Event.isValid(event)) {
+        if (EventUtil.isValid(event)) {
             if (!this.isWorking) {
                 this.isWorking = true
                 this.pipeMap.values.forEach { it.push(event) }
@@ -73,10 +75,10 @@ class BEventPipeline(context: BGameContext) {
         }
 
         private fun push(event: BEvent?, position: Int) {
-            if (BContract.Event.isValid(event)) {
+            if (EventUtil.isValid(event)) {
                 if (position < this.nodes.size) {
-                    this.nodes[position].handle(event!!)
-                    this.push(event, position + 1)
+                    val nextEvent = this.nodes[position].handle(event!!)
+                    this.push(nextEvent, position + 1)
                 }
             }
         }
@@ -119,9 +121,9 @@ class BEventPipeline(context: BGameContext) {
 
             protected val pipeMap = mutableMapOf<String, Pipe>()
 
-            abstract fun handle(event: BEvent)
+            abstract fun handle(event: BEvent) : BEvent?
 
-            fun add(pipe: Pipe) {
+            fun addPipe(pipe: Pipe) {
                 this.pipeMap[pipe.name] = pipe
             }
 
