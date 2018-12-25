@@ -94,11 +94,11 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
     override fun pushProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
         .also { set ->
             if (this.isProduceEnable) {
-                this.trainTankLvl1Factory.create()?.let { set.add(it) }
+                this.trainTankLvl1Factory.sendOnCreateUnitAction()?.let { set.add(it) }
                 if (this.currentLevel > 1) {
-                    this.trainTankLvl2Factory.create()?.let { set.add(it) }
+                    this.trainTankLvl2Factory.sendOnCreateUnitAction()?.let { set.add(it) }
                     if (this.currentLevel > 2) {
-                        this.trainTankLvl3Factory.create()?.let { set.add(it) }
+                        this.trainTankLvl3Factory.sendOnCreateUnitAction()?.let { set.add(it) }
                     }
                 }
             }

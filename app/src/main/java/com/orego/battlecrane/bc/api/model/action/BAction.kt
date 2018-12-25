@@ -19,7 +19,7 @@ abstract class BAction protected constructor(
 
     abstract class Factory(private val eventPipeline: BEventPipeline) {
 
-        fun create() {
+        fun sendOnCreateUnitAction() {
             val action = this.createAction()
             val createActionEvent = BEvent(BOnCreateActionNode.NAME, action)
             this.eventPipeline.pushEvent(createActionEvent)

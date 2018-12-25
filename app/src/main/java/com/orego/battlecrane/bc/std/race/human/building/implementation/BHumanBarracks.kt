@@ -1,6 +1,12 @@
 package com.orego.battlecrane.bc.std.race.human.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
 import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
@@ -49,10 +55,8 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
     override var isProduceEnable = false
 
     /**
-     * Companions.
+     * Factory.
      */
-
-    private val pipeline by lazy { this.context.pipeline }
 
     val trainMarineLvl1Factory = TrainMarineLvl1Factory()
 
@@ -60,34 +64,37 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
 
     val trainMarineLvl3Factory = TrainMarineLvl3Factory()
 
-    /**
-     * Lifecycle.
-     */
-
-    override fun onTurnStarted() {
-        this.switchProduceEnable(true)
-    }
-
-    override fun onTurnEnded() {
-        this.switchProduceEnable(false)
-    }
 
     /**
-     * Produce function.
+     * Context.
      */
 
-    override fun pushProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
-        .also { set ->
-            if (this.isProduceEnable) {
-                this.trainMarineLvl1Factory.create()?.let { set.add(it) }
-                if (this.currentLevel > 1) {
-                    this.trainMarineLvl2Factory.create()?.let { set.add(it) }
-                    if (this.currentLevel > 2) {
-                        this.trainMarineLvl3Factory.create()?.let { set.add(it) }
-                    }
+    private val pipeline = this.context.pipeline
+
+    private val onTurnStartedPipe = OnTurnStartedPipe(context)
+
+    private val onTurnFinishedPipe = OnTurnFinishedPipe(context)
+
+    init {
+        this.pipeline
+            .findNode(BOnTurnStartedNode.NAME)!!
+            .connectPipe(this.onTurnStartedPipe)
+        this.pipeline
+            .findNode(BOnTurnFinishedNode.NAME)!!
+            .connectPipe(this.onTurnFinishedPipe)
+    }
+
+    override fun produceUnits() {
+        if (this.isProduceEnable) {
+            this.trainMarineLvl1Factory.sendOnCreateUnitAction()
+            if (this.currentLevel > 1) {
+                this.trainMarineLvl2Factory.sendOnCreateUnitAction()
+                if (this.currentLevel > 2) {
+                    this.trainMarineLvl3Factory.sendOnCreateUnitAction()
                 }
             }
         }
+    }
 
     /**
      * Action.
@@ -98,17 +105,16 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
 
         override var targetPosition: BPoint? = null
 
-        protected abstract fun isTrainConditionPerformed(unit : BUnit) : Boolean
+        protected abstract fun isTrainConditionPerformed(unit: BUnit): Boolean
 
-        override fun performAction(): Boolean {
+        override fun perform(): Boolean {
             if (this.targetPosition != null) {
                 val marine = BHumanMarine(this.context, this.owner!!)
                 val manager = this.context.mapManager
                 val unit = manager.getUnitByPosition(this.targetPosition)
                 if (this.isTrainConditionPerformed(unit)) {
 
-
-
+                    //TODO: MAKE!!!
                     val isSuccessful = manager.createUnit(marine, this.targetPosition)
                     if (isSuccessful) {
                         this@BHumanBarracks.switchProduceEnable(false)
@@ -153,6 +159,60 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
         inner class Action : TrainMarine() {
 
             override fun isTrainConditionPerformed(unit: BUnit) = true
+        }
+    }
+
+    /**
+     * Pipe.
+     */
+
+    inner class OnTurnStartedPipe(context: BGameContext) : BPipe(context) {
+
+        override val name = "BARRACKS_ON_TURN_STARTED_${this@BHumanBarracks.owner!!.id}"
+
+        override val nodes = mutableListOf<BNode>(OnTurnStartedNode(context))
+    }
+
+    inner class OnTurnFinishedPipe(context: BGameContext) : BPipe(context) {
+
+        override val name = "BARRACKS_ON_TURN_FINISHED_${this@BHumanBarracks.owner!!.id}"
+
+        override val nodes = mutableListOf<BNode>(OnTurnFinishedNode(context))
+    }
+
+    /**
+     * Node.
+     */
+
+    inner class OnTurnStartedNode(context: BGameContext) : BNode(context) {
+
+        override val name = "BARRACKS_ON_TURN_STARTED_${this@BHumanBarracks.owner!!.id}"
+
+        override fun handle(event: BEvent): BEvent? {
+            val bundle = event.bundle
+            return if (bundle is BOnTurnStartedPipe.OnTurnStartedBundle) {
+                if (this@BHumanBarracks.owner == bundle.player) {
+
+                    this.pipeMap.values.forEach { it.push(event) }
+                }
+                event
+            } else {
+                null
+            }
+        }
+    }
+
+    inner class OnTurnFinishedNode(context: BGameContext) : BNode(context) {
+
+        override val name = "BARRACKS_ON_TURN_FINISHED_${this@BHumanBarracks.owner!!.id}"
+
+        override fun handle(event: BEvent): BEvent? {
+            //return if (event.bundle is BProducePipe.ProduceBundle) {
+            //  this.pipeMap.values.forEach { it.push(event) }
+            //event
+            //} else {
+            //  null
+            //}
         }
     }
 }

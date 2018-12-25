@@ -1,12 +1,14 @@
 package com.orego.battlecrane.bc.api.model.contract
 
-import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
-import com.orego.battlecrane.bc.api.model.action.BAction
+import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 
 interface BProducable {
 
     var isProduceEnable : Boolean
 
-    fun pushProduceActions(context: BGameContext, owner : BPlayer)
+    /**
+     * Send actions to pipeline.
+     */
+
+    fun produceUnits()
 }

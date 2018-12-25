@@ -6,6 +6,7 @@ import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.BTurnNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
+import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 
 class BOnTurnStartedPipe(context: BGameContext) : BPipe(context) {
 
@@ -18,5 +19,5 @@ class BOnTurnStartedPipe(context: BGameContext) : BPipe(context) {
 
     override val nodes = mutableListOf<BNode>(BOnTurnStartedNode(context))
 
-    open class OnTurnStartedBundle : BTurnPipe.TurnBundle()
+    open class OnTurnStartedBundle(val player : BPlayer) : BTurnPipe.TurnBundle()
 }

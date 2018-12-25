@@ -17,7 +17,7 @@ class BUnitNode(context: BGameContext) : BNode(context) {
     override val name = NAME
 
     init {
-        //Put on create action node:
+        //Put on sendOnCreateUnitAction action node:
         this.pipeMap[BOnCreateActionPipe.NAME] = BOnCreateActionPipe(context)
         //Put on perform action node:
         this.pipeMap[BOnPerformActionPipe.NAME] = BOnPerformActionPipe(context)
