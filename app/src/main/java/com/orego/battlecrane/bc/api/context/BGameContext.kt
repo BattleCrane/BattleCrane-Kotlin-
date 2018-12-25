@@ -11,7 +11,7 @@ class BGameContext(scenario: BGameScenario) {
      * Pipeline.
      */
 
-    val pipeline = BEventPipeline()
+    val pipeline = BEventPipeline(this)
 
     /**
      * Player manager.

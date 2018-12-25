@@ -3,6 +3,8 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.node.BOnCreateActionNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onPerform.BOnPerformActionPipe
 
 class BOnPerformActionNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
@@ -10,16 +12,30 @@ class BOnPerformActionNode(context: BGameContext) : BEventPipeline.Pipe.Node(con
     companion object {
 
         const val NAME = "${BOnPerformActionPipe.NAME}/ON_PERFORM_ACTION_NODE"
+
+        const val DEFAULT_PIPE_NAME = "$NAME/DEFAULT_PIPE"
     }
 
     override val name = NAME
 
-    override fun handle(event: BEvent) : BEvent {
+    init {
+        //Add default on perform action pipe:
+        this.pipeMap[DEFAULT_PIPE_NAME] = object : BEventPipeline.Pipe(context) {
+
+            override val name = DEFAULT_PIPE_NAME
+
+            override val nodes = mutableListOf<Node>()
+        }
+    }
+
+    override fun handle(event: BEvent): BEvent? {
         val name = event.name!!
         val bundle = event.any!!
-        if (name == BOnPerformActionPipe.EVENT && bundle is B.Bundle) {
+        return if (name == BOnPerformActionPipe.EVENT && bundle is BActionPipe.ActionBundle) {
             this.pipeMap.values.forEach { it.push(event) }
+            event
+        } else {
+            null
         }
-        return event
     }
 }

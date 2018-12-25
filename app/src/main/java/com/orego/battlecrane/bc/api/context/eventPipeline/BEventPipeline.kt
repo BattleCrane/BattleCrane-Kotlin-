@@ -25,7 +25,7 @@ class BEventPipeline(context: BGameContext) {
                 this.isWorking = false
                 if (!this.eventQueue.isEmpty()) {
                     val nextEvent = this.eventQueue.removeAt(0)
-                    pushEvent(nextEvent)
+                    this.pushEvent(nextEvent)
                 }
             } else {
                 this.eventQueue.add(event!!)

@@ -10,6 +10,9 @@ class BOnCreateActionPipe(context: BGameContext) : BEventPipeline.Pipe(context) 
     companion object {
 
         const val NAME = "${BActionNode.NAME}/ON_CREATE_PIPE"
+
+        const val EVENT = "ON_CREATE_ACTION_EVENT"
+
     }
 
     override val name = NAME

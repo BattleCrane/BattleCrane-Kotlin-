@@ -9,7 +9,7 @@ class BActionPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
 
     companion object {
 
-        const val NAME = "NAME"
+        const val NAME = "ACTION_PIPE"
     }
 
     override val name = NAME
@@ -17,8 +17,8 @@ class BActionPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
     override val nodes = mutableListOf<Node>(BActionNode(context))
 
     /**
-     * Bundle.
+     * ActionBundle.
      */
 
-    data class Bundle(val action: BAction)
+    open class ActionBundle(val action: BAction)
 }
