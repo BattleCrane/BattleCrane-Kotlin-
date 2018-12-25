@@ -11,15 +11,7 @@ abstract class BAction protected constructor(
     var owner: BPlayer? = null
 ) {
 
-    protected abstract fun performAction(): Boolean
-
-    fun perform(): Boolean {
-        val isSuccessful = this.performAction()
-        if (isSuccessful) {
-            this.actionObservers.values.forEach { it.onActionPerformed(this) }
-        }
-        return isSuccessful
-    }
+    abstract fun perform(): Boolean
 
     /**
      * Factory.
@@ -29,8 +21,7 @@ abstract class BAction protected constructor(
 
         fun create() {
             val action = this.createAction()
-            val createActionEvent =
-                BEvent(BOnCreateActionNode.NAME, action)
+            val createActionEvent = BEvent(BOnCreateActionNode.NAME, action)
             this.eventPipeline.pushEvent(createActionEvent)
         }
 

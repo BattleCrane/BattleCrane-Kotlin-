@@ -32,7 +32,10 @@ class BOnPerformActionNode(context: BGameContext) : BEventPipeline.Pipe.Node(con
         val name = event.name!!
         val bundle = event.any!!
         return if (name == BOnPerformActionPipe.EVENT && bundle is BActionPipe.ActionBundle) {
-            this.pipeMap.values.forEach { it.push(event) }
+            val action = bundle.action
+            if (action.perform()) {
+                this.pipeMap.values.forEach { it.push(event) }
+            }
             event
         } else {
             null

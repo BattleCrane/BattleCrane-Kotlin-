@@ -3,6 +3,8 @@ package com.orego.battlecrane.bc.api.context.eventPipeline
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.BAttackPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.BAttackNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.BUnitPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.util.EventUtil
 
@@ -14,7 +16,8 @@ class BEventPipeline(context: BGameContext) {
 
     private val pipeMap = mutableMapOf(
         BUnitPipe.NAME to BUnitPipe(context),
-        BActionPipe.NAME to BActionPipe(context)
+        BActionPipe.NAME to BActionPipe(context),
+        BAttackPipe.NAME to BAttackNode(context)
     )
 
     fun pushEvent(event: BEvent?) {

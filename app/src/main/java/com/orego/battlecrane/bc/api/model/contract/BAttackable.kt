@@ -8,12 +8,6 @@ interface BAttackable {
 
     var isAttackEnable : Boolean
 
-    val attackObserver: MutableMap<Long, AttackListener>
-
-    val damageObserver: MutableMap<Long, DamageListener>
-
-    val attackEnableObserver : MutableMap<Long, AttackEnableListener>
-
     fun attack(target: BHitPointable) {
         if (this.isAttackEnable) {
             this.attackObserver.values.forEach { it.onAttackStarted() }
