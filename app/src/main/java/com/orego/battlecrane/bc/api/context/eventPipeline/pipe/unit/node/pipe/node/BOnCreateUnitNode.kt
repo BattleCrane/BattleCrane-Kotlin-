@@ -10,12 +10,9 @@ class BOnCreateUnitNode(context: BGameContext) : BEventPipeline.Pipe.Node(contex
     companion object {
 
         const val NAME = "ON_CREATE_UNIT_NODE"
-
-        const val EVENT = "ON_CREATE_UNIT_EVENT"
     }
 
-    override val name =
-        NAME
+    override val name = NAME
 
     private val mapManager = context.mapManager
 
@@ -26,7 +23,7 @@ class BOnCreateUnitNode(context: BGameContext) : BEventPipeline.Pipe.Node(contex
     override fun handle(event: BEvent) : BEvent? {
         val name = event.name!!
         val bundle = event.any!!
-        return if (name == EVENT && bundle is BOnCreateUnitPipe.OnCreateUnitBundle) {
+        return if (name == BOnCreateUnitPipe.EVENT && bundle is BOnCreateUnitPipe.OnCreateUnitBundle) {
             val unit = bundle.unit
             val point = bundle.point
             if (this.mapManager.createUnit(unit, point)) {

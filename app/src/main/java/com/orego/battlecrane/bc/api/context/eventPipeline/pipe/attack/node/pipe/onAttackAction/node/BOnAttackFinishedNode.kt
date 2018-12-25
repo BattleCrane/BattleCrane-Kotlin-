@@ -14,19 +14,15 @@ class BOnAttackFinishedNode(context: BGameContext) : BEventPipeline.Pipe.Node(co
 
     override val name = NAME
 
-    init {
-        //Put on create action node:
-        //this.pipeMap[BOnCreateActionPipe.NAME] = BOnCreateActionPipe(context)
-        //Put on perform action node:
-        //this.pipeMap[BOnPerformActionPipe.NAME] = BOnPerformActionPipe(context)
-    }
-
-    override fun handle(event: BEvent) : BEvent? {
-        //return if (event.any is BUnitPipe.UnitBundle) {
- //           this.pipeMap.values.forEach { it.push(event) }
-   //         event
-     //   } else {
-       //     null
-        //}
+    override fun handle(event: BEvent): BEvent? {
+        val bundle = event.any
+        return if (bundle is BOnAttackActionPipe.OnAttackActionBundle) {
+            val attackable = bundle.attackable
+            val target = bundle.target
+            this.pipeMap.values.forEach { it.push(event) }
+            event
+        } else {
+            null
+        }
     }
 }

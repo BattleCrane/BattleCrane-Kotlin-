@@ -4,6 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.BAttackNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe.onAttackEnable.BOnAttackEnablePipe
 
 class BOnAttackEnableNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
 
@@ -14,19 +15,16 @@ class BOnAttackEnableNode(context: BGameContext) : BEventPipeline.Pipe.Node(cont
 
     override val name = NAME
 
-    init {
-        //Put on create action node:
-        //this.pipeMap[BOnCreateActionPipe.NAME] = BOnCreateActionPipe(context)
-        //Put on perform action node:
-        //this.pipeMap[BOnPerformActionPipe.NAME] = BOnPerformActionPipe(context)
-    }
-
-    override fun handle(event: BEvent) : BEvent? {
-        //return if (event.any is BUnitPipe.UnitBundle) {
- //           this.pipeMap.values.forEach { it.push(event) }
-   //         event
-     //   } else {
-       //     null
-        //}
+    override fun handle(event: BEvent): BEvent? {
+        val bundle = event.any
+        return if (bundle is BOnAttackEnablePipe.AttackEnableBundle) {
+            //Switch trigger:
+            val attackable = bundle.attackable
+            attackable.isAttackEnable = bundle.isEnable
+            this.pipeMap.values.forEach { it.push(event) }
+            event
+        } else {
+            null
+        }
     }
 }

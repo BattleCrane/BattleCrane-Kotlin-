@@ -13,6 +13,8 @@ class BOnCreateUnitPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
     companion object {
 
         const val NAME = "${BUnitNode.NAME}/ON_CREATE_UNIT_PIPE"
+
+        const val EVENT = "ON_CREATE_UNIT_EVENT"
     }
 
     override val name = NAME

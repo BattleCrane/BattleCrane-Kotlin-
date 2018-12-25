@@ -11,22 +11,9 @@ class BOnCreateActionNode(context: BGameContext) : BEventPipeline.Pipe.Node(cont
     companion object {
 
         const val NAME = "${BOnCreateActionPipe.NAME}/ON_CREATE_ACTION_NODE"
-
-        const val DEFAULT_PIPE_NAME = "$NAME/DEFAULT_PIPE"
     }
 
-    override val name =
-        NAME
-
-    init {
-        //Add default on created action pipe:
-        this.pipeMap[DEFAULT_PIPE_NAME] = object : BEventPipeline.Pipe(context) {
-
-            override val name = DEFAULT_PIPE_NAME
-
-            override val nodes = mutableListOf<Node>()
-        }
-    }
+    override val name = NAME
 
     override fun handle(event: BEvent): BEvent? {
         val name = event.name!!

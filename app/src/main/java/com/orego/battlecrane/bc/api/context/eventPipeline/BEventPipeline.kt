@@ -17,7 +17,7 @@ class BEventPipeline(context: BGameContext) {
     private val pipeMap = mutableMapOf(
         BUnitPipe.NAME to BUnitPipe(context),
         BActionPipe.NAME to BActionPipe(context),
-        BAttackPipe.NAME to BAttackNode(context)
+        BAttackPipe.NAME to BAttackPipe(context)
     )
 
     fun pushEvent(event: BEvent?) {
@@ -126,7 +126,7 @@ class BEventPipeline(context: BGameContext) {
 
             abstract fun handle(event: BEvent) : BEvent?
 
-            fun addPipe(pipe: Pipe) {
+            open fun addPipe(pipe: Pipe) {
                 this.pipeMap[pipe.name] = pipe
             }
 

@@ -2,7 +2,10 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.BAttackPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.BAttackNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe.onAttackEnable.node.BOnAttackEnableNode
+import com.orego.battlecrane.bc.api.model.contract.BAttackable
 
 class BOnAttackEnablePipe(context: BGameContext) : BEventPipeline.Pipe(context) {
 
@@ -14,4 +17,7 @@ class BOnAttackEnablePipe(context: BGameContext) : BEventPipeline.Pipe(context) 
     override val name = NAME
 
     override val nodes = mutableListOf<Node>(BOnAttackEnableNode(context))
+
+    open class AttackEnableBundle(attackable: BAttackable, val isEnable: Boolean) :
+        BAttackPipe.AttackBundle(attackable)
 }
