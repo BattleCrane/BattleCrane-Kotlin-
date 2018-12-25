@@ -24,7 +24,7 @@ class BUnitNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
     }
 
     override fun handle(event: BEvent) : BEvent? {
-        return if (event.any is BUnitPipe.UnitBundle) {
+        return if (event.bundle is BUnitPipe.UnitBundle) {
             this.pipeMap.values.forEach { it.push(event) }
             event
         } else {

@@ -1,8 +1,8 @@
-package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoints
+package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoint
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoints.node.BHitPointNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoint.node.BHitPointNode
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 
 class BHitPointPipe(context: BGameContext) : BEventPipeline.Pipe(context) {

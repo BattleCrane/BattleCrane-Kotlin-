@@ -84,10 +84,10 @@ class BHumanAdjutant(
             val actionPipe = pipeline.findPipe(BActionPipe.NAME)!!
             actionPipe
                 .findPipe(BOnCreateActionNode.DEFAULT_PIPE_NAME)!!
-                .addNode(OnActionCreatedNode())
+                .placeNode(OnActionCreatedNode())
             actionPipe
                 .findPipe(BOnPerformActionNode.DEFAULT_PIPE_NAME)!!
-                .addNode(OnActionPerformedNode())
+                .placeNode(OnActionPerformedNode())
         }
 
         fun loadResources() {
@@ -118,7 +118,7 @@ class BHumanAdjutant(
             override val name = "ACTION_LOADER_NODE"
 
             override fun handle(event: BEvent) {
-                val bundle = event.any!! as BOnCreateActionNode.Bundle
+                val bundle = event.bundle!! as BOnCreateActionNode.Bundle
                 val action = bundle.action
                 if (this@BHumanAdjutant.owner == action.owner) {
                     when (action) {
@@ -139,7 +139,7 @@ class BHumanAdjutant(
             override val name = "ACTION_PERFORMED_NODE"
 
             override fun handle(event: BEvent) {
-                val bundle = event.any!! as BOnCreateActionNode.Bundle
+                val bundle = event.bundle!! as BOnCreateActionNode.Bundle
                 val action = bundle.action
                 if (this@BHumanAdjutant.owner == action.owner) {
                     this.refreshResources()

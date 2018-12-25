@@ -1,14 +1,15 @@
-package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoints.node
+package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.BOnProduceEnablePipe
 
-class BHitPointNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BOnProduceEnableNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
 
     companion object {
 
-        const val NAME = "_NODE"
+        const val NAME = "${BOnProduceEnablePipe.NAME}/ON_PRODUCE_ENABLE_NODE"
     }
 
     override val name = NAME

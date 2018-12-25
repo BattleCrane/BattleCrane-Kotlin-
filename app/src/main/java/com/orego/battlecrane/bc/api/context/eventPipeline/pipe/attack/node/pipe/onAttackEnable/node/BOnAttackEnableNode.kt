@@ -16,7 +16,7 @@ class BOnAttackEnableNode(context: BGameContext) : BEventPipeline.Pipe.Node(cont
     override val name = NAME
 
     override fun handle(event: BEvent): BEvent? {
-        val bundle = event.any
+        val bundle = event.bundle
         return if (bundle is BOnAttackEnablePipe.AttackEnableBundle) {
             //Switch trigger:
             val attackable = bundle.attackable

@@ -5,8 +5,6 @@ import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.BAttackPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.BAttackNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe.onAttackAction.node.BOnAttackActionNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe.onAttackAction.node.BOnAttackFinishedNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe.onAttackAction.node.BOnAttackStartedNode
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 

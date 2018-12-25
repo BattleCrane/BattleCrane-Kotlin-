@@ -22,7 +22,7 @@ class BOnCreateUnitNode(context: BGameContext) : BEventPipeline.Pipe.Node(contex
 
     override fun handle(event: BEvent) : BEvent? {
         val name = event.name!!
-        val bundle = event.any!!
+        val bundle = event.bundle!!
         return if (name == BOnCreateUnitPipe.EVENT && bundle is BOnCreateUnitPipe.OnCreateUnitBundle) {
             val unit = bundle.unit
             val point = bundle.point

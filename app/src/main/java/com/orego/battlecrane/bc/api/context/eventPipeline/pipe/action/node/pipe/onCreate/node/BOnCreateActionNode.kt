@@ -1,12 +1,12 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.BOnCreateActionPipe
 
-class BOnCreateActionNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BOnCreateActionNode(context: BGameContext) : BNode(context) {
 
     companion object {
 
@@ -17,7 +17,7 @@ class BOnCreateActionNode(context: BGameContext) : BEventPipeline.Pipe.Node(cont
 
     override fun handle(event: BEvent): BEvent? {
         val name = event.name!!
-        val bundle = event.any!!
+        val bundle = event.bundle!!
         return if (name == BOnCreateActionPipe.EVENT && bundle is BActionPipe.ActionBundle) {
             this.pipeMap.values.forEach { it.push(event) }
             event

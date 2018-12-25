@@ -3,11 +3,11 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.node.BOnCreateActionNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onPerform.BOnPerformActionPipe
 
-class BOnPerformActionNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BOnPerformActionNode(context: BGameContext) : BNode(context) {
 
     companion object {
 
@@ -18,7 +18,7 @@ class BOnPerformActionNode(context: BGameContext) : BEventPipeline.Pipe.Node(con
 
     override fun handle(event: BEvent): BEvent? {
         val name = event.name!!
-        val bundle = event.any!!
+        val bundle = event.bundle!!
         return if (name == BOnPerformActionPipe.EVENT && bundle is BActionPipe.ActionBundle) {
             val action = bundle.action
             if (action.perform()) {

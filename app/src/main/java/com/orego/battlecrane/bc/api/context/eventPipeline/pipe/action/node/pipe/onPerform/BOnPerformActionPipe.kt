@@ -2,10 +2,12 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.BActionNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onPerform.node.BOnPerformActionNode
 
-class BOnPerformActionPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
+class BOnPerformActionPipe(context: BGameContext) : BPipe(context) {
 
     companion object {
 
@@ -16,7 +18,7 @@ class BOnPerformActionPipe(context: BGameContext) : BEventPipeline.Pipe(context)
 
     override val name = NAME
 
-    override val nodes = mutableListOf<Node>(
+    override val nodes = mutableListOf<BNode>(
         BOnPerformActionNode(context)
     )
 }
