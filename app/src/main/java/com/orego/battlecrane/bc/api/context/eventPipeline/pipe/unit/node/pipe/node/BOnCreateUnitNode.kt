@@ -1,11 +1,11 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.node.pipe.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.node.pipe.BOnCreateUnitPipe
 
-class BOnCreateUnitNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BOnCreateUnitNode(context: BGameContext) : BNode(context) {
 
     companion object {
 
@@ -29,7 +29,7 @@ class BOnCreateUnitNode(context: BGameContext) : BEventPipeline.Pipe.Node(contex
             if (this.mapManager.createUnit(unit, point)) {
                 unit.onCreate()
                 this.pipeMap.values.forEach { pipe -> pipe.push(event) }
-            }
+            };
             event
         } else {
             null

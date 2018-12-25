@@ -2,10 +2,12 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.BAttackNode
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
 
-class BAttackPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
+class BAttackPipe(context: BGameContext) : BPipe(context) {
 
     companion object {
 
@@ -14,7 +16,7 @@ class BAttackPipe(context: BGameContext) : BEventPipeline.Pipe(context) {
 
     override val name = NAME
 
-    override val nodes = mutableListOf<Node>(BAttackNode(context))
+    override val nodes = mutableListOf<BNode>(BAttackNode(context))
 
     open class AttackBundle(val attackable : BAttackable)
 }

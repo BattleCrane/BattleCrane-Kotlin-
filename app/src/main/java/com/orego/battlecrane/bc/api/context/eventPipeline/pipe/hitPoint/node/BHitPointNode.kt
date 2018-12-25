@@ -3,9 +3,10 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoint.node
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoint.BHitPointPipe
 
-class BHitPointNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BHitPointNode(context: BGameContext) : BNode(context) {
 
     companion object {
 

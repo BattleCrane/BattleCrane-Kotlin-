@@ -1,12 +1,12 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.level.node.pipe.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.level.node.pipe.BOnLevelIncreasedPipe
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
 
-class BOnLevelIncreasedNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BOnLevelIncreasedNode(context: BGameContext) : BNode(context) {
 
     companion object {
 

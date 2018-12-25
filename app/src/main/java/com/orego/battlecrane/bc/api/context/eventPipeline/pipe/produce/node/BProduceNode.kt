@@ -1,12 +1,12 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.BProducePipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.BOnProduceEnablePipe
 
-class BProduceNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BProduceNode(context: BGameContext) : BNode(context) {
 
     companion object {
 
@@ -16,7 +16,7 @@ class BProduceNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
     override val name = NAME
 
     init {
-        this.addPipe(BOnProduceEnablePipe(context))
+        this.connectPipe(BOnProduceEnablePipe(context))
     }
 
     override fun handle(event: BEvent) : BEvent? {

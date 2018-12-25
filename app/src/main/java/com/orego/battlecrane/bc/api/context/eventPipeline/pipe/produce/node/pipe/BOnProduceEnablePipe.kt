@@ -1,11 +1,14 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.BProducePipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.BProduceNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.node.BOnProduceEnableNode
 import com.orego.battlecrane.bc.api.model.contract.BProducable
 
-class BOnProduceEnablePipe(context: BGameContext) : BEventPipeline.Pipe(context) {
+class BOnProduceEnablePipe(context: BGameContext) : BPipe(context) {
 
     companion object {
 
@@ -14,7 +17,8 @@ class BOnProduceEnablePipe(context: BGameContext) : BEventPipeline.Pipe(context)
 
     override val name = NAME
 
-    override val nodes = mutableListOf<Node>(BOnProduceEnableNode(context))
+    override val nodes = mutableListOf<BNode>(BOnProduceEnableNode(context))
 
-    open class OnProduceEnableBundle(val producable : BProducable)
+    open class OnProduceEnableBundle(producable: BProducable, val isEnable: Boolean) :
+        BProducePipe.ProduceBundle(producable)
 }

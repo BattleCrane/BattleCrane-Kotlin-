@@ -8,12 +8,5 @@ interface BProducable {
 
     var isProduceEnable : Boolean
 
-    fun switchProduceEnable(isProduceEnable : Boolean) {
-        if (this.isProduceEnable != isProduceEnable) {
-            this.isProduceEnable = isProduceEnable
-            this.isProduceStateChangedObserver.values.forEach { it.onProduceStateChanged(isProduceEnable) }
-        }
-    }
-
     fun pushProduceActions(context: BGameContext, owner : BPlayer)
 }

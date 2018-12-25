@@ -1,11 +1,12 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.BOnProduceEnablePipe
+import com.orego.battlecrane.bc.api.model.contract.BProducable
 
-class BOnProduceEnableNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BOnProduceEnableNode(context: BGameContext) : BNode(context) {
 
     companion object {
 
@@ -14,19 +15,22 @@ class BOnProduceEnableNode(context: BGameContext) : BEventPipeline.Pipe.Node(con
 
     override val name = NAME
 
-    init {
-        //Put on create action node:
-        //this.pipeMap[BOnCreateActionPipe.NAME] = BOnCreateActionPipe(context)
-        //Put on perform action node:
-        //this.pipeMap[BOnPerformActionPipe.NAME] = BOnPerformActionPipe(context)
+    override fun handle(event: BEvent): BEvent? {
+        val bundle = event.bundle
+        if (bundle is BOnProduceEnablePipe.OnProduceEnableBundle) {
+            if (this.switchProduceEnable(bundle.producable, bundle.isEnable)) {
+                this.pipeMap.values.forEach { it.push(event) }
+                return event
+            }
+        }
+        return null
     }
 
-    override fun handle(event: BEvent) : BEvent? {
-        //return if (event.any is BUnitPipe.UnitBundle) {
- //           this.pipeMap.values.forEach { it.push(event) }
-   //         event
-     //   } else {
-       //     null
-        //}
+    fun switchProduceEnable(producable: BProducable, isProduceEnable: Boolean): Boolean {
+        val isSuccessful = producable.isProduceEnable != isProduceEnable
+        if (isSuccessful) {
+            producable.isProduceEnable = isProduceEnable
+        }
+        return isSuccessful
     }
 }

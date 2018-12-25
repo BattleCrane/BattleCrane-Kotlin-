@@ -3,11 +3,12 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe.onAttackAction.BOnAttackActionPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoint.node.pipe.BOnHitPointsDamagedPipe
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 
-class BOnAttackActionNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BOnAttackActionNode(context: BGameContext) : BNode(context) {
 
     companion object {
 

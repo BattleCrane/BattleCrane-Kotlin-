@@ -3,11 +3,12 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.BAttackPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe.onAttackAction.BOnAttackActionPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.node.pipe.onAttackEnable.BOnAttackEnablePipe
 
-class BAttackNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
+class BAttackNode(context: BGameContext) : BNode(context) {
 
     companion object {
 
@@ -17,10 +18,8 @@ class BAttackNode(context: BGameContext) : BEventPipeline.Pipe.Node(context) {
     override val name = NAME
 
     init {
-        //Put on attack action node:
-        this.pipeMap[BOnAttackActionPipe.NAME] = BOnAttackActionPipe(context)
-        //Put on attack enable node:
-        this.pipeMap[BOnAttackEnablePipe.NAME] = BOnAttackEnablePipe(context)
+        this.connectPipe(BOnAttackActionPipe(context))
+        this.connectPipe(BOnAttackEnablePipe(context))
     }
 
     override fun handle(event: BEvent) : BEvent? {
