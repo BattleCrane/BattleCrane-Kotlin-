@@ -49,20 +49,6 @@ class BHumanBarracks(context: BGameContext, owner: BPlayer) : BHumanBuilding(con
     override var isProduceEnable = false
 
     /**
-     * Observers.
-     */
-
-    override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
-
-    override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
-
-    override val levelUpObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
-
-    override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
-
-    override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
-
-    /**
      * Companions.
      */
 

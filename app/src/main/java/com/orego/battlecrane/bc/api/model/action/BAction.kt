@@ -8,7 +8,7 @@ import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 
 abstract class BAction protected constructor(
     protected val context: BGameContext,
-    var owner: BPlayer? = null
+    open var owner: BPlayer? = null
 ) {
 
     abstract fun perform(): Boolean
