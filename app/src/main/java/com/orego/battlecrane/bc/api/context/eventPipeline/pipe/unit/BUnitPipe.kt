@@ -1,6 +1,7 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.node.BUnitNode
@@ -16,6 +17,8 @@ class BUnitPipe(context: BGameContext) : BPipe(context) {
     override val name = NAME
 
     override val nodes = mutableListOf<BNode>(BUnitNode(context))
+
+    open class UnitEvent : BEvent()
 
     open class UnitBundle(val unit : BUnit)
 }

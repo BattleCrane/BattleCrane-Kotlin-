@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.BProduceNode
@@ -18,5 +19,5 @@ class BProducePipe(context: BGameContext) : BPipe(context) {
 
     override val nodes = mutableListOf<BNode>(BProduceNode(context))
 
-    open class ProduceBundle(val producable : BProducable)
+    open class ProduceEvent : BEvent()
 }

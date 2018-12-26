@@ -1,6 +1,7 @@
 package com.orego.battlecrane.bc.api.context.playerManager.player.adjutant;
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.model.action.BAction
 
 abstract class BAdjutant(
     protected val context: BGameContext,
@@ -22,9 +23,9 @@ abstract class BAdjutant(
 
         var receivedInfluenceCount = 0
 
-        val buildingActions = mutableSetOf<Long>()
+        val buildingActions = mutableSetOf<BAction>()
 
-        val trainActions = mutableSetOf<Long>()
+        val trainActions = mutableSetOf<BAction>()
     }
 
     /**

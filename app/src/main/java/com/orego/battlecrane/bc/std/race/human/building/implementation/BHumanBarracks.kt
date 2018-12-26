@@ -5,13 +5,13 @@ import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.annotation.BUnitComponent
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.BOnCreateActionPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.node.BOnCreateActionNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.node.pipe.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
@@ -70,7 +70,7 @@ class BHumanBarracks(context: BGameContext, ownerId: Long) :
 
     init {
         val pipeline = context.pipeline
-        val onCreateActionPipe = BPipe(context, mutableListOf(TrainMarineActionNode(context, ownerId)))
+        val onCreateActionPipe = BPipe(context, mutableListOf(OnCreateTrainMarineActionNode(context, ownerId)))
         val onTurnStartedPipe = BPipe(context)
         val onTurnFinishedPipe = BPipe(context)
         this.onCreateActionPipeId = onCreateActionPipe.id
@@ -87,133 +87,167 @@ class BHumanBarracks(context: BGameContext, ownerId: Long) :
             .connectPipe(this.onTurnFinishedPipe)
     }
 
+    /**
+     * Sends events to pipeline to create produce abilities.
+     */
+
     override fun produceUnits(pipeline: BEventPipeline) {
         if (this.isProduceEnable) {
             pipeline.pushEvent(
-                TrainMarineActionNode.createTrainMarineLvl1ActionEvent(this.ownerId)
+                OnCreateTrainMarineActionNode.createTrainMarineLvl1ActionEvent(this.ownerId, this.unitId)
             )
             if (this.currentLevel > 1) {
                 pipeline.pushEvent(
-                    TrainMarineActionNode.createTrainMarineLvl2ActionEvent(this.ownerId)
+                    OnCreateTrainMarineActionNode.createTrainMarineLvl2ActionEvent(this.ownerId, this.unitId)
                 )
                 if (this.currentLevel > 2) {
                     pipeline.pushEvent(
-                        TrainMarineActionNode.createTrainMarineLvl3ActionEvent(this.ownerId)
+                        OnCreateTrainMarineActionNode.createTrainMarineLvl3ActionEvent(this.ownerId, this.unitId)
                     )
                 }
             }
         }
     }
 
-    class TrainMarineActionNode(context: BGameContext, private val ownerId: Long) : BNode(context) {
-
-        companion object {
-
-            fun createTrainMarineLvl1ActionEvent(ownerId: Long) = TrainMarineLvl1ActionEvent(ownerId)
-
-            fun createTrainMarineLvl2ActionEvent(ownerId: Long) = TrainMarineLvl1ActionEvent(ownerId)
-
-            fun createTrainMarineLvl3ActionEvent(ownerId: Long) = TrainMarineLvl1ActionEvent(ownerId)
-        }
-
-        override fun handle(event: BEvent): BEvent? {
-            val currentPlayer = this.context.playerManager.currentPlayer
-            if (this.ownerId == currentPlayer.id) {
-                val action = when (event) {
-                    is TrainMarineLvl1ActionEvent -> TrainMarineLvl1(this.ownerId)
-                    is TrainMarineLvl2ActionEvent -> TrainMarineLvl2(this.ownerId)
-                    is TrainMarineLvl3ActionEvent -> TrainMarineLvl3(this.ownerId)
-                    else -> return null
-                }
-
-            }
-        }
-
-        /**
-         * Events.
-         */
-
-        abstract class TrainMarineActionEvent(val ownerId: Long) : BOnCreateActionPipe.OnCreateActionEvent()
-
-        class TrainMarineLvl1ActionEvent(ownerId: Long) : TrainMarineActionEvent(ownerId)
-
-        class TrainMarineLvl2ActionEvent(ownerId: Long) : TrainMarineActionEvent(ownerId)
-
-        class TrainMarineLvl3ActionEvent(ownerId: Long) : TrainMarineActionEvent(ownerId)
-
-        /**
-         * Action.
-         */
-
-        abstract class TrainMarine(ownerId: Long) : BHumanAction(ownerId), BTargetable {
-
-            override var targetPosition: BPoint? = null
-
-            protected abstract fun isTrainConditionPerformed(unit: BUnit, player: BPlayer): Boolean
-
-            override fun perform(context: BGameContext): Boolean {
-                val position = this.targetPosition
-                if (position != null) {
-                    val unit = context.mapManager.getUnitByPosition(position)
-                    val player = context.playerManager.getPlayerById(this.ownerId)
-                    if (this.isTrainConditionPerformed(unit, player)) {
-                        val pipeline = context.pipeline
-                        pipeline.pushEvent(
-                            BOnCreateUnitPipe.createEvent(marine, position)
-                        )
-                        pipeline.pushEvent(
-                            BOnProduceEnablePipe.createEvent(this@BHumanBarracks, false)
-                        )
-                        return true
-                    }
-                }
-                return false
-            }
-        }
-
-        class TrainMarineLvl1(ownerId: Long) : TrainMarine(ownerId) {
-
-            override fun isTrainConditionPerformed(unit: BUnit, player: BPlayer) =
-                this.ownerId == unit.ownerId
-        }
-
-        class TrainMarineLvl2(ownerId: Long) : TrainMarine(ownerId) {
-
-            override fun isTrainConditionPerformed(unit: BUnit, player: BPlayer) =
-                !player.isEnemy(unit.ownerId)
-        }
-
-        class TrainMarineLvl3(ownerId: Long) : TrainMarine(ownerId) {
-
-            override fun isTrainConditionPerformed(unit: BUnit, player: BPlayer) = true
-        }
-    }
-
     /**
-     * Pipe.
+     * Action.
      */
 
-    inner class OnTurnStartedPipe(context: BGameContext) : BPipe(context) {
+    abstract class TrainMarine(ownerId: Long, private val barracksId: Long) : BHumanAction(ownerId), BTargetable {
 
-        override val name = "BARRACKS_ON_TURN_STARTED_${this@BHumanBarracks.ownerId!!.id}"
+        override var targetPosition: BPoint? = null
 
-        override val nodes = mutableListOf<BNode>(OnTurnStartedNode(context))
+        protected abstract fun isTrainConditionPerformed(unit: BUnit, player: BPlayer): Boolean
+
+        override fun perform(context: BGameContext): Boolean {
+            val position = this.targetPosition
+            if (position != null) {
+                val unit = context.mapManager.getUnitByPosition(position)
+                val player = context.playerManager.getPlayerById(this.ownerId)
+                if (this.isTrainConditionPerformed(unit, player)) {
+                    val pipeline = context.pipeline
+                    pipeline.pushEvent(
+                        BHumanMarine.OnCreateNode.createEvent(position)
+                    )
+                    pipeline.pushEvent(
+                        OnProduceEnableNode.createEvent(this.ownerId, this.barracksId, false)
+                    )
+                    return true
+                }
+            }
+            return false
+        }
     }
 
-    inner class OnTurnFinishedPipe(context: BGameContext) : BPipe(context) {
+    class TrainMarineLvl1(ownerId: Long, barracksId: Long) : TrainMarine(ownerId, barracksId) {
 
-        override val name = "BARRACKS_ON_TURN_FINISHED_${this@BHumanBarracks.ownerId!!.id}"
+        override fun isTrainConditionPerformed(unit: BUnit, player: BPlayer) =
+            this.ownerId == unit.ownerId
+    }
 
-        override val nodes = mutableListOf<BNode>(OnTurnFinishedNode(context))
+    class TrainMarineLvl2(ownerId: Long, barracksId: Long) : TrainMarine(ownerId, barracksId) {
+
+        override fun isTrainConditionPerformed(unit: BUnit, player: BPlayer) =
+            !player.isEnemy(unit.ownerId)
+    }
+
+    class TrainMarineLvl3(ownerId: Long, barracksId: Long) : TrainMarine(ownerId, barracksId) {
+
+        override fun isTrainConditionPerformed(unit: BUnit, player: BPlayer) = true
     }
 
     /**
      * Node.
      */
 
-    inner class OnTurnStartedNode(context: BGameContext) : BNode(context) {
+    @BUnitComponent
+    class OnCreateTrainMarineActionNode(context: BGameContext, private val ownerId: Long, private val barracksId: Long) :
+        BNode(context) {
 
-        override val name = "BARRACKS_ON_TURN_STARTED_${this@BHumanBarracks.ownerId!!.id}"
+        companion object {
+
+            fun createTrainMarineLvl1ActionEvent(ownerId: Long, unitId: Long) =
+                TrainMarineLvl1ActionEvent(ownerId, unitId)
+
+            fun createTrainMarineLvl2ActionEvent(ownerId: Long, unitId: Long) =
+                TrainMarineLvl1ActionEvent(ownerId, unitId)
+
+            fun createTrainMarineLvl3ActionEvent(ownerId: Long, unitId: Long) =
+                TrainMarineLvl1ActionEvent(ownerId, unitId)
+        }
+
+        /**
+         * Creates action.
+         */
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is TrainMarineActionEvent) {
+                if (this.ownerId == event.ownerId && this.barracksId == event.unitId) {
+                    val action = when (event) {
+                        is TrainMarineLvl1ActionEvent -> TrainMarineLvl1(this.ownerId, this.barracksId)
+                        is TrainMarineLvl2ActionEvent -> TrainMarineLvl2(this.ownerId, this.barracksId)
+                        is TrainMarineLvl3ActionEvent -> TrainMarineLvl3(this.ownerId, this.barracksId)
+                        else -> return null
+                    }
+                    val player = this.context.playerManager.getPlayerById(this.ownerId)
+                    val resourceManager = player.adjutant.resourceManager
+                    resourceManager.trainActions += action
+                    return event
+                }
+            }
+            return null
+        }
+
+        /**
+         * Event.
+         */
+
+        abstract class TrainMarineActionEvent(val ownerId: Long, val unitId: Long) :
+            BOnCreateActionPipe.OnCreateActionEvent()
+
+        class TrainMarineLvl1ActionEvent(ownerId: Long, unitId: Long) :
+            TrainMarineActionEvent(ownerId, unitId)
+
+        class TrainMarineLvl2ActionEvent(ownerId: Long, unitId: Long) :
+            TrainMarineActionEvent(ownerId, unitId)
+
+        class TrainMarineLvl3ActionEvent(ownerId: Long, unitId: Long) :
+            TrainMarineActionEvent(ownerId, unitId)
+    }
+
+    @BUnitComponent
+    class OnProduceEnableNode(context: BGameContext, private val ownerId: Long, private val unitId: Long) :
+        BNode(context) {
+
+        companion object {
+
+            fun createEvent(ownerId: Long, unitId: Long, isEnable: Boolean) =
+                ProduceBarracksEnableEvent(ownerId, unitId, isEnable)
+        }
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is ProduceBarracksEnableEvent) {
+                if (this.ownerId == event.ownerId && this.unitId == event.unitId) {
+                    val barracks = this.context.mapManager.unitHeap[this.unitId]
+                    if (barracks is BProducable) {
+                        barracks.isProduceEnable = event.isEnable
+                        return event
+                    }
+                }
+            }
+            return null
+        }
+
+        /**
+         * Event.
+         */
+
+        open class ProduceBarracksEnableEvent(val ownerId: Long, val unitId: Long, isEnable: Boolean) :
+            BOnProduceEnablePipe.ProduceEnableEvent(isEnable)
+    }
+
+    @BUnitComponent
+    class OnTurnStartedNode(context: BGameContext) : BNode(context) {
 
         override fun handle(event: BEvent): BEvent? {
             val bundle = event.bundle
@@ -229,7 +263,8 @@ class BHumanBarracks(context: BGameContext, ownerId: Long) :
         }
     }
 
-    inner class OnTurnFinishedNode(context: BGameContext) : BNode(context) {
+    @BUnitComponent
+    class OnTurnFinishedNode(context: BGameContext) : BNode(context) {
 
         override val name = "BARRACKS_ON_TURN_FINISHED_${this@BHumanBarracks.ownerId!!.id}"
 

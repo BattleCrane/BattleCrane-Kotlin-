@@ -3,21 +3,18 @@ package com.orego.battlecrane.bc.std.race.human.infantry.implementation
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.BOnCreateActionPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.BOnProduceEnablePipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.annotation.BPlayerComponent
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.node.pipe.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BTargetable
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
-import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.infantry.BHumanInfantry
 
-open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, owner),
+open class BHumanMarine(context: BGameContext, ownerId: Long) : BUnit(ownerId),
     BHumanInfantry, BHitPointable, BAttackable {
 
     companion object {
@@ -82,5 +79,36 @@ open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, 
             this@BHumanMarine.switchAttackEnable(false)
             return true
         }
+    }
+
+    /**
+     * Node.
+     */
+
+    @BPlayerComponent
+    class OnCreateNode(context: BGameContext, private val ownerId: Long) : BNode(context) {
+
+        companion object {
+
+            fun createEvent(position: BPoint) = CreateMarineEvent(position)
+        }
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is CreateMarineEvent) {
+                val mapManager = this.context.mapManager
+                val marine = BHumanMarine(this.context, this.ownerId)
+                val position = event.position
+                if (mapManager.createUnit(marine, position)) {
+                    val pipes = this.pipeMap.values.toList()
+                    for (i in 0 until pipes.size) {
+                        pipes[i].push(event)
+                    }
+                    return event
+                }
+            }
+            return null
+        }
+
+        open class CreateMarineEvent(position: BPoint) : BOnCreateUnitPipe.CreateUnitEvent(position)
     }
 }
