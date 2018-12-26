@@ -10,13 +10,11 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
     val id: Long = BIdGenerator.generatePlayerId()
 
     //TODO WHILE WITHOUT BONUSES:
-    val adjutant: BAdjutant = builder.build(context, this)
+    val adjutant: BAdjutant = builder.build(context, this.id)
 
-    private val allies = mutableSetOf<BPlayer>()
+    private val allies = mutableSetOf<Long>()
 
-    private val enemies = mutableSetOf<BPlayer>()
-
-    val onTurnFinishedObserver = mutableMapOf<Long, OnPlayerTurnFinishedListener>()
+    private val enemies = mutableSetOf<Long>()
 
     /**
      * Game.
@@ -31,33 +29,18 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
     }
 
     /**
-     * Unit.
-     */
-
-    fun owns(unit: BUnit) = this == unit.owner
-
-    /**
      * Player.
      */
 
-    fun addEnemy(player: BPlayer) = this.enemies.add(player)
+    fun addEnemy(player: Long) = this.enemies.add(player)
 
-    fun removeEnemy(player: BPlayer) = this.enemies.remove(player)
+    fun removeEnemy(player: Long) = this.enemies.remove(player)
 
-    fun isEnemy(player: BPlayer?) = this.enemies.contains(player)
+    fun isEnemy(player: Long) = this.enemies.contains(player)
 
-    fun addAlly(player: BPlayer) = this.allies.add(player)
+    fun addAlly(player: Long) = this.allies.add(player)
 
-    fun removeAlly(player: BPlayer) = this.allies.remove(player)
+    fun removeAlly(player: Long) = this.allies.remove(player)
 
-    fun isAlly(player: BPlayer) = this.allies.contains(player)
-
-    /**
-     * Listener.
-     */
-
-    interface OnPlayerTurnFinishedListener {
-
-        fun onPlayerTurnFinished(player: BPlayer)
-    }
+    fun isAlly(player: Long) = this.allies.contains(player)
 }

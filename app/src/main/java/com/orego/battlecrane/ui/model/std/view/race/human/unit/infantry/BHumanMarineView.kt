@@ -33,7 +33,7 @@ class BHumanMarineView(
 
     private fun getPath() =
         "race/human/unit/marine/" +
-                "${COLOR_MAP[this.entity.owner!!.id]}/" +
+                "${COLOR_MAP[this.entity.ownerId!!.id]}/" +
                 "${this.entity.currentHitPoints}_${
                 if (this.entity.isAttackEnable) {
                     "active"

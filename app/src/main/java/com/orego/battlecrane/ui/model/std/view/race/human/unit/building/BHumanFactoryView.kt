@@ -33,7 +33,7 @@ class BHumanFactoryView(
 
     private fun getPath() =
         "race/human/unit/factory/" +
-                "${COLOR_MAP[this.entity.owner!!.id]}/" +
+                "${COLOR_MAP[this.entity.ownerId!!.id]}/" +
                 "${this.entity.currentLevel}_${this.entity.currentHitPoints}.png"
 
     override fun refresh() {

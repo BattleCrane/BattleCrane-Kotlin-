@@ -129,7 +129,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
      * Actions.
      */
 
-    abstract inner class Build : BHumanAction(this.context, this.owner!!),
+    abstract inner class Build : BHumanAction(this.context, this.ownerId!!),
         BTargetable {
 
         override var targetPosition: BPoint? = null
@@ -137,7 +137,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         protected abstract fun buildUnit(): BHumanBuilding
 
         override fun performAction(): Boolean {
-            if (this.targetPosition != null && this.owner != null) {
+            if (this.targetPosition != null && this.ownerId != null) {
                 val unit = this.buildUnit()
                 val manager = this.context.mapManager
                 val isSuccessful = manager.createUnit(unit, this.targetPosition)
@@ -157,7 +157,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         inner class Action : Build() {
 
             override fun buildUnit() =
-                BHumanBarracks(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+                BHumanBarracks(this@BHumanHeadquarters.context, this@BHumanHeadquarters.ownerId!!)
         }
     }
 
@@ -168,7 +168,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         inner class Action : Build() {
 
             override fun buildUnit() =
-                BHumanTurret(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+                BHumanTurret(this@BHumanHeadquarters.context, this@BHumanHeadquarters.ownerId!!)
         }
     }
 
@@ -179,7 +179,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         inner class Action : Build() {
 
             override fun buildUnit() =
-                BHumanWall(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+                BHumanWall(this@BHumanHeadquarters.context, this@BHumanHeadquarters.ownerId!!)
         }
     }
 
@@ -190,7 +190,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         inner class Action : Build() {
 
             override fun buildUnit() =
-                BHumanFactory(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+                BHumanFactory(this@BHumanHeadquarters.context, this@BHumanHeadquarters.ownerId!!)
         }
     }
 
@@ -201,7 +201,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         inner class Action : Build() {
 
             override fun buildUnit() =
-                BHumanGenerator(this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!)
+                BHumanGenerator(this@BHumanHeadquarters.context, this@BHumanHeadquarters.ownerId!!)
         }
     }
 
@@ -210,13 +210,13 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         override fun createAction() = Action()
 
         inner class Action : BHumanAction(
-            this@BHumanHeadquarters.context, this@BHumanHeadquarters.owner!!
+            this@BHumanHeadquarters.context, this@BHumanHeadquarters.ownerId!!
         ), BTargetable {
 
             override var targetPosition: BPoint? = null
 
             override fun performAction(): Boolean {
-                if (this.targetPosition != null && this.owner != null) {
+                if (this.targetPosition != null && this.ownerId != null) {
                     val manager = this.context.mapManager
                     val unit = manager.getUnitByPosition(this.targetPosition)
                     if (unit is BLevelable && unit is BHumanBuilding) {
@@ -241,7 +241,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         var buildActionCount = 0
 
         fun initBuildActionCount() {
-            val owner = this@BHumanHeadquarters.owner!!
+            val owner = this@BHumanHeadquarters.ownerId!!
             var abilityCount = HEADQUARTERS_BUILD_ABILITY
             this.unitHeap.forEach { unit ->
                 if (owner.owns(unit) && unit is BHumanGenerator) {
@@ -255,7 +255,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
             var barracksCount = 0
             var factoryCount = 0
             this.unitHeap.forEach { unit ->
-                if (this@BHumanHeadquarters.owner!!.owns(unit)) {
+                if (this@BHumanHeadquarters.ownerId!!.owns(unit)) {
                     when (unit) {
                         is BHumanBarracks -> barracksCount++
                         is BHumanFactory -> factoryCount++
@@ -268,7 +268,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
         fun canGeneratorBuild(): Boolean {
             var generatorCount = 0
             for (unit in this.unitHeap) {
-                if (unit is BHumanGenerator && this@BHumanHeadquarters.owner!!.owns(unit)) {
+                if (unit is BHumanGenerator && this@BHumanHeadquarters.ownerId!!.owns(unit)) {
                     if (generatorCount == GENERATOR_LIMIT) {
                         return false
                     } else {
@@ -285,7 +285,7 @@ class BHumanHeadquarters(context: BGameContext, owner: BPlayer) : BHumanBuilding
                     unit is BHumanBuilding
                     && unit is BLevelable
                     && unit.currentLevel < unit.maxLevel
-                    && this@BHumanHeadquarters.owner!!.owns(unit)
+                    && this@BHumanHeadquarters.ownerId!!.owns(unit)
                 ) {
                     return true
                 }

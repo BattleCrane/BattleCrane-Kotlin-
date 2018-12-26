@@ -128,7 +128,7 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
      * Action.
      */
 
-    inner class Attack : BAction(this.context, this.owner) {
+    inner class Attack : BAction(this.context, this.ownerId) {
 
         override fun performAction(): Boolean {
             this@BHumanTurret.attackInRadius()

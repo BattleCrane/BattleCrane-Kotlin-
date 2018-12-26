@@ -1,6 +1,7 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.model
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.util.BIdGenerator
 
 /**
  * Handles events.
@@ -8,14 +9,16 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 
 abstract class BNode(protected val context: BGameContext) {
 
-    abstract val name: String
+    val id = BIdGenerator.generateNodeId()
 
-    protected val pipeMap = mutableMapOf<String, BPipe>()
+    open val name: String = ""
+
+    protected val pipeMap = mutableMapOf<Long, BPipe>()
 
     abstract fun handle(event: BEvent): BEvent?
 
     open fun connectPipe(pipe: BPipe) {
-        this.pipeMap[pipe.name] = pipe
+        this.pipeMap[pipe.id] = pipe
     }
 
     fun findNode(name: String): BNode? {

@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.node.pipe
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.BUnitPipe
@@ -17,6 +18,8 @@ class BOnCreateUnitPipe(context: BGameContext) : BPipe(context) {
         const val NAME = "${BUnitNode.NAME}/ON_CREATE_UNIT_PIPE"
 
         const val EVENT = "ON_CREATE_UNIT_EVENT"
+
+        fun createEvent(unit: BUnit, point: BPoint) : BEvent = BEvent(EVENT, OnCreateUnitBundle(unit, point))
     }
 
     override val name = NAME

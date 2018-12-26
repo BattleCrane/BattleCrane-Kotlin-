@@ -10,9 +10,15 @@ object BIdGenerator {
 
     private var nodeIdCounter : Long = 0
 
+    private var pipeIdConter : Long = 0
+
     fun generateUnitId() = this.unitIdCounter++
 
     fun generateActionId() = this.actionIdCounter++
 
     fun generatePlayerId() = this.playerIdConter++
+
+    fun generatePipeId() = this.pipeIdConter++
+
+    fun generateNodeId() = this.nodeIdCounter++
 }

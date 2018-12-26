@@ -108,7 +108,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
      * Action.
      */
 
-    abstract inner class TrainTank : BHumanAction(this.context, this.owner!!),
+    abstract inner class TrainTank : BHumanAction(this.context, this.ownerId!!),
         BTargetable {
 
         override var targetPosition: BPoint? = null
@@ -117,7 +117,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
 
         override fun performAction(): Boolean {
             if (this.targetPosition != null) {
-                val tank = BHumanTank(this.context, this.owner!!)
+                val tank = BHumanTank(this.context, this.ownerId!!)
                 val manager = this.context.mapManager
                 val unit = manager.getUnitByPosition(this.targetPosition)
                 if (unit is BEmptyField && this.isTrainConditionPerformed(unit)) {
@@ -144,7 +144,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
         inner class Action : TrainTank() {
 
             override fun isTrainConditionPerformed(unit: BUnit) =
-                this@BHumanFactory.owner!!.owns(unit)
+                this@BHumanFactory.ownerId!!.owns(unit)
         }
     }
 
@@ -155,7 +155,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
         inner class Action : TrainTank() {
 
             override fun isTrainConditionPerformed(unit: BUnit) =
-                !this@BHumanFactory.owner!!.isEnemy(unit.owner)
+                !this@BHumanFactory.ownerId!!.isEnemy(unit.ownerId)
         }
     }
 

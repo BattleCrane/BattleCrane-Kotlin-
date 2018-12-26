@@ -1,17 +1,20 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.model
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.util.EventUtil
+import com.orego.battlecrane.bc.api.util.BIdGenerator
 
 /**
  * Provides events to nodes.
  */
 
-abstract class BPipe(protected val context: BGameContext) {
+open class BPipe(
+    protected val context: BGameContext,
+    open val nodes: MutableList<BNode> = mutableListOf()
+) {
 
-    abstract val name: String
+    val id = BIdGenerator.generatePipeId()
 
-    protected abstract val nodes: MutableList<BNode>
+    open val name: String = ""
 
     fun push(any: BEvent?) {
         val startPosition = 0
@@ -19,9 +22,9 @@ abstract class BPipe(protected val context: BGameContext) {
     }
 
     private fun push(event: BEvent?, position: Int) {
-        if (EventUtil.isValid(event)) {
+        if (event != null) {
             if (position < this.nodes.size) {
-                val nextEvent = this.nodes[position].handle(event!!)
+                val nextEvent = this.nodes[position].handle(event)
                 this.push(nextEvent, position + 1)
             }
         }

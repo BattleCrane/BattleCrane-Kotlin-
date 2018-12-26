@@ -5,6 +5,7 @@ import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.node.BOnCreateActionNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onPerform.node.BOnPerformActionNode
 import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.action.BAction
@@ -15,9 +16,7 @@ import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanFac
 import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
 
 class BHumanAdjutant(
-    context: BGameContext,
-    owner: BPlayer,
-    bonusFactories: MutableSet<BAction.Factory>
+    context: BGameContext, owner: Long, bonusFactories: MutableSet<BAction.Factory>
 ) : BAdjutant(context, owner, bonusFactories) {
 
     companion object {
@@ -27,13 +26,9 @@ class BHumanAdjutant(
         private const val TURN_INFLUENCE_COUNT = 1
     }
 
-    private val unitHeap by lazy {
-        this.context.mapManager.unitHeap.values
-    }
-
     override val resourceManager = ResourceManager()
 
-    private val attackManager = AttackManager()
+    fun getUnitHeap() = this.context.mapManager.unitHeap.values
 
     override fun onGameStarted() {
     }
@@ -50,27 +45,24 @@ class BHumanAdjutant(
      * AttackManager.
      */
 
-    private inner class AttackManager {
-
-        fun startTurn() {
-            this.activateUnits()
-            val isHeadquartersShotIsReady =
-                this@BHumanAdjutant.resourceManager.receivedInfluenceCount == MAX_RECEIVED_INFLUENCE_COUNT
-            if (isHeadquartersShotIsReady) {
-                this.makeHeadquatersShot()
-            }
+    fun startTurn() {
+        this.activateUnits()
+        val isHeadquartersShotIsReady =
+            this@BHumanAdjutant.resourceManager.receivedInfluenceCount == MAX_RECEIVED_INFLUENCE_COUNT
+        if (isHeadquartersShotIsReady) {
+            this.makeHeadquatersShot()
         }
+    }
 
-        fun activateUnits() {
-            this@BHumanAdjutant.unitHeap
-                .filter { unit -> this@BHumanAdjutant.owner.owns(unit) && unit is BAttackable }
-                .map { unit -> unit as BAttackable }
-                .forEach { unit -> unit.switchAttackEnable(true) }
-        }
+    fun activateUnits() {
+        this@BHumanAdjutant.unitHeap
+            .filter { unit -> this@BHumanAdjutant.ownerId.owns(unit) && unit is BAttackable }
+            .map { unit -> unit as BAttackable }
+            .forEach { unit -> unit.switchAttackEnable(true) }
+    }
 
-        private fun makeHeadquatersShot() {
+    private fun makeHeadquatersShot() {
 
-        }
     }
 
     /**
@@ -92,7 +84,7 @@ class BHumanAdjutant(
 
         fun loadResources() {
             val context = this@BHumanAdjutant.context
-            val owner = this@BHumanAdjutant.owner
+            val owner = this@BHumanAdjutant.ownerId
             this.buildingActions.clear()
             this.trainActions.clear()
             //Update:
@@ -120,7 +112,7 @@ class BHumanAdjutant(
             override fun handle(event: BEvent) {
                 val bundle = event.bundle!! as BOnCreateActionNode.Bundle
                 val action = bundle.action
-                if (this@BHumanAdjutant.owner == action.owner) {
+                if (this@BHumanAdjutant.ownerId == action.owner) {
                     when (action) {
                         is BHumanHeadquarters.Build -> this@ResourceManager.buildingActions += action
                         is BHumanBarracks.TrainMarine -> this@ResourceManager.trainActions += action
@@ -141,14 +133,14 @@ class BHumanAdjutant(
             override fun handle(event: BEvent) {
                 val bundle = event.bundle!! as BOnCreateActionNode.Bundle
                 val action = bundle.action
-                if (this@BHumanAdjutant.owner == action.owner) {
+                if (this@BHumanAdjutant.ownerId == action.owner) {
                     this.refreshResources()
                 }
             }
 
             fun refreshResources() {
                 val context = this@BHumanAdjutant.context
-                val owner = this@BHumanAdjutant.owner
+                val owner = this@BHumanAdjutant.ownerId
                 this@ResourceManager.buildingActions.clear()
                 this@ResourceManager.trainActions.clear()
                 this@BHumanAdjutant.unitHeap
@@ -167,6 +159,6 @@ class BHumanAdjutant(
 
     class Builder : BAdjutant.Builder() {
 
-        override fun build(context: BGameContext, owner: BPlayer) = BHumanAdjutant(context, owner, this.bonusFactories)
+        override fun build(context: BGameContext, owner: Long) = BHumanAdjutant(context, owner, this.bonusFactories)
     }
 }

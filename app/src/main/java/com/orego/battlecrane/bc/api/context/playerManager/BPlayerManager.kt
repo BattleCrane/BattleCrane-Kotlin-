@@ -23,17 +23,9 @@ class BPlayerManager(scenario: BGameScenario, context: BGameContext) {
 
     var currentPlayer: BPlayer = scenario.getStartPlayer(this.players)
 
-    private var playerPointer  = this.players.indexOf(this.currentPlayer)
+    private var playerPointer = this.players.indexOf(this.currentPlayer)
 
-    private val turnAssistant = BTurnAssistant()
-
-    private val turnObserver = mutableMapOf<Long, TurnListener>()
-
-    fun isEnemies(unit1: BUnit, unit2: BUnit): Boolean {
-        val owner1 = unit1.owner
-        val owner2 = unit2.owner
-        return owner1 != null && owner2 != null && owner1.isEnemy(owner2)
-    }
+    fun getPlayerById(id: Long) = this.players.find { it.id == id }!!
 
     fun onGameStarted() {
         this.turnAssistant.startTurn(this.currentPlayer)
@@ -43,7 +35,7 @@ class BPlayerManager(scenario: BGameScenario, context: BGameContext) {
 
     }
 
-    fun addOnTurnListener(listener : TurnListener) : Long {
+    fun addOnTurnListener(listener: TurnListener): Long {
         val id = BIdGenerator.generateActionId()
         this.turnObserver[id] = listener
         return id

@@ -60,7 +60,10 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
      * Unit.
      */
 
-    override fun isPlaced(position: BPoint) = position.attachedUnit is BEmptyField
+    override fun isPlaced(
+        context: BGameContext,
+        position: BPoint
+    ) = position.attachedUnit is BEmptyField
 
     /**
      * Lifecycle.
@@ -90,7 +93,7 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
      * Action.
      */
 
-    inner class Attack : BAction(this.context, this.owner), BTargetable {
+    inner class Attack : BAction(this.context, this.ownerId), BTargetable {
 
         override var targetPosition: BPoint? = null
 

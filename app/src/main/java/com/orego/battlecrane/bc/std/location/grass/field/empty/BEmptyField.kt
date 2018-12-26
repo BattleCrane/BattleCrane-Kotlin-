@@ -6,5 +6,8 @@ import com.orego.battlecrane.bc.std.location.grass.field.BField
 
 class BEmptyField(context: BGameContext) : BField(context) {
 
-    override fun isPlaced(position: BPoint) = true
+    override fun isPlaced(
+        context: BGameContext,
+        position: BPoint
+    ) = true
 }

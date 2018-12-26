@@ -1,13 +1,11 @@
 package com.orego.battlecrane.bc.api.context.playerManager.player.adjutant;
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
-import com.orego.battlecrane.bc.api.model.action.BAction
 
 abstract class BAdjutant(
     protected val context: BGameContext,
-    protected val owner: BPlayer,
-    protected val bonusFactories: MutableSet<BAction.Factory>
+    protected val ownerId: Long,
+    protected val bonusFactories: MutableSet<Long>
 ) {
 
     open val resourceManager = ResourceManager()
@@ -24,9 +22,9 @@ abstract class BAdjutant(
 
         var receivedInfluenceCount = 0
 
-        val buildingActions = mutableSetOf<BAction>()
+        val buildingActions = mutableSetOf<Long>()
 
-        val trainActions = mutableSetOf<BAction>()
+        val trainActions = mutableSetOf<Long>()
     }
 
     /**
@@ -35,8 +33,8 @@ abstract class BAdjutant(
 
     abstract class Builder {
 
-        val bonusFactories = mutableSetOf<BAction.Factory>()
+        val bonusFactories = mutableSetOf<Long>()
 
-        abstract fun build(context: BGameContext, owner: BPlayer): BAdjutant
+        abstract fun build(context: BGameContext, owner: Long): BAdjutant
     }
 }

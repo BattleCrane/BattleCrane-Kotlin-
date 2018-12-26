@@ -1,7 +1,6 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
@@ -23,8 +22,11 @@ class BActionNode(context: BGameContext) : BNode(context) {
     }
 
     override fun handle(event: BEvent): BEvent? {
-        return if (event.bundle is BActionPipe.ActionBundle) {
-            this.pipeMap.values.forEach { it.push(event) }
+        return if (event is BActionPipe.ActionEvent) {
+            val pipes = this.pipeMap.values.toList()
+            for (i in 0 until pipes.size) {
+                pipes[i].push(event)
+            }
             event
         } else {
             null

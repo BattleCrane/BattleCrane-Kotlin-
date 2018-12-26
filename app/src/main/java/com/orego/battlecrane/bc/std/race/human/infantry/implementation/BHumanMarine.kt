@@ -1,6 +1,11 @@
 package com.orego.battlecrane.bc.std.race.human.infantry.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.BOnCreateActionPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.BOnProduceEnablePipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.node.pipe.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.action.BAction
@@ -9,6 +14,7 @@ import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BTargetable
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
+import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.infantry.BHumanInfantry
 
 open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, owner),
@@ -42,24 +48,10 @@ open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, 
     final override var isAttackEnable = false
 
     /**
-     * Observers.
-     */
-
-    final override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
-
-    final override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
-
-    final override val damageObserver: MutableMap<Long, BAttackable.DamageListener> = mutableMapOf()
-
-    final override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
-
-    final override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
-
-    /**
      * Unit.
      */
 
-    override fun isPlaced(position: BPoint) = position.attachedUnit is BEmptyField
+    override fun isPlaced(context: BGameContext, position: BPoint) = position.attachedUnit is BEmptyField
 
     /**
      * Lifecycle.
@@ -81,7 +73,7 @@ open class BHumanMarine(context: BGameContext, owner: BPlayer) : BUnit(context, 
         }
     }
 
-    inner class Attack : BAction(this.context, this.owner), BTargetable {
+    inner class Attack : BAction(this.context, this.ownerId), BTargetable {
 
         override var targetPosition: BPoint? = null
 

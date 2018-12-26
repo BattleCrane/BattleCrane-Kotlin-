@@ -1,5 +1,6 @@
 package com.orego.battlecrane.bc.api.context.mapManager;
 
+import android.content.Context;
 import com.orego.battlecrane.bc.api.context.BGameContext;
 import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint;
 import com.orego.battlecrane.bc.api.model.unit.BUnit;
@@ -16,6 +17,8 @@ public final class BMapManager {
 
     private final Map<Long, BUnit> unitHeap = new HashMap<>();
 
+    private final BGameContext context;
+
     public BMapManager(final BGameScenario scenario, final BGameContext context) {
         for (int i = 0; i < MAP_SIZE; i++) {
             for (int j = 0; j < MAP_SIZE; j++) {
@@ -24,6 +27,7 @@ public final class BMapManager {
             }
         }
         scenario.initMap(this, context);
+        this.context = context;
     }
 
     public final boolean createUnit(final BUnit unit, final BPoint pivot) {
@@ -35,14 +39,14 @@ public final class BMapManager {
                 && this.inBounds(startX, endY)
                 && this.inBounds(endX, startY)
                 && this.inBounds(endX, endY)) {
-            if (unit.isPlaced(pivot)) {
+            if (unit.isPlaced(this.context, pivot)) {
                 //Attach pivot to entity:
                 unit.setPivot(this.matrix[startX][startY]);
                 //Attach entity to matrix:
                 for (int i = startX; i < endX; i++) {
                     for (int j = startY; j < endY; j++) {
                         final BPoint point = BMapManager.this.matrix[i][j];
-                        point.setAttachedUnit(unit);
+                        point.setAttachedUnit(unit.getUnitId());
                     }
                 }
                 //Put in heap:
@@ -67,11 +71,8 @@ public final class BMapManager {
     }
 
     public final BUnit getUnitByPosition(final int x, final int y) {
-        return this.matrix[x][y].getAttachedUnit();
-    }
-
-    public final boolean hasBoundUnit(final int x, final int y) {
-        return this.matrix[x][y].getAttachedUnit() != null;
+        final long unitId = this.matrix[x][y].getAttachedUnit();
+        return this.unitHeap.get(unitId);
     }
 
     /**

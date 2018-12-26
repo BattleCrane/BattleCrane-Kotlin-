@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoint.BHitPoin
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.level.BLevelPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.BProducePipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.BUnitPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.util.EventUtil
+import java.lang.IllegalStateException
 
 class BEventPipeline(context: BGameContext) {
 
@@ -18,7 +18,7 @@ class BEventPipeline(context: BGameContext) {
 
     private val eventQueue = mutableListOf<BEvent>()
 
-    private val pipeMap = mutableMapOf<String, BPipe>()
+    private val pipeMap = mutableMapOf<Long, BPipe>()
 
     /**
      * Adds root pipes:
@@ -34,44 +34,48 @@ class BEventPipeline(context: BGameContext) {
     }
 
     fun pushEvent(event: BEvent?) {
-        if (EventUtil.isValid(event)) {
+        if (event != null) {
             if (!this.isWorking) {
                 this.isWorking = true
-                this.pipeMap.values.forEach { it.push(event) }
+                val pipes = this.pipeMap.values.toList()
+                for (i in 0 until pipes.size) {
+                    pipes[i].push(event)
+                }
                 this.isWorking = false
                 if (!this.eventQueue.isEmpty()) {
                     val nextEvent = this.eventQueue.removeAt(0)
                     this.pushEvent(nextEvent)
                 }
             } else {
-                this.eventQueue.add(event!!)
+                this.eventQueue.add(event)
             }
         }
     }
 
     fun connectPipe(pipe: BPipe) {
-        this.pipeMap[pipe.name] = pipe
+        this.pipeMap[pipe.id] = pipe
     }
 
-    fun findNode(name: String): BNode? {
-        for (pipe in this.pipeMap.values) {
-            val node = pipe.findNode(name)
-            if (node != null) {
-                return node
-            }
-        }
-        return null
-    }
-
-    fun findPipe(name: String): BPipe? {
+    fun findPipe(name: String): BPipe {
         for (pipe in this.pipeMap.values) {
             val result = pipe.findPipe(name)
             if (result != null) {
                 return result
             }
         }
-        return null
+        throw IllegalStateException("Pipe not found!")
     }
 
-    operator fun get(name: String) = this.pipeMap[name]
+    fun findNode(name: String): BNode {
+        for (pipe in this.pipeMap.values) {
+            val node = pipe.findNode(name)
+            if (node != null) {
+                return node
+            }
+        }
+        throw IllegalStateException("Node not found!")
+    }
+
+    operator fun get(name: String) = this.pipeMap.values
+        .find { it.name == name }
 }
