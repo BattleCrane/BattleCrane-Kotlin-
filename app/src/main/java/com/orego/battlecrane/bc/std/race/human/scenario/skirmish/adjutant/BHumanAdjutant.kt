@@ -6,14 +6,13 @@ import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.node.BOnCreateActionNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onPerform.node.BOnPerformActionNode
-import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BProducable
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanBarracks
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanFactory
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
 
 class BHumanAdjutant(
     context: BGameContext, owner: Long, bonusFactories: MutableSet<BAction.Factory>

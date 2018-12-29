@@ -1,8 +1,13 @@
 package com.orego.battlecrane.bc.api.bot
 
-import com.orego.battlecrane.bc.api.model.action.BAction
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 
 interface BBot {
 
-    fun calc(): List<BAction>
+    /**
+     * Calculates turn.
+     */
+
+    fun calc(context: BGameContext): List<BEvent>
 }

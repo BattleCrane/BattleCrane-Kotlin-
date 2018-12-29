@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.action.BAction
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.ui.model.api.modeController.BClickMode
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView

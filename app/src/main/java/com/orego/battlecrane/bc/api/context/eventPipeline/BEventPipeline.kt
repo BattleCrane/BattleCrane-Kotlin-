@@ -78,4 +78,8 @@ class BEventPipeline(context: BGameContext) {
 
     operator fun get(name: String) = this.pipeMap.values
         .find { it.name == name }
+
+    fun bindPipeTo(nodeName: String, pipe: BPipe) {
+        this.findNode(nodeName).connectPipe(pipe)
+    }
 }

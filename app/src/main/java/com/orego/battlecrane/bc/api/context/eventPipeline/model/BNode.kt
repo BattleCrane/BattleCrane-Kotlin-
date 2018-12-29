@@ -4,14 +4,14 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.util.BIdGenerator
 
 /**
- * Handles events.
+ * Handles game events.
  */
 
 abstract class BNode(protected val context: BGameContext) {
 
     val id = BIdGenerator.generateNodeId()
 
-    open val name: String = ""
+    open val name: String? = null
 
     protected val pipeMap = mutableMapOf<Long, BPipe>()
 

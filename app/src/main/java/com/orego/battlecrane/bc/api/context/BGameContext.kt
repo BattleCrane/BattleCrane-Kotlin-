@@ -2,8 +2,13 @@ package com.orego.battlecrane.bc.api.context
 
 import com.orego.battlecrane.bc.api.context.mapManager.BMapManager
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.playerManager.BPlayerManager
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
+
+/**
+ * Game.
+ */
 
 class BGameContext(scenario: BGameScenario) {
 
@@ -20,12 +25,23 @@ class BGameContext(scenario: BGameScenario) {
     val playerManager = BPlayerManager(scenario, this)
 
     /**
-     * Secondly -- map manager.
+     * Map manager.
      */
 
     val mapManager = BMapManager(scenario, this)
 
+    /**
+     * Launch a game.
+     */
+
     fun startGame() {
-        this.playerManager.onGameStarted()
+        val event = StartGameEvent()
+        this.pipeline.pushEvent(event)
     }
+
+    class StartGameEvent : BEvent()
+
+    class EndGameEvent : BEvent()
+
+
 }

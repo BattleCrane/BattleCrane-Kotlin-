@@ -9,13 +9,13 @@ class BOnTurnStartedNode(context: BGameContext) : BNode(context) {
 
     companion object {
 
-        const val NAME = "${BOnTurnStartedPipe.NAME}/ON_TURN_STARTED_NODE"
+        const val NAME = "TURN_STARTED_NODE"
     }
 
     override val name = NAME
 
     override fun handle(event: BEvent) : BEvent? {
-        return if (event.bundle is BOnTurnStartedPipe.OnTurnStartedBundle) {
+        return if (event is BOnTurnStartedPipe.TurnStartedEvent) {
             this.pipeMap.values.forEach { it.push(event) }
             event
         } else {

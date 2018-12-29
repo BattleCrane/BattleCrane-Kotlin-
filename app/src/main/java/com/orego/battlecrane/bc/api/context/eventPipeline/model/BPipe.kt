@@ -14,7 +14,7 @@ open class BPipe(
 
     val id = BIdGenerator.generatePipeId()
 
-    open val name: String = ""
+    open val name: String? = null
 
     fun push(any: BEvent?) {
         val startPosition = 0

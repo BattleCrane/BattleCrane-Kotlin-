@@ -3,7 +3,7 @@ package com.orego.battlecrane.ui.model.std.view.race.human.unit.building
 import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.unit.BUnit
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanFactory
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.byAssets

@@ -2,13 +2,11 @@ package com.orego.battlecrane.ui.model.std.view.race.human.action.vehicle
 
 import android.content.Context
 import android.widget.ImageView
-import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.action.BAction
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanFactory
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.byAssets
-import com.orego.battlecrane.ui.util.byResource
 
 class BHumanTrainTankLvl3View(
     action: BHumanFactory.TrainTankLvl3Factory.Action, dimension: Int, context: Context

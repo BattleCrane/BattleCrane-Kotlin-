@@ -4,6 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
+import com.orego.battlecrane.bc.api.context.turnManager.BTurnManager
 
 class BOnTurnFinishedNode(context: BGameContext) : BNode(context) {
 
@@ -15,7 +16,7 @@ class BOnTurnFinishedNode(context: BGameContext) : BNode(context) {
     override val name = NAME
 
     override fun handle(event: BEvent) : BEvent? {
-        return if (event.bundle is BOnTurnFinishedPipe.OnTurnFinishedBundle) {
+        return if (event is BOnTurnFinishedPipe.TurnFinishedEvent) {
             this.pipeMap.values.forEach { it.push(event) }
             event
         } else {

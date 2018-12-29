@@ -12,12 +12,12 @@ class BOnTurnStartedPipe(context: BGameContext) : BPipe(context) {
 
     companion object {
 
-        const val NAME = "${BTurnNode.NAME}/ON_TURN_STARTED_PIPE"
+        const val NAME = "TURN_STARTED_PIPE"
     }
 
     override val name = NAME
 
     override val nodes = mutableListOf<BNode>(BOnTurnStartedNode(context))
 
-    open class OnTurnStartedBundle(val player : BPlayer) : BTurnPipe.TurnBundle()
+    open class TurnStartedEvent : BTurnPipe.TurnEvent()
 }

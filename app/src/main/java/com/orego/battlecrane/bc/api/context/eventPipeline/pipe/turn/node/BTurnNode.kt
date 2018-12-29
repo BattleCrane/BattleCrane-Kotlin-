@@ -22,7 +22,7 @@ class BTurnNode(context: BGameContext) : BNode(context) {
     }
 
     override fun handle(event: BEvent) : BEvent? {
-        return if (event.bundle is BTurnPipe.TurnBundle) {
+        return if (event is BTurnPipe.TurnEvent) {
             this.pipeMap.values.forEach { it.push(event) }
             event
         } else {

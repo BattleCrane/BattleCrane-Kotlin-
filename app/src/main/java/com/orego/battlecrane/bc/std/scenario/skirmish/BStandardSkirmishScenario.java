@@ -6,8 +6,8 @@ import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer;
 import com.orego.battlecrane.bc.api.model.unit.BUnit;
 import com.orego.battlecrane.bc.api.scenario.BGameScenario;
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField;
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters;
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanWall;
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters;
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall;
 import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BHumanAdjutant;
 import org.jetbrains.annotations.NotNull;
 

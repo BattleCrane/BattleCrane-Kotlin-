@@ -10,5 +10,5 @@ interface BProducable {
      * Send actions to pipeline.
      */
 
-    fun produceUnits(pipeline: BEventPipeline)
+    fun produceAbilities(pipeline: BEventPipeline)
 }

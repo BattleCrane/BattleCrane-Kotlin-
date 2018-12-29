@@ -2,13 +2,11 @@ package com.orego.battlecrane.ui.model.std.view.race.human.action.building
 
 import android.content.Context
 import android.widget.ImageView
-import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.model.action.BAction
-import com.orego.battlecrane.bc.std.race.human.building.implementation.BHumanHeadquarters
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.byAssets
-import com.orego.battlecrane.ui.util.byResource
 
 class BHumanBuildWallView(action: BHumanHeadquarters.BuildWallFactory.Action, dimension: Int, context: Context) :
     BActionView(action) {
