@@ -1,9 +1,9 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
-import com.orego.battlecrane.bc.api.model.action.BAction
+import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
+import com.orego.battlecrane.bc.api.model.player.BPlayer
+import com.orego.battlecrane.bc.api.model.contract.BAction
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BLevelable
 import com.orego.battlecrane.bc.api.model.contract.BProducable

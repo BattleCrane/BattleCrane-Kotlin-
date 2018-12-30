@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.std.location.grass.field
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.api.model.contract.BUnit
 
 abstract class BField(context: BGameContext) : BUnit(context) {
 

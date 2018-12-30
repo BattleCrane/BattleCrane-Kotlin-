@@ -12,6 +12,8 @@ object BIdGenerator {
 
     private var pipeIdConter : Long = 0
 
+    private var attackableIdCounter: Long = 0
+
     fun generateUnitId() = this.unitIdCounter++
 
     fun generateActionId() = this.actionIdCounter++
@@ -21,4 +23,6 @@ object BIdGenerator {
     fun generatePipeId() = this.pipeIdConter++
 
     fun generateNodeId() = this.nodeIdCounter++
+
+    fun generateAttackableId() = this.attackableIdCounter++
 }

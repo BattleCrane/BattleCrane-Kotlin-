@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
+import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.BHumanUnit
 

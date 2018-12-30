@@ -4,14 +4,16 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.attack.BAttackPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.hitPoint.BHitPointPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.level.BLevelPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.BProducePipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.BUnitPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.action.BActionPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.attack.BAttackPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.hitPoint.BHitPointPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.level.BLevelPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.produce.BProducePipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.unit.BUnitPipe
 import java.lang.IllegalStateException
 
+@BContextComponent
 class BEventPipeline(context: BGameContext) {
 
     private var isWorking = false

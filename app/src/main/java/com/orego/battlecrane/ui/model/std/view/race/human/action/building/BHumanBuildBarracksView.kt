@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.model.std.view.race.human.action.building
 
 import android.content.Context
 import android.widget.ImageView
-import com.orego.battlecrane.bc.api.model.action.BAction
+import com.orego.battlecrane.bc.api.model.contract.BAction
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.ui.model.api.modeController.BClickMode

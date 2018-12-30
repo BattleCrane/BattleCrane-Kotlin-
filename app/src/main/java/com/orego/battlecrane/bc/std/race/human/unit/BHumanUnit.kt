@@ -3,10 +3,10 @@ package com.orego.battlecrane.bc.std.race.human.unit
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.annotation.unitComponent.BUnitComponent
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
-import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.component.unit.BUnitComponent
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.model.contract.BUnit
 import com.orego.battlecrane.bc.std.race.human.BHumanRace
 
 abstract class BHumanUnit(context: BGameContext, ownerId: Long) : BUnit(ownerId), BHumanRace {

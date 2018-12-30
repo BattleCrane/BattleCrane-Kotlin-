@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.model.std.view.race.human.unit.vehicle
 
 import android.content.Context
 import android.widget.ImageView
-import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.api.model.contract.BUnit
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.BHumanTank
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView

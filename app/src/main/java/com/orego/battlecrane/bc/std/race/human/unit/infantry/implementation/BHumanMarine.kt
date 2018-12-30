@@ -4,13 +4,13 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.annotation.BPlayerComponent
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.unit.node.pipe.BOnCreateUnitPipe
-import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.model.action.BAction
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.unit.node.pipe.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
+import com.orego.battlecrane.bc.api.model.contract.BAction
 import com.orego.battlecrane.bc.api.model.contract.BAttackable
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
 import com.orego.battlecrane.bc.api.model.contract.BTargetable
-import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.api.model.contract.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanInfantry
 

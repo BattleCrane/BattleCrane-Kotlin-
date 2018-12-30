@@ -1,12 +1,12 @@
 package com.orego.battlecrane.bc.api.model.contract
 
-import com.orego.battlecrane.bc.api.model.action.BAction
-
 interface BAttackable {
+
+    val attackableId: Long
 
     var damage: Int
 
-    var isAttackEnable : Boolean
+    var isAttackEnable: Boolean
 
-    fun getAttackAction() : BAction?
+    fun getAttackAction(): BAction?
 }

@@ -1,9 +1,9 @@
 package com.orego.battlecrane.ui.model.api.render.action
 
 import android.content.Context
-import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.context.playerManager.BPlayerManager
-import com.orego.battlecrane.bc.api.model.action.BAction
+import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
+import com.orego.battlecrane.bc.api.context.controller.player.BPlayerController
+import com.orego.battlecrane.bc.api.model.contract.BAction
 import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.addView
@@ -81,14 +81,14 @@ abstract class BPrimaryActionViewRender : BActionViewRender(COLUMN_COUNT, ROW_CO
     }
 }
 
-class BTrainViewRender(private val playerManager: BPlayerManager) : BPrimaryActionViewRender() {
+class BTrainViewRender(private val playerController: BPlayerController) : BPrimaryActionViewRender() {
 
     override val stack: Set<BAction>
-        get() = this.playerManager.currentPlayerId.adjutant.resourceManager.trainActions
+        get() = this.playerController.currentPlayerId.adjutant.resourceManager.trainActions
 }
 
-class BBuildViewRender(private val playerManager: BPlayerManager) : BPrimaryActionViewRender() {
+class BBuildViewRender(private val playerController: BPlayerController) : BPrimaryActionViewRender() {
 
     override val stack: Set<BAction>
-        get() = this.playerManager.currentPlayerId.adjutant.resourceManager.buildingActions
+        get() = this.playerController.currentPlayerId.adjutant.resourceManager.buildingActions
 }

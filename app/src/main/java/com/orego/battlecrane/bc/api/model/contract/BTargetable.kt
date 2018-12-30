@@ -1,6 +1,6 @@
 package com.orego.battlecrane.bc.api.model.contract
 
-import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
+import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 
 interface BTargetable {
 

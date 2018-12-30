@@ -2,6 +2,8 @@ package com.orego.battlecrane.bc.api.model.contract
 
 interface BHitPointable {
 
+    val hitPointableId: Long
+
     var currentHitPoints: Int
 
     var maxHitPoints: Int

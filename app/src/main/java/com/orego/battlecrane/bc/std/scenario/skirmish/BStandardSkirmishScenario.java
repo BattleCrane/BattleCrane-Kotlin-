@@ -1,9 +1,9 @@
 package com.orego.battlecrane.bc.std.scenario.skirmish;
 
 import com.orego.battlecrane.bc.api.context.BGameContext;
-import com.orego.battlecrane.bc.api.context.mapManager.BMapManager;
-import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer;
-import com.orego.battlecrane.bc.api.model.unit.BUnit;
+import com.orego.battlecrane.bc.api.context.controller.map.BMapController;
+import com.orego.battlecrane.bc.api.model.player.BPlayer;
+import com.orego.battlecrane.bc.api.model.contract.BUnit;
 import com.orego.battlecrane.bc.api.scenario.BGameScenario;
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField;
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.orego.battlecrane.bc.api.context.mapManager.BMapManager.MAP_SIZE;
+import static com.orego.battlecrane.bc.api.context.controller.map.BMapController.MAP_SIZE;
 
 public final class BStandardSkirmishScenario implements BGameScenario {
 
@@ -42,7 +42,7 @@ public final class BStandardSkirmishScenario implements BGameScenario {
 
     @Override
     public final void initMap(
-            @NotNull final BMapManager.BMapHolder mapHolder,
+            @NotNull final BMapController.BMapHolder mapHolder,
             @NotNull final BGameContext context
     ) {
         //Fill startTurn player stackPosition:

@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.model.std.view.race.human.action.infantry
 
 import android.content.Context
 import android.widget.ImageView
-import com.orego.battlecrane.bc.api.model.action.BAction
+import com.orego.battlecrane.bc.api.model.contract.BAction
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
 import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView

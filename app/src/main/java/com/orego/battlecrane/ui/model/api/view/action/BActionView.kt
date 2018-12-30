@@ -1,7 +1,7 @@
 package com.orego.battlecrane.ui.model.api.view.action
 
-import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
-import com.orego.battlecrane.bc.api.model.action.BAction
+import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
+import com.orego.battlecrane.bc.api.model.contract.BAction
 import com.orego.battlecrane.ui.model.api.modeController.BClickMode
 import com.orego.battlecrane.ui.model.api.view.BView
 

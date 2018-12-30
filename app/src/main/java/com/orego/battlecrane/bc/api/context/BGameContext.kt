@@ -1,34 +1,40 @@
 package com.orego.battlecrane.bc.api.context
 
-import com.orego.battlecrane.bc.api.context.mapManager.BMapManager
+import com.orego.battlecrane.bc.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.playerManager.BPlayerManager
+import com.orego.battlecrane.bc.api.context.eventPipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.storage.BStorage
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 
 /**
  * Game.
  */
 
+@BContextComponent
 class BGameContext(scenario: BGameScenario) {
 
     /**
      * Pipeline.
      */
 
+    @BContextComponent
     val pipeline = BEventPipeline(this)
-
-    /**
-     * Player manager.
-     */
-
-    val playerManager = BPlayerManager(scenario, this)
 
     /**
      * Map manager.
      */
 
-    val mapManager = BMapManager(scenario, this)
+    @BContextComponent
+    val mapManager = BMapController(scenario, this)
+
+
+    /**
+     * Storage.
+     */
+
+    @BContextComponent
+    val storage = BStorage(scenario, this)
 
     /**
      * Launches a game.

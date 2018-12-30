@@ -1,7 +1,7 @@
 package com.orego.battlecrane.ui.model.api.render.unit
 
-import com.orego.battlecrane.bc.api.context.mapManager.BMapManager.MAP_SIZE
-import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.api.context.controller.map.BMapController.MAP_SIZE
+import com.orego.battlecrane.bc.api.model.contract.BUnit
 import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.addView
@@ -28,7 +28,7 @@ class BUnitViewRender(private val units: Map<Long, BUnit>) : BViewRender<BUnit, 
     private val actualUnitViewMap = mutableMapOf<Long, BUnitView>()
 
     /**
-     * Added only NEW & remove only OLD unit views.
+     * Added only NEW & removeObject only OLD unit views.
      */
 
     override fun draw() {

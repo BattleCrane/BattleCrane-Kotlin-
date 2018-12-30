@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bc.api.context.playerManager.BPlayerManager
-import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
-import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
+import com.orego.battlecrane.bc.api.context.controller.player.BPlayerController
+import com.orego.battlecrane.bc.api.model.player.BPlayer
+import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BHumanAdjutant
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.model.api.modeController.BClickController
@@ -166,7 +166,7 @@ class BBattleFragment : BFragment() {
             }
 
             fun init() {
-                this@Presenter.gameContext.playerManager.addOnTurnListener(object : BPlayerManager.TurnListener {
+                this@Presenter.gameContext.playerManager.addOnTurnListener(object : BPlayerController.TurnListener {
 
                     override fun onTurnStarted(player: BPlayer) {
                         val racePaths = this@RaceToolController.racePathMap[player.adjutant::class.java]!!
