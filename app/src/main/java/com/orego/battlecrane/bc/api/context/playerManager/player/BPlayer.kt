@@ -6,7 +6,9 @@ import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.annotation.playerComponent.BPlayerComponent
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
 import com.orego.battlecrane.bc.api.context.playerManager.player.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.util.BIdGenerator
 import java.util.*
@@ -30,14 +32,42 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
      * Context.
      */
 
-    var onTurnStartedPipeId : Long = 0
+    var onTurnStartedPipeId: Long
 
-    var onTurnFinishedPipeId : Long = 0
-
-    var turnTimerPipeId : Long = 0
+    var onTurnStartedNodeId : Long
+    
+    var onTurnFinishedPipeId: Long
+    
+    var onTurnFinishedNodeId :Long
+    
+    var turnTimerPipeId : Long
+    
+    var turnTimerNodeId : Long
 
     init {
-
+        //Get pipeline:
+        val pipeline = context.pipeline
+        //Configure pipeline:
+        //Turn timer:
+        val turnTimerNode = TurnTimerNode(context, this.id)
+        val turnTimerPipe = turnTimerNode.wrapInPipe()
+        //On turn started:
+        val onTurnStartedNode = OnTurnStartedNode(context, this.id)
+        onTurnStartedNode.connectInnerPipe(turnTimerPipe)
+        val onTurnStartedPipe = onTurnStartedNode.wrapInPipe()
+        //On turn finished:
+        val onTurnFinishedNode = OnTurnFinishedNode(context, this.id)
+        val onTurnFinishedPipe = onTurnFinishedNode.wrapInPipe()
+        //Save pipe ids:
+        this.onTurnStartedPipeId = onTurnStartedPipe.id
+        this.onTurnStartedNodeId = onTurnStartedNode.id 
+        this.onTurnFinishedPipeId = onTurnFinishedPipe.id
+        this.onTurnFinishedNodeId = onTurnFinishedNode.id
+        this.turnTimerPipeId = turnTimerPipe.id
+        this.turnTimerNodeId = turnTimerNode.id
+        //Bind pipes:
+        pipeline.bindPipeToNode(BOnTurnStartedNode.NAME, onTurnStartedPipe)
+        pipeline.bindPipeToNode(BOnTurnFinishedNode.NAME, onTurnFinishedPipe)
     }
 
     /**
@@ -57,18 +87,30 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
     fun isAlly(player: Long) = this.allies.contains(player)
 
     @BPlayerComponent
-    class OnTurnStarted(context: BGameContext, var ownerId: Long) : BNode(context) {
+    class OnTurnStartedNode(context: BGameContext, var playerId: Long) : BNode(context) {
 
         override fun handle(event: BEvent): BEvent? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            return if (event is BOnTurnStartedPipe.OnTurnStartedEvent
+                && event.ownerId == this.playerId
+            ) {
+                event.also { this.pushEventIntoPipes(it) }
+            } else {
+                null
+            }
         }
     }
 
     @BPlayerComponent
-    class OnTurnFinished(context: BGameContext, var ownerId: Long) : BNode(context) {
+    class OnTurnFinishedNode(context: BGameContext, var playerId: Long) : BNode(context) {
 
         override fun handle(event: BEvent): BEvent? {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            return if (event is BOnTurnFinishedPipe.OnTurnFinishedEvent
+                && event.ownerId == this.playerId
+            ) {
+                event.also { this.pushEventIntoPipes(it) }
+            } else {
+                null
+            }
         }
     }
 

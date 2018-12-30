@@ -74,10 +74,10 @@ class BHumanAdjutant(
             val pipeline = this@BHumanAdjutant.context.pipeline
             val actionPipe = pipeline.findPipe(BActionPipe.NAME)!!
             actionPipe
-                .findPipe(BOnCreateActionNode.DEFAULT_PIPE_NAME)!!
+                .findPipeBy(BOnCreateActionNode.DEFAULT_PIPE_NAME)!!
                 .placeNode(OnActionCreatedNode())
             actionPipe
-                .findPipe(BOnPerformActionNode.DEFAULT_PIPE_NAME)!!
+                .findPipeBy(BOnPerformActionNode.DEFAULT_PIPE_NAME)!!
                 .placeNode(OnActionPerformedNode())
         }
 

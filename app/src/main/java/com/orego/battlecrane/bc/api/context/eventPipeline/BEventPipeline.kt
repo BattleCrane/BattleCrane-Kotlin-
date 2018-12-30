@@ -25,12 +25,12 @@ class BEventPipeline(context: BGameContext) {
      */
 
     init {
-        this.connectPipe(BUnitPipe(context))
-        this.connectPipe(BActionPipe(context))
-        this.connectPipe(BAttackPipe(context))
-        this.connectPipe(BHitPointPipe(context))
-        this.connectPipe(BLevelPipe(context))
-        this.connectPipe(BProducePipe(context))
+        this.connectInnerPipe(BUnitPipe(context))
+        this.connectInnerPipe(BActionPipe(context))
+        this.connectInnerPipe(BAttackPipe(context))
+        this.connectInnerPipe(BHitPointPipe(context))
+        this.connectInnerPipe(BLevelPipe(context))
+        this.connectInnerPipe(BProducePipe(context))
     }
 
     fun pushEvent(event: BEvent?) {
@@ -52,13 +52,18 @@ class BEventPipeline(context: BGameContext) {
         }
     }
 
-    fun connectPipe(pipe: BPipe) {
+    fun connectInnerPipe(pipe: BPipe) {
         this.pipeMap[pipe.id] = pipe
     }
 
-    fun findPipe(name: String): BPipe {
-        for (pipe in this.pipeMap.values) {
-            val result = pipe.findPipe(name)
+    fun findPipe(name: String) = this.findPipeBy { it.name == name }
+
+    fun findPipe(id: Long) = this.findPipeBy { it.id == id }
+
+    fun findPipeBy(condition: (BPipe) -> Boolean): BPipe {
+        val pipes = this.pipeMap.values.toList()
+        for (i in 0 until pipes.size) {
+            val result = pipes[i].findPipeBy(condition)
             if (result != null) {
                 return result
             }
@@ -66,9 +71,14 @@ class BEventPipeline(context: BGameContext) {
         throw IllegalStateException("Pipe not found!")
     }
 
-    fun findNode(name: String): BNode {
-        for (pipe in this.pipeMap.values) {
-            val node = pipe.findNode(name)
+    fun findNode(name: String) = this.findNodeBy { it.name == name }
+
+    fun findNode(id: Long) = this.findNodeBy { it.id == id }
+
+    fun findNodeBy(condition: (BNode) -> Boolean): BNode {
+        val pipes = this.pipeMap.values.toList()
+        for (i in 0 until pipes.size) {
+            val node = pipes[i].findNodeBy(condition)
             if (node != null) {
                 return node
             }
@@ -76,10 +86,11 @@ class BEventPipeline(context: BGameContext) {
         throw IllegalStateException("Node not found!")
     }
 
-    operator fun get(name: String) = this.pipeMap.values
-        .find { it.name == name }
+    fun bindPipeToNode(nodeName: String, pipe: BPipe) {
+        this.findNode(nodeName).connectInnerPipe(pipe)
+    }
 
-    fun bindPipeTo(nodeName: String, pipe: BPipe) {
-        this.findNode(nodeName).connectPipe(pipe)
+    fun bindPipeToNode(nodeId: Long, pipe: BPipe) {
+        this.findNode(nodeId).connectInnerPipe(pipe)
     }
 }

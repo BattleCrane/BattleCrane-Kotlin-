@@ -17,8 +17,8 @@ class BActionNode(context: BGameContext) : BNode(context) {
     override val name = NAME
 
     init {
-        this.connectPipe(BOnCreateActionPipe(context))
-        this.connectPipe(BOnPerformActionPipe(context))
+        this.connectInnerPipe(BOnCreateActionPipe(context))
+        this.connectInnerPipe(BOnPerformActionPipe(context))
     }
 
     override fun handle(event: BEvent): BEvent? {

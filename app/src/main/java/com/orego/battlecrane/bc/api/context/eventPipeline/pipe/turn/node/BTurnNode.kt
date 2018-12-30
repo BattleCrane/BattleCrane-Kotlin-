@@ -17,8 +17,8 @@ class BTurnNode(context: BGameContext) : BNode(context) {
     override val name = NAME
 
     init {
-        this.connectPipe(BOnTurnStartedPipe(context))
-        this.connectPipe(BOnTurnFinishedPipe(context))
+        this.connectInnerPipe(BOnTurnStartedPipe(context))
+        this.connectInnerPipe(BOnTurnFinishedPipe(context))
     }
 
     override fun handle(event: BEvent): BEvent? {

@@ -9,7 +9,7 @@ class BOnTurnStartedNode(context: BGameContext) : BNode(context) {
 
     companion object {
 
-        const val NAME = "TURN_STARTED_NODE"
+        const val NAME = "ON_TURN_STARTED_NODE"
     }
 
     override val name = NAME

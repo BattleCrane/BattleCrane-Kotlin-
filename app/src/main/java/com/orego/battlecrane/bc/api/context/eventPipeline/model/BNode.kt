@@ -17,16 +17,17 @@ abstract class BNode(protected val context: BGameContext) {
 
     abstract fun handle(event: BEvent): BEvent?
 
-    open fun connectPipe(pipe: BPipe) {
+    open fun connectInnerPipe(pipe: BPipe) {
         this.pipeMap[pipe.id] = pipe
     }
 
-    fun findNode(name: String): BNode? {
-        if (this.name == name) {
+    fun findNodeBy(condition: (BNode) -> Boolean): BNode? {
+        if (condition(this)) {
             return this
         } else {
-            for (pipe in this.pipeMap.values) {
-                val result = pipe.findNode(name)
+            val pipes = this.pipeMap.values.toList()
+            for (i in 0 until pipes.size) {
+                val result = pipes[i].findNodeBy(condition)
                 if (result != null) {
                     return result
                 }
@@ -35,9 +36,10 @@ abstract class BNode(protected val context: BGameContext) {
         }
     }
 
-    fun findPipe(name: String): BPipe? {
-        for (pipe in this.pipeMap.values) {
-            val result = pipe.findPipe(name)
+    fun findPipeBy(condition: (BPipe) -> Boolean): BPipe? {
+        val pipes = this.pipeMap.values.toList()
+        for (i in 0 until pipes.size) {
+            val result = pipes[i].findPipeBy(condition)
             if (result != null) {
                 return result
             }
@@ -45,9 +47,11 @@ abstract class BNode(protected val context: BGameContext) {
         return null
     }
 
-    protected fun pushEventIntoPipes(event : BEvent) {
+    fun wrapInPipe() = BPipe(this.context, mutableListOf(this))
+
+    protected fun pushEventIntoPipes(event: BEvent) {
         val pipes = this.pipeMap.values.toList()
-        val size  = pipes.size
+        val size = pipes.size
         for (i in 0 until size) {
             pipes[i].push(event)
         }

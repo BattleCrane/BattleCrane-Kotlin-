@@ -11,7 +11,7 @@ class BOnTurnFinishedPipe(context: BGameContext) : BPipe(context) {
 
     companion object {
 
-        const val NAME = "${BTurnNode.NAME}/ON_TURN_FINISHED_PIPE"
+        const val NAME = "ON_TURN_FINISHED_PIPE"
     }
 
     override val name = NAME

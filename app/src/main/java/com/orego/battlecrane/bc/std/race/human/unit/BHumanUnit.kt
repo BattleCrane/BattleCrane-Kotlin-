@@ -3,37 +3,42 @@ package com.orego.battlecrane.bc.std.race.human.unit
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.annotation.unitComponent.BUnitComponent
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.BHumanRace
 
 abstract class BHumanUnit(context: BGameContext, ownerId: Long) : BUnit(ownerId), BHumanRace {
 
-    protected val onTurnStartedPipeId: Long
+    var onTurnStartedPipeId: Long
 
-    protected val onTurnFinishedPipeId: Long
+    var onTurnStartedNodeId : Long
+
+    var onTurnFinishedPipeId: Long
+
+    var onTurnFinishedNodeId : Long
 
     init {
         //Get pipeline:
         val pipeline = context.pipeline
-        //Create pipes:
-        val onTurnStartedPipe = BPipe(
-            context, mutableListOf(OnTurnStartedNode(context, ownerId, this.unitId))
-        )
-        val onTurnFinishedPipe = BPipe(
-            context, mutableListOf(OnTurnFinishedNode(context, ownerId, this.unitId))
-        )
+        //On turn started:
+        val onTurnStartedNode = OnTurnStartedNode(context, ownerId, this.unitId)
+        val onTurnStartedPipe = onTurnStartedNode.wrapInPipe()
+        //On turn finished:
+        val onTurnFinishedNode = OnTurnFinishedNode(context, ownerId, this.unitId)
+        val onTurnFinishedPipe = onTurnFinishedNode.wrapInPipe()
         //Save pipe ids:
         this.onTurnStartedPipeId = onTurnStartedPipe.id
+        this.onTurnStartedNodeId = onTurnStartedNode.id
         this.onTurnFinishedPipeId = onTurnFinishedPipe.id
+        this.onTurnFinishedNodeId = onTurnFinishedNode.id
         //Bind pipes:
-        pipeline.bindPipeTo(BOnTurnStartedNode.NAME, onTurnStartedPipe)
-        pipeline.bindPipeTo(BOnTurnFinishedNode.NAME, onTurnFinishedPipe)
+        val player = context.playerManager.getPlayerById(ownerId)
+        val onPlayerTurnStartedNodeId = player.onTurnStartedNodeId
+        val onPlayerTurnFinishedNodeId = player.onTurnFinishedNodeId
+        pipeline.bindPipeToNode(onPlayerTurnStartedNodeId, onTurnStartedPipe)
+        pipeline.bindPipeToNode(onPlayerTurnFinishedNodeId, onTurnFinishedPipe)
     }
 
     @BUnitComponent

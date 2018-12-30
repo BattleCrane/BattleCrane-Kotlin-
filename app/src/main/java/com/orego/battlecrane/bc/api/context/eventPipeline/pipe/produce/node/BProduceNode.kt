@@ -16,7 +16,7 @@ class BProduceNode(context: BGameContext) : BNode(context) {
     override val name = NAME
 
     init {
-        this.connectPipe(BOnProduceEnablePipe(context))
+        this.connectInnerPipe(BOnProduceEnablePipe(context))
     }
 
     override fun handle(event: BEvent) : BEvent? {

@@ -22,19 +22,17 @@ class BOnTurnFinishedNode(context: BGameContext) : BNode(context) {
             //Make broadcast for each pipes:
             this.pushEventIntoPipes(event)
             //Switch player:
-            this.context.apply {
-                val nextPlayerId = this@BOnTurnFinishedNode.setNextAblePlayer(this.playerManager)
-                this.pipeline.pushEvent(
-                    BOnTurnStartedPipe.OnTurnStartedEvent(nextPlayerId)
-                )
-            }
+            val playerManager = this.context.playerManager
+            val nextPlayerId = this@BOnTurnFinishedNode.setNextAblePlayer(playerManager)
+            val pipeline = this.context.pipeline
+            pipeline.pushEvent(BOnTurnStartedPipe.OnTurnStartedEvent(nextPlayerId))
             event
         } else {
             null
         }
     }
 
-    private fun setNextAblePlayer(playerManager: BPlayerManager) : Long {
+    private fun setNextAblePlayer(playerManager: BPlayerManager): Long {
         val ablePlayers = playerManager.ablePlayers
         val ablePlayerCount = ablePlayers.size
         if (playerManager.playerPointer < ablePlayerCount) {

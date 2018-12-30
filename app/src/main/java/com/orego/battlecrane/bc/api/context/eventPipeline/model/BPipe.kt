@@ -34,9 +34,9 @@ open class BPipe(
         this.nodes.add(node)
     }
 
-    fun findNode(name: String): BNode? {
-        for (node in this.nodes) {
-            val result = node.findNode(name)
+    fun findNodeBy(condition: (BNode) -> Boolean): BNode? {
+        for (i in 0 until this.nodes.size) {
+            val result = this.nodes[i].findNodeBy(condition)
             if (result != null) {
                 return result
             }
@@ -44,12 +44,12 @@ open class BPipe(
         return null
     }
 
-    fun findPipe(name: String): BPipe? {
-        if (this.name == name) {
+    fun findPipeBy(condition: (BPipe) -> Boolean): BPipe? {
+        if (condition(this)) {
             return this
         } else {
-            for (node in this.nodes) {
-                val result = node.findPipe(name)
+            for (i in 0 until this.nodes.size) {
+                val result = this.nodes[i].findPipeBy(condition)
                 if (result != null) {
                     return result
                 }

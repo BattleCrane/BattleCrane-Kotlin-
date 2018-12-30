@@ -9,10 +9,6 @@ import com.orego.battlecrane.bc.api.context.eventPipeline.model.annotation.unitC
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.BOnCreateActionPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onCreate.node.BOnCreateActionNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.produce.node.pipe.BOnProduceEnablePipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
 import com.orego.battlecrane.bc.api.context.mapManager.point.BPoint
 import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
@@ -73,7 +69,7 @@ class BHumanBarracks(context: BGameContext, ownerId: Long) :
         //Save pipe ids:
         this.onCreateTrainMarineActionPipeId = onCreateMarineTrainActionPipe.id
         //Bind pipes:
-        context.pipeline.bindPipeTo(BOnCreateActionNode.NAME, onCreateMarineTrainActionPipe)
+        context.pipeline.bindPipeToNode(BOnCreateActionNode.NAME, onCreateMarineTrainActionPipe)
     }
 
     /**
