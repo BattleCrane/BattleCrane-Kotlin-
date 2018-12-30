@@ -84,11 +84,11 @@ abstract class BPrimaryActionViewRender : BActionViewRender(COLUMN_COUNT, ROW_CO
 class BTrainViewRender(private val playerManager: BPlayerManager) : BPrimaryActionViewRender() {
 
     override val stack: Set<BAction>
-        get() = this.playerManager.currentPlayer.adjutant.resourceManager.trainActions
+        get() = this.playerManager.currentPlayerId.adjutant.resourceManager.trainActions
 }
 
 class BBuildViewRender(private val playerManager: BPlayerManager) : BPrimaryActionViewRender() {
 
     override val stack: Set<BAction>
-        get() = this.playerManager.currentPlayer.adjutant.resourceManager.buildingActions
+        get() = this.playerManager.currentPlayerId.adjutant.resourceManager.buildingActions
 }

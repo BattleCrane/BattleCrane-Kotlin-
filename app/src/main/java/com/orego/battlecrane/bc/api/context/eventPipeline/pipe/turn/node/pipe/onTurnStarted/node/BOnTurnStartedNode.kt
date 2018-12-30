@@ -14,10 +14,9 @@ class BOnTurnStartedNode(context: BGameContext) : BNode(context) {
 
     override val name = NAME
 
-    override fun handle(event: BEvent) : BEvent? {
-        return if (event is BOnTurnStartedPipe.TurnStartedEvent) {
-            this.pipeMap.values.forEach { it.push(event) }
-            event
+    override fun handle(event: BEvent): BEvent? {
+        return if (event is BOnTurnStartedPipe.OnTurnStartedEvent) {
+            event.also { this.pushEventIntoPipes(it) }
         } else {
             null
         }

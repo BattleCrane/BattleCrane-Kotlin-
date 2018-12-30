@@ -36,7 +36,7 @@ public final class BStandardSkirmishScenario implements BGameScenario {
 
     @NotNull
     @Override
-    public final BPlayer getStartPlayer(final List<BPlayer> players) {
+    public final BPlayer getStartPlayerPosition(final List<BPlayer> players) {
         return players.get(new Random().nextInt(1));
     }
 

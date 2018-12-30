@@ -122,7 +122,7 @@ class BHumanAdjutant(
         }
 
         /**
-         * Refresh action list after action running.
+         * Refresh turnTimerTask list after turnTimerTask running.
          */
 
         inner class OnActionPerformedNode : BEventPipeline.Pipe.Node(this@BHumanAdjutant.context) {

@@ -21,12 +21,22 @@ class BTurnNode(context: BGameContext) : BNode(context) {
         this.connectPipe(BOnTurnFinishedPipe(context))
     }
 
-    override fun handle(event: BEvent) : BEvent? {
-        return if (event is BTurnPipe.TurnEvent) {
-            this.pipeMap.values.forEach { it.push(event) }
-            event
-        } else {
-            null
+    override fun handle(event: BEvent): BEvent? {
+        val playerManager = this.context.playerManager
+        val currentPlayerId = playerManager.currentPlayerId
+        return when (event) {
+            is BGameContext.OnGameStartedEvent -> {
+                BOnTurnStartedPipe
+                    .OnTurnStartedEvent(currentPlayerId)
+                    .also { this.pushEventIntoPipes(it) }
+            }
+            is BGameContext.OnGameFinishedEvent -> {
+                event.also { this.pushEventIntoPipes(it) }
+            }
+            is BTurnPipe.TurnEvent -> {
+                event.also { this.pushEventIntoPipes(it) }
+            }
+            else -> null
         }
     }
 }

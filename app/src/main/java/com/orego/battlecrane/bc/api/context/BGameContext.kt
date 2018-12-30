@@ -35,13 +35,11 @@ class BGameContext(scenario: BGameScenario) {
      */
 
     fun startGame() {
-        val event = StartGameEvent()
+        val event = OnGameStartedEvent()
         this.pipeline.pushEvent(event)
     }
 
-    class StartGameEvent : BEvent()
+    class OnGameStartedEvent : BEvent()
 
-    class EndGameEvent : BEvent()
-
-
+    class OnGameFinishedEvent : BEvent()
 }

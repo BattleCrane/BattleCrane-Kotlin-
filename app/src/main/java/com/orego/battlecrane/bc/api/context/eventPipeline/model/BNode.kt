@@ -13,7 +13,7 @@ abstract class BNode(protected val context: BGameContext) {
 
     open val name: String? = null
 
-    protected val pipeMap = mutableMapOf<Long, BPipe>()
+    protected open val pipeMap = mutableMapOf<Long, BPipe>()
 
     abstract fun handle(event: BEvent): BEvent?
 
@@ -43,5 +43,13 @@ abstract class BNode(protected val context: BGameContext) {
             }
         }
         return null
+    }
+
+    protected fun pushEventIntoPipes(event : BEvent) {
+        val pipes = this.pipeMap.values.toList()
+        val size  = pipes.size
+        for (i in 0 until size) {
+            pipes[i].push(event)
+        }
     }
 }

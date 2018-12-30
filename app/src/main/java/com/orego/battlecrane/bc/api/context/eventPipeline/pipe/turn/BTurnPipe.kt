@@ -17,5 +17,5 @@ class BTurnPipe(context: BGameContext) : BPipe(context) {
 
     override val nodes = mutableListOf<BNode>(BTurnNode(context))
 
-    open class TurnEvent : BEvent()
+    open class TurnEvent(val ownerId: Long) : BEvent()
 }

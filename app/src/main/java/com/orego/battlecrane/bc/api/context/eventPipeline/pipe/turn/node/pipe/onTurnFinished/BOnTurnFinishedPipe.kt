@@ -16,7 +16,9 @@ class BOnTurnFinishedPipe(context: BGameContext) : BPipe(context) {
 
     override val name = NAME
 
-    override val nodes = mutableListOf<BNode>(BOnTurnFinishedNode(context))
+    init {
+        this.placeNode(BOnTurnFinishedNode(context))
+    }
 
-    open class TurnFinishedEvent : BTurnPipe.TurnEvent()
+    open class OnTurnFinishedEvent(ownerId: Long) : BTurnPipe.TurnEvent(ownerId)
 }

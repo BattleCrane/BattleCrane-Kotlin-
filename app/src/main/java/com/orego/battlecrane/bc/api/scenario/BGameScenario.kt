@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.api.context.playerManager.player.BPlayer
 
 interface BGameScenario {
 
-    fun getStartPlayer(players: List<BPlayer>): BPlayer
+    fun getStartPlayerPosition(): Int
 
     fun initMap(mapManager: BMapManager, context: BGameContext)
 
