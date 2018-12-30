@@ -16,10 +16,7 @@ class BOnCreateActionNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent): BEvent? {
         return if (event is BOnCreateActionPipe.OnCreateActionEvent) {
-            val pipes = this.pipeMap.values.toList()
-            for (i in 0 until pipes.size) {
-                pipes[i].push(event)
-            }
+            this.pushEventIntoPipes(event)
             event
         } else {
             null

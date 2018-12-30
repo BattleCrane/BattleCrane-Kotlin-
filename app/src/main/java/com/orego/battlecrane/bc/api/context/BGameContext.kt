@@ -31,7 +31,7 @@ class BGameContext(scenario: BGameScenario) {
     val mapManager = BMapManager(scenario, this)
 
     /**
-     * Launch a game.
+     * Launches a game.
      */
 
     fun startGame() {

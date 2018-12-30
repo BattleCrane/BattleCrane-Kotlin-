@@ -1,24 +1,23 @@
 package com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onPerform
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.BActionNode
+import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.BActionPipe
 import com.orego.battlecrane.bc.api.context.eventPipeline.pipe.action.node.pipe.onPerform.node.BOnPerformActionNode
+import com.orego.battlecrane.bc.api.model.action.BAction
 
 class BOnPerformActionPipe(context: BGameContext) : BPipe(context) {
 
     companion object {
 
-        const val NAME = "${BActionNode.NAME}/ON_PERFORM_PIPE"
-
-        const val EVENT = "ON_PERFORM_ACTION_EVENT"
+        const val NAME = "ON_PERFORM_PIPE"
     }
 
     override val name = NAME
 
-    override val nodes = mutableListOf<BNode>(
-        BOnPerformActionNode(context)
-    )
+    init {
+        this.placeNode(BOnPerformActionNode(context))
+    }
+
+    open class OnActionPerformedNode(val action : BAction) : BActionPipe.ActionEvent()
 }

@@ -19,6 +19,4 @@ class BUnitPipe(context: BGameContext) : BPipe(context) {
     override val nodes = mutableListOf<BNode>(BUnitNode(context))
 
     open class UnitEvent : BEvent()
-
-    open class UnitBundle(val unit : BUnit)
 }

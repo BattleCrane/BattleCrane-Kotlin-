@@ -11,21 +11,15 @@ abstract class BAdjutant(
 
     open val resourceManager = ResourceManager()
 
-    abstract fun onGameStarted()
-
-    abstract fun onTurnStarted()
-
-    abstract fun onTurnEnded()
-
     open inner class ResourceManager {
 
         var currentInfluenceCount = 0
 
         var receivedInfluenceCount = 0
 
-        val buildingActions = mutableSetOf<BAction>()
+        open val buildingActions = mutableSetOf<BAction>()
 
-        val trainActions = mutableSetOf<BAction>()
+        open val trainActions = mutableSetOf<BAction>()
     }
 
     /**

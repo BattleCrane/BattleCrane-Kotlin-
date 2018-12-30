@@ -11,6 +11,10 @@ import com.orego.battlecrane.bc.std.race.human.BHumanRace
 
 abstract class BHumanUnit(context: BGameContext, ownerId: Long) : BUnit(ownerId), BHumanRace {
 
+    /**
+     * Context.
+     */
+
     var onTurnStartedPipeId: Long
 
     var onTurnStartedNodeId : Long
