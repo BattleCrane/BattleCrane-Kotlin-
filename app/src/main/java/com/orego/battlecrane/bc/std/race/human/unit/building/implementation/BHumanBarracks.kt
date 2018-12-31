@@ -1,14 +1,14 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.component.unit.BUnitComponent
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.action.node.pipe.onCreate.BOnCreateActionPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.action.node.pipe.onCreate.node.BOnCreateActionNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.produce.node.pipe.BOnProduceEnablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
+import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.BPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.action.node.pipe.onCreate.BOnCreateActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.action.node.pipe.onCreate.node.BOnCreateActionNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.produce.node.pipe.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.model.contract.BHitPointable
@@ -76,7 +76,7 @@ class BHumanBarracks(context: BGameContext, ownerId: Long) :
      * Sends events to pipeline to create produce abilities.
      */
 
-    override fun produceAbilities(pipeline: BEventPipeline) {
+    override fun produceAbilities(pipeline: BPipeline) {
         if (this.isProduceEnable) {
             pipeline.pushEvent(
                 OnCreateTrainMarineActionNode.createTrainMarineLvl1ActionEvent(this.ownerId, this.unitId)

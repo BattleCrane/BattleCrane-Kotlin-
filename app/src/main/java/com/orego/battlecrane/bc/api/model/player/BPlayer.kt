@@ -1,14 +1,14 @@
 package com.orego.battlecrane.bc.api.model.player
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.component.player.BPlayerComponent
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.turn.BTurnPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPlayerComponent
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
 import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.util.BIdGenerator
 import java.util.*

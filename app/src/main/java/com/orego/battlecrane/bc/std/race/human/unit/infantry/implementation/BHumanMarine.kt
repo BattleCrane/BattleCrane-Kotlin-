@@ -1,10 +1,10 @@
 package com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BNode
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.annotation.BPlayerComponent
-import com.orego.battlecrane.bc.api.context.eventPipeline.pipeImlementation.unit.node.pipe.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.annotation.BPlayerComponent
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 import com.orego.battlecrane.bc.api.model.contract.BAction
 import com.orego.battlecrane.bc.api.model.contract.BAttackable

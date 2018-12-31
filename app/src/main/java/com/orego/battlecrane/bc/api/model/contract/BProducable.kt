@@ -1,6 +1,6 @@
 package com.orego.battlecrane.bc.api.model.contract
 
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
+import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
 
 interface BProducable {
 
@@ -10,5 +10,5 @@ interface BProducable {
      * Send actions to pipeline.
      */
 
-    fun produceAbilities(pipeline: BEventPipeline)
+    fun produceAbilities(pipeline: BPipeline)
 }

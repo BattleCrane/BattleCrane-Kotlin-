@@ -1,12 +1,9 @@
 package com.orego.battlecrane.bc.api.context.storage
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.storage.heap.BHeap
-import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BActionHeap
-import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAttackableHeap
-import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
-import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.*
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 
 @BContextComponent
@@ -16,6 +13,7 @@ class BStorage(scenario: BGameScenario, context: BGameContext) {
         BUnitHeap::class.java to BUnitHeap(),
         BActionHeap::class.java to BActionHeap(),
         BAttackableHeap::class.java to BAttackableHeap(),
+        BLevelableHeap::class.java to BLevelableHeap(),
         BPlayerHeap::class.java to BPlayerHeap()
     )
 

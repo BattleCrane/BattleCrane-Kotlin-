@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.api.context.controller.player
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 
 @BContextComponent

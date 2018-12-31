@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.api.context.controller.map;
 
 import com.orego.battlecrane.bc.api.context.BGameContext;
 import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint;
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.component.context.BContextComponent;
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent;
 import com.orego.battlecrane.bc.api.model.contract.BUnit;
 import com.orego.battlecrane.bc.api.scenario.BGameScenario;
 

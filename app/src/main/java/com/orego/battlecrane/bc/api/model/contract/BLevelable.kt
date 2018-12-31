@@ -2,6 +2,8 @@ package com.orego.battlecrane.bc.api.model.contract
 
 interface BLevelable {
 
+    val levelableId : Long
+
     var currentLevel: Int
 
     var maxLevel: Int

@@ -1,9 +1,9 @@
 package com.orego.battlecrane.bc.api.context
 
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController
-import com.orego.battlecrane.bc.api.context.eventPipeline.BEventPipeline
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.eventPipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
+import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.storage.BStorage
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 
@@ -19,7 +19,7 @@ class BGameContext(scenario: BGameScenario) {
      */
 
     @BContextComponent
-    val pipeline = BEventPipeline(this)
+    val pipeline = BPipeline(this)
 
     /**
      * Map manager.
