@@ -3,7 +3,6 @@ package com.orego.battlecrane.bc.api.context.pipeline.model.pipe
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.generator.BIdGenerator
 
 /**
  * Provides events to nodes.
@@ -14,7 +13,7 @@ open class BPipe(
     open val nodes: MutableList<BNode> = mutableListOf()
 ) {
 
-    val id = this.context.idGenerator.generatePipeId()
+    val id = this.context.contextGenerator.getIdGenerator(BPipe::class.java).generateId()
 
     open val name: String? = null
 

@@ -1,9 +1,8 @@
 package com.orego.battlecrane.bc.api.context.pipeline.model.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.generator.BIdGenerator
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 
 /**
  * Handles game events.
@@ -11,7 +10,7 @@ import com.orego.battlecrane.bc.api.context.generator.BIdGenerator
 
 abstract class BNode(protected val context: BGameContext) {
 
-    val id = this.context.idGenerator.generateNodeId()
+    val id = this.context.contextGenerator.getIdGenerator(BNode::class.java).generateId()
 
     open val name: String? = null
 

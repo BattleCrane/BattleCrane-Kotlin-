@@ -1,10 +1,10 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.BHitPointableNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.BHitPointableNode
 
 @BContextComponent
 class BHitPointablePipe(context: BGameContext) : BPipe(context) {
@@ -20,5 +20,5 @@ class BHitPointablePipe(context: BGameContext) : BPipe(context) {
         this.placeNode(BHitPointableNode(context))
     }
 
-    open class HitPointableEvent : BEvent()
+    open class Event : BEvent()
 }

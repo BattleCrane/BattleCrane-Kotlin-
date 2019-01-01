@@ -24,7 +24,7 @@ class BOnDestroyUnitNode(context: BGameContext) : BNode(context) {
     }
 
     override fun handle(event: BEvent): BEvent? {
-        return if (event is BOnDestroyUnitPipe.OnDestroyUnitEvent) {
+        return if (event is BOnDestroyUnitPipe.Event) {
             this.storage.removeObject(event.unitId, BUnitHeap::class.java)
             event.also { pushEventIntoPipes(it) }
         } else {

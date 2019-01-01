@@ -1,10 +1,10 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BProducableHeap
 
 @BContextComponent
@@ -36,7 +36,7 @@ class BOnProduceEnableNode(context: BGameContext) : BNode(context) {
     }
 
     private fun switchProduceEnable(producableId: Long, isProduceEnable: Boolean): Boolean {
-        val producable = this.producableHeap[producableId]!!
+        val producable = this.producableHeap[producableId]
         val isSuccessful = producable.isProduceEnable != isProduceEnable
         if (isSuccessful) {
             producable.isProduceEnable = isProduceEnable

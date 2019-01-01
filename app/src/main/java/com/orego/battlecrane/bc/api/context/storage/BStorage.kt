@@ -4,12 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.storage.heap.BHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.*
-import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
-import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
-import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
-import com.orego.battlecrane.bc.api.model.entity.property.BProducable
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.util.mapWithFilter
 
 @BContextComponent
 class BStorage(scenario: BGameScenario, context: BGameContext) {
@@ -35,10 +30,6 @@ class BStorage(scenario: BGameScenario, context: BGameContext) {
     )
 
     inline fun <reified T> getHeap(heapClazz: Class<T>): T = this.heapMap[heapClazz] as T
-
-    fun addHeap(heap: BHeap<*>) {
-        this.heapMap[heap::class.java] = heap
-    }
 
     fun addObject(any: Any) {
         val heaps = this.heapMap.values.toList()

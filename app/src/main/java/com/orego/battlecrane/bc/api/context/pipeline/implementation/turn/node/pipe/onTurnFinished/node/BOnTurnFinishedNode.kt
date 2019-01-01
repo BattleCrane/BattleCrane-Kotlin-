@@ -3,9 +3,9 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.p
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 
 @BContextComponent
 class BOnTurnFinishedNode(context: BGameContext) : BNode(context) {
@@ -23,13 +23,13 @@ class BOnTurnFinishedNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent): BEvent? {
 
-        return if (event is BOnTurnFinishedPipe.OnTurnFinishedEvent) {
+        return if (event is BOnTurnFinishedPipe.Event) {
             //Make broadcast for each pipes:
             this.pushEventIntoPipes(event)
             //Switch player:
             val nextPlayerId = this.setNextAblePlayer()
             val pipeline = this.context.pipeline
-            pipeline.pushEvent(BOnTurnStartedPipe.OnTurnStartedEvent(nextPlayerId))
+            pipeline.pushEvent(BOnTurnStartedPipe.Event(nextPlayerId))
             event
         } else {
             null

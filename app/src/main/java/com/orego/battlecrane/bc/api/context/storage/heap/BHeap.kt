@@ -4,9 +4,11 @@ abstract class BHeap<T> {
 
     protected val objectMap = mutableMapOf<Long, T>()
 
-    operator fun get(id: Long) = this.objectMap[id]
+    operator fun get(id: Long) : T = this.objectMap[id]!!
 
     abstract fun addObject(any: Any)
 
     abstract fun removeObject(any: Any)
+
+    fun getObjectList() = this.objectMap.values.toList()
 }

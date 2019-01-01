@@ -9,11 +9,9 @@ abstract class BUnit(
     var y: Int
 ) {
 
-    val unitId = context.idGenerator.generateUnitId()
+    val unitId = context.contextGenerator.getIdGenerator(BUnit::class.java).generateId()
 
     abstract val height: Int
 
     abstract val width: Int
-
-    abstract fun isCreatingConditionsPerformed(context: BGameContext): Boolean
 }

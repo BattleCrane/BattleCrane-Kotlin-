@@ -4,9 +4,9 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 
 @BContextComponent
 class BTurnNode(context: BGameContext) : BNode(context) {
@@ -33,13 +33,13 @@ class BTurnNode(context: BGameContext) : BNode(context) {
         return when (event) {
             is BGameContext.OnGameStartedEvent -> {
                 BOnTurnStartedPipe
-                    .OnTurnStartedEvent(currentPlayerId)
+                    .Event(currentPlayerId)
                     .also { this.pushEventIntoPipes(it) }
             }
             is BGameContext.OnGameFinishedEvent -> {
                 event.also { this.pushEventIntoPipes(it) }
             }
-            is BTurnPipe.TurnEvent -> {
+            is BTurnPipe.Event -> {
                 event.also { this.pushEventIntoPipes(it) }
             }
             else -> null

@@ -1,11 +1,11 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.BProducablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
 @BContextComponent
 class BProducableNode(context: BGameContext) : BNode(context) {
@@ -19,9 +19,7 @@ class BProducableNode(context: BGameContext) : BNode(context) {
 
     init {
         this.connectInnerPipe(
-            BOnProduceEnablePipe(
-                context
-            )
+            BOnProduceEnablePipe(context)
         )
     }
 

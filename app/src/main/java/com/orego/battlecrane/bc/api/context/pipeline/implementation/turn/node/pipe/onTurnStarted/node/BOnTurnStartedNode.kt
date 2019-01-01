@@ -1,10 +1,10 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
 @BContextComponent
 class BOnTurnStartedNode(context: BGameContext) : BNode(context) {
@@ -17,8 +17,8 @@ class BOnTurnStartedNode(context: BGameContext) : BNode(context) {
     override val name = NAME
 
     override fun handle(event: BEvent): BEvent? {
-        return if (event is BOnTurnStartedPipe.OnTurnStartedEvent) {
-            event.also { this.pushEventIntoPipes(it) }
+        return if (event is BOnTurnStartedPipe.Event) {
+            this.pushEventIntoPipes(event)
         } else {
             null
         }

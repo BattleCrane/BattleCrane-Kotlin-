@@ -1,14 +1,14 @@
 package com.orego.battlecrane.bc.api.model.player
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPlayerComponent
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPlayerComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
@@ -21,7 +21,7 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
         const val NEUTRAL_PLAYER_ID : Long = 0
     }
 
-    val playerId: Long = context.idGenerator.generatePlayerId()
+    val playerId: Long = context.contextGenerator.getIdGenerator(BPlayer::class.java).generateId()
 
     //TODO WHILE WITHOUT BONUSES:
     val adjutant: BAdjutant = builder.build(this.playerId)
@@ -100,7 +100,7 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
     class OnTurnStartedNode(context: BGameContext, var playerId: Long) : BNode(context) {
 
         override fun handle(event: BEvent): BEvent? {
-            return if (event is BOnTurnStartedPipe.OnTurnStartedEvent
+            return if (event is BOnTurnStartedPipe.Event
                 && event.playerId == this.playerId
             ) {
                 event.also { this.pushEventIntoPipes(it) }
@@ -114,7 +114,7 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
     class OnTurnFinishedNode(context: BGameContext, var playerId: Long) : BNode(context) {
 
         override fun handle(event: BEvent): BEvent? {
-            return if (event is BOnTurnFinishedPipe.OnTurnFinishedEvent
+            return if (event is BOnTurnFinishedPipe.Event
                 && event.playerId == this.playerId
             ) {
                 event.also { this.pushEventIntoPipes(it) }
@@ -143,16 +143,16 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
         private lateinit var turnTimerTask: TimerTask
 
         override fun handle(event: BEvent): BEvent? {
-            if (event is BTurnPipe.TurnEvent && this.ownerId == event.playerId) {
+            if (event is BTurnPipe.Event && this.ownerId == event.playerId) {
                 when (event) {
-                    is BOnTurnStartedPipe.OnTurnStartedEvent -> {
+                    is BOnTurnStartedPipe.Event -> {
                         val turnTime = this.turnTime
                         if (turnTime != null) {
                             this.timeLeft.set(turnTime)
                             timer(name = TIMER_NAME, period = SECOND, action = this.action)
                         }
                     }
-                    is BOnTurnFinishedPipe.OnTurnFinishedEvent -> {
+                    is BOnTurnFinishedPipe.Event -> {
                         this.turnTimerTask.cancel()
                     }
                 }
@@ -172,7 +172,7 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
             if (isTurnFinished) {
                 this.cancel()
                 this@TurnTimerNode.context.pipeline.pushEvent(
-                    BOnTurnFinishedPipe.OnTurnFinishedEvent(this@TurnTimerNode.ownerId)
+                    BOnTurnFinishedPipe.Event(this@TurnTimerNode.ownerId)
                 )
             } else {
                 this@TurnTimerNode.timeLeft.set(time - SECOND)
@@ -180,4 +180,10 @@ class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
             this@TurnTimerNode.turnTimerTask = this
         }
     }
+
+    /**
+     * Generator.
+     */
+
+
 }

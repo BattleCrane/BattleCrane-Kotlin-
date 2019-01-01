@@ -17,7 +17,7 @@ class BLevelableNode(context: BGameContext) : BNode(context) {
     override val name = NAME
 
     override fun handle(event: BEvent) : BEvent? {
-        return if (event is BLevelablePipe.LevelableEvent) {
+        return if (event is BLevelablePipe.Event) {
             this.pushEventIntoPipes(event)
             event
         } else {

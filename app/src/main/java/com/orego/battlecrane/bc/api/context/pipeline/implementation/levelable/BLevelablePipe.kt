@@ -1,10 +1,10 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.BLevelableNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 
 @BContextComponent
 class BLevelablePipe(context: BGameContext) : BPipe(context) {
@@ -20,5 +20,5 @@ class BLevelablePipe(context: BGameContext) : BPipe(context) {
         this.placeNode(BLevelableNode(context))
     }
 
-    open class LevelableEvent : BEvent()
+    open class Event : BEvent()
 }

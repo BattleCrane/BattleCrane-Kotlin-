@@ -55,11 +55,12 @@ abstract class BHumanUnit(context: BGameContext, playerId: Long, x: Int, y: Int)
     class OnTurnStartedNode(context: BGameContext, unitId: Long) :
         BNode(context) {
 
-        private val unit = this.context.storage.getHeap(BUnitHeap::class.java)[unitId]!!
+        private val humanUnit = this.context.storage.getHeap(BUnitHeap::class.java)[unitId]!! as BHumanUnit
 
         override fun handle(event: BEvent): BEvent? {
-            if (event is BOnTurnStartedPipe.OnTurnStartedEvent
-                && this.unit.playerId == event.playerId) {
+            if (event is BOnTurnStartedPipe.Event
+                && this.humanUnit.playerId == event.playerId
+            ) {
                 return this.pushEventIntoPipes(event)
             }
             return null
@@ -70,11 +71,12 @@ abstract class BHumanUnit(context: BGameContext, playerId: Long, x: Int, y: Int)
     class OnTurnFinishedNode(context: BGameContext, unitId: Long) :
         BNode(context) {
 
-        private val unit = this.context.storage.getHeap(BUnitHeap::class.java)[unitId]!!
+        private val humanUnit = this.context.storage.getHeap(BUnitHeap::class.java)[unitId]!! as BHumanUnit
 
         override fun handle(event: BEvent): BEvent? {
-            if (event is BOnTurnFinishedPipe.OnTurnFinishedEvent
-                && this.unit.playerId == event.playerId) {
+            if (event is BOnTurnFinishedPipe.Event
+                && this.humanUnit.playerId == event.playerId
+            ) {
                 return this.pushEventIntoPipes(event)
             }
             return null

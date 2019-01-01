@@ -2,9 +2,9 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.unit
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.BUnitNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 
 @BContextComponent
 class BUnitPipe(context: BGameContext) : BPipe(context) {
@@ -20,5 +20,5 @@ class BUnitPipe(context: BGameContext) : BPipe(context) {
         this.placeNode(BUnitNode(context))
     }
 
-    open class UnitEvent : BEvent()
+    open class Event : BEvent()
 }

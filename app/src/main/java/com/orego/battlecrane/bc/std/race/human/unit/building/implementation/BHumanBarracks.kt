@@ -1,15 +1,17 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.BUnitPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.BUnitNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
@@ -45,10 +47,10 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
     override val producableId: Long
 
     init {
-        val generator = context.idGenerator
-        this.hitPointableId = generator.generateHitPointableId()
-        this.levelableId = generator.generateLevelableId()
-        this.producableId = generator.generateProducableId()
+        val generator = context.contextGenerator
+        this.hitPointableId = generator.getIdGenerator(BHitPointable::class.java).generateId()
+        this.levelableId = generator.getIdGenerator(BLevelable::class.java).generateId()
+        this.producableId = generator.getIdGenerator(BProducable::class.java).generateId()
     }
 
     /**
@@ -84,10 +86,10 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         val pipeline = context.pipeline
 
         //On produce enable:
-        val onBarracksProduceEnableNode = OnBarracksProduceEnableNode(context, playerId, this.producableId)
+        val onBarracksProduceEnableNode = OnBarracksProduceEnableNode(context, this.unitId)
 
         //On train marine:
-        val onTrainMarineNode = OnTrainMarineNode(playerId, this.unitId, context)
+        val onTrainMarineNode = OnTrainMarineNode(this.unitId, context)
         val onTrainMarinePipe = onTrainMarineNode.wrapInPipe()
 
         //Save ids:
@@ -104,29 +106,55 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Node.
      */
 
+    @BAdjutantComponent
+    class OnCreateBarracksNode(context: BGameContext, private val playerId: Long) : BNode(context) {
+
+        companion object {
+
+            fun createEvent(playerId: Long, x: Int, y: Int) =
+                Event(playerId, x, y)
+        }
+
+        private val mapController = this.context.mapController
+
+        private val storage = this.context.storage
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is Event && event.playerId == this.playerId) {
+                val marine = BHumanMarine(this.context, this.playerId, event.x, event.y)
+                if (this.mapController.placeUnitOnMap(this.context, marine)) {
+                    this.storage.addObject(marine)
+                    return this.pushEventIntoPipes(event)
+                }
+            }
+            return null
+        }
+
+        /**
+         * Event.
+         */
+
+        open class Event(val playerId: Long, x: Int, y: Int) :
+            BOnCreateUnitPipe.Event(x, y)
+    }
 
     @BUnitComponent
     class OnBarracksProduceEnableNode(context: BGameContext, unitId: Long) : BNode(context) {
 
-        private val barracks : BHumanBarracks
-
-        init {
-            val storage = this.context.storage
-            this.barracks = storage.getHeap(BUnitHeap::class.java)[unitId]!! as BHumanBarracks
-        }
+        private val barracks = this.context.storage.getHeap(BUnitHeap::class.java)[unitId]!! as BHumanBarracks
 
         override fun handle(event: BEvent): BEvent? {
-            return if (event is BTurnPipe.TurnEvent && this.barracks.playerId == event.playerId) {
+            return if (event is BTurnPipe.Event && this.barracks.playerId == event.playerId) {
                 val pipeline = this.context.pipeline
                 this.pushEventIntoPipes(event)
                 val producableId = this.barracks.producableId
                 when (event) {
-                    is BOnTurnStartedPipe.OnTurnStartedEvent -> {
+                    is BOnTurnStartedPipe.Event -> {
                         pipeline.pushEvent(
                             BOnProduceEnablePipe.createEvent(producableId, true)
                         )
                     }
-                    is BOnTurnFinishedPipe.OnTurnFinishedEvent -> {
+                    is BOnTurnFinishedPipe.Event -> {
                         pipeline.pushEvent(
                             BOnProduceEnablePipe.createEvent(producableId, false)
                         )
@@ -146,44 +174,45 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         companion object {
 
             fun createEvent(barracksUnitId: Long, x: Int, y: Int) =
-                TrainMarineEvent(barracksUnitId, x, y)
+                Event(barracksUnitId, x, y)
         }
 
-        private val unitHeap = this.context.storage.getHeap(BUnitHeap::class.java)
-
-        private val barracks = this.unitHeap[unitId] as BHumanBarracks
+        private val barracks = this.context.storage.getHeap(BUnitHeap::class.java)[unitId]!! as BHumanBarracks
 
         private val mapController = this.context.mapController
 
         private val pipeline = this.context.pipeline
 
         override fun handle(event: BEvent): BEvent? {
-            if (event !is TrainMarineEvent
+            if (event !is Event
                 || this.barracks.unitId != event.barracksUnitId
                 || !this.barracks.isProduceEnable
             ) {
                 return null
             }
-            val barracksLevel = barracks.currentLevel
             val x = event.x
             val y = event.y
+            val barracksLevel = this.barracks.currentLevel
+            val barracksPlayerId = this.barracks.playerId
             val otherUnit = this.mapController.getUnitByPosition(this.context, x, y)
             val otherPlayerId = otherUnit.playerId
-            if (barracksLevel == 1 && otherPlayerId == this.player.playerId) {
-                this.createMarine(x, y)
+            if (barracksLevel == 1 && otherPlayerId == barracksPlayerId) {
+                this.createMarine(barracksPlayerId, x, y)
             }
-            if (barracksLevel == 2 && !this.player.isEnemy(otherPlayerId)) {
-                this.createMarine(x, y)
+            val playerHeap = this.context.storage.getHeap(BPlayerHeap::class.java)
+            val barracksOwner = playerHeap[barracksPlayerId]!!
+            if (barracksLevel == 2 && !barracksOwner.isEnemy(otherPlayerId)) {
+                this.createMarine(barracksPlayerId, x, y)
             }
             if (barracksLevel == 3) {
-                this.createMarine(x, y)
+                this.createMarine(barracksPlayerId, x, y)
             }
             return this.pushEventIntoPipes(event)
         }
 
-        private fun createMarine(x: Int, y: Int) {
+        private fun createMarine(playerId: Long, x: Int, y: Int) {
             this.pipeline.pushEvent(
-                BHumanMarine.OnCreateNode.createEvent(this.player.playerId, x, y)
+                BHumanMarine.OnCreateMarineNode.createEvent(playerId, x, y)
             )
             this.pipeline.pushEvent(
                 BOnProduceEnablePipe.createEvent(this.barracks.producableId, false)
@@ -194,7 +223,7 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Event.
          */
 
-        open class TrainMarineEvent(val barracksUnitId: Long, val x: Int, val y: Int) :
-            BUnitPipe.UnitEvent()
+        open class Event(val barracksUnitId: Long, val x: Int, val y: Int) :
+            BUnitPipe.Event()
     }
 }

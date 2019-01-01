@@ -1,10 +1,10 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
 @BContextComponent
 class BOnCreateUnitNode(context: BGameContext) : BNode(context) {
@@ -22,7 +22,7 @@ class BOnCreateUnitNode(context: BGameContext) : BNode(context) {
      */
 
     override fun handle(event: BEvent) : BEvent? {
-        return if (event is BOnCreateUnitPipe.OnCreateUnitEvent) {
+        return if (event is BOnCreateUnitPipe.Event) {
             this.pushEventIntoPipes(event);
             event
         } else {
