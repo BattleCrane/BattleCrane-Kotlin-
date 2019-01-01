@@ -3,6 +3,7 @@ package com.orego.battlecrane.bc.api.context.controller.player
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
+import com.orego.battlecrane.bc.util.mapWithFilter
 
 @BContextComponent
 class BPlayerController(scenario: BGameScenario, context: BGameContext) {
@@ -11,17 +12,16 @@ class BPlayerController(scenario: BGameScenario, context: BGameContext) {
 
     var currentPlayerId: Long
 
-    var playerPointer: Int
+    var currentPlayerPosition: Int
 
     init {
-        val players = scenario.initPlayerList(context)
-        val startPlayerPosition = scenario.getStartPlayerPosition()
+        val players = scenario.getPlayers(context)
+        val firstTurnPlayerPosition = scenario.getFirstTurnPlayerPosition()
         //Init fields:
-        this.players = players
-        this.ablePlayers = players.map { it.playerId }.toMutableList()
-        this.currentPlayerId = players[startPlayerPosition].playerId
-        this.playerPointer = startPlayerPosition
+        this.currentPlayerPosition = firstTurnPlayerPosition
+        this.currentPlayerId = players[firstTurnPlayerPosition].playerId
+        this.ablePlayers = players
+            .mapWithFilter({ it.isAblePlayer }, { it.playerId })
+            .toMutableList()
     }
-
-    fun getPlayerById(id: Long) = this.players.find { it.playerId == id }!!
 }

@@ -2,15 +2,17 @@ package com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
+import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
 import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.api.model.contract.BAction
-import com.orego.battlecrane.bc.api.model.contract.BAttackable
-import com.orego.battlecrane.bc.api.model.contract.BHitPointable
-import com.orego.battlecrane.bc.api.model.contract.BTargetable
-import com.orego.battlecrane.bc.api.model.contract.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.BAction
+import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
+import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
+import com.orego.battlecrane.bc.api.model.entity.BTargetable
+import com.orego.battlecrane.bc.api.model.entity.main.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 
-open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, owner), BHitPointable,
+open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, owner),
+    BHitPointable,
     BAttackable {
 
     companion object {
@@ -30,9 +32,9 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
      * Properties.
      */
 
-    final override val verticalSize = DEFAULT_VERTICAL_SIDE
+    final override val height = DEFAULT_VERTICAL_SIDE
 
-    final override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
+    final override val width = DEFAULT_HORIZONTAL_SIDE
 
     final override var currentHitPoints = DEFAULT_MAX_HEALTH
 
@@ -81,7 +83,7 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
      * Action function.
      */
 
-    override fun getAttackAction(): BAction? {
+    override fun getAttackableAbilities(pipeline: BPipeline) {
         return if (this.isAttackEnable) {
             Attack()
         } else {
@@ -93,7 +95,7 @@ open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, ow
      * Action.
      */
 
-    inner class Attack : BAction(this.context, this.ownerId), BTargetable {
+    inner class Attack : BAction(this.context, this.playerId), BTargetable {
 
         override var targetPosition: BPoint? = null
 

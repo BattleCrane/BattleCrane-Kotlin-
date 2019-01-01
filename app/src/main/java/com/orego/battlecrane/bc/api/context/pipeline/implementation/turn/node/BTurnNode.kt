@@ -1,12 +1,14 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 
+@BContextComponent
 class BTurnNode(context: BGameContext) : BNode(context) {
 
     companion object {
@@ -16,14 +18,18 @@ class BTurnNode(context: BGameContext) : BNode(context) {
 
     override val name = NAME
 
+    private val playerController by lazy {
+        this.context.playerController
+    }
+
     init {
         this.connectInnerPipe(BOnTurnStartedPipe(context))
         this.connectInnerPipe(BOnTurnFinishedPipe(context))
     }
 
     override fun handle(event: BEvent): BEvent? {
-        val playerManager = this.context.playerManager
-        val currentPlayerId = playerManager.currentPlayerId
+        val controller = this.playerController
+        val currentPlayerId = controller.currentPlayerId
         return when (event) {
             is BGameContext.OnGameStartedEvent -> {
                 BOnTurnStartedPipe

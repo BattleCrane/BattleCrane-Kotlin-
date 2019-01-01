@@ -73,7 +73,7 @@ class BBattleFragment : BFragment() {
         private val modeController = BClickController()
 
         private val unitRender by lazy {
-            BUnitViewRender(this.gameContext.mapManager.unitHeap)
+            BUnitViewRender(this.gameContext.mapController.unitHeap)
         }
 
         private val buildViewRender by lazy {

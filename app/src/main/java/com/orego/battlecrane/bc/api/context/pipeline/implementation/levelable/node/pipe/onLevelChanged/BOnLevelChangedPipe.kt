@@ -1,10 +1,9 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelChanged
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.BPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.BLevelablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelChanged.node.BOnLevelChangedNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 
 @BContextComponent

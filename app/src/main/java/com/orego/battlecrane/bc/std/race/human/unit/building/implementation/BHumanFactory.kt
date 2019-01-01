@@ -3,19 +3,21 @@ package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.api.model.contract.BAction
-import com.orego.battlecrane.bc.api.model.contract.BHitPointable
-import com.orego.battlecrane.bc.api.model.contract.BLevelable
-import com.orego.battlecrane.bc.api.model.contract.BProducable
-import com.orego.battlecrane.bc.api.model.contract.BTargetable
-import com.orego.battlecrane.bc.api.model.contract.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.BAction
+import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
+import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
+import com.orego.battlecrane.bc.api.model.entity.property.BProducable
+import com.orego.battlecrane.bc.api.model.entity.BTargetable
+import com.orego.battlecrane.bc.api.model.entity.main.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.BHumanTank
 
 class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner),
-    BHitPointable, BLevelable, BProducable {
+    BHitPointable,
+    BLevelable,
+    BProducable {
 
     companion object {
 
@@ -34,9 +36,9 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
      * Properties.
      */
 
-    override val verticalSize = DEFAULT_VERTICAL_SIDE
+    override val height = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
+    override val width = DEFAULT_HORIZONTAL_SIDE
 
     override var currentHitPoints = DEFAULT_MAX_HEALTH
 
@@ -108,7 +110,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
      * Action.
      */
 
-    abstract inner class TrainTank : BHumanAction(this.context, this.ownerId!!),
+    abstract inner class TrainTank : BHumanAction(this.context, this.playerId!!),
         BTargetable {
 
         override var targetPosition: BPoint? = null
@@ -144,7 +146,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
         inner class Action : TrainTank() {
 
             override fun isTrainConditionPerformed(unit: BUnit) =
-                this@BHumanFactory.ownerId!!.owns(unit)
+                this@BHumanFactory.playerId!!.owns(unit)
         }
     }
 
@@ -155,7 +157,7 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
         inner class Action : TrainTank() {
 
             override fun isTrainConditionPerformed(unit: BUnit) =
-                !this@BHumanFactory.ownerId!!.isEnemy(unit.ownerId)
+                !this@BHumanFactory.playerId!!.isEnemy(unit.playerId)
         }
     }
 

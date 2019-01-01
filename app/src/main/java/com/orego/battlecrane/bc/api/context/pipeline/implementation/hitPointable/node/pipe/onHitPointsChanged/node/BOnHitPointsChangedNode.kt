@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsChanged.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsChanged.BOnHitPointsChangedPipe
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BHitPointableHeap
@@ -20,10 +20,6 @@ class BOnHitPointsChangedNode(context: BGameContext) : BNode(context) {
     /**
      * Context.
      */
-
-    private val pipeline by lazy {
-        this.context.pipeline
-    }
 
     private val hitPointableHeap by lazy {
         this.context.storage.getHeap(BHitPointableHeap::class.java)

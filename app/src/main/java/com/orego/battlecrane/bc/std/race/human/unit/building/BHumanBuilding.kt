@@ -1,25 +1,26 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
+import com.orego.battlecrane.bc.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.BHumanUnit
 
-abstract class BHumanBuilding(ownerId: Long) : BHumanUnit(ownerId) {
+abstract class BHumanBuilding(context: BGameContext, playerId: Long, x : Int, y : Int) :
+    BHumanUnit(context, playerId, x, y) {
 
     /**
      * All human buildings places near each other.
      */
 
-    override fun isPlaced(context: BGameContext, position: BPoint): Boolean {
-        val mapManager = context.mapManager
-        val startX = position.x
-        val startY = position.y
-        val endX = startX + this.horizontalSize
-        val endY = startY + this.verticalSize
+    override fun isCreatingConditionsPerformed(context: BGameContext): Boolean {
+        val controller = context.mapController
+        val startX = this.x
+        val startY = this.y
+        val endX = startX + this.width
+        val endY = startY + this.height
         for (x in startX until endX) {
             for (y in startY until endY) {
-                if (mapManager.getUnitByPosition(x, y) !is BEmptyField) {
+                if (controller.getUnitByPosition(context, x, y) !is BEmptyField) {
                     return false
                 }
             }
@@ -31,33 +32,33 @@ abstract class BHumanBuilding(ownerId: Long) : BHumanUnit(ownerId) {
         val neighborEndY = endY + 1
         //TODO SIMPLIFY!!!!!
         for (x in neighborStartX until neighborEndX) {
-            if (mapManager.inBounds(x, neighborStartY)) {
-                val unit = mapManager.getUnitByPosition(x, neighborStartY)
-                if (unit is BHumanBuilding && this.ownerId == unit.ownerId) {
+            if (BMapController.inBounds(x, neighborStartY)) {
+                val unit = controller.getUnitByPosition(context, x, neighborStartY)
+                if (unit is BHumanBuilding && this.playerId == unit.playerId) {
                     return true
                 }
             }
         }
         for (x in neighborStartX until neighborEndX) {
-            if (mapManager.inBounds(x, neighborEndY)) {
-                val unit = mapManager.getUnitByPosition(x, neighborEndY)
-                if (unit is BHumanBuilding && this.ownerId == unit.ownerId) {
+            if (BMapController.inBounds(x, neighborEndY)) {
+                val unit = controller.getUnitByPosition(context, x, neighborEndY)
+                if (unit is BHumanBuilding && this.playerId == unit.playerId) {
                     return true
                 }
             }
         }
         for (y in neighborStartY until neighborEndY) {
-            if (mapManager.inBounds(startX, y)) {
-                val unit = mapManager.getUnitByPosition(startX, y)
-                if (unit is BHumanBuilding && this.ownerId == unit.ownerId) {
+            if (BMapController.inBounds(startX, y)) {
+                val unit = controller.getUnitByPosition(context, startX, y)
+                if (unit is BHumanBuilding && this.playerId == unit.playerId) {
                     return true
                 }
             }
         }
         for (y in neighborStartY until neighborEndY) {
-            if (mapManager.inBounds(endX, y)) {
-                val unit = mapManager.getUnitByPosition(endX, y)
-                if (unit is BHumanBuilding && this.ownerId == unit.ownerId) {
+            if (BMapController.inBounds(endX, y)) {
+                val unit = controller.getUnitByPosition(context, endX, y)
+                if (unit is BHumanBuilding && this.playerId == unit.playerId) {
                     return true
                 }
             }

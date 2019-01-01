@@ -1,15 +1,15 @@
 package com.orego.battlecrane.bc.api.context.pipeline
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.BPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.action.BActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.BAttackablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.BHitPointablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.BLevelablePipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.produce.BProducePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.BProducablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.BUnitPipe
 import java.lang.IllegalStateException
 
@@ -22,18 +22,25 @@ class BPipeline(context: BGameContext) {
 
     private val pipeMap = mutableMapOf<Long, BPipe>()
 
+    private val onPipelineWorkFinshedObserver =
+        mutableMapOf<Class<out OnPipelineWorkFinishedListener>, OnPipelineWorkFinishedListener>()
+
     /**
      * Adds root pipes:
      */
 
     init {
         this.connectInnerPipe(BUnitPipe(context))
-        this.connectInnerPipe(BActionPipe(context))
         this.connectInnerPipe(BAttackablePipe(context))
         this.connectInnerPipe(BHitPointablePipe(context))
         this.connectInnerPipe(BLevelablePipe(context))
-        this.connectInnerPipe(BProducePipe(context))
+        this.connectInnerPipe(BProducablePipe(context))
+        this.connectInnerPipe(BTurnPipe(context))
     }
+
+    /**
+     * Event.
+     */
 
     fun pushEvent(event: BEvent?) {
         if (event != null) {
@@ -47,12 +54,20 @@ class BPipeline(context: BGameContext) {
                 if (!this.eventQueue.isEmpty()) {
                     val nextEvent = this.eventQueue.removeAt(0)
                     this.pushEvent(nextEvent)
+                } else {
+                    this.onPipelineWorkFinshedObserver.values.forEach { listener ->
+                        listener.onPipelineWorkFinished()
+                    }
                 }
             } else {
                 this.eventQueue.add(event)
             }
         }
     }
+
+    /**
+     * Pipe.
+     */
 
     fun connectInnerPipe(pipe: BPipe) {
         this.pipeMap[pipe.id] = pipe
@@ -72,6 +87,10 @@ class BPipeline(context: BGameContext) {
         }
         throw IllegalStateException("Pipe not found!")
     }
+
+    /**
+     * Node.
+     */
 
     fun findNode(name: String) = this.findNodeBy { it.name == name }
 
@@ -94,5 +113,26 @@ class BPipeline(context: BGameContext) {
 
     fun bindPipeToNode(nodeId: Long, pipe: BPipe) {
         this.findNode(nodeId).connectInnerPipe(pipe)
+    }
+
+    fun bindNodeToPipe(pipeId : Long, node : BNode) {
+        this.findPipe(pipeId).placeNode(node)
+    }
+
+    /**
+     * Listener.
+     */
+
+    fun registerOnPipelineWorkFinishedListener(listener: OnPipelineWorkFinishedListener) {
+        this.onPipelineWorkFinshedObserver[listener::class.java] = listener
+    }
+
+    fun unregisterOnPipelineWorkFinishedListener(clazz: Class<out OnPipelineWorkFinishedListener>) {
+        this.onPipelineWorkFinshedObserver.remove(clazz)
+    }
+
+    interface OnPipelineWorkFinishedListener {
+
+        fun onPipelineWorkFinished()
     }
 }

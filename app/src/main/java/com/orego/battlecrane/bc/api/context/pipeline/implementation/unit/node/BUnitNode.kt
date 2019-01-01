@@ -1,12 +1,14 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.action.node.pipe.onCreate.BOnCreateActionPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.action.node.pipe.onPerform.BOnPerformActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.BUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 
+@BContextComponent
 class BUnitNode(context: BGameContext) : BNode(context) {
 
     companion object {
@@ -17,15 +19,13 @@ class BUnitNode(context: BGameContext) : BNode(context) {
     override val name = NAME
 
     init {
-        //Put on sendOnCreateUnitAction turnTimerTask node:
-        this.pipeMap[BOnCreateActionPipe.NAME] = BOnCreateActionPipe(context)
-        //Put on perform turnTimerTask node:
-        this.pipeMap[BOnPerformActionPipe.NAME] = BOnPerformActionPipe(context)
+        this.connectInnerPipe(BOnCreateUnitPipe(context))
+        this.connectInnerPipe(BOnDestroyUnitPipe(context))
     }
 
     override fun handle(event: BEvent) : BEvent? {
-        return if (event.bundle is BUnitPipe.UnitBundle) {
-            this.pipeMap.values.forEach { it.push(event) }
+        return if (event is BUnitPipe.UnitEvent) {
+            this.pushEventIntoPipes(event)
             event
         } else {
             null

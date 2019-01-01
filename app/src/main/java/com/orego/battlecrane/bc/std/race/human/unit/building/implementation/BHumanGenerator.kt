@@ -2,12 +2,13 @@ package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.api.model.contract.BHitPointable
-import com.orego.battlecrane.bc.api.model.contract.BLevelable
+import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
+import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 
 class BHumanGenerator(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner),
-    BHitPointable, BLevelable {
+    BHitPointable,
+    BLevelable {
 
     companion object {
 
@@ -26,9 +27,9 @@ class BHumanGenerator(context: BGameContext, owner: BPlayer) : BHumanBuilding(co
      * Properties.
      */
 
-    override val verticalSize = DEFAULT_VERTICAL_SIDE
+    override val height = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
+    override val width = DEFAULT_HORIZONTAL_SIDE
 
     override var currentHitPoints = DEFAULT_MAX_HEALTH
 

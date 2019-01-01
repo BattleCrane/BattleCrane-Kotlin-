@@ -1,10 +1,12 @@
 package com.orego.battlecrane.bc.api.context.pipeline.implementation.turn
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.BPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.BTurnNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 
+@BContextComponent
 class BTurnPipe(context: BGameContext) : BPipe(context) {
 
     companion object {
@@ -18,5 +20,5 @@ class BTurnPipe(context: BGameContext) : BPipe(context) {
         this.placeNode(BTurnNode(context))
     }
 
-    open class TurnEvent(val ownerId: Long) : BEvent()
+    open class TurnEvent(val playerId: Long) : BEvent()
 }

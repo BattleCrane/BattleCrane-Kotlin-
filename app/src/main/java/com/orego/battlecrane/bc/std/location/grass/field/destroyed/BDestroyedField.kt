@@ -1,13 +1,10 @@
 package com.orego.battlecrane.bc.std.location.grass.field.destroyed
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 import com.orego.battlecrane.bc.std.location.grass.field.BField
 
-class BDestroyedField(context: BGameContext) : BField(context) {
+class BDestroyedField(context: BGameContext, playerid: Long, x: Int, y: Int) :
+    BField(context, playerid, x, y) {
 
-    override fun isPlaced(
-        context: BGameContext,
-        position: BPoint
-    ) = true
+    override fun isCreatingConditionsPerformed(context: BGameContext) = true
 }

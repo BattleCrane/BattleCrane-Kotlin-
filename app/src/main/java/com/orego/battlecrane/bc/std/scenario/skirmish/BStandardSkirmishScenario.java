@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.std.scenario.skirmish;
 import com.orego.battlecrane.bc.api.context.BGameContext;
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController;
 import com.orego.battlecrane.bc.api.model.player.BPlayer;
-import com.orego.battlecrane.bc.api.model.contract.BUnit;
+import com.orego.battlecrane.bc.api.model.entity.main.BUnit;
 import com.orego.battlecrane.bc.api.scenario.BGameScenario;
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField;
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters;
@@ -21,7 +21,7 @@ public final class BStandardSkirmishScenario implements BGameScenario {
 
     @NotNull
     @Override
-    public final List<BPlayer> initPlayerList(final @NotNull BGameContext context) {
+    public final List<BPlayer> getPlayers(final @NotNull BGameContext context) {
         final List<BPlayer> playerList = new ArrayList<>();
         final BPlayer redPlayer = new BPlayer(context, new BHumanAdjutant.Builder());
         final BPlayer bluePlayer = new BPlayer(context, new BHumanAdjutant.Builder());
@@ -65,8 +65,8 @@ public final class BStandardSkirmishScenario implements BGameScenario {
             throw new IllegalArgumentException("Standard skirmish scenario supports two players!");
         }
         //Fill rest points:
-        for (int x = 0; x < MAP_SIZE; x++) {
-            for (int y = 0; y < MAP_SIZE; y++) {
+        for (int x = 0; x < Companion.getMAP_SIZE(); x++) {
+            for (int y = 0; y < Companion.getMAP_SIZE(); y++) {
                 if (!mapHolder.hasBoundUnit(x, y)) {
                     final BUnit emptyField = new BEmptyField(context);
                     mapHolder.bindUnitTo(emptyField, x, y);

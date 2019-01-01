@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.model.std.view.race.human.unit.building
 
 import android.content.Context
 import android.widget.ImageView
-import com.orego.battlecrane.bc.api.model.contract.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.BUnit
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
@@ -23,8 +23,8 @@ class BHumanWallView(
     }
 
     init {
-        val width = dimension * this.entity.horizontalSize
-        val height = dimension * this.entity.verticalSize
+        val width = dimension * this.entity.width
+        val height = dimension * this.entity.height
         this.displayedView = ImageView(context).byAssets(
             context, width, height, this.getPath()
         )
@@ -32,7 +32,7 @@ class BHumanWallView(
 
     private fun getPath() =
         "race/human/unit/wall/" +
-                "${COLOR_MAP[this.entity.ownerId!!.id]}/" +
+                "${COLOR_MAP[this.entity.playerId!!.id]}/" +
                 "${this.entity.currentHitPoints}.png"
 
     override fun refresh() {

@@ -3,7 +3,7 @@ package com.orego.battlecrane.ui.model.api.render.action
 import android.content.Context
 import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 import com.orego.battlecrane.bc.api.context.controller.player.BPlayerController
-import com.orego.battlecrane.bc.api.model.contract.BAction
+import com.orego.battlecrane.bc.api.model.entity.main.BAction
 import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.addView

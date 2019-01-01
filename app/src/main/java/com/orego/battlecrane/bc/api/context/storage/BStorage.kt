@@ -4,16 +4,33 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.storage.heap.BHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.*
+import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
+import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
+import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
+import com.orego.battlecrane.bc.api.model.entity.property.BProducable
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
+import com.orego.battlecrane.bc.util.mapWithFilter
 
 @BContextComponent
 class BStorage(scenario: BGameScenario, context: BGameContext) {
 
+    init {
+        //Player:
+        scenario.getPlayers(context).forEach { player ->
+            this.addObject(player)
+        }
+        //Unit:
+        scenario.getUnits(context).forEach { unit ->
+            this.addObject(unit)
+        }
+    }
+
     val heapMap = mutableMapOf<Class<*>, BHeap<*>>(
         BUnitHeap::class.java to BUnitHeap(),
-        BActionHeap::class.java to BActionHeap(),
         BAttackableHeap::class.java to BAttackableHeap(),
         BLevelableHeap::class.java to BLevelableHeap(),
+        BHitPointableHeap::class.java to BHitPointableHeap(),
+        BProducableHeap::class.java to BProducableHeap(),
         BPlayerHeap::class.java to BPlayerHeap()
     )
 

@@ -1,15 +1,18 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
 import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.api.model.contract.BAction
-import com.orego.battlecrane.bc.api.model.contract.BAttackable
-import com.orego.battlecrane.bc.api.model.contract.BHitPointable
-import com.orego.battlecrane.bc.api.model.contract.BLevelable
+import com.orego.battlecrane.bc.api.model.entity.main.BAction
+import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
+import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
+import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 
-class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner), BHitPointable,
-    BLevelable, BAttackable {
+class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner),
+    BHitPointable,
+    BLevelable,
+    BAttackable {
 
     companion object {
 
@@ -34,9 +37,9 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
      * Properties.
      */
 
-    override val verticalSize = DEFAULT_VERTICAL_SIDE
+    override val height = DEFAULT_VERTICAL_SIDE
 
-    override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
+    override val width = DEFAULT_HORIZONTAL_SIDE
 
     override var currentHitPoints = DEFAULT_MAX_HEALTH
 
@@ -72,7 +75,7 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
 
     override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
 
-    override fun getAttackAction(): BAction? {
+    override fun getAttackableAbilities(pipeline: BPipeline) {
         return if (this.isAttackEnable) {
             this.currentAttack
         } else {
@@ -128,7 +131,7 @@ class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(conte
      * Action.
      */
 
-    inner class Attack : BAction(this.context, this.ownerId) {
+    inner class Attack : BAction(this.context, this.playerId) {
 
         override fun performAction(): Boolean {
             this@BHumanTurret.attackInRadius()

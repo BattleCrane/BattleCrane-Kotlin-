@@ -1,27 +1,31 @@
 package com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.annotation.BPlayerComponent
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.BOnCreateUnitPipe
-import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
-import com.orego.battlecrane.bc.api.model.contract.BAction
-import com.orego.battlecrane.bc.api.model.contract.BAttackable
-import com.orego.battlecrane.bc.api.model.contract.BHitPointable
-import com.orego.battlecrane.bc.api.model.contract.BTargetable
-import com.orego.battlecrane.bc.api.model.contract.BUnit
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.BAttackablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPlayerComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
+import com.orego.battlecrane.bc.api.model.entity.main.BUnit
+import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
+import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanInfantry
 
-open class BHumanMarine(context: BGameContext, ownerId: Long) : BUnit(ownerId),
-    BHumanInfantry, BHitPointable, BAttackable {
+open class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
+    BUnit(context, playerId, x, y), BHumanInfantry, BHitPointable, BAttackable {
 
     companion object {
 
-        private const val DEFAULT_VERTICAL_SIDE = 1
+        private const val DEFAULT_HEIGHT = 1
 
-        private const val DEFAULT_HORIZONTAL_SIDE = 1
+        private const val DEFAULT_WIDTH = 1
 
         private const val DEFAULT_MAX_HEALTH = 1
 
@@ -32,9 +36,9 @@ open class BHumanMarine(context: BGameContext, ownerId: Long) : BUnit(ownerId),
      * Properties.
      */
 
-    final override val verticalSize = DEFAULT_VERTICAL_SIDE
+    final override val height = DEFAULT_HEIGHT
 
-    final override val horizontalSize = DEFAULT_HORIZONTAL_SIDE
+    final override val width = DEFAULT_WIDTH
 
     final override var currentHitPoints = DEFAULT_MAX_HEALTH
 
@@ -45,70 +49,123 @@ open class BHumanMarine(context: BGameContext, ownerId: Long) : BUnit(ownerId),
     final override var isAttackEnable = false
 
     /**
+     * Id.
+     */
+
+    final override val hitPointableId: Long
+
+    final override val attackableId: Long
+
+    init {
+        val generator = context.idGenerator
+        this.hitPointableId = generator.generateHitPointableId()
+        this.attackableId = generator.generateAttackableId()
+    }
+
+    /**
      * Unit.
      */
 
-    override fun isPlaced(context: BGameContext, position: BPoint) = position.attachedUnit is BEmptyField
-
-    /**
-     * Lifecycle.
-     */
-
-    override fun onTurnStarted() {
-        this.switchAttackEnable(true)
-    }
-
-    override fun onTurnEnded() {
-        this.switchAttackEnable(false)
-    }
-
-    override fun getAttackAction(): BAction? {
-        return if (this.isAttackEnable) {
-            Attack()
-        } else {
-            null
-        }
-    }
-
-    inner class Attack : BAction(this.context, this.ownerId), BTargetable {
-
-        override var targetPosition: BPoint? = null
-
-        override fun performAction(): Boolean {
-            //TODO MAKE SHOT:
-            this@BHumanMarine.switchAttackEnable(false)
-            return true
-        }
+    override fun isCreatingConditionsPerformed(context: BGameContext): Boolean {
+        val otherUnit = context.mapController.getUnitByPosition(context, this.x, this.y)
+        return otherUnit is BEmptyField
     }
 
     /**
      * Node.
      */
 
+
+    init {
+
+    }
+
     @BPlayerComponent
-    class OnCreateNode(context: BGameContext, private val ownerId: Long) : BNode(context) {
+    class OnCreateNode(context: BGameContext, private val playerId: Long) : BNode(context) {
 
         companion object {
 
-            fun createEvent(position: BPoint) = CreateMarineEvent(position)
+            fun createEvent(playerId: Long, x: Int, y: Int) =
+                OnCreateMarineEvent(playerId, x, y)
         }
 
+        private val mapController = this.context.mapController
+
         override fun handle(event: BEvent): BEvent? {
-            if (event is CreateMarineEvent) {
-                val mapManager = this.context.mapManager
-                val marine = BHumanMarine(this.context, this.ownerId)
-                val position = event.position
-                if (mapManager.createUnit(marine, position)) {
-                    val pipes = this.pipeMap.values.toList()
-                    for (i in 0 until pipes.size) {
-                        pipes[i].push(event)
-                    }
-                    return event
+            if (event is OnCreateMarineEvent && event.playerId == this.playerId) {
+                val marine = BHumanMarine(this.context, this.playerId, event.x, event.y)
+                if (this.mapController.placeUnitOnMap(this.context, marine)) {
+                    return this.pushEventIntoPipes(event)
                 }
             }
             return null
         }
 
-        open class CreateMarineEvent(position: BPoint) : BOnCreateUnitPipe.CreateUnitEvent(position)
+        /**
+         * Event.
+         */
+
+        open class OnCreateMarineEvent(val playerId: Long, x: Int, y: Int) :
+            BOnCreateUnitPipe.OnCreateUnitEvent(x, y)
+    }
+
+    @BUnitComponent
+    class OnMarineAttackEnableNode(
+        context: BGameContext,
+        private val playerId: Long,
+        private val attackableId: Long
+    ) : BNode(context) {
+
+        override fun handle(event: BEvent): BEvent? {
+            return if (event is BTurnPipe.TurnEvent && this.playerId == event.playerId) {
+                val pipeline = this.context.pipeline
+                this.pushEventIntoPipes(event)
+                when (event) {
+                    is BOnTurnStartedPipe.OnTurnStartedEvent -> {
+                        pipeline.pushEvent(
+                            BOnAttackEnablePipe.createEvent(this.attackableId, true)
+                        )
+                    }
+                    is BOnTurnFinishedPipe.OnTurnFinishedEvent -> {
+                        pipeline.pushEvent(
+                            BOnAttackEnablePipe.createEvent(this.attackableId, false)
+                        )
+                    }
+                }
+                event
+            } else {
+                null
+            }
+        }
+    }
+
+    @BUnitComponent
+    class OnMarineAttackNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        private val unitHeap = this.context.storage.getHeap(BUnitHeap::class.java)
+
+        private val mapController = this.context.mapController
+
+        private val marine = unitHeap[unitId]!!
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event !is OnMarineAttackEvent || event.unitId != this.marine.unitId) {
+                return null
+            }
+            val targetX = event.targetX
+            val targetY = event.targetY
+            val targetUnit = this.mapController.getUnitByPosition(this.context, targetX, targetY)
+            if (targetUnit is BHitPointable) {
+
+            }
+
+
+            val marineX = this.marine.x
+            val marineY = this.marine.y
+
+        }
+
+        open class OnMarineAttackEvent(val unitId: Long, val targetX: Int, val targetY: Int) :
+            BAttackablePipe.AttackableEvent()
     }
 }
