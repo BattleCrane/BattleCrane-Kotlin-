@@ -18,7 +18,7 @@ class BPlayerController(context: BGameContext, var currentPlayerPosition: Int) {
         //Init fields:
         this.currentPlayerId = players[this.currentPlayerPosition].playerId
         this.ablePlayers = players
-            .mapWithFilter({ it.isAblePlayer }, { it.playerId })
+            .mapWithFilter({ it.isAblePlayer(context) }, { it.playerId })
             .toMutableList()
     }
 }

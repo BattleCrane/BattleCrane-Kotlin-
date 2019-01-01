@@ -1,29 +1,34 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
-import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.api.model.entity.main.BAction
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.BUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.BUnitNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.api.model.entity.property.BProducable
-import com.orego.battlecrane.bc.api.model.entity.BTargetable
-import com.orego.battlecrane.bc.api.model.entity.main.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
-import com.orego.battlecrane.bc.std.race.human.action.BHumanAction
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
-import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.BHumanTank
+import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.BHumanMarine
 
-class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner),
-    BHitPointable,
-    BLevelable,
-    BProducable {
+class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
+    BHumanBuilding(context, playerId, x, y), BHitPointable, BLevelable, BProducable {
 
     companion object {
 
-        private const val DEFAULT_VERTICAL_SIDE = 3
+        private const val DEFAULT_HEIGHT = 3
 
-        private const val DEFAULT_HORIZONTAL_SIDE = 2
+        private const val DEFAULT_WIDTH = 2
 
         private const val DEFAULT_MAX_HEALTH = 1
 
@@ -33,12 +38,29 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
     }
 
     /**
-     * Properties.
+     * Id.
      */
 
-    override val height = DEFAULT_VERTICAL_SIDE
+    override val hitPointableId: Long
 
-    override val width = DEFAULT_HORIZONTAL_SIDE
+    override val levelableId: Long
+
+    override val producableId: Long
+
+    init {
+        val generator = context.contextGenerator
+        this.hitPointableId = generator.getIdGenerator(BHitPointable::class.java).generateId()
+        this.levelableId = generator.getIdGenerator(BLevelable::class.java).generateId()
+        this.producableId = generator.getIdGenerator(BProducable::class.java).generateId()
+    }
+
+    /**
+     * Property.
+     */
+
+    override val height = DEFAULT_HEIGHT
+
+    override val width = DEFAULT_WIDTH
 
     override var currentHitPoints = DEFAULT_MAX_HEALTH
 
@@ -51,123 +73,176 @@ class BHumanFactory(context: BGameContext, owner: BPlayer) : BHumanBuilding(cont
     override var isProduceEnable = false
 
     /**
-     * Observers.
+     * Context.
      */
 
-    override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
+    val onFactoryProduceEnableNodeId: Long
 
-    override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
+    val onTrainTankNodeId: Long
 
-    override val levelUpObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
+    val onTrainTankPipeId: Long
 
-    override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
+    init {
+        //Get pipeline:
+        val pipeline = context.pipeline
 
-    override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
+        //On produce enable:
+        val onFactoryProduceEnableNode = OnFactoryProduceEnableNode(context, this.unitId)
 
-    /**
-     * Companions.
-     */
+        //On train tank:
+        val onTrainTankNode = OnTrainTankNode(this.unitId, context)
+        val onTrainTankPipe = onTrainTankNode.wrapInPipe()
 
-    private val pipeline by lazy { this.context.pipeline }
+        //Save ids:
+        this.onFactoryProduceEnableNodeId = onFactoryProduceEnableNode.id
+        this.onTrainTankNodeId = onTrainTankNode.id
+        this.onTrainTankPipeId = onTrainTankPipe.id
 
-    val trainTankLvl1Factory = TrainTankLvl1Factory()
-
-    val trainTankLvl2Factory = TrainTankLvl2Factory()
-
-    val trainTankLvl3Factory = TrainTankLvl3Factory()
-
-
-    /**
-     * Lifecycle.
-     */
-
-    override fun onTurnStarted() {
-        this.switchProduceEnable(true)
-    }
-
-    override fun onTurnEnded() {
-        this.switchProduceEnable(false)
+        //Bind:
+        pipeline.bindNodeToPipe(this.onTurnStartedNodeId, onFactoryProduceEnableNode)
+        pipeline.bindPipeToNode(BUnitNode.NAME, onTrainTankPipe)
     }
 
     /**
-     * Producer function.
+     * Node.
      */
 
-    override fun pushProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
-        .also { set ->
-            if (this.isProduceEnable) {
-                this.trainTankLvl1Factory.sendOnCreateUnitAction()?.let { set.add(it) }
-                if (this.currentLevel > 1) {
-                    this.trainTankLvl2Factory.sendOnCreateUnitAction()?.let { set.add(it) }
-                    if (this.currentLevel > 2) {
-                        this.trainTankLvl3Factory.sendOnCreateUnitAction()?.let { set.add(it) }
+    @BAdjutantComponent
+    class OnCreateFactoryNode(context: BGameContext, private val playerId: Long) : BNode(context) {
+
+        companion object {
+
+            fun createEvent(playerId: Long, x: Int, y: Int) =
+                Event(playerId, x, y)
+        }
+
+        private val mapController = this.context.mapController
+
+        private val storage = this.context.storage
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is Event && event.playerId == this.playerId) {
+                val x = event.x
+                val y = event.y
+                if (this.isCreatingConditionsPerformed(x, y)) {
+                    val factory = BHumanFactory(this.context, this.playerId, x, y)
+                    if (this.mapController.placeUnitOnMap(factory)) {
+                        this.storage.addObject(factory)
+                        return this.pushEventIntoPipes(event)
                     }
                 }
             }
+            return null
         }
 
-    /**
-     * Action.
-     */
-
-    abstract inner class TrainTank : BHumanAction(this.context, this.playerId!!),
-        BTargetable {
-
-        override var targetPosition: BPoint? = null
-
-        protected abstract fun isTrainConditionPerformed(unit : BUnit) : Boolean
-
-        override fun performAction(): Boolean {
-            if (this.targetPosition != null) {
-                val tank = BHumanTank(this.context, this.ownerId!!)
-                val manager = this.context.mapManager
-                val unit = manager.getUnitByPosition(this.targetPosition)
-                if (unit is BEmptyField && this.isTrainConditionPerformed(unit)) {
-                    val isSuccessful = manager.createUnit(tank, this.targetPosition)
-                    if (isSuccessful) {
-                        this@BHumanFactory.switchProduceEnable(false)
+        private fun isCreatingConditionsPerformed(startX: Int, startY: Int): Boolean {
+            val endX = startX + DEFAULT_WIDTH
+            val endY = startY + DEFAULT_HEIGHT
+            for (x in startX until endX) {
+                for (y in startY until endY) {
+                    val otherUnit = this.context.mapController.getUnitByPosition(this.context, x, y)
+                    if (otherUnit !is BEmptyField) {
+                        return false
                     }
-                    return isSuccessful
                 }
             }
-            return false
+            return true
+        }
+
+        /**
+         * Event.
+         */
+
+        open class Event(val playerId: Long, x: Int, y: Int) :
+            BOnCreateUnitPipe.Event(x, y)
+    }
+
+    @BUnitComponent
+    class OnFactoryProduceEnableNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        private val factory = this.context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanFactory
+
+        override fun handle(event: BEvent): BEvent? {
+            return if (event is BTurnPipe.Event && this.factory.playerId == event.playerId) {
+                val pipeline = this.context.pipeline
+                this.pushEventIntoPipes(event)
+                val producableId = this.factory.producableId
+                when (event) {
+                    is BOnTurnStartedPipe.Event -> {
+                        pipeline.pushEvent(
+                            BOnProduceEnablePipe.createEvent(producableId, true)
+                        )
+                    }
+                    is BOnTurnFinishedPipe.Event -> {
+                        pipeline.pushEvent(
+                            BOnProduceEnablePipe.createEvent(producableId, false)
+                        )
+                    }
+                }
+                event
+            } else {
+                null
+            }
         }
     }
 
-    /**
-     * Factories.
-     */
+    @BUnitComponent
+    class OnTrainTankNode(unitId: Long, context: BGameContext) :
+        BNode(context) {
 
-    inner class TrainTankLvl1Factory : BAction.Factory(this.pipeline) {
+        companion object {
 
-
-        override fun createAction() = Action()
-
-        inner class Action : TrainTank() {
-
-            override fun isTrainConditionPerformed(unit: BUnit) =
-                this@BHumanFactory.playerId!!.owns(unit)
+            fun createEvent(factoryUnitId: Long, x: Int, y: Int) =
+                Event(factoryUnitId, x, y)
         }
-    }
 
-    inner class TrainTankLvl2Factory : BAction.Factory(this.pipeline) {
+        private val factory = this.context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanFactory
 
-        override fun createAction() = Action()
+        private val mapController = this.context.mapController
 
-        inner class Action : TrainTank() {
+        private val pipeline = this.context.pipeline
 
-            override fun isTrainConditionPerformed(unit: BUnit) =
-                !this@BHumanFactory.playerId!!.isEnemy(unit.playerId)
+        override fun handle(event: BEvent): BEvent? {
+            if (event !is Event
+                || this.factory.unitId != event.factoryUnitId
+                || !this.factory.isProduceEnable
+            ) {
+                return null
+            }
+            val x = event.x
+            val y = event.y
+            val factoryLevel = this.factory.currentLevel
+            val factoryPlayerId = this.factory.playerId
+            val otherUnit = this.mapController.getUnitByPosition(this.context, x, y)
+            val otherPlayerId = otherUnit.playerId
+            if (factoryLevel == 1 && otherPlayerId == factoryPlayerId) {
+                this.createMarine(factoryPlayerId, x, y)
+            }
+            val playerHeap = this.context.storage.getHeap(BPlayerHeap::class.java)
+            val factoryOwner = playerHeap[factoryPlayerId]
+            if (factoryLevel == 2 && !factoryOwner.isEnemy(otherPlayerId)) {
+                this.createMarine(factoryPlayerId, x, y)
+            }
+            if (factoryLevel == 3) {
+                this.createMarine(factoryPlayerId, x, y)
+            }
+            return this.pushEventIntoPipes(event)
         }
-    }
 
-    inner class TrainTankLvl3Factory : BAction.Factory(this.pipeline) {
-
-        override fun createAction() = Action()
-
-        inner class Action : TrainTank() {
-
-            override fun isTrainConditionPerformed(unit: BUnit) = true
+        private fun createMarine(playerId: Long, x: Int, y: Int) {
+            this.pipeline.pushEvent(
+                BHumanMarine.OnCreateMarineNode.createEvent(playerId, x, y)
+            )
+            this.pipeline.pushEvent(
+                BOnProduceEnablePipe.createEvent(this.factory.producableId, false)
+            )
         }
+
+        /**
+         * Event.
+         */
+
+        open class Event(val factoryUnitId: Long, val x: Int, val y: Int) :
+            BUnitPipe.Event()
     }
 }

@@ -1,16 +1,44 @@
 package com.orego.battlecrane.bc.std.race.human.adjutant
 
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.node.BOnCreateUnitNode
 import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.std.race.human.BHumanRace
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
+import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.BHumanMarine
 
-class BHumanAdjutant(playerId : Long) : BAdjutant(playerId), BHumanRace {
+class BHumanAdjutant(context: BGameContext, playerId: Long) : BAdjutant(context, playerId), BHumanRace {
+
+    override var isAble = true
 
     /**
-     * Builder.
+     * Context.
      */
 
-    class Builder : BAdjutant.Builder() {
+    val onCreateBarracksPipeId: Long
 
-        override fun build(playerId: Long) = BHumanAdjutant(playerId)
+    val onCreateBarracksNodeId: Long
+
+    val onCreateMarinePipeId: Long
+
+    val onCreateMarineNodeId: Long
+
+    init {
+        //Get pipeline:
+        val pipeline = context.pipeline
+
+        //Barracks:
+        val onCreateBarracksNode = BHumanBarracks.OnCreateBarracksNode(context, playerId)
+        val onCreateBarracksPipe = onCreateBarracksNode.wrapInPipe()
+        this.onCreateBarracksNodeId = onCreateBarracksNode.id
+        this.onCreateBarracksPipeId = onCreateBarracksPipe.id
+        pipeline.bindPipeToNode(BOnCreateUnitNode.NAME, onCreateBarracksPipe)
+
+        //Marine:
+        val onCreateMarineNode = BHumanMarine.OnCreateMarineNode(context, playerId)
+        val onCreateMarinePipe = onCreateMarineNode.wrapInPipe()
+        this.onCreateMarineNodeId = onCreateMarineNode.id
+        this.onCreateMarinePipeId = onCreateMarinePipe.id
+        pipeline.bindPipeToNode(BOnCreateUnitNode.NAME, onCreateMarinePipe)
     }
 }

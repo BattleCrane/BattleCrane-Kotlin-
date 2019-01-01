@@ -1,11 +1,11 @@
 package com.orego.battlecrane.bc.std.race.human.unit
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.main.BUnit
@@ -30,7 +30,7 @@ abstract class BHumanUnit(context: BGameContext, playerId: Long, x: Int, y: Int)
         //Get context:
         val pipeline = context.pipeline
         val playerHeap = context.storage.getHeap(BPlayerHeap::class.java)
-        val player = playerHeap[playerId]!!
+        val player = playerHeap[playerId]
 
         //On turn started:
         val onTurnStartedNode = OnTurnStartedNode(context, playerId)

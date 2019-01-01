@@ -17,6 +17,7 @@ import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHea
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.api.model.entity.property.BProducable
+import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.BHumanMarine
 
@@ -121,13 +122,27 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         override fun handle(event: BEvent): BEvent? {
             if (event is Event && event.playerId == this.playerId) {
-                val marine = BHumanMarine(this.context, this.playerId, event.x, event.y)
-                if (this.mapController.placeUnitOnMap(this.context, marine)) {
-                    this.storage.addObject(marine)
-                    return this.pushEventIntoPipes(event)
+                val x = event.x
+                val y = event.y
+                if (this.isCreatingConditionsPerformed(x, y)) {
+                    val barracks = BHumanBarracks(this.context, this.playerId, x, y)
+                    if (this.mapController.placeUnitOnMap(barracks)) {
+                        this.storage.addObject(barracks)
+                        return this.pushEventIntoPipes(event)
+                    }
                 }
             }
             return null
+        }
+
+        private fun isCreatingConditionsPerformed(x: Int, y: Int): Boolean {
+            for (i in y until y + DEFAULT_HEIGHT) {
+                val otherUnit = this.context.mapController.getUnitByPosition(this.context, x, i)
+                if (otherUnit !is BEmptyField) {
+                    return false
+                }
+            }
+            return true
         }
 
         /**
@@ -226,4 +241,6 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         open class Event(val barracksUnitId: Long, val x: Int, val y: Int) :
             BUnitPipe.Event()
     }
+
+    class OnLevelChangedNode
 }

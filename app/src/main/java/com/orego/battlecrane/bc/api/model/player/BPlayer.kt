@@ -9,28 +9,44 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pi
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPlayerComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAdjutantHeap
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.concurrent.timer
 
-class BPlayer(context: BGameContext, builder: BAdjutant.Builder) {
+class BPlayer(context: BGameContext) {
 
     companion object {
 
         const val NEUTRAL_PLAYER_ID : Long = 0
     }
 
+    /**
+     * Id.
+     */
+
     val playerId: Long = context.contextGenerator.getIdGenerator(BPlayer::class.java).generateId()
 
-    //TODO WHILE WITHOUT BONUSES:
-    val adjutant: BAdjutant = builder.build(this.playerId)
+    /**
+     * Property.
+     */
 
-    var isAblePlayer = true
+    fun isAblePlayer(context: BGameContext) : Boolean {
+        val adjutantHeap = context.storage.getHeap(BAdjutantHeap::class.java)
+        for (id in this.adjutants) {
+            val adjutant = adjutantHeap[id]
+            if (adjutant.isAble) {
+                return true
+            }
+        }
+        return false
+    }
 
-    private val allies = mutableSetOf<Long>()
+    val adjutants = mutableSetOf<Long>()
 
-    private val enemies = mutableSetOf<Long>()
+    val allies = mutableSetOf<Long>()
+
+    val enemies = mutableSetOf<Long>()
 
     /**
      * Context.

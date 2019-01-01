@@ -3,6 +3,7 @@ package com.orego.battlecrane.bc.std.scenario.skirmish
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
+import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.entity.main.BUnit
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
@@ -10,18 +11,16 @@ import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
-
-import java.util.ArrayList
-import java.util.Random
+import java.util.*
 
 class BStandardSkirmishScenario : BGameScenario {
 
     override val firstTurnPlayerPosition = Random().nextInt(1)
 
     override fun getPlayers(context: BGameContext): List<BPlayer> {
-        val playerList = ArrayList<BPlayer>()
-        val redPlayer = BPlayer(context, BHumanAdjutant.Builder())
-        val bluePlayer = BPlayer(context, BHumanAdjutant.Builder())
+        val playerList = mutableListOf<BPlayer>()
+        val redPlayer = BPlayer(context)
+        val bluePlayer = BPlayer(context)
 
         //Set enemies:
         redPlayer.addEnemy(bluePlayer.playerId)
@@ -33,6 +32,19 @@ class BStandardSkirmishScenario : BGameScenario {
         return playerList
     }
 
+    override fun getAdjutants(context: BGameContext): List<BAdjutant> {
+        val adjutantList = mutableListOf<BAdjutant>()
+        val heap = context.storage.getHeap(BPlayerHeap::class.java)
+        val players = heap.getObjectList()
+        if (players.size == 2) {
+            adjutantList.add(BHumanAdjutant(context, players[0].playerId))
+            adjutantList.add(BHumanAdjutant(context, players[1].playerId))
+            return adjutantList
+        } else {
+            throw IllegalArgumentException("Standard skirmish scenario supports two players!")
+        }
+    }
+
     override fun getUnits(context: BGameContext) =
         mutableListOf<BUnit>()
             .addBuildings(context)
@@ -40,7 +52,7 @@ class BStandardSkirmishScenario : BGameScenario {
 
     private fun MutableList<BUnit>.addBuildings(context: BGameContext): MutableList<BUnit> {
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
-        val players = heap.getPlayers()
+        val players = heap.getObjectList()
         if (players.size == 2) {
 
             //Get players:

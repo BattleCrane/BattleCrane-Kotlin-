@@ -1,20 +1,20 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 
-class BHumanGenerator(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner),
+class BHumanGenerator(context: BGameContext, playerId: Long, x : Int, y : Int) :
+    BHumanBuilding(context, playerId, x, y),
     BHitPointable,
     BLevelable {
 
     companion object {
 
-        private const val DEFAULT_VERTICAL_SIDE = 2
+        private const val DEFAULT_HEIGTH = 2
 
-        private const val DEFAULT_HORIZONTAL_SIDE = 2
+        private const val DEFAULT_WIDTH = 2
 
         private const val DEFAULT_MAX_HEALTH = 1
 
@@ -27,9 +27,9 @@ class BHumanGenerator(context: BGameContext, owner: BPlayer) : BHumanBuilding(co
      * Properties.
      */
 
-    override val height = DEFAULT_VERTICAL_SIDE
+    override val height = DEFAULT_HEIGTH
 
-    override val width = DEFAULT_HORIZONTAL_SIDE
+    override val width = DEFAULT_WIDTH
 
     override var currentHitPoints = DEFAULT_MAX_HEALTH
 
@@ -40,14 +40,15 @@ class BHumanGenerator(context: BGameContext, owner: BPlayer) : BHumanBuilding(co
     override var maxLevel = DEFAULT_MAX_LEVEL
 
     /**
-     * Observers.
+     * Id.
      */
 
-    override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
+    override val hitPointableId: Long
 
-    override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
+    override val levelableId: Long
 
-    override val levelUpObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
-
-    override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
+    init {
+        val generator = context.contextGenerator
+        this.hitPointableId =
+    }
 }

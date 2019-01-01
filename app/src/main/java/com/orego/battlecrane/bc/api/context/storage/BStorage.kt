@@ -14,6 +14,10 @@ class BStorage(scenario: BGameScenario, context: BGameContext) {
         scenario.getPlayers(context).forEach { player ->
             this.addObject(player)
         }
+        //Adjutant:
+        scenario.getAdjutants(context).forEach { adjutant ->
+            this.addObject(adjutant)
+        }
         //Unit:
         scenario.getUnits(context).forEach { unit ->
             this.addObject(unit)
@@ -21,12 +25,13 @@ class BStorage(scenario: BGameScenario, context: BGameContext) {
     }
 
     val heapMap = mutableMapOf<Class<*>, BHeap<*>>(
+        BPlayerHeap::class.java to BPlayerHeap(),
+        BAdjutantHeap::class.java to BAdjutantHeap(),
         BUnitHeap::class.java to BUnitHeap(),
         BAttackableHeap::class.java to BAttackableHeap(),
         BLevelableHeap::class.java to BLevelableHeap(),
         BHitPointableHeap::class.java to BHitPointableHeap(),
-        BProducableHeap::class.java to BProducableHeap(),
-        BPlayerHeap::class.java to BPlayerHeap()
+        BProducableHeap::class.java to BProducableHeap()
     )
 
     inline fun <reified T> getHeap(heapClazz: Class<T>): T = this.heapMap[heapClazz] as T

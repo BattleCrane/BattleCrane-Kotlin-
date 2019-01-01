@@ -6,26 +6,25 @@ import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 
 @BContextComponent
-class BPlayerHeap : BHeap<BPlayer>() {
+class BAdjutantHeap : BHeap<BAdjutant>() {
+
+    companion object {
+
+        const val NAME = "ADJUTANT_HEAP"
+    }
 
     override fun addObject(any: Any) {
-        if (any is BPlayer) {
-            this.objectMap[any.playerId] = any
-        }
         if (any is BAdjutant) {
-            this.setAdjutantId(any)
-
+            this.objectMap[any.adjutantId] = any
         }
     }
 
     override fun removeObject(any: Any) {
-        if (any is BPlayer) {
-            this.objectMap.remove(any.playerId)
+        if (any is BAdjutant) {
+            this.objectMap.remove(any.adjutantId)
         }
-    }
+        if (any is BPlayer) {
 
-    private fun setAdjutantId(adjutant: BAdjutant) {
-        val player = this.objectMap[adjutant.playerId]!!
-        player.adjutants.add(adjutant.adjutantId)
+        }
     }
 }

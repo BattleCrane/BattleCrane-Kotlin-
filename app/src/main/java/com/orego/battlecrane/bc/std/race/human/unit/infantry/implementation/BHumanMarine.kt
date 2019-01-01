@@ -101,6 +101,10 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         pipeline.bindPipeToNode(BAttackableNode.NAME, onMarineAttackPipe)
     }
 
+    /**
+     * Node.
+     */
+
     @BAdjutantComponent
     class OnCreateMarineNode(context: BGameContext, private val playerId: Long) : BNode(context) {
 
@@ -141,10 +145,6 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         open class OnCreateMarineEvent(val playerId: Long, x: Int, y: Int) :
             BOnCreateUnitPipe.Event(x, y)
     }
-
-    /**
-     * Node.
-     */
 
     @BUnitComponent
     class OnMarineAttackEnableNode(context: BGameContext, unitId: Long) : BNode(context) {

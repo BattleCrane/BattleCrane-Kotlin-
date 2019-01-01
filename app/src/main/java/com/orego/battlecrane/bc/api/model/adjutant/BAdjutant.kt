@@ -1,22 +1,14 @@
 package com.orego.battlecrane.bc.api.model.adjutant;
 
-open class BAdjutant(val playerId: Long) {
+import com.orego.battlecrane.bc.api.context.BGameContext
 
-    open val resourceManager = ResourceManager()
+/**
+ * Race controller.
+ */
 
-    open class ResourceManager {
+abstract class BAdjutant(context: BGameContext, val playerId : Long) {
 
-        var currentInfluenceCount = 0
+    val adjutantId = context.contextGenerator.getIdGenerator(BAdjutant::class.java).generateId()
 
-        var receivedInfluenceCount = 0
-    }
-
-    /**
-     * Builder.
-     */
-
-    open class Builder {
-
-        open fun build(playerId: Long) = BAdjutant(playerId)
-    }
+    abstract var isAble : Boolean
 }
