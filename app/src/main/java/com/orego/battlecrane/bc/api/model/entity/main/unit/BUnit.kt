@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.api.model.entity.main
+package com.orego.battlecrane.bc.api.model.entity.main.unit
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 

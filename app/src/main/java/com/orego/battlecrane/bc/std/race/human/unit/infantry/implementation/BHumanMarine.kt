@@ -16,17 +16,19 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.api.model.entity.main.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BCreature
 import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
+import com.orego.battlecrane.bc.std.location.grass.field.BField
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.BHumanUnit
-import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanInfantry
+import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanCreature
 import java.lang.Integer.max
 import java.lang.Integer.min
 
 class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
-    BHumanUnit(context, playerId, x, y), BHumanInfantry, BHitPointable, BAttackable {
+    BHumanCreature(context, playerId, x, y), BHitPointable, BAttackable {
 
     companion object {
 
@@ -303,9 +305,17 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         private fun isAttackBlock(otherUnit: BUnit): Boolean {
             val marineOwnerId = this.marine.playerId
             val otherPlayerId = otherUnit.playerId
-            return otherUnit !is BHumanInfantry
-                    && (marineOwnerId != otherPlayerId
-                    && !this.playerHeap[marineOwnerId].isAlly(otherPlayerId))
+            if (otherUnit is BCreature || otherUnit is BField) {
+                return false
+            }
+            if (marineOwnerId == otherPlayerId) {
+                return false
+            }
+            val marineOwner = this.playerHeap[marineOwnerId]
+            if (marineOwner.isAlly(otherPlayerId)) {
+                return false
+            }
+            return true
         }
 
         /**

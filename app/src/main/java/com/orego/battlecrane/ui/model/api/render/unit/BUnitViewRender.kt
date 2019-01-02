@@ -1,7 +1,7 @@
 package com.orego.battlecrane.ui.model.api.render.unit
 
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController.MAP_SIZE
-import com.orego.battlecrane.bc.api.model.entity.main.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.ui.model.api.render.BViewRender
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.addView

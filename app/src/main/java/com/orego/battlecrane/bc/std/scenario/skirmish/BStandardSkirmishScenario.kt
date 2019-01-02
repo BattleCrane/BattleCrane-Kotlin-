@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
-import com.orego.battlecrane.bc.api.model.entity.main.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField

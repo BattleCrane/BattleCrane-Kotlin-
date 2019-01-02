@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.model.std.view.ground.map.field.destroyed
 
 import android.content.Context
 import android.widget.ImageView
-import com.orego.battlecrane.bc.api.model.entity.main.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.destroyed.BDestroyedField
 import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView

@@ -8,10 +8,11 @@ import com.orego.battlecrane.bc.api.model.entity.main.BAction
 import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.entity.BTargetable
-import com.orego.battlecrane.bc.api.model.entity.main.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
+import com.orego.battlecrane.bc.std.race.human.unit.vehicle.BHumanVehicle
 
-open class BHumanTank(context: BGameContext, owner: BPlayer) : BUnit(context, owner),
+open class BHumanTank(context: BGameContext, owner: BPlayer) : BHumanVehicle(context, owner),
     BHitPointable,
     BAttackable {
 

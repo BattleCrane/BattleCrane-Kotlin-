@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.api.context.storage.heap.implementation
 
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.storage.heap.BHeap
-import com.orego.battlecrane.bc.api.model.entity.main.BUnit
+import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 
 @BContextComponent
 class BUnitHeap : BHeap<BUnit>() {
