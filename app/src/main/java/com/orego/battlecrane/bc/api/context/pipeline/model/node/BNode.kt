@@ -10,6 +10,10 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 
 abstract class BNode(protected val context: BGameContext) {
 
+    /**
+     * Node.
+     */
+
     val id = this.context.contextGenerator.getIdGenerator(BNode::class.java).generateId()
 
     open val name: String? = null
@@ -20,6 +24,10 @@ abstract class BNode(protected val context: BGameContext) {
 
     open fun connectInnerPipe(pipe: BPipe) {
         this.pipeMap[pipe.id] = pipe
+    }
+
+    open fun disconnectInnerPipe(pipeId : Long) {
+        this.pipeMap.remove(pipeId)
     }
 
     fun findNodeBy(condition: (BNode) -> Boolean): BNode? {

@@ -1,17 +1,16 @@
 package com.orego.battlecrane.bc.api.context.pipeline
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.BAttackablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.BHitPointablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.BLevelablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.BProducablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.BUnitPipe
-import java.lang.IllegalStateException
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 
 @BContextComponent
 class BPipeline(context: BGameContext) {
@@ -113,6 +112,10 @@ class BPipeline(context: BGameContext) {
 
     fun bindPipeToNode(nodeId: Long, pipe: BPipe) {
         this.findNode(nodeId).connectInnerPipe(pipe)
+    }
+
+    fun unbindPipeFromNode(nodeName: String, pipeId : Long) {
+        this.findNode(nodeName).disconnectInnerPipe(pipeId)
     }
 
     fun bindNodeToPipe(pipeId : Long, node : BNode) {

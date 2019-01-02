@@ -26,7 +26,7 @@ class BOnProduceEnableNode(context: BGameContext) : BNode(context) {
     }
 
     override fun handle(event: BEvent): BEvent? {
-        if (event is BOnProduceEnablePipe.OnProducableEnableEvent) {
+        if (event is BOnProduceEnablePipe.OnEnableEvent) {
             if (this.switchProduceEnable(event.producableId, event.isEnable)) {
                 this.pushEventIntoPipes(event)
                 return event

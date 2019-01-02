@@ -28,7 +28,7 @@ class BHumanAdjutant(context: BGameContext, playerId: Long) : BAdjutant(context,
         val pipeline = context.pipeline
 
         //Barracks:
-        val onCreateBarracksNode = BHumanBarracks.OnCreateBarracksNode(context, playerId)
+        val onCreateBarracksNode = BHumanBarracks.OnCreateNode(context, playerId)
         val onCreateBarracksPipe = onCreateBarracksNode.wrapInPipe()
         this.onCreateBarracksNodeId = onCreateBarracksNode.id
         this.onCreateBarracksPipeId = onCreateBarracksPipe.id

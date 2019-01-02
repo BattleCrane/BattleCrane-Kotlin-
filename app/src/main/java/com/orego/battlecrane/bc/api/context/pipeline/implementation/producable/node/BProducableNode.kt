@@ -24,7 +24,7 @@ class BProducableNode(context: BGameContext) : BNode(context) {
     }
 
     override fun handle(event: BEvent) : BEvent? {
-        return if (event is BProducablePipe.ProducableEvent) {
+        return if (event is BProducablePipe.Event) {
             this.pushEventIntoPipes(event)
             event
         } else {

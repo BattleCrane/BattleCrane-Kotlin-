@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.n
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.node.BOnAttackActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.node.BOnAttackEnableNode
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsChanged.BOnHitPointsChangedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
@@ -217,7 +217,7 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
             if (this.isPossibleAttackGeometry(targetX, targetY)) {
                 this.pushEventIntoPipes(event)
                 this.pipeline.pushEvent(
-                    BOnHitPointsChangedPipe.createOnDecreasedEvent(targetUnit.hitPointableId, this.marine.damage)
+                    BOnHitPointsActionPipe.createOnDecreasedEvent(targetUnit.hitPointableId, this.marine.damage)
                 )
                 return event
             }

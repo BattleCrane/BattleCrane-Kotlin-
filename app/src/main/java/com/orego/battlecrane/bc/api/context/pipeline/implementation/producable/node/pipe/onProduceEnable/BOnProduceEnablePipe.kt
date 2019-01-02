@@ -14,7 +14,7 @@ class BOnProduceEnablePipe(context: BGameContext) : BPipe(context) {
         const val NAME = "ON_PRODUCE_ENABLE_PIPE"
 
         fun createEvent(producableId: Long, isEnable: Boolean) =
-            OnProducableEnableEvent(producableId, isEnable)
+            OnEnableEvent(producableId, isEnable)
     }
 
     override val name = NAME
@@ -23,6 +23,6 @@ class BOnProduceEnablePipe(context: BGameContext) : BPipe(context) {
         this.placeNode(BOnProduceEnableNode(context))
     }
 
-    open class OnProducableEnableEvent(val producableId: Long, val isEnable: Boolean) :
-        BProducablePipe.ProducableEvent()
+    open class OnEnableEvent(val producableId: Long, val isEnable: Boolean) :
+        BProducablePipe.Event()
 }
