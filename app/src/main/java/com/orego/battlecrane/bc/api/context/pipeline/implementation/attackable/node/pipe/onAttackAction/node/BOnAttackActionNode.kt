@@ -30,7 +30,7 @@ class BOnAttackActionNode(context: BGameContext) : BNode(context) {
             this.pushEventIntoPipes(event)
             //Push range event:
             this.context.pipeline.pushEvent(
-                BOnHitPointsChangedPipe.createOnHitPointsDecreasedEvent(event.hitPointableId, damage)
+                BOnHitPointsChangedPipe.createOnDecreasedEvent(event.hitPointableId, damage)
             )
             event
         } else {

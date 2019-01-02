@@ -1,10 +1,11 @@
 package com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.BAttackablePipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.BAttackableNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.BOnAttackActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.node.BOnAttackActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.node.BOnAttackEnableNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsChanged.BOnHitPointsChangedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
@@ -74,31 +75,38 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Node.
      */
 
+    val onMarineTurnNodeId: Long
+
+    val onMarineAttackActionPipeId: Long
+
+    val onMarineAttackActionNodeId: Long
+
     val onMarineAttackEnableNodeId: Long
 
-    val onMarineAttackPipeId: Long
-
-    val onMarineAttackNodeId: Long
+    val onMarineAttackEnablePipeId: Long
 
     init {
         //Get pipeline:
         val pipeline = context.pipeline
 
-        //On produce enable:
-        val onMarineAttackEnableNode = OnMarineAttackEnableNode(context, this.unitId)
+        //On turn:
+        val onTurnNode = OnTurnNode(context, this.unitId)
+        this.onMarineTurnNodeId = onTurnNode.id
+        pipeline.bindNodeToPipe(this.onTurnStartedNodeId, onTurnNode)
 
-        //On train marine:
-        val onMarineAttackNode = OnMarineAttackNode(context, this.unitId)
-        val onMarineAttackPipe = onMarineAttackNode.wrapInPipe()
+        //On attack acton:
+        val onAttackActionNode = OnAttackActionNode(context, this.unitId)
+        val onAttackActionPipe = onAttackActionNode.wrapInPipe()
+        this.onMarineAttackActionNodeId = onAttackActionNode.id
+        this.onMarineAttackActionPipeId = onAttackActionPipe.id
+        pipeline.bindPipeToNode(BOnAttackActionNode.NAME, onAttackActionPipe)
 
-        //Save ids:
-        this.onMarineAttackEnableNodeId = onMarineAttackEnableNode.id
-        this.onMarineAttackNodeId = onMarineAttackNode.id
-        this.onMarineAttackPipeId = onMarineAttackPipe.id
-
-        //Bind:
-        pipeline.bindNodeToPipe(this.onTurnStartedNodeId, onMarineAttackEnableNode)
-        pipeline.bindPipeToNode(BAttackableNode.NAME, onMarineAttackPipe)
+        //On attack enable:
+        val onAttackEnableNode = OnAttackEnableNode(context, this.unitId)
+        val onAttackEnablePipe = onAttackEnableNode.wrapInPipe()
+        this.onMarineAttackEnableNodeId = onAttackEnableNode.id
+        this.onMarineAttackEnablePipeId = onAttackEnablePipe.id
+        pipeline.bindPipeToNode(BOnAttackEnableNode.NAME, onAttackEnablePipe)
     }
 
     /**
@@ -106,12 +114,12 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
      */
 
     @BAdjutantComponent
-    class OnCreateMarineNode(context: BGameContext, private val playerId: Long) : BNode(context) {
+    class OnCreateNode(context: BGameContext, private val playerId: Long) : BNode(context) {
 
         companion object {
 
             fun createEvent(playerId: Long, x: Int, y: Int) =
-                OnCreateMarineEvent(playerId, x, y)
+                Event(playerId, x, y)
         }
 
         private val mapController = this.context.mapController
@@ -119,7 +127,7 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         private val storage = this.context.storage
 
         override fun handle(event: BEvent): BEvent? {
-            if (event is OnCreateMarineEvent && event.playerId == this.playerId) {
+            if (event is Event && event.playerId == this.playerId) {
                 val x = event.x
                 val y = event.y
                 if (this.isCreatingConditionsPerformed(x, y)) {
@@ -142,12 +150,12 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Event.
          */
 
-        open class OnCreateMarineEvent(val playerId: Long, x: Int, y: Int) :
+        open class Event(val playerId: Long, x: Int, y: Int) :
             BOnCreateUnitPipe.Event(x, y)
     }
 
     @BUnitComponent
-    class OnMarineAttackEnableNode(context: BGameContext, unitId: Long) : BNode(context) {
+    class OnTurnNode(context: BGameContext, unitId: Long) : BNode(context) {
 
         private val marine = this.context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
 
@@ -176,7 +184,7 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
     }
 
     @BUnitComponent
-    class OnMarineAttackNode(context: BGameContext, unitId: Long) : BNode(context) {
+    class OnAttackActionNode(context: BGameContext, unitId: Long) : BNode(context) {
 
         companion object {
 
@@ -192,7 +200,7 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         private val pipeline = this.context.pipeline
 
         override fun handle(event: BEvent): BEvent? {
-            if (event !is OnMarineAttackEvent || event.unitId != this.marine.unitId) {
+            if (event !is Event || event.attackableId != this.marine.attackableId) {
                 return null
             }
             val targetX = event.targetX
@@ -209,7 +217,7 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
             if (this.isPossibleAttackGeometry(targetX, targetY)) {
                 this.pushEventIntoPipes(event)
                 this.pipeline.pushEvent(
-                    BOnAttackActionPipe.createEvent(this.marine.attackableId, targetUnit.hitPointableId)
+                    BOnHitPointsChangedPipe.createOnDecreasedEvent(targetUnit.hitPointableId, this.marine.damage)
                 )
                 return event
             }
@@ -304,7 +312,22 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Event.
          */
 
-        open class OnMarineAttackEvent(val unitId: Long, val targetX: Int, val targetY: Int) :
-            BAttackablePipe.Event()
+        open class Event(attackableId: Long, val targetX: Int, val targetY: Int) :
+            BOnAttackActionPipe.Event(attackableId)
+    }
+
+    @BUnitComponent
+    class OnAttackEnableNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        private val marine = this.context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
+
+        override fun handle(event: BEvent): BEvent? {
+            return if (event is BOnAttackEnablePipe.Event && this.marine.attackableId == event.attackableId) {
+                this.marine.isAttackEnable = event.isEnable
+                this.pushEventIntoPipes(event)
+            } else {
+                null
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ class BOnHitPointsChangedPipe(context: BGameContext) : BPipe(context) {
         fun createOnHitPointsIncreasedEvent(hitPointableId: Long, range: Int) =
             DecreasedEvent(hitPointableId, range)
 
-        fun createOnHitPointsDecreasedEvent(hitPointableId: Long, range: Int) =
+        fun createOnDecreasedEvent(hitPointableId: Long, range: Int) =
             DecreasedEvent(hitPointableId, range)
 
         fun createOnHitPointsChangedEvent(hitPointableId: Long, range: Int) =

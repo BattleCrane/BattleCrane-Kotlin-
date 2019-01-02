@@ -13,8 +13,7 @@ class BOnAttackActionPipe(context: BGameContext) : BPipe(context) {
 
         const val NAME = "ON_ATTACK_ACTION_PIPE"
 
-        fun createEvent(attackableId: Long, hitPointableId: Long)
-                = Event(attackableId, hitPointableId)
+        fun createEvent(attackableId: Long) = Event(attackableId)
     }
 
     override val name = NAME
@@ -23,5 +22,5 @@ class BOnAttackActionPipe(context: BGameContext) : BPipe(context) {
         this.placeNode(BOnAttackActionNode(context))
     }
 
-    open class Event(val attackableId: Long, val hitPointableId: Long) : BAttackablePipe.Event()
+    open class Event(val attackableId: Long) : BAttackablePipe.Event()
 }

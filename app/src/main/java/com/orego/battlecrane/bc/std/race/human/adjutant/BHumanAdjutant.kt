@@ -35,7 +35,7 @@ class BHumanAdjutant(context: BGameContext, playerId: Long) : BAdjutant(context,
         pipeline.bindPipeToNode(BOnCreateUnitNode.NAME, onCreateBarracksPipe)
 
         //Marine:
-        val onCreateMarineNode = BHumanMarine.OnCreateMarineNode(context, playerId)
+        val onCreateMarineNode = BHumanMarine.OnCreateNode(context, playerId)
         val onCreateMarinePipe = onCreateMarineNode.wrapInPipe()
         this.onCreateMarineNodeId = onCreateMarineNode.id
         this.onCreateMarinePipeId = onCreateMarinePipe.id

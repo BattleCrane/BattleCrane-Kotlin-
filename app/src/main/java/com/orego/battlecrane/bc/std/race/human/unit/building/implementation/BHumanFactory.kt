@@ -231,7 +231,7 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         private fun createMarine(playerId: Long, x: Int, y: Int) {
             this.pipeline.pushEvent(
-                BHumanMarine.OnCreateMarineNode.createEvent(playerId, x, y)
+                BHumanMarine.OnCreateNode.createEvent(playerId, x, y)
             )
             this.pipeline.pushEvent(
                 BOnProduceEnablePipe.createEvent(this.factory.producableId, false)

@@ -192,7 +192,7 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
                 Event(barracksUnitId, x, y)
         }
 
-        private val barracks = this.context.storage.getHeap(BUnitHeap::class.java)[unitId]!! as BHumanBarracks
+        private val barracks = this.context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
 
         private val mapController = this.context.mapController
 
@@ -215,7 +215,7 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
                 this.createMarine(barracksPlayerId, x, y)
             }
             val playerHeap = this.context.storage.getHeap(BPlayerHeap::class.java)
-            val barracksOwner = playerHeap[barracksPlayerId]!!
+            val barracksOwner = playerHeap[barracksPlayerId]
             if (barracksLevel == 2 && !barracksOwner.isEnemy(otherPlayerId)) {
                 this.createMarine(barracksPlayerId, x, y)
             }
@@ -227,7 +227,7 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         private fun createMarine(playerId: Long, x: Int, y: Int) {
             this.pipeline.pushEvent(
-                BHumanMarine.OnCreateMarineNode.createEvent(playerId, x, y)
+                BHumanMarine.OnCreateNode.createEvent(playerId, x, y)
             )
             this.pipeline.pushEvent(
                 BOnProduceEnablePipe.createEvent(this.barracks.producableId, false)
@@ -242,5 +242,10 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
             BUnitPipe.Event()
     }
 
-    class OnLevelChangedNode
+    @BUnitComponent
+    class OnLevelChangedNode(context: BGameContext) : BNode(context) {
+        override fun handle(event: BEvent): BEvent? {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+    }
 }
