@@ -27,7 +27,7 @@ import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.std.location.grass.field.BField
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
-import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanCreature
+import com.orego.battlecrane.bc.std.race.human.unit.vehicle.BHumanVehicle
 
 
 /**
@@ -35,7 +35,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanCreature
  */
 
 class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
-    BHumanCreature(context, playerId, x, y), BHitPointable, BAttackable {
+    BHumanVehicle(context, playerId, x, y), BHitPointable, BAttackable {
 
     companion object {
 
