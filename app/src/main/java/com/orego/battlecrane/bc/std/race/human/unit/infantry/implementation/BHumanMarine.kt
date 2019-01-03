@@ -30,18 +30,22 @@ import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanCreature
 import java.lang.Integer.max
 import java.lang.Integer.min
 
+/**
+ * Basic human infantry.
+ */
+
 class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
     BHumanCreature(context, playerId, x, y), BHitPointable, BAttackable {
 
     companion object {
 
-        private const val DEFAULT_HEIGHT = 1
+        private const val HEIGHT = 1
 
-        private const val DEFAULT_WIDTH = 1
+        private const val WIDTH = 1
 
-        private const val DEFAULT_MAX_HEALTH = 1
+        private const val MAX_HEALTH = 1
 
-        private const val DEFAULT_DAMAGE = 1
+        private const val DAMAGE = 1
     }
 
     /**
@@ -49,15 +53,15 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
      */
 
 
-    override val height = DEFAULT_HEIGHT
+    override val height = HEIGHT
 
-    override val width = DEFAULT_WIDTH
+    override val width = WIDTH
 
-    override var currentHitPoints = DEFAULT_MAX_HEALTH
+    override var currentHitPoints = MAX_HEALTH
 
-    override var maxHitPoints = DEFAULT_MAX_HEALTH
+    override var maxHitPoints = MAX_HEALTH
 
-    override var damage = DEFAULT_DAMAGE
+    override var damage = DAMAGE
 
     override var isAttackEnable = false
 
@@ -247,7 +251,6 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
             }
             val targetX = event.targetX
             val targetY = event.targetY
-
             val targetUnit = this.mapController.getUnitByPosition(this.context, targetX, targetY)
             if (targetUnit !is BHitPointable) {
                 return null
