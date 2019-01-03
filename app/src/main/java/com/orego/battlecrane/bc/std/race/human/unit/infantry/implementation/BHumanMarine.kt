@@ -83,17 +83,17 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Node.
      */
 
-    val onMarineTurnPipeId: Long
+    val onTurnPipeId: Long
 
-    val onMarineTurnNodeId: Long
+    val onTurnNodeId: Long
 
-    val onMarineAttackActionPipeId: Long
+    val onAttackActionPipeId: Long
 
-    val onMarineAttackActionNodeId: Long
+    val onAttackActionNodeId: Long
 
-    val onMarineAttackEnableNodeId: Long
+    val onAttackEnableNodeId: Long
 
-    val onMarineAttackEnablePipeId: Long
+    val onAttackEnablePipeId: Long
 
     val onHitPointsActionPipeId : Long
 
@@ -110,22 +110,22 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         //On turn:
         val onTurnNode = OnTurnNode(context, this.unitId)
         val onTurnPipe = onTurnNode.wrapInPipe()
-        this.onMarineTurnNodeId = onTurnNode.id
-        this.onMarineTurnPipeId = onTurnPipe.id
+        this.onTurnNodeId = onTurnNode.id
+        this.onTurnPipeId = onTurnPipe.id
         pipeline.bindPipeToNode(BTurnNode.NAME, onTurnPipe)
 
         //On attack acton:
         val onAttackActionNode = OnAttackActionNode(context, this.unitId)
         val onAttackActionPipe = onAttackActionNode.wrapInPipe()
-        this.onMarineAttackActionNodeId = onAttackActionNode.id
-        this.onMarineAttackActionPipeId = onAttackActionPipe.id
+        this.onAttackActionNodeId = onAttackActionNode.id
+        this.onAttackActionPipeId = onAttackActionPipe.id
         pipeline.bindPipeToNode(BOnAttackActionNode.NAME, onAttackActionPipe)
 
         //On attack enable:
         val onAttackEnableNode = OnAttackEnableNode(context, this.unitId)
         val onAttackEnablePipe = onAttackEnableNode.wrapInPipe()
-        this.onMarineAttackEnableNodeId = onAttackEnableNode.id
-        this.onMarineAttackEnablePipeId = onAttackEnablePipe.id
+        this.onAttackEnableNodeId = onAttackEnableNode.id
+        this.onAttackEnablePipeId = onAttackEnablePipe.id
         pipeline.bindPipeToNode(BOnAttackEnableNode.NAME, onAttackEnablePipe)
 
         //On hit points action:
@@ -377,12 +377,20 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         override fun handle(event: BEvent): BEvent? {
-            return if (event is BOnAttackEnablePipe.Event && this.marine.attackableId == event.attackableId) {
-                this.marine.isAttackEnable = event.isEnable
-                this.pushEventIntoPipes(event)
-            } else {
-                null
+            if (event is BOnAttackEnablePipe.Event && this.marine.attackableId == event.attackableId) {
+                if (this.switchEnable(event.isEnable)) {
+                    this.pushEventIntoPipes(event)
+                }
             }
+            return null
+        }
+
+        private fun switchEnable(enable: Boolean): Boolean {
+            val isSuccessful = this.marine.isAttackEnable != enable
+            if (isSuccessful) {
+                this.marine.isAttackEnable = enable
+            }
+            return isSuccessful
         }
     }
 
@@ -529,9 +537,9 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         private fun unbindNodes() {
-            this.pipeline.unbindPipeFromNode(BTurnNode.NAME, this.marine.onMarineTurnPipeId)
-            this.pipeline.unbindPipeFromNode(BOnAttackActionNode.NAME, this.marine.onMarineAttackActionPipeId)
-            this.pipeline.unbindPipeFromNode(BOnAttackEnableNode.NAME, this.marine.onMarineAttackEnablePipeId)
+            this.pipeline.unbindPipeFromNode(BTurnNode.NAME, this.marine.onTurnPipeId)
+            this.pipeline.unbindPipeFromNode(BOnAttackActionNode.NAME, this.marine.onAttackActionPipeId)
+            this.pipeline.unbindPipeFromNode(BOnAttackEnableNode.NAME, this.marine.onAttackEnablePipeId)
             this.pipeline.unbindPipeFromNode(BOnDestroyUnitNode.NAME, this.marine.onDestroyPipeId)
             this.pipeline.unbindPipeFromNode(BOnHitPointsActionNode.NAME, this.marine.onHitPointsActionPipeId)
         }

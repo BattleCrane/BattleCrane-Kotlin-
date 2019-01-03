@@ -82,17 +82,17 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Node.
      */
 
-    val onTankTurnPipeId: Long
+    val onTurnPipeId: Long
 
-    val onTankTurnNodeId: Long
+    val onTurnNodeId: Long
 
-    val onTankAttackActionPipeId: Long
+    val onAttackActionPipeId: Long
 
-    val onTankAttackActionNodeId: Long
+    val onAttackActionNodeId: Long
 
-    val onTankAttackEnableNodeId: Long
+    val onAttackEnableNodeId: Long
 
-    val onTankAttackEnablePipeId: Long
+    val onAttackEnablePipeId: Long
 
     val onHitPointsActionPipeId : Long
 
@@ -109,22 +109,22 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
         //On turn:
         val onTurnNode = OnTurnNode(context, this.unitId)
         val onTurnPipe = onTurnNode.wrapInPipe()
-        this.onTankTurnNodeId = onTurnNode.id
-        this.onTankTurnPipeId = onTurnPipe.id
+        this.onTurnNodeId = onTurnNode.id
+        this.onTurnPipeId = onTurnPipe.id
         pipeline.bindPipeToNode(BTurnNode.NAME, onTurnPipe)
 
         //On attack acton:
         val onAttackActionNode = OnAttackActionNode(context, this.unitId)
         val onAttackActionPipe = onAttackActionNode.wrapInPipe()
-        this.onTankAttackActionNodeId = onAttackActionNode.id
-        this.onTankAttackActionPipeId = onAttackActionPipe.id
+        this.onAttackActionNodeId = onAttackActionNode.id
+        this.onAttackActionPipeId = onAttackActionPipe.id
         pipeline.bindPipeToNode(BOnAttackActionNode.NAME, onAttackActionPipe)
 
         //On attack enable:
         val onAttackEnableNode = OnAttackEnableNode(context, this.unitId)
         val onAttackEnablePipe = onAttackEnableNode.wrapInPipe()
-        this.onTankAttackEnableNodeId = onAttackEnableNode.id
-        this.onTankAttackEnablePipeId = onAttackEnablePipe.id
+        this.onAttackEnableNodeId = onAttackEnableNode.id
+        this.onAttackEnablePipeId = onAttackEnablePipe.id
         pipeline.bindPipeToNode(BOnAttackEnableNode.NAME, onAttackEnablePipe)
 
         //On hit points action:
@@ -376,12 +376,20 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         override fun handle(event: BEvent): BEvent? {
-            return if (event is BOnAttackEnablePipe.Event && this.tank.attackableId == event.attackableId) {
-                this.tank.isAttackEnable = event.isEnable
-                this.pushEventIntoPipes(event)
-            } else {
-                null
+            if (event is BOnAttackEnablePipe.Event && this.tank.attackableId == event.attackableId) {
+                if (this.switchEnable(event.isEnable)) {
+                    this.pushEventIntoPipes(event)
+                }
             }
+            return null
+        }
+
+        private fun switchEnable(enable: Boolean): Boolean {
+            val isSuccessful = this.tank.isAttackEnable != enable
+            if (isSuccessful) {
+                this.tank.isAttackEnable = enable
+            }
+            return isSuccessful
         }
     }
 
@@ -528,9 +536,9 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         private fun unbindNodes() {
-            this.pipeline.unbindPipeFromNode(BTurnNode.NAME, this.tank.onTankTurnPipeId)
-            this.pipeline.unbindPipeFromNode(BOnAttackActionNode.NAME, this.tank.onTankAttackActionPipeId)
-            this.pipeline.unbindPipeFromNode(BOnAttackEnableNode.NAME, this.tank.onTankAttackEnablePipeId)
+            this.pipeline.unbindPipeFromNode(BTurnNode.NAME, this.tank.onTurnPipeId)
+            this.pipeline.unbindPipeFromNode(BOnAttackActionNode.NAME, this.tank.onAttackActionPipeId)
+            this.pipeline.unbindPipeFromNode(BOnAttackEnableNode.NAME, this.tank.onAttackEnablePipeId)
             this.pipeline.unbindPipeFromNode(BOnDestroyUnitNode.NAME, this.tank.onDestroyPipeId)
             this.pipeline.unbindPipeFromNode(BOnHitPointsActionNode.NAME, this.tank.onHitPointsActionPipeId)
         }

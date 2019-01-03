@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable
+package com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.BProducablePipe
@@ -7,22 +7,21 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BCo
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 
 @BContextComponent
-class BOnProduceEnablePipe(context: BGameContext) : BPipe(context) {
+class BOnProduceActionPipe(context: BGameContext) : BPipe(context){
 
     companion object {
 
-        const val NAME = "ON_PRODUCE_ENABLE_PIPE"
+        const val NAME = "ON_PRODUCE_ACTION_PIPE"
 
-        fun createEvent(producableId: Long, isEnable: Boolean) =
-            Event(producableId, isEnable)
+        fun createEvent(producableId: Long) = Event(producableId)
     }
 
     override val name = NAME
 
     init {
-        this.placeNode(BOnProduceEnableNode(context))
+        this.placeNode(BOnProduceEnableNode(this.context))
     }
 
-    open class Event(val producableId: Long, val isEnable: Boolean) :
+    open class Event(val producableId: Long) :
         BProducablePipe.Event()
 }

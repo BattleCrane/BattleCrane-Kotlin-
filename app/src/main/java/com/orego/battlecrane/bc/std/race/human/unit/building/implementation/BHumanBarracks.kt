@@ -7,7 +7,8 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.BProducablePipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.BProducableNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.BOnProduceActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.node.BOnProduceActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.BTurnNode
@@ -92,9 +93,13 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
     val onTurnPipeId: Long
 
-    val onTrainMarineNodeId: Long
+    val onProduceEnableNodeId : Long
 
-    val onTrainMarinePipeId: Long
+    val onProduceEnablePipeId : Long
+
+    val onProduceActionNodeId: Long
+
+    val onProduceActionPipeId: Long
 
     val onDestroyNodeId: Long
 
@@ -112,26 +117,26 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         //Get context:
         val pipeline = context.pipeline
 
-        //On produce enable:
+        //On turn:
         val onTurnNode = OnTurnNode(context, this.unitId)
         val onTurnPipe = onTurnNode.wrapInPipe()
         this.onTurnNodeId = onTurnNode.id
         this.onTurnPipeId = onTurnPipe.id
         pipeline.bindPipeToNode(BTurnNode.NAME, onTurnPipe)
 
-        //On train marine:
-        val onTrainMarineNode = OnTrainMarineNode(this.unitId, context)
-        val onTrainMarinePipe = onTrainMarineNode.wrapInPipe()
-        this.onTrainMarineNodeId = onTrainMarineNode.id
-        this.onTrainMarinePipeId = onTrainMarinePipe.id
-        pipeline.bindPipeToNode(BProducableNode.NAME, onTrainMarinePipe)
+        //On produce enable:
+        val onProduceEnableNode = OnProduceEnableNode(context, this.unitId)
+        val onProduceEnablePipe = onProduceEnableNode.wrapInPipe()
+        this.onProduceEnableNodeId = onProduceEnableNode.id
+        this.onProduceEnablePipeId = onProduceEnablePipe.id
+        pipeline.bindPipeToNode(BOnProduceEnablePipe.NAME, onProduceEnablePipe)
 
-        //On destroy:
-        val onDestroyNode = OnDestroyNode(context, this.unitId)
-        val onDestroyPipe = onDestroyNode.wrapInPipe()
-        this.onDestroyNodeId = onDestroyNode.id
-        this.onDestroyPipeId = onDestroyPipe.id
-        pipeline.bindPipeToNode(BOnDestroyUnitNode.NAME, onDestroyPipe)
+        //On produce action:
+        val onProduceActionNode = OnProduceActionNode(this.unitId, context)
+        val onProduceActionPipe = onProduceActionNode.wrapInPipe()
+        this.onProduceActionNodeId = onProduceActionNode.id
+        this.onProduceActionPipeId = onProduceActionPipe.id
+        pipeline.bindPipeToNode(BOnProduceActionNode.NAME, onProduceActionPipe)
 
         //On level action:
         val onLevelActionNode = OnLevelActionNode(context, this.unitId)
@@ -146,6 +151,13 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         this.onHitPointsActionNodeId = onHitPointsActionNode.id
         this.onHitPointsActionPipeId = onHitPointsActionPipe.id
         pipeline.bindPipeToNode(BOnHitPointsActionNode.NAME, onHitPointsActionPipe)
+
+        //On destroy:
+        val onDestroyNode = OnDestroyNode(context, this.unitId)
+        val onDestroyPipe = onDestroyNode.wrapInPipe()
+        this.onDestroyNodeId = onDestroyNode.id
+        this.onDestroyPipeId = onDestroyPipe.id
+        pipeline.bindPipeToNode(BOnDestroyUnitNode.NAME, onDestroyPipe)
     }
 
     /**
@@ -284,7 +296,32 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
     }
 
     @BUnitComponent
-    class OnTrainMarineNode(unitId: Long, context: BGameContext) : BNode(context) {
+    class OnProduceEnableNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        private val barracks by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        }
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnProduceEnablePipe.Event && this.barracks.producableId == event.producableId) {
+                if (this.switchEnable(event.isEnable)) {
+                    this.pushEventIntoPipes(event)
+                }
+            }
+            return null
+        }
+
+        private fun switchEnable(enable: Boolean): Boolean {
+            val isSuccessful = this.barracks.isProduceEnable != enable
+            if (isSuccessful) {
+                this.barracks.isProduceEnable = enable
+            }
+            return isSuccessful
+        }
+    }
+
+    @BUnitComponent
+    class OnProduceActionNode(unitId: Long, context: BGameContext) : BNode(context) {
 
         companion object {
 
@@ -590,7 +627,8 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         private fun unbindNodes() {
             this.pipeline.unbindPipeFromNode(BTurnNode.NAME, this.barracks.onTurnPipeId)
-            this.pipeline.unbindPipeFromNode(BProducableNode.NAME, this.barracks.onTrainMarinePipeId)
+            this.pipeline.unbindPipeFromNode(BOnProduceEnablePipe.NAME, this.barracks.onProduceEnablePipeId)
+            this.pipeline.unbindPipeFromNode(BOnProduceActionPipe.NAME, this.barracks.onProduceActionPipeId)
             this.pipeline.unbindPipeFromNode(BOnDestroyUnitNode.NAME, this.barracks.onDestroyPipeId)
             this.pipeline.unbindPipeFromNode(BOnLevelActionNode.NAME, this.barracks.onLevelActionPipeId)
             this.pipeline.unbindPipeFromNode(BOnHitPointsActionNode.NAME, this.barracks.onHitPointsActionPipeId)
