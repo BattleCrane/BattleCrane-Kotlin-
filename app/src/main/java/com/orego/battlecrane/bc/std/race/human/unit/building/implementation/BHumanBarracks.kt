@@ -29,6 +29,10 @@ import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.BHumanMarine
 
+/**
+ * Train marines.
+ */
+
 class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
     BHumanBuilding(context, playerId, x, y), BHitPointable, BLevelable, BProducable {
 
@@ -198,7 +202,6 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
             val neighborEndX = endX + 1
             val neighborStartY = startY - 1
             val neighborEndY = endY + 1
-            //TODO SIMPLIFY!!!!!
             for (x in neighborStartX until neighborEndX) {
                 if (this.hasNeighborBuilding(x, neighborStartY)) {
                     return true
@@ -252,7 +255,9 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Unit.
          */
 
-        private val barracks = context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        private val barracks by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        }
 
         override fun handle(event: BEvent): BEvent? {
             if (event is BTurnPipe.Event && this.barracks.playerId == event.playerId) {
@@ -299,7 +304,9 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Unit.
          */
 
-        private val barracks = context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        private val barracks by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        }
 
         override fun handle(event: BEvent): BEvent? {
             if (event !is Event
@@ -358,7 +365,9 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Unit.
          */
 
-        private val barracks = context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        private val barracks by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        }
 
         /**
          * Handler function.
@@ -450,7 +459,9 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Unit.
          */
 
-        private val barracks = context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        private val barracks by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        }
 
         /**
          * Handler functon.
@@ -563,7 +574,9 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Unit.
          */
 
-        private val barracks = this.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        private val barracks by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanBarracks
+        }
 
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnDestroyUnitPipe.Event && event.unitId == this.barracks.unitId) {

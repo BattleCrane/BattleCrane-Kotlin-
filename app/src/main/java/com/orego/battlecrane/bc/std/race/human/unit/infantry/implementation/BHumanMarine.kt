@@ -6,10 +6,14 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.n
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.node.BOnAttackEnableNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.BTurnNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.node.BOnDestroyUnitNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
@@ -22,7 +26,6 @@ import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.std.location.grass.field.BField
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
-import com.orego.battlecrane.bc.std.race.human.unit.BHumanUnit
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanCreature
 import java.lang.Integer.max
 import java.lang.Integer.min
@@ -58,7 +61,6 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
     override var isAttackEnable = false
 
-
     /**
      * Id.
      */
@@ -77,6 +79,8 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Node.
      */
 
+    val onMarineTurnPipeId: Long
+
     val onMarineTurnNodeId: Long
 
     val onMarineAttackActionPipeId: Long
@@ -87,14 +91,24 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
     val onMarineAttackEnablePipeId: Long
 
+    val onHitPointsActionPipeId : Long
+
+    val onHitPointsActionNodeId : Long
+
+    val onDestroyPipeId : Long
+
+    val onDestroyNodeId : Long
+
     init {
         //Get pipeline:
         val pipeline = context.pipeline
 
         //On turn:
         val onTurnNode = OnTurnNode(context, this.unitId)
+        val onTurnPipe = onTurnNode.wrapInPipe()
         this.onMarineTurnNodeId = onTurnNode.id
-        pipeline.bindNodeToPipe(this.onTurnStartedNodeId, onTurnNode)
+        this.onMarineTurnPipeId = onTurnPipe.id
+        pipeline.bindPipeToNode(BTurnNode.NAME, onTurnPipe)
 
         //On attack acton:
         val onAttackActionNode = OnAttackActionNode(context, this.unitId)
@@ -109,6 +123,20 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         this.onMarineAttackEnableNodeId = onAttackEnableNode.id
         this.onMarineAttackEnablePipeId = onAttackEnablePipe.id
         pipeline.bindPipeToNode(BOnAttackEnableNode.NAME, onAttackEnablePipe)
+
+        //On hit points action:
+        val onHitPointsActionNode = OnHitPointsActionNode(context, this.unitId)
+        val onHitPointsActionPipe = onHitPointsActionNode.wrapInPipe()
+        this.onHitPointsActionNodeId = onHitPointsActionNode.id
+        this.onHitPointsActionPipeId = onHitPointsActionPipe.id
+        pipeline.bindPipeToNode(BOnHitPointsActionNode.NAME, onHitPointsActionPipe)
+
+        //On destroy:
+        val onDestroyNode = OnDestroyNode(context, this.unitId)
+        val onDestroyPipe = onDestroyNode.wrapInPipe()
+        this.onDestroyPipeId = onDestroyPipe.id
+        this.onDestroyNodeId = onDestroyNode.id
+        pipeline.bindPipeToNode(BOnDestroyUnitNode.NAME, onDestroyPipe)
     }
 
     /**
@@ -159,7 +187,9 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
     @BUnitComponent
     class OnTurnNode(context: BGameContext, unitId: Long) : BNode(context) {
 
-        private val marine = this.context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
+        private val marine by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
+        }
 
         override fun handle(event: BEvent): BEvent? {
             return if (event is BTurnPipe.Event && this.marine.playerId == event.playerId) {
@@ -193,13 +223,23 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
             private const val VECTOR = 1
         }
 
-        private val mapController = this.context.mapController
+        /**
+         * Context.
+         */
 
-        private val marine = this.context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
+        private val mapController = context.mapController
 
-        private val playerHeap = this.context.storage.getHeap(BPlayerHeap::class.java)
+        private val playerHeap = context.storage.getHeap(BPlayerHeap::class.java)
 
-        private val pipeline = this.context.pipeline
+        private val pipeline = context.pipeline
+
+        /**
+         * Unt.
+         */
+
+        private val marine by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
+        }
 
         override fun handle(event: BEvent): BEvent? {
             if (event !is Event || event.attackableId != this.marine.attackableId) {
@@ -219,7 +259,7 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
             if (this.isPossibleAttackGeometry(targetX, targetY)) {
                 this.pushEventIntoPipes(event)
                 this.pipeline.pushEvent(
-                    BOnHitPointsActionPipe.createOnDecreasedEvent(targetUnit.hitPointableId, this.marine.damage)
+                    BOnHitPointsActionPipe.Current.createOnDecreasedEvent(targetUnit.hitPointableId, this.marine.damage)
                 )
                 return event
             }
@@ -329,7 +369,9 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
     @BUnitComponent
     class OnAttackEnableNode(context: BGameContext, unitId: Long) : BNode(context) {
 
-        private val marine = this.context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
+        private val marine by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
+        }
 
         override fun handle(event: BEvent): BEvent? {
             return if (event is BOnAttackEnablePipe.Event && this.marine.attackableId == event.attackableId) {
@@ -338,6 +380,157 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
             } else {
                 null
             }
+        }
+    }
+
+    @BUnitComponent
+    class OnHitPointsActionNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        /**
+         * Context.
+         */
+
+        private val pipeline = context.pipeline
+
+        /**
+         * Unit.
+         */
+
+        private val marine by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
+        }
+
+        /**
+         * Handler functon.
+         */
+
+        private val decreaseCurrentHitPointsFunc: (Int) -> Boolean = { damage ->
+            val hasDamage = damage > 0
+            if (hasDamage) {
+                this.marine.currentHitPoints -= damage
+            }
+            hasDamage
+        }
+
+        private val increaseCurrentHitPointsFunc: (Int) -> Boolean = { restore ->
+            val currentHitPoints = this.marine.currentHitPoints
+            val maxHitPoints = this.marine.maxHitPoints
+            val hasRestore = restore > 0 && currentHitPoints < maxHitPoints
+            if (hasRestore) {
+                val newHitPoints = currentHitPoints + restore
+                if (newHitPoints < maxHitPoints) {
+                    this.marine.currentHitPoints = newHitPoints
+                } else {
+                    this.marine.currentHitPoints = maxHitPoints
+                }
+            }
+            hasRestore
+        }
+
+        private val changeCurrentHitPointsFunc: (Int) -> Boolean = { newHitPointsValue ->
+            val maxHitPoints = this.marine.maxHitPoints
+            val hasChanged = newHitPointsValue in 0..maxHitPoints
+            if (hasChanged) {
+                this.marine.currentHitPoints = newHitPointsValue
+            }
+            hasChanged
+        }
+
+        private val decreaseMaxHitPointsFunc: (Int) -> Boolean = { range ->
+            val hasRange = range > 0
+            if (hasRange) {
+                this.marine.maxHitPoints -= range
+                if (this.marine.currentHitPoints > this.marine.maxHitPoints) {
+                    this.marine.currentHitPoints = this.marine.maxHitPoints
+                }
+            }
+            hasRange
+        }
+
+        private val increaseMaxHitPointsFunc: (Int) -> Boolean = { range ->
+            val hasRestore = range > 0
+            if (hasRestore) {
+                this.marine.maxHitPoints += range
+            }
+            hasRestore
+        }
+
+        private val changeMaxHitPointsFunc: (Int) -> Boolean = { newMaxHitPonts ->
+            val hasRange = newMaxHitPonts != 0
+            if (hasRange) {
+                this.marine.maxHitPoints = newMaxHitPonts
+                if (this.marine.currentHitPoints > this.marine.maxHitPoints) {
+                    this.marine.currentHitPoints = this.marine.maxHitPoints
+                }
+            }
+            hasRange
+        }
+
+        /**
+         * Function map.
+         */
+
+        val eventHandlerFuncMap = mutableMapOf<Class<*>, (Int) -> Boolean>(
+            BOnHitPointsActionPipe.Current.OnIncreasedEvent::class.java to this.increaseCurrentHitPointsFunc,
+            BOnHitPointsActionPipe.Current.OnDecreasedEvent::class.java to this.decreaseCurrentHitPointsFunc,
+            BOnHitPointsActionPipe.Current.OnChangedEvent::class.java to this.changeCurrentHitPointsFunc,
+            BOnHitPointsActionPipe.Max.OnIncreasedEvent::class.java to this.increaseMaxHitPointsFunc,
+            BOnHitPointsActionPipe.Max.OnDecreasedEvent::class.java to this.decreaseMaxHitPointsFunc,
+            BOnHitPointsActionPipe.Max.OnChangedEvent::class.java to this.changeMaxHitPointsFunc
+        )
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnHitPointsActionPipe.Event
+                && event.hitPointableId == this.marine.hitPointableId
+            ) {
+                val handlerFunc = this.eventHandlerFuncMap[event::class.java]
+                if (handlerFunc != null && handlerFunc(event.range)) {
+                    this.pushEventIntoPipes(event)
+                    if (this.marine.currentHitPoints <= 0) {
+                        this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.marine.unitId))
+                    }
+                    return event
+                }
+            }
+            return null
+        }
+    }
+
+    @BUnitComponent
+    class OnDestroyNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        /**
+         * Context.
+         */
+
+        private val storage = context.storage
+
+        private val pipeline = context.pipeline
+
+        /**
+         * Unit.
+         */
+
+        private val marine by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanMarine
+        }
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnDestroyUnitPipe.Event && event.unitId == this.marine.unitId) {
+                this.pushEventIntoPipes(event)
+                this.unbindNodes()
+                this.storage.removeObject(event.unitId, BUnitHeap::class.java)
+                return event
+            }
+            return null
+        }
+
+        private fun unbindNodes() {
+            this.pipeline.unbindPipeFromNode(BTurnNode.NAME, this.marine.onMarineTurnPipeId)
+            this.pipeline.unbindPipeFromNode(BOnAttackActionNode.NAME, this.marine.onMarineAttackActionPipeId)
+            this.pipeline.unbindPipeFromNode(BOnAttackEnableNode.NAME, this.marine.onMarineAttackEnablePipeId)
+            this.pipeline.unbindPipeFromNode(BOnDestroyUnitNode.NAME, this.marine.onDestroyPipeId)
+            this.pipeline.unbindPipeFromNode(BOnHitPointsActionNode.NAME, this.marine.onHitPointsActionPipeId)
         }
     }
 }
