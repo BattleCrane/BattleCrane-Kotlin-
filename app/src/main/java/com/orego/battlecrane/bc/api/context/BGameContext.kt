@@ -62,4 +62,8 @@ class BGameContext(scenario: BGameScenario) {
     class OnGameStartedEvent : BEvent()
 
     class OnGameFinishedEvent : BEvent()
+
+    class OnWinEvent : BEvent()
+
+    class OnLoseEvent : BEvent()
 }

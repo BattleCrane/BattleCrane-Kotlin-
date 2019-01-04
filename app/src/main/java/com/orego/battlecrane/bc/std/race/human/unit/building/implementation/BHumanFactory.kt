@@ -1,7 +1,6 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
@@ -21,7 +20,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BA
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.util.BPipeConnection
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
@@ -254,10 +253,9 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
             if (event is ProduceTankEvent
                 && producableId == event.producableId
                 && this.factory.isProduceEnable
-                && event.canProduceTank(this.context, this.factory)
+                && event.perform(this.context, this.factory)
             ) {
                 this.pushEventIntoPipes(event)
-                event.produceTank(this.pipeline, this.factory.playerId)
                 this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
                 return event
             }
@@ -271,7 +269,15 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         class ProduceTankEvent(producableId: Long, val x: Int, val y: Int) :
             BOnProduceActionPipe.Event(producableId) {
 
-            fun canProduceTank(context: BGameContext, factory: BHumanFactory): Boolean {
+            fun perform(context: BGameContext, factory: BHumanFactory) : Boolean {
+                val canProduceTank = this.canProduceTank(context, factory)
+                if (canProduceTank) {
+                    context.pipeline.pushEvent(BHumanTank.OnCreateNode.createEvent(factory.playerId, this.x, this.y))
+                }
+                return canProduceTank
+            }
+
+            private fun canProduceTank(context: BGameContext, factory: BHumanFactory): Boolean {
                 val controller = context.mapController
                 val otherUnit = controller.getUnitByPosition(context, this.x, this.y)
                 if (otherUnit !is BEmptyField) {
@@ -292,10 +298,6 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
                     return true
                 }
                 return false
-            }
-
-            fun produceTank(pipeline: BPipeline, playerId: Long) {
-                pipeline.pushEvent(BHumanTank.OnCreateNode.createEvent(playerId, this.x, this.y))
             }
         }
     }

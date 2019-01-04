@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.api.context.pipeline.util
+package com.orego.battlecrane.bc.api.context.pipeline.model.pipe
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
@@ -10,7 +10,10 @@ data class BPipeConnection(val sourcePipeId: Long, val destinationNodeId : Long)
         fun createByNode(context: BGameContext, destinationNodeName: String, sourceNode: BNode): BPipeConnection {
             val sourcePipe = sourceNode.wrapInPipe()
             val destinationNode = context.pipeline.bindPipeToNode(destinationNodeName, sourcePipe)
-            return BPipeConnection(sourcePipe.id, destinationNode.id)
+            return BPipeConnection(
+                sourcePipe.id,
+                destinationNode.id
+            )
         }
     }
 

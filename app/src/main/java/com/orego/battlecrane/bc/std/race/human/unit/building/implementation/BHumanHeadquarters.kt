@@ -1,292 +1,309 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.model.player.BPlayer
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.node.BOnProduceActionNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.node.BOnProduceEnableNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.BTurnNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.node.BOnDestroyUnitNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
-import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.api.model.entity.property.BProducable
+import com.orego.battlecrane.bc.std.race.human.event.BHumanEvents
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 
-class BHumanHeadquarters(context: BGameContext, playerId: Long, x : Int, y : Int)
-    : BHumanBuilding(context, playerId, x, y), BHitPointable, BLevelable, BProducable {
+/**
+ * Command center of human race.
+ */
+
+class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) :
+    BHumanBuilding(context, playerId, x, y), BHitPointable, BProducable {
 
     companion object {
 
-        private const val DEFAULT_VERTICAL_SIDE = 2
+        const val HEIGHT = 2
 
-        private const val DEFAULT_HORIZONTAL_SIDE = 2
+        const val WIDTH = 2
 
-        private const val DEFAULT_MAX_HEALTH = 8
-
-        private const val DEFAULT_LEVEL = 1
-
-        private const val DEFAULT_MAX_LEVEL = 2
-
-        private const val HEADQUARTERS_BUILD_ABILITY = 1
-
-        private const val GENERATOR_LIMIT = 2
-
-        private const val DEFAULT_BUILDING_UPGRADE = 1
+        const val MAX_HIT_POINTS = 8
     }
 
     /**
-     * Properties.
+     * Id.
      */
 
-    override val height = DEFAULT_VERTICAL_SIDE
+    override val hitPointableId: Long
 
-    override val width = DEFAULT_HORIZONTAL_SIDE
+    override val producableId: Long
 
-    override var currentHitPoints = DEFAULT_MAX_HEALTH
+    init {
+        val generator = context.contextGenerator
+        this.hitPointableId = generator.getIdGenerator(BHitPointable::class.java).generateId()
+        this.producableId = generator.getIdGenerator(BProducable::class.java).generateId()
+    }
 
-    override var maxHitPoints = DEFAULT_MAX_HEALTH
+    /**
+     * Property.
+     */
 
-    override var currentLevel = DEFAULT_LEVEL
+    override val height = HEIGHT
 
-    override var maxLevel = DEFAULT_MAX_LEVEL
+    override val width = WIDTH
 
-    override var isProduceEnable: Boolean
-        get () = this.buildDeveloper.buildActionCount > 0
-        set(isEnable) {
-            if (isEnable) {
-                this.buildDeveloper.initBuildActionCount()
-            }
+    override var currentHitPoints = MAX_HIT_POINTS
+
+    override var maxHitPoints = MAX_HIT_POINTS
+
+    override var isProduceEnable = false
+
+    /**
+     * Context.
+     */
+
+    val turnConnection = BPipeConnection.createByNode(
+        context, BTurnNode.NAME, OnTurnNode(context, this.unitId)
+    )
+
+    val produceEnableConnection = BPipeConnection.createByNode(
+        context, BOnProduceEnableNode.NAME, OnProduceEnableNode(context, this.unitId)
+    )
+
+    val produceActionConnection = BPipeConnection.createByNode(
+        context, BOnProduceActionNode.NAME, OnProduceActionNode(this.unitId, context)
+    )
+
+    val hitPointsActionConnection = BPipeConnection.createByNode(
+        context, BOnHitPointsActionNode.NAME, OnHitPointsActionNode(context, this.unitId)
+    )
+
+    val destroyConnection = BPipeConnection.createByNode(
+        context, BOnDestroyUnitNode.NAME, OnDestroyNode(context, this.unitId)
+    )
+
+    /**
+     * Node.
+     */
+
+    @BAdjutantComponent
+    class OnCreateNode(context: BGameContext, private val playerId: Long) : BNode(context) {
+
+        companion object {
+
+            fun createEvent(playerId: Long, x: Int, y: Int) = Event(playerId, x, y)
         }
 
-    /**
-     * Observers.
-     */
+        /**
+         * Context.
+         */
 
-    override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
-
-    override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
-
-    override val levelUpObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
-
-    override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
-
-    override var isProduceStateChangedObserver: MutableMap<Long, BProducable.Listener> = mutableMapOf()
-
-    /**
-     * Companions.
-     */
-
-    private val pipeline by lazy { this.context.pipeline }
-
-    val buildDeveloper = BuildDeveloper()
-
-    val buildBarracksFactory = BuildBarracksFactory()
-
-    val buildTurretFactory = BuildTurretFactory()
-
-    val buildWallFactory = BuildWallFactory()
-
-    val buildFactoryFactory = BuildFactoryFactory()
-
-    val buildGeneratorFactory = BuildGeneratorFactory()
-
-    val upgrageBuildingFactory = UpgrageBuildingFactory()
-
-    /**
-     * Lifecycle.
-     */
-
-    override fun onTurnStarted() {
-        this.switchProduceEnable(true)
-    }
-
-    override fun onTurnEnded() {
-        this.switchProduceEnable(false)
-    }
-
-    /**
-     * Producer function.
-     */
-
-    override fun pushProduceActions(context: BGameContext, owner: BPlayer) = mutableSetOf<BAction>()
-        .also { set ->
-            if (this.isProduceEnable) {
-                this.buildBarracksFactory.sendOnCreateUnitAction()?.let { set.add(it) }
-                this.buildTurretFactory.sendOnCreateUnitAction()?.let { set.add(it) }
-                this.buildWallFactory.sendOnCreateUnitAction()?.let { set.add(it) }
-                if (this.buildDeveloper.canFactoryBuild()) {
-                    this.buildFactoryFactory.sendOnCreateUnitAction()?.let { set.add(it) }
-                }
-                if (this.buildDeveloper.canGeneratorBuild()) {
-                    this.buildGeneratorFactory.sendOnCreateUnitAction()?.let { set.add(it) }
-                }
-                if (this.buildDeveloper.canUpgrade()) {
-                    this.upgrageBuildingFactory.sendOnCreateUnitAction()?.let { set.add(it) }
-                }
+        override fun handle(event: BEvent): BEvent? {
+            if (event is Event
+                && event.playerId == this.playerId
+                && event.createHeadquarters(this.context)
+            ) {
+                return this.pushEventIntoPipes(event)
             }
+            return null
         }
 
-    /**
-     * Actions.
-     */
+        /**
+         * Event.
+         */
 
-    abstract inner class Build : BHumanAction(this.context, this.playerId!!),
-        BTargetable {
+        class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
 
-        override var targetPosition: BPoint? = null
-
-        protected abstract fun buildUnit(): BHumanBuilding
-
-        override fun performAction(): Boolean {
-            if (this.targetPosition != null && this.ownerId != null) {
-                val unit = this.buildUnit()
-                val manager = this.context.mapManager
-                val isSuccessful = manager.createUnit(unit, this.targetPosition)
+            fun createHeadquarters(context: BGameContext): Boolean {
+                val controller = context.mapController
+                val headquarters = BHumanHeadquarters(context, this.playerId, this.x, this.y)
+                val isSuccessful = controller.placeUnitOnMap(headquarters)
                 if (isSuccessful) {
-                    this@BHumanHeadquarters.buildDeveloper.buildActionCount--
+                    context.storage.addObject(headquarters)
                 }
                 return isSuccessful
             }
+        }
+    }
+
+    @BUnitComponent
+    class OnTurnNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        /**
+         * Context.
+         */
+
+        private val pipeline = context.pipeline
+
+        /**
+         * Unit.
+         */
+
+        private val headquarters by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanHeadquarters
+        }
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BTurnPipe.Event && this.headquarters.playerId == event.playerId) {
+                val producableId = this.headquarters.producableId
+                when (event) {
+                    is BOnTurnStartedPipe.Event -> {
+                        this.pushEventIntoPipes(event)
+                        if (this.isBattleMode()) {
+                            this.makeAttack()
+                        }
+                        this.pipeline.pushEvent(
+                            BOnProduceEnablePipe.createEvent(producableId, true)
+                        )
+                        return event
+                    }
+                    is BOnTurnFinishedPipe.Event -> {
+                        this.pushEventIntoPipes(event)
+                        this.pipeline.pushEvent(
+                            BOnProduceEnablePipe.createEvent(producableId, false)
+                        )
+                        return event
+                    }
+                }
+            }
+            return null
+        }
+
+        private fun isBattleMode() : Boolean {
+            //TODO
             return false
         }
-    }
 
-    inner class BuildBarracksFactory : BAction.Factory(this.pipeline) {
-
-        override fun createAction() = Action()
-
-        inner class Action : Build() {
-
-            override fun buildUnit() =
-                BHumanBarracks(this@BHumanHeadquarters.context, this@BHumanHeadquarters.playerId!!)
+        private fun makeAttack() {
+            //TODO
         }
     }
 
-    inner class BuildTurretFactory : BAction.Factory(this.pipeline) {
+    @BUnitComponent
+    class OnProduceEnableNode(context: BGameContext, unitId: Long) : BNode(context) {
 
-        override fun createAction() =  Action()
-
-        inner class Action : Build() {
-
-            override fun buildUnit() =
-                BHumanTurret(this@BHumanHeadquarters.context, this@BHumanHeadquarters.playerId!!)
+        private val headquarters by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanHeadquarters
         }
-    }
 
-    inner class BuildWallFactory : BAction.Factory(this.pipeline) {
-
-        override fun createAction() = Action()
-
-        inner class Action : Build() {
-
-            override fun buildUnit() =
-                BHumanWall(this@BHumanHeadquarters.context, this@BHumanHeadquarters.playerId!!)
-        }
-    }
-
-    inner class BuildFactoryFactory : BAction.Factory(this.pipeline) {
-
-        override fun createAction() = Action()
-
-        inner class Action : Build() {
-
-            override fun buildUnit() =
-                BHumanFactory(this@BHumanHeadquarters.context, this@BHumanHeadquarters.playerId!!)
-        }
-    }
-
-    inner class BuildGeneratorFactory : BAction.Factory(this.pipeline) {
-
-        override fun createAction() =  Action()
-
-        inner class Action : Build() {
-
-            override fun buildUnit() =
-                BHumanGenerator(this@BHumanHeadquarters.context, this@BHumanHeadquarters.playerId!!)
-        }
-    }
-
-    inner class UpgrageBuildingFactory : BAction.Factory(this.pipeline) {
-
-        override fun createAction() = Action()
-
-        inner class Action : BHumanAction(
-            this@BHumanHeadquarters.context, this@BHumanHeadquarters.playerId!!
-        ), BTargetable {
-
-            override var targetPosition: BPoint? = null
-
-            override fun performAction(): Boolean {
-                if (this.targetPosition != null && this.ownerId != null) {
-                    val manager = this.context.mapManager
-                    val unit = manager.getUnitByPosition(this.targetPosition)
-                    if (unit is BLevelable && unit is BHumanBuilding) {
-                        return unit.increaseLevel(DEFAULT_BUILDING_UPGRADE)
-                    }
-                }
-                return false
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnProduceEnablePipe.Event
+                && this.headquarters.producableId == event.producableId
+                && event.perform(this.context)
+            ) {
+                return this.pushEventIntoPipes(event)
             }
+            return null
         }
     }
 
-    /**
-     * Build developer.
-     */
+    @BUnitComponent
+    class OnProduceActionNode(unitId: Long, context: BGameContext) : BNode(context) {
 
-    inner class BuildDeveloper {
+        /**
+         * Context.
+         */
 
-        private val unitHeap by lazy {
-            this@BHumanHeadquarters.context.mapManager.unitHeap.values
+        private val pipeline = context.pipeline
+
+        /**
+         * Unit.
+         */
+
+        private val headquarters by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanHeadquarters
         }
 
-        var buildActionCount = 0
-
-        fun initBuildActionCount() {
-            val owner = this@BHumanHeadquarters.playerId!!
-            var abilityCount = HEADQUARTERS_BUILD_ABILITY
-            this.unitHeap.forEach { unit ->
-                if (owner.owns(unit) && unit is BHumanGenerator) {
-                    abilityCount++
-                }
+        override fun handle(event: BEvent): BEvent? {
+            val producableId = this.headquarters.producableId
+            if (event is BHumanEvents.Construct.Event
+                && producableId == event.producableId
+                && this.headquarters.isProduceEnable
+                && event.perform(this.context, this.headquarters.playerId)
+            ) {
+                this.pushEventIntoPipes(event)
+                this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+                return event
             }
-            this.buildActionCount = abilityCount
+            return null
+        }
+    }
+
+    @BUnitComponent
+    class OnHitPointsActionNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        /**
+         * Context.
+         */
+
+        private val pipeline = context.pipeline
+
+        /**
+         * Unit.
+         */
+
+        private val headquarters by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanHeadquarters
         }
 
-        fun canFactoryBuild(): Boolean {
-            var barracksCount = 0
-            var factoryCount = 0
-            this.unitHeap.forEach { unit ->
-                if (this@BHumanHeadquarters.playerId!!.owns(unit)) {
-                    when (unit) {
-                        is BHumanBarracks -> barracksCount++
-                        is BHumanFactory -> factoryCount++
-                    }
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnHitPointsActionPipe.Event
+                && event.hitPointableId == this.headquarters.hitPointableId
+                && event.perform(this.context)
+            ) {
+                this.pushEventIntoPipes(event)
+                if (this.headquarters.currentHitPoints <= 0) {
+                    this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.headquarters.unitId))
                 }
+                return event
             }
-            return barracksCount - factoryCount > 0
+            return null
+        }
+    }
+
+    @BUnitComponent
+    class OnDestroyNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        /**
+         * Context.
+         */
+
+        private val storage = context.storage
+
+        /**
+         * Unit.
+         */
+
+        private val headquarters by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanHeadquarters
         }
 
-        fun canGeneratorBuild(): Boolean {
-            var generatorCount = 0
-            for (unit in this.unitHeap) {
-                if (unit is BHumanGenerator && this@BHumanHeadquarters.playerId!!.owns(unit)) {
-                    if (generatorCount == GENERATOR_LIMIT) {
-                        return false
-                    } else {
-                        generatorCount++
-                    }
-                }
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnDestroyUnitPipe.Event && event.unitId == this.headquarters.unitId) {
+                this.pushEventIntoPipes(event)
+                this.unbindPipes()
+                this.storage.removeObject(event.unitId, BUnitHeap::class.java)
+                return event
             }
-            return true
+            return null
         }
 
-        fun canUpgrade(): Boolean {
-            for (unit in this.unitHeap) {
-                if (
-                    unit is BHumanBuilding
-                    && unit is BLevelable
-                    && unit.currentLevel < unit.maxLevel
-                    && this@BHumanHeadquarters.playerId!!.owns(unit)
-                ) {
-                    return true
-                }
-            }
-            return false
+        private fun unbindPipes() {
+            this.headquarters.turnConnection.disconnect(this.context)
+            this.headquarters.produceEnableConnection.disconnect(this.context)
+            this.headquarters.produceActionConnection.disconnect(this.context)
+            this.headquarters.destroyConnection.disconnect(this.context)
+            this.headquarters.hitPointsActionConnection.disconnect(this.context)
         }
     }
 }

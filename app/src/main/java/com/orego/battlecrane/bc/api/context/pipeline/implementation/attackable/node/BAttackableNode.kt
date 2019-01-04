@@ -25,7 +25,7 @@ class BAttackableNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent): BEvent? {
         return if (event is BAttackablePipe.Event) {
-            event.also { this.pushEventIntoPipes(it) }
+            this.pushEventIntoPipes(event)
         } else {
             null
         }

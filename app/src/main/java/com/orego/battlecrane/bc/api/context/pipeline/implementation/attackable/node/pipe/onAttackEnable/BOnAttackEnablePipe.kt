@@ -5,6 +5,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.B
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.node.BOnAttackEnableNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAttackableHeap
 
 @BContextComponent
 class BOnAttackEnablePipe(context: BGameContext) : BPipe(context) {
@@ -14,7 +15,7 @@ class BOnAttackEnablePipe(context: BGameContext) : BPipe(context) {
         const val NAME = "ON_ATTACK_ENABLE_PIPE"
 
         fun createEvent(attackableId: Long, isEnable: Boolean) =
-                Event(attackableId, isEnable)
+            Event(attackableId, isEnable)
     }
 
     override val name = NAME
@@ -24,5 +25,15 @@ class BOnAttackEnablePipe(context: BGameContext) : BPipe(context) {
     }
 
     open class Event(val attackableId: Long, val isEnable: Boolean) :
-        BAttackablePipe.Event()
+        BAttackablePipe.Event() {
+
+        fun perform(context: BGameContext): Boolean {
+            val attackable = context.storage.getHeap(BAttackableHeap::class.java)[this.attackableId]
+            val isSuccessful = attackable.isAttackEnable != this.isEnable
+            if (isSuccessful) {
+                attackable.isAttackEnable = this.isEnable
+            }
+            return isSuccessful
+        }
+    }
 }

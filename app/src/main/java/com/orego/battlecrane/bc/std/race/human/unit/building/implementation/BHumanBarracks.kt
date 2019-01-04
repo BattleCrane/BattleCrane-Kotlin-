@@ -1,7 +1,6 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
@@ -21,7 +20,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BA
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.util.BPipeConnection
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
@@ -253,10 +252,9 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
             if (event is TrainMarineEvent
                 && producableId == event.producableId
                 && this.barracks.isProduceEnable
-                && event.canTrainMarine(this.context, this.barracks)
+                && event.perform(this.context, this.barracks)
             ) {
                 this.pushEventIntoPipes(event)
-                event.trainMarine(this.pipeline, this.barracks.playerId)
                 this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
                 return event
             }
@@ -270,7 +268,15 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         class TrainMarineEvent(producableId: Long, val x: Int, val y: Int) :
             BOnProduceActionPipe.Event(producableId) {
 
-            fun canTrainMarine(context: BGameContext, barracks: BHumanBarracks): Boolean {
+            fun perform(context: BGameContext, barracks: BHumanBarracks): Boolean {
+                val canTrainMarine = this.canTrainMarine(context, barracks)
+                if (canTrainMarine) {
+                    context.pipeline.pushEvent(BHumanMarine.OnCreateNode.createEvent(barracks.playerId, this.x, this.y))
+                }
+                return canTrainMarine
+            }
+
+            private fun canTrainMarine(context: BGameContext, barracks: BHumanBarracks): Boolean {
                 val controller = context.mapController
                 val otherUnit = controller.getUnitByPosition(context, this.x, this.y)
                 if (otherUnit !is BEmptyField) {
@@ -291,10 +297,6 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
                     return true
                 }
                 return false
-            }
-
-            fun trainMarine(pipeline: BPipeline, playerId: Long) {
-                pipeline.pushEvent(BHumanMarine.OnCreateNode.createEvent(playerId, this.x, this.y))
             }
         }
     }

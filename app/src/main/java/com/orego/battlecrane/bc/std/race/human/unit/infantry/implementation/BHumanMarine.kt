@@ -1,6 +1,7 @@
 package com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.BOnAttackActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.node.BOnAttackActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
@@ -18,6 +19,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BA
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
@@ -82,65 +84,25 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Node.
      */
 
-    val onTurnPipeId: Long
+    val turnConnection = BPipeConnection.createByNode(
+        context, BTurnNode.NAME, OnTurnNode(context, this.unitId)
+    )
 
-    val onTurnNodeId: Long
+    val attackActionConnection = BPipeConnection.createByNode(
+        context, BOnAttackActionNode.NAME, OnAttackActionNode(context, this.unitId)
+    )
 
-    val onAttackActionPipeId: Long
+    val attackEnableConnection = BPipeConnection.createByNode(
+        context, BOnAttackEnableNode.NAME, OnAttackEnableNode(context, this.unitId)
+    )
 
-    val onAttackActionNodeId: Long
+    val hitPointsConnection = BPipeConnection.createByNode(
+        context, BOnHitPointsActionNode.NAME, OnHitPointsActionNode(context, this.unitId)
+    )
 
-    val onAttackEnableNodeId: Long
-
-    val onAttackEnablePipeId: Long
-
-    val onHitPointsActionPipeId : Long
-
-    val onHitPointsActionNodeId : Long
-
-    val onDestroyPipeId : Long
-
-    val onDestroyNodeId : Long
-
-    init {
-        //Get pipeline:
-        val pipeline = context.pipeline
-
-        //On turn:
-        val onTurnNode = OnTurnNode(context, this.unitId)
-        val onTurnPipe = onTurnNode.wrapInPipe()
-        this.onTurnNodeId = onTurnNode.id
-        this.onTurnPipeId = onTurnPipe.id
-        pipeline.bindPipeToNode(BTurnNode.NAME, onTurnPipe)
-
-        //On attack acton:
-        val onAttackActionNode = OnAttackActionNode(context, this.unitId)
-        val onAttackActionPipe = onAttackActionNode.wrapInPipe()
-        this.onAttackActionNodeId = onAttackActionNode.id
-        this.onAttackActionPipeId = onAttackActionPipe.id
-        pipeline.bindPipeToNode(BOnAttackActionNode.NAME, onAttackActionPipe)
-
-        //On attack enable:
-        val onAttackEnableNode = OnAttackEnableNode(context, this.unitId)
-        val onAttackEnablePipe = onAttackEnableNode.wrapInPipe()
-        this.onAttackEnableNodeId = onAttackEnableNode.id
-        this.onAttackEnablePipeId = onAttackEnablePipe.id
-        pipeline.bindPipeToNode(BOnAttackEnableNode.NAME, onAttackEnablePipe)
-
-        //On hit points action:
-        val onHitPointsActionNode = OnHitPointsActionNode(context, this.unitId)
-        val onHitPointsActionPipe = onHitPointsActionNode.wrapInPipe()
-        this.onHitPointsActionNodeId = onHitPointsActionNode.id
-        this.onHitPointsActionPipeId = onHitPointsActionPipe.id
-        pipeline.bindPipeToNode(BOnHitPointsActionNode.NAME, onHitPointsActionPipe)
-
-        //On destroy:
-        val onDestroyNode = OnDestroyNode(context, this.unitId)
-        val onDestroyPipe = onDestroyNode.wrapInPipe()
-        this.onDestroyPipeId = onDestroyPipe.id
-        this.onDestroyNodeId = onDestroyNode.id
-        pipeline.bindPipeToNode(BOnDestroyUnitNode.NAME, onDestroyPipe)
-    }
+    val destroyConnection = BPipeConnection.createByNode(
+        context, BOnDestroyUnitNode.NAME, OnDestroyNode(context, this.unitId)
+    )
 
     /**
      * Node.
@@ -151,21 +113,15 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         companion object {
 
-            fun createEvent(playerId: Long, x: Int, y: Int) =
-                Event(playerId, x, y)
+            fun createEvent(playerId: Long, x: Int, y: Int) = Event(playerId, x, y)
         }
 
-        private val mapController = this.context.mapController
-
-        private val storage = this.context.storage
-
         override fun handle(event: BEvent): BEvent? {
-            if (event is Event && event.playerId == this.playerId) {
-                val marine = BHumanMarine(this.context, this.playerId, event.x, event.y)
-                if (this.mapController.placeUnitOnMap(marine)) {
-                    this.storage.addObject(marine)
-                    return this.pushEventIntoPipes(event)
-                }
+            if (event is Event
+                && event.playerId == this.playerId
+                && event.createMarine(this.context)
+            ) {
+                return this.pushEventIntoPipes(event)
             }
             return null
         }
@@ -175,7 +131,17 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
          */
 
         open class Event(val playerId: Long, x: Int, y: Int) :
-            BOnCreateUnitPipe.Event(x, y)
+            BOnCreateUnitPipe.Event(x, y) {
+
+            fun createMarine(context: BGameContext): Boolean {
+                val marine = BHumanMarine(context, this.playerId, this.x, this.y)
+                val isSuccessful = context.mapController.placeUnitOnMap(marine)
+                if (isSuccessful) {
+                    context.storage.addObject(marine)
+                }
+                return isSuccessful
+            }
+        }
     }
 
     @BUnitComponent
@@ -212,23 +178,8 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
     @BUnitComponent
     class OnAttackActionNode(context: BGameContext, unitId: Long) : BNode(context) {
 
-        companion object {
-
-            private const val VECTOR = 1
-        }
-
         /**
-         * Context.
-         */
-
-        private val mapController = context.mapController
-
-        private val playerHeap = context.storage.getHeap(BPlayerHeap::class.java)
-
-        private val pipeline = context.pipeline
-
-        /**
-         * Unt.
+         * Unit.
          */
 
         private val marine by lazy {
@@ -236,127 +187,140 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         override fun handle(event: BEvent): BEvent? {
-            if (event !is Event || event.attackableId != this.marine.attackableId) {
-                return null
-            }
-            val targetX = event.targetX
-            val targetY = event.targetY
-            val targetUnit = this.mapController.getUnitByPosition(this.context, targetX, targetY)
-            if (targetUnit !is BHitPointable) {
-                return null
-            }
-            val marineOwner = this.playerHeap[this.marine.playerId]
-            if (!marineOwner.isEnemy(targetUnit.playerId)) {
-                return null
-            }
-            if (this.isPossibleAttackGeometry(targetX, targetY)) {
+            if (event is Event
+                && event.attackableId == this.marine.attackableId
+                && event.canAttack(this.context, this.marine)
+            ) {
                 this.pushEventIntoPipes(event)
-                this.pipeline.pushEvent(
-                    BOnHitPointsActionPipe.Current.createOnDecreasedEvent(targetUnit.hitPointableId, this.marine.damage)
-                )
+                event.makeAttack(this.context, this.marine.damage)
                 return event
             }
+
             return null
         }
 
         /**
-         * Attack geometry check.
-         */
-
-        private fun isPossibleAttackGeometry(targetX: Int, targetY: Int): Boolean {
-            val marineX = this.marine.x
-            val marineY = this.marine.y
-            return when {
-                this.isPossibleAttackByXAxis(marineX, marineY, targetX, targetY) -> true
-                this.isPossibleAttackByYAxis(marineX, marineY, targetX, targetY) -> true
-                this.isPossibleAttackByDiagonal(marineX, marineY, targetX, targetY) -> true
-                else -> false
-            }
-        }
-
-
-        private fun isPossibleAttackByXAxis(marineX: Int, marineY: Int, targetX: Int, targetY: Int): Boolean {
-            if (marineX == targetX) {
-                for (y in min(marineY, targetY) + 1 until max(marineY, targetY)) {
-                    val otherUnit = this.mapController.getUnitByPosition(this.context, targetX, y)
-                    if (this.isAttackBlock(otherUnit)) {
-                        return false
-                    }
-                }
-                return true
-            }
-            return false
-        }
-
-        private fun isPossibleAttackByYAxis(marineX: Int, marineY: Int, targetX: Int, targetY: Int): Boolean {
-            if (marineY == targetY) {
-                for (x in min(marineX, targetX) + 1 until max(marineX, targetX)) {
-                    val otherUnit = this.mapController.getUnitByPosition(this.context, x, targetY)
-                    if (this.isAttackBlock(otherUnit)) {
-                        return false
-                    }
-                }
-                return true
-            }
-            return false
-        }
-
-        private fun isPossibleAttackByDiagonal(marineX: Int, marineY: Int, targetX: Int, targetY: Int): Boolean {
-            val distanceX = marineX - targetX
-            val distanceY = marineY - targetY
-            val isDiagonal = Math.abs(distanceX) == Math.abs(distanceY)
-            if (isDiagonal) {
-                //Any distance:
-                val distanceBetweenUnits = distanceX - 1
-                val dx =
-                    if (distanceX > 0) {
-                        VECTOR
-                    } else {
-                        -VECTOR
-                    }
-                val dy =
-                    if (distanceY > 0) {
-                        VECTOR
-                    } else {
-                        -VECTOR
-                    }
-                var x = marineX
-                var y = marineY
-                repeat(distanceBetweenUnits) {
-                    x += dx
-                    y += dy
-                    val otherUnit = this.mapController.getUnitByPosition(this.context, x, y)
-                    if (this.isAttackBlock(otherUnit)) {
-                        return false
-                    }
-                }
-                return true
-            }
-            return false
-        }
-
-        private fun isAttackBlock(otherUnit: BUnit): Boolean {
-            val marineOwnerId = this.marine.playerId
-            val otherPlayerId = otherUnit.playerId
-            if (otherUnit is BCreature || otherUnit is BField) {
-                return false
-            }
-            if (marineOwnerId == otherPlayerId) {
-                return false
-            }
-            val marineOwner = this.playerHeap[marineOwnerId]
-            if (marineOwner.isAlly(otherPlayerId)) {
-                return false
-            }
-            return true
-        }
-
-        /**
-         * ProduceTankEvent.
+         * Event.
          */
 
         open class Event(attackableId: Long, val targetX: Int, val targetY: Int) :
-            BOnAttackActionPipe.Event(attackableId)
+            BOnAttackActionPipe.Event(attackableId) {
+
+            companion object {
+
+                private const val VECTOR = 1
+            }
+
+            fun canAttack(context: BGameContext, marine: BHumanMarine): Boolean {
+                val targetUnit = context.mapController.getUnitByPosition(context, this.targetX, this.targetY)
+                if (targetUnit !is BHitPointable) {
+                    return false
+                }
+                val player = context.storage.getHeap(BPlayerHeap::class.java)[marine.playerId]
+                return player.isEnemy(targetUnit.playerId) && this.isPossibleAttackGeometry(context, marine)
+            }
+
+            fun makeAttack(context : BGameContext, damage : Int) {
+                val target = context.mapController.getUnitByPosition(context, this.targetX, this.targetY)
+                if (target is BHitPointable) {
+                    context.pipeline.pushEvent(
+                        BOnHitPointsActionPipe.Current.createOnDecreasedEvent(target.hitPointableId, damage)
+                    )
+                }
+            }
+
+            /**
+             * Attack geometry check.
+             */
+
+            private fun isPossibleAttackGeometry(context: BGameContext, marine: BHumanMarine): Boolean {
+                val marineX = marine.x
+                val marineY = marine.y
+                val playerId = marine.playerId
+                return when {
+                    this.isPossibleAttackByXAxis(context, marineX, marineY, playerId) -> true
+                    this.isPossibleAttackByYAxis(context, marineX, marineY, playerId) -> true
+                    this.isPossibleAttackByDiagonal(context, marineX, marineY, playerId) -> true
+                    else -> false
+                }
+            }
+
+            private fun isPossibleAttackByXAxis(context: BGameContext, marineX: Int, marineY: Int, playerId: Long)
+                    : Boolean {
+                if (marineX == this.targetX) {
+                    for (y in min(marineY, this.targetY) + 1 until max(marineY, this.targetY)) {
+                        if (this.isAttackBlock(context, this.targetX, y, playerId)) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+                return false
+            }
+
+            private fun isPossibleAttackByYAxis(context: BGameContext, marineX: Int, marineY: Int, playerId: Long):
+                    Boolean {
+                if (marineY == this.targetY) {
+                    for (x in min(marineX, this.targetX) + 1 until max(marineX, this.targetX)) {
+                        if (this.isAttackBlock(context, x, this.targetY, playerId)) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+                return false
+            }
+
+            private fun isPossibleAttackByDiagonal(context: BGameContext, marineX: Int, marineY: Int, playerId: Long):
+                    Boolean {
+                val distanceX = marineX - this.targetX
+                val distanceY = marineY - this.targetY
+                val isDiagonal = Math.abs(distanceX) == Math.abs(distanceY)
+                if (isDiagonal) {
+                    //Any distance:
+                    val distanceBetweenUnits = distanceX - 1
+                    val dx =
+                        if (distanceX > 0) {
+                            VECTOR
+                        } else {
+                            -VECTOR
+                        }
+                    val dy =
+                        if (distanceY > 0) {
+                            VECTOR
+                        } else {
+                            -VECTOR
+                        }
+                    var x = marineX
+                    var y = marineY
+                    repeat(distanceBetweenUnits) {
+                        x += dx
+                        y += dy
+                        if (this.isAttackBlock(context, x, y, playerId)) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+                return false
+            }
+
+            private fun isAttackBlock(context: BGameContext, x: Int, y: Int, playerId: Long): Boolean {
+                val otherUnit = context.mapController.getUnitByPosition(context, x, y)
+                val otherPlayerId = otherUnit.playerId
+                if (otherUnit is BCreature || otherUnit is BField) {
+                    return false
+                }
+                if (playerId == otherPlayerId) {
+                    return false
+                }
+                val marineOwner = context.storage.getHeap(BPlayerHeap::class.java)[playerId]
+                if (marineOwner.isAlly(otherPlayerId)) {
+                    return false
+                }
+                return true
+            }
+        }
     }
 
     @BUnitComponent
