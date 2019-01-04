@@ -26,7 +26,6 @@ import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BVehicle
 import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.std.location.grass.field.BField
-import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.BHumanVehicle
 
 
@@ -161,22 +160,13 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         override fun handle(event: BEvent): BEvent? {
             if (event is Event && event.playerId == this.playerId) {
-                val x = event.x
-                val y = event.y
-                if (this.isCreatingConditionsPerformed(x, y)) {
-                    val tank = BHumanTank(this.context, this.playerId, event.x, event.y)
-                    if (this.mapController.placeUnitOnMap(tank)) {
-                        this.storage.addObject(tank)
-                        return this.pushEventIntoPipes(event)
-                    }
+                val tank = BHumanTank(this.context, this.playerId, event.x, event.y)
+                if (this.mapController.placeUnitOnMap(tank)) {
+                    this.storage.addObject(tank)
+                    return this.pushEventIntoPipes(event)
                 }
             }
             return null
-        }
-
-        private fun isCreatingConditionsPerformed(x: Int, y: Int): Boolean {
-            val otherUnit = this.context.mapController.getUnitByPosition(context, x, y)
-            return otherUnit is BEmptyField
         }
 
         /**
@@ -361,7 +351,7 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         /**
-         * Event.
+         * TrainMarineEvent.
          */
 
         open class Event(attackableId: Long, val targetX: Int, val targetY: Int) :

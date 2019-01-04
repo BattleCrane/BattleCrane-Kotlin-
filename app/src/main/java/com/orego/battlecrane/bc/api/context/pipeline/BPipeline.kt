@@ -38,7 +38,7 @@ class BPipeline(context: BGameContext) {
     }
 
     /**
-     * Event.
+     * TrainMarineEvent.
      */
 
     fun pushEvent(event: BEvent?) {
@@ -106,8 +106,10 @@ class BPipeline(context: BGameContext) {
         throw IllegalStateException("Node not found!")
     }
 
-    fun bindPipeToNode(nodeName: String, pipe: BPipe) {
-        this.findNode(nodeName).connectInnerPipe(pipe)
+    fun bindPipeToNode(nodeName: String, pipe: BPipe) : BNode {
+        val node = this.findNode(nodeName)
+        node.connectInnerPipe(pipe)
+        return node
     }
 
     fun bindPipeToNode(nodeId: Long, pipe: BPipe) {
@@ -116,6 +118,10 @@ class BPipeline(context: BGameContext) {
 
     fun unbindPipeFromNode(nodeName: String, pipeId : Long) {
         this.findNode(nodeName).disconnectInnerPipe(pipeId)
+    }
+
+    fun unbindPipeFromNode(nodeId: Long, pipeId : Long) {
+        this.findNode(nodeId).disconnectInnerPipe(pipeId)
     }
 
     fun bindNodeToPipe(pipeId : Long, node : BNode) {

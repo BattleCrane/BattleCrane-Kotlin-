@@ -5,6 +5,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.BL
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BLevelableHeap
 
 @BContextComponent
 class BOnLevelActionPipe(context: BGameContext) : BPipe(context) {
@@ -34,14 +35,52 @@ class BOnLevelActionPipe(context: BGameContext) : BPipe(context) {
      */
 
     abstract class Event(val levelableId: Long, val range: Int) :
-        BLevelablePipe.Event()
+        BLevelablePipe.Event() {
+
+        abstract fun perform(context: BGameContext) : Boolean
+    }
 
     open class OnIncreasedEvent(levelableId: Long, range: Int) :
-        Event(levelableId, range)
+        Event(levelableId, range) {
+
+        override fun perform(context: BGameContext): Boolean {
+            val levelable = context.storage.getHeap(BLevelableHeap::class.java)[this.levelableId]
+            val hasIncreased = range > 0 && levelable.currentLevel < levelable.maxLevel
+            if (hasIncreased) {
+                levelable.currentLevel += range
+            }
+            return hasIncreased
+        }
+    }
 
     open class OnDecreasedEvent(levelableId: Long, range: Int) :
-        Event(levelableId, range)
+        Event(levelableId, range) {
+
+        override fun perform(context: BGameContext): Boolean {
+            val levelable = context.storage.getHeap(BLevelableHeap::class.java)[this.levelableId]
+            val hasDecreased = this.range > 0 && levelable.currentLevel > 1
+            if (hasDecreased) {
+                val newLevel = levelable.currentLevel - range
+                if (newLevel > 1) {
+                    levelable.currentLevel = newLevel
+                } else {
+                    levelable.currentLevel = 1
+                }
+            }
+            return hasDecreased
+        }
+    }
 
     open class OnChangedEvent(levelableId: Long, range: Int) :
-        Event(levelableId, range)
+        Event(levelableId, range) {
+
+        override fun perform(context: BGameContext): Boolean {
+            val levelable = context.storage.getHeap(BLevelableHeap::class.java)[this.levelableId]
+            val hasChanged = this.range > 0 && this.range <= levelable.maxLevel
+            if (hasChanged) {
+                levelable.currentLevel = this.range
+            }
+            return hasChanged
+        }
+    }
 }

@@ -104,6 +104,8 @@ class BPlayer(context: BGameContext) {
 
     fun removeEnemy(player: Long) = this.enemies.remove(player)
 
+    fun isMine(player: Long) = this.playerId == player
+
     fun isEnemy(player: Long) = this.enemies.contains(player)
 
     fun addAlly(player: Long) = this.allies.add(player)
