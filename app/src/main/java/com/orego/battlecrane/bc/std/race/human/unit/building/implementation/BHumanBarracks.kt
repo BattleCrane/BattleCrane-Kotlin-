@@ -40,9 +40,9 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
     companion object {
 
-        const val HEIGHT = 2
+        const val HEIGHT = 1
 
-        const val WIDTH = 1
+        const val WIDTH = 2
 
         const val LEVEL_1_MAX_HIT_POINTS = 1
 
@@ -279,15 +279,15 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
                 val barracksLevel = barracks.currentLevel
                 val barracksPlayerId = barracks.playerId
                 val otherPlayerId = otherUnit.playerId
-                if (barracksLevel == 1 && otherPlayerId == barracksPlayerId) {
+                if (barracksLevel == FIRST_LEVEL && otherPlayerId == barracksPlayerId) {
                     return true
                 }
                 val playerHeap = context.storage.getHeap(BPlayerHeap::class.java)
                 val barracksOwner = playerHeap[barracksPlayerId]
-                if (barracksLevel == 2 && !barracksOwner.isEnemy(otherPlayerId)) {
+                if (barracksLevel == SECOND_LEVEL && !barracksOwner.isEnemy(otherPlayerId)) {
                     return true
                 }
-                if (barracksLevel == 3) {
+                if (barracksLevel == THIRD_LEVEL) {
                     return true
                 }
                 return false

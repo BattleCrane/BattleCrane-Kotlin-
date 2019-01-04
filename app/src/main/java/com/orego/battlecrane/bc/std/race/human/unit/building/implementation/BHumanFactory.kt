@@ -1,6 +1,7 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
@@ -8,6 +9,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.no
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.BOnProduceActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.node.BOnProduceActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.node.BOnProduceEnableNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.BTurnNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
@@ -19,6 +21,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BA
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.util.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
@@ -27,6 +30,7 @@ import com.orego.battlecrane.bc.api.model.entity.property.BProducable
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.BHumanTank
+
 
 /**
  * Produces tanks.
@@ -37,15 +41,23 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
     companion object {
 
-        const val HEIGHT = 2
+        const val HEIGHT = 3
 
-        const val WIDTH = 1
+        const val WIDTH = 2
 
-        const val MAX_HIT_POINTS = 1
+        const val LEVEL_1_MAX_HIT_POINTS = 1
 
-        const val LEVEL = 1
+        const val LEVEL_2_MAX_HIT_POINTS = 4
 
-        const val MAX_LEVEL = 3
+        const val LEVEL_3_MAX_HIT_POINTS = 6
+
+        const val FIRST_LEVEL = 1
+
+        const val SECOND_LEVEL = 2
+
+        const val THIRD_LEVEL = 3
+
+        const val MAX_LEVEL = THIRD_LEVEL
     }
 
     /**
@@ -73,11 +85,11 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
     override val width = WIDTH
 
-    override var currentHitPoints = MAX_HIT_POINTS
+    override var currentHitPoints = LEVEL_1_MAX_HIT_POINTS
 
-    override var maxHitPoints = MAX_HIT_POINTS
+    override var maxHitPoints = LEVEL_1_MAX_HIT_POINTS
 
-    override var currentLevel = LEVEL
+    override var currentLevel = FIRST_LEVEL
 
     override var maxLevel = MAX_LEVEL
 
@@ -87,76 +99,29 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Context.
      */
 
-    val onTurnNodeId: Long
+    val turnConnection = BPipeConnection.createByNode(
+        context, BTurnNode.NAME, OnTurnNode(context, this.unitId)
+    )
 
-    val onTurnPipeId: Long
+    val produceEnableConnection = BPipeConnection.createByNode(
+        context, BOnProduceEnableNode.NAME, OnProduceEnableNode(context, this.unitId)
+    )
 
-    val onProduceEnablePipeId: Long
+    val produceActionConnection = BPipeConnection.createByNode(
+        context, BOnProduceActionNode.NAME, OnProduceActionNode(this.unitId, context)
+    )
 
-    val onProduceEnableNodeId: Long
+    val levelActionConnection = BPipeConnection.createByNode(
+        context, BOnLevelActionNode.NAME, OnLevelActionNode(context, this.unitId)
+    )
 
-    val onProduceActionNodeId: Long
+    val hitPointsActionConnection = BPipeConnection.createByNode(
+        context, BOnHitPointsActionNode.NAME, OnHitPointsActionNode(context, this.unitId)
+    )
 
-    val onProduceActionPipeId: Long
-
-    val onDestroyNodeId: Long
-
-    val onDestroyPipeId: Long
-
-    val onLevelActionNodeId: Long
-
-    val onLevelActionPipeId: Long
-
-    val onHitPointsActionNodeId: Long
-
-    val onHitPointsActionPipeId: Long
-
-    init {
-        //Get context:
-        val pipeline = context.pipeline
-
-        //On turn:
-        val onTurnNode = OnTurnNode(context, this.unitId)
-        val onTurnPipe = onTurnNode.wrapInPipe()
-        this.onTurnNodeId = onTurnNode.id
-        this.onTurnPipeId = onTurnPipe.id
-        pipeline.bindPipeToNode(BTurnNode.NAME, onTurnPipe)
-
-        //On produce enable:
-        val onProduceEnableNode = OnProduceEnableNode(context, this.unitId)
-        val onProduceEnablePipe = onProduceEnableNode.wrapInPipe()
-        this.onProduceEnableNodeId = onProduceEnableNode.id
-        this.onProduceEnablePipeId = onProduceEnablePipe.id
-        pipeline.bindPipeToNode(BOnProduceEnablePipe.NAME, onProduceEnablePipe)
-
-        //On produce action:
-        val onProduceActionNode = OnProduceActionNode(this.unitId, context)
-        val onProduceActionPipe = onProduceActionNode.wrapInPipe()
-        this.onProduceActionNodeId = onProduceActionNode.id
-        this.onProduceActionPipeId = onProduceActionPipe.id
-        pipeline.bindPipeToNode(BOnProduceActionNode.NAME, onProduceActionPipe)
-
-        //On level action:
-        val onLevelActionNode = OnLevelActionNode(context, this.unitId)
-        val onLevelActionPipe = onLevelActionNode.wrapInPipe()
-        this.onLevelActionNodeId = onLevelActionNode.id
-        this.onLevelActionPipeId = onLevelActionPipe.id
-        pipeline.bindPipeToNode(BOnLevelActionNode.NAME, onLevelActionPipe)
-
-        //On hit points action:
-        val onHitPointsActionNode = OnHitPointsActionNode(context, this.unitId)
-        val onHitPointsActionPipe = onHitPointsActionNode.wrapInPipe()
-        this.onHitPointsActionNodeId = onHitPointsActionNode.id
-        this.onHitPointsActionPipeId = onHitPointsActionPipe.id
-        pipeline.bindPipeToNode(BOnHitPointsActionNode.NAME, onHitPointsActionPipe)
-
-        //On destroy:
-        val onDestroyNode = OnDestroyNode(context, this.unitId)
-        val onDestroyPipe = onDestroyNode.wrapInPipe()
-        this.onDestroyNodeId = onDestroyNode.id
-        this.onDestroyPipeId = onDestroyPipe.id
-        pipeline.bindPipeToNode(BOnDestroyUnitNode.NAME, onDestroyPipe)
-    }
+    val destroyConnection = BPipeConnection.createByNode(
+        context, BOnDestroyUnitNode.NAME, OnDestroyNode(context, this.unitId)
+    )
 
     /**
      * Node.
@@ -174,17 +139,12 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Context.
          */
 
-        private val mapController = context.mapController
-
-        private val storage = context.storage
-
         override fun handle(event: BEvent): BEvent? {
-            if (event is Event && event.playerId == this.playerId) {
-                val factory = BHumanFactory(this.context, this.playerId, event.x, event.y)
-                if (this.mapController.placeUnitOnMap(factory)) {
-                    this.storage.addObject(factory)
-                    return this.pushEventIntoPipes(event)
-                }
+            if (event is Event
+                && event.playerId == this.playerId
+                && event.createFactory(this.context)
+            ) {
+                return this.pushEventIntoPipes(event)
             }
             return null
         }
@@ -193,7 +153,18 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Event.
          */
 
-        class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y)
+        class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
+
+            fun createFactory(context: BGameContext): Boolean {
+                val controller = context.mapController
+                val factory = BHumanFactory(context, this.playerId, this.x, this.y)
+                val isSuccessful = controller.placeUnitOnMap(factory)
+                if (isSuccessful) {
+                    context.storage.addObject(factory)
+                }
+                return isSuccessful
+            }
+        }
     }
 
     @BUnitComponent
@@ -245,20 +216,13 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         override fun handle(event: BEvent): BEvent? {
-            if (event is BOnProduceEnablePipe.Event && this.factory.producableId == event.producableId) {
-                if (this.switchEnable(event.isEnable)) {
-                    this.pushEventIntoPipes(event)
-                }
+            if (event is BOnProduceEnablePipe.Event
+                && this.factory.producableId == event.producableId
+                && event.perform(this.context)
+            ) {
+                return this.pushEventIntoPipes(event)
             }
             return null
-        }
-
-        private fun switchEnable(enable: Boolean): Boolean {
-            val isSuccessful = this.factory.isProduceEnable != enable
-            if (isSuccessful) {
-                this.factory.isProduceEnable = enable
-            }
-            return isSuccessful
         }
     }
 
@@ -275,11 +239,7 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Context.
          */
 
-        private val mapController = context.mapController
-
         private val pipeline = context.pipeline
-
-        private val playerHeap = context.storage.getHeap(BPlayerHeap::class.java)
 
         /**
          * Unit.
@@ -290,41 +250,18 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         override fun handle(event: BEvent): BEvent? {
-            if (event !is ProduceTankEvent
-                || this.factory.producableId != event.producableId
-                || !this.factory.isProduceEnable
+            val producableId = this.factory.producableId
+            if (event is ProduceTankEvent
+                && producableId == event.producableId
+                && this.factory.isProduceEnable
+                && event.canProduceTank(this.context, this.factory)
             ) {
-                return null
+                this.pushEventIntoPipes(event)
+                event.produceTank(this.pipeline, this.factory.playerId)
+                this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+                return event
             }
-            val x = event.x
-            val y = event.y
-            val otherUnit = this.mapController.getUnitByPosition(this.context, x, y)
-            if (otherUnit !is BEmptyField) {
-                return null
-            }
-            val factoryLevel = this.factory.currentLevel
-            val factoryPlayerId = this.factory.playerId
-            val otherPlayerId = otherUnit.playerId
-            if (factoryLevel == 1 && otherPlayerId == factoryPlayerId) {
-                this.createTank(x, y)
-            }
-            val factoryOwner = this.playerHeap[factoryPlayerId]
-            if (factoryLevel == 2 && !factoryOwner.isEnemy(otherPlayerId)) {
-                this.createTank(x, y)
-            }
-            if (factoryLevel == 3) {
-                this.createTank(x, y)
-            }
-            return this.pushEventIntoPipes(event)
-        }
-
-        private fun createTank(x: Int, y: Int) {
-            this.pipeline.pushEvent(
-                BHumanTank.OnCreateNode.createEvent(this.factory.playerId, x, y)
-            )
-            this.pipeline.pushEvent(
-                BOnProduceEnablePipe.createEvent(this.factory.producableId, false)
-            )
+            return null
         }
 
         /**
@@ -332,7 +269,35 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
          */
 
         class ProduceTankEvent(producableId: Long, val x: Int, val y: Int) :
-            BOnProduceActionPipe.Event(producableId)
+            BOnProduceActionPipe.Event(producableId) {
+
+            fun canProduceTank(context: BGameContext, factory: BHumanFactory): Boolean {
+                val controller = context.mapController
+                val otherUnit = controller.getUnitByPosition(context, this.x, this.y)
+                if (otherUnit !is BEmptyField) {
+                    return false
+                }
+                val level = factory.currentLevel
+                val playerId = factory.playerId
+                val otherPlayerId = otherUnit.playerId
+                if (level == FIRST_LEVEL && otherPlayerId == playerId) {
+                    return true
+                }
+                val playerHeap = context.storage.getHeap(BPlayerHeap::class.java)
+                val player = playerHeap[playerId]
+                if (level == SECOND_LEVEL && !player.isEnemy(otherPlayerId)) {
+                    return true
+                }
+                if (level == THIRD_LEVEL) {
+                    return true
+                }
+                return false
+            }
+
+            fun produceTank(pipeline: BPipeline, playerId: Long) {
+                pipeline.pushEvent(BHumanTank.OnCreateNode.createEvent(playerId, this.x, this.y))
+            }
+        }
     }
 
     @BUnitComponent
@@ -352,55 +317,11 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
             context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanFactory
         }
 
-        /**
-         * Handler function.
-         */
-
-        private val increaseLevelFunc: (Int) -> Boolean = { range ->
-            val hasIncreased = range > 0 && this.factory.currentLevel < this.factory.maxLevel
-            if (hasIncreased) {
-                this.factory.currentLevel += range
-            }
-            hasIncreased
-        }
-
-        private val decreaseLevelFunc: (Int) -> Boolean = { range ->
-            val hasDecreased = range > 0 && this.factory.currentLevel > 1
-            if (hasDecreased) {
-                val newLevel = this.factory.currentLevel - range
-                if (newLevel > 1) {
-                    this.factory.currentLevel = newLevel
-                } else {
-                    this.factory.currentLevel = 1
-                }
-            }
-            hasDecreased
-        }
-
-        private val changeLevelFunc: (Int) -> Boolean = { newLevel ->
-            val hasChanged = newLevel > 0 && newLevel <= this.factory.maxLevel
-            if (hasChanged) {
-                this.factory.currentLevel = newLevel
-            }
-            hasChanged
-        }
-
-        /**
-         * Function map.
-         */
-
-        private val eventHandlerFuncMap = mutableMapOf<Class<*>, (Int) -> Boolean>(
-            BOnLevelActionPipe.OnIncreasedEvent::class.java to this.increaseLevelFunc,
-            BOnLevelActionPipe.OnDecreasedEvent::class.java to this.decreaseLevelFunc,
-            BOnLevelActionPipe.OnChangedEvent::class.java to this.changeLevelFunc
-        )
-
         override fun handle(event: BEvent): BEvent? {
-            if (event !is BOnLevelActionPipe.Event || this.factory.levelableId == event.levelableId) {
-                return null
-            }
-            val handlerFunc = this.eventHandlerFuncMap[event::class.java]
-            if (handlerFunc != null && handlerFunc(event.range)) {
+            if (event is BOnLevelActionPipe.Event
+                && this.factory.levelableId == event.levelableId
+                && event.perform(this.context)
+            ) {
                 this.pushEventIntoPipes(event)
                 this.changeHitPointsByLevel()
                 return event
@@ -414,9 +335,9 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
             if (currentLevel in 1..3) {
                 val newHitPoints =
                     when (currentLevel) {
-                        1 -> 1
-                        2 -> 4
-                        else -> 6
+                        FIRST_LEVEL -> LEVEL_1_MAX_HIT_POINTS
+                        SECOND_LEVEL -> LEVEL_2_MAX_HIT_POINTS
+                        else -> LEVEL_3_MAX_HIT_POINTS
                     }
                 this.pipeline.pushEvent(
                     BOnHitPointsActionPipe.Max.createOnChangedEvent(hitPointableId, newHitPoints)
@@ -445,97 +366,16 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
             context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanFactory
         }
 
-        /**
-         * Handler functon.
-         */
-
-        private val decreaseCurrentHitPointsFunc: (Int) -> Boolean = { damage ->
-            val hasDamage = damage > 0
-            if (hasDamage) {
-                this.factory.currentHitPoints -= damage
-            }
-            hasDamage
-        }
-
-        private val increaseCurrentHitPointsFunc: (Int) -> Boolean = { restore ->
-            val currentHitPoints = this.factory.currentHitPoints
-            val maxHitPoints = this.factory.maxHitPoints
-            val hasRestore = restore > 0 && currentHitPoints < maxHitPoints
-            if (hasRestore) {
-                val newHitPoints = currentHitPoints + restore
-                if (newHitPoints < maxHitPoints) {
-                    this.factory.currentHitPoints = newHitPoints
-                } else {
-                    this.factory.currentHitPoints = maxHitPoints
-                }
-            }
-            hasRestore
-        }
-
-        private val changeCurrentHitPointsFunc: (Int) -> Boolean = { newHitPointsValue ->
-            val maxHitPoints = this.factory.maxHitPoints
-            val hasChanged = newHitPointsValue in 0..maxHitPoints
-            if (hasChanged) {
-                this.factory.currentHitPoints = newHitPointsValue
-            }
-            hasChanged
-        }
-
-        private val decreaseMaxHitPointsFunc: (Int) -> Boolean = { range ->
-            val hasRange = range > 0
-            if (hasRange) {
-                this.factory.maxHitPoints -= range
-                if (this.factory.currentHitPoints > this.factory.maxHitPoints) {
-                    this.factory.currentHitPoints = this.factory.maxHitPoints
-                }
-            }
-            hasRange
-        }
-
-        private val increaseMaxHitPointsFunc: (Int) -> Boolean = { range ->
-            val hasRestore = range > 0
-            if (hasRestore) {
-                this.factory.maxHitPoints += range
-            }
-            hasRestore
-        }
-
-        private val changeMaxHitPointsFunc: (Int) -> Boolean = { newMaxHitPonts ->
-            val hasRange = newMaxHitPonts != 0
-            if (hasRange) {
-                this.factory.maxHitPoints = newMaxHitPonts
-                if (this.factory.currentHitPoints > this.factory.maxHitPoints) {
-                    this.factory.currentHitPoints = this.factory.maxHitPoints
-                }
-            }
-            hasRange
-        }
-
-        /**
-         * Function map.
-         */
-
-        val eventHandlerFuncMap = mutableMapOf<Class<*>, (Int) -> Boolean>(
-            BOnHitPointsActionPipe.Current.OnIncreasedEvent::class.java to this.increaseCurrentHitPointsFunc,
-            BOnHitPointsActionPipe.Current.OnDecreasedEvent::class.java to this.decreaseCurrentHitPointsFunc,
-            BOnHitPointsActionPipe.Current.OnChangedEvent::class.java to this.changeCurrentHitPointsFunc,
-            BOnHitPointsActionPipe.Max.OnIncreasedEvent::class.java to this.increaseMaxHitPointsFunc,
-            BOnHitPointsActionPipe.Max.OnDecreasedEvent::class.java to this.decreaseMaxHitPointsFunc,
-            BOnHitPointsActionPipe.Max.OnChangedEvent::class.java to this.changeMaxHitPointsFunc
-        )
-
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnHitPointsActionPipe.Event
                 && event.hitPointableId == this.factory.hitPointableId
+                && event.perform(this.context)
             ) {
-                val handlerFunc = this.eventHandlerFuncMap[event::class.java]
-                if (handlerFunc != null && handlerFunc(event.range)) {
-                    this.pushEventIntoPipes(event)
-                    if (this.factory.currentHitPoints <= 0) {
-                        this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.factory.unitId))
-                    }
-                    return event
+                this.pushEventIntoPipes(event)
+                if (this.factory.currentHitPoints <= 0) {
+                    this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.factory.unitId))
                 }
+                return event
             }
             return null
         }
@@ -550,8 +390,6 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         private val storage = context.storage
 
-        private val pipeline = context.pipeline
-
         /**
          * Unit.
          */
@@ -563,20 +401,20 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnDestroyUnitPipe.Event && event.unitId == this.factory.unitId) {
                 this.pushEventIntoPipes(event)
-                this.unbindNodes()
+                this.unbindPipes()
                 this.storage.removeObject(event.unitId, BUnitHeap::class.java)
                 return event
             }
             return null
         }
 
-        private fun unbindNodes() {
-            this.pipeline.unbindPipeFromNode(BTurnNode.NAME, this.factory.onTurnPipeId)
-            this.pipeline.unbindPipeFromNode(BOnProduceEnablePipe.NAME, this.factory.onProduceEnablePipeId)
-            this.pipeline.unbindPipeFromNode(BOnProduceActionPipe.NAME, this.factory.onProduceActionPipeId)
-            this.pipeline.unbindPipeFromNode(BOnDestroyUnitNode.NAME, this.factory.onDestroyPipeId)
-            this.pipeline.unbindPipeFromNode(BOnLevelActionNode.NAME, this.factory.onLevelActionPipeId)
-            this.pipeline.unbindPipeFromNode(BOnHitPointsActionNode.NAME, this.factory.onHitPointsActionPipeId)
+        private fun unbindPipes() {
+            this.factory.turnConnection.disconnect(this.context)
+            this.factory.produceEnableConnection.disconnect(this.context)
+            this.factory.produceActionConnection.disconnect(this.context)
+            this.factory.destroyConnection.disconnect(this.context)
+            this.factory.levelActionConnection.disconnect(this.context)
+            this.factory.hitPointsActionConnection.disconnect(this.context)
         }
     }
 }

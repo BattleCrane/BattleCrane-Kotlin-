@@ -249,7 +249,7 @@ class BHumanGenerator(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         /**
-         * TrainMarineEvent.
+         * ProduceTankEvent.
          */
 
         class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y)

@@ -56,7 +56,7 @@ class BGameContext(scenario: BGameScenario) {
     }
 
     /**
-     * TrainMarineEvent.
+     * ProduceTankEvent.
      */
 
     class OnGameStartedEvent : BEvent()

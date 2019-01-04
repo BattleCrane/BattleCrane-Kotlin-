@@ -38,7 +38,7 @@ class BPipeline(context: BGameContext) {
     }
 
     /**
-     * TrainMarineEvent.
+     * ProduceTankEvent.
      */
 
     fun pushEvent(event: BEvent?) {

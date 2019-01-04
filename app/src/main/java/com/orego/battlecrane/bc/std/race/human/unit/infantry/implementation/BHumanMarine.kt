@@ -352,7 +352,7 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         /**
-         * TrainMarineEvent.
+         * ProduceTankEvent.
          */
 
         open class Event(attackableId: Long, val targetX: Int, val targetY: Int) :
