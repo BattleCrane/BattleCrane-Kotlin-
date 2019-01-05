@@ -15,15 +15,15 @@ import com.orego.battlecrane.bc.api.model.player.BPlayer
 class BContextGenerator {
 
     val generatorMap = mutableMapOf<Class<*>, IdGenerator>(
+        BPipe::class.java to IdGenerator(0),
+        BNode::class.java to IdGenerator(0),
         BPlayer::class.java to IdGenerator(1),
+        BAdjutant::class.java to IdGenerator(1),
         BUnit::class.java to IdGenerator(0),
         BAttackable::class.java to IdGenerator(0),
         BHitPointable::class.java to IdGenerator(0),
         BLevelable::class.java to IdGenerator(0),
-        BProducable::class.java to IdGenerator(0),
-        BPipe::class.java to IdGenerator(0),
-        BNode::class.java to IdGenerator(0),
-        BAdjutant::class.java to IdGenerator(1)
+        BProducable::class.java to IdGenerator(0)
     )
 
     fun getIdGenerator(clazz: Class<*>) = this.generatorMap[clazz]!!

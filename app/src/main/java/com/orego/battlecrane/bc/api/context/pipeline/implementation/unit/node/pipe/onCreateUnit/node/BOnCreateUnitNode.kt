@@ -21,12 +21,10 @@ class BOnCreateUnitNode(context: BGameContext) : BNode(context) {
      * Creates new unit.
      */
 
-    override fun handle(event: BEvent) : BEvent? {
-        return if (event is BOnCreateUnitPipe.Event) {
-            this.pushEventIntoPipes(event);
-            event
+    override fun handle(event: BEvent) =
+        if (event is BOnCreateUnitPipe.Event) {
+            this.pushEventIntoPipes(event)
         } else {
             null
         }
-    }
 }

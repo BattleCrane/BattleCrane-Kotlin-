@@ -140,7 +140,7 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is Event
                 && event.playerId == this.playerId
-                && event.createBarracks(this.context)
+                && event.perform(this.context)
             ) {
                 return this.pushEventIntoPipes(event)
             }
@@ -153,7 +153,7 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
 
-            fun createBarracks(context: BGameContext): Boolean {
+            fun perform(context: BGameContext): Boolean {
                 val controller = context.mapController
                 val barracks = BHumanBarracks(context, this.playerId, this.x, this.y)
                 val isSuccessful = controller.placeUnitOnMap(barracks)
@@ -216,9 +216,11 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnProduceEnablePipe.Event
                 && this.barracks.producableId == event.producableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
-                return this.pushEventIntoPipes(event)
+                event.perform(this.context)
+                this.pushEventIntoPipes(event)
+                return event
             }
             return null
         }
@@ -230,7 +232,7 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         companion object {
 
             fun createEvent(barracksUnitId: Long, x: Int, y: Int) =
-                TrainMarineEvent(barracksUnitId, x, y)
+                Event(barracksUnitId, x, y)
         }
 
         /**
@@ -249,11 +251,12 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         override fun handle(event: BEvent): BEvent? {
             val producableId = this.barracks.producableId
-            if (event is TrainMarineEvent
+            if (event is Event
                 && producableId == event.producableId
                 && this.barracks.isProduceEnable
-                && event.perform(this.context, this.barracks)
+                && event.isEnable(this.context, this.barracks)
             ) {
+                event.perform(this.context, this.barracks)
                 this.pushEventIntoPipes(event)
                 this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
                 return event
@@ -265,18 +268,14 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Event.
          */
 
-        class TrainMarineEvent(producableId: Long, val x: Int, val y: Int) :
+        class Event(producableId: Long, val x: Int, val y: Int) :
             BOnProduceActionPipe.Event(producableId) {
 
-            fun perform(context: BGameContext, barracks: BHumanBarracks): Boolean {
-                val canTrainMarine = this.canTrainMarine(context, barracks)
-                if (canTrainMarine) {
-                    context.pipeline.pushEvent(BHumanMarine.OnCreateNode.createEvent(barracks.playerId, this.x, this.y))
-                }
-                return canTrainMarine
+            fun perform(context: BGameContext, barracks: BHumanBarracks) {
+                context.pipeline.pushEvent(BHumanMarine.OnCreateNode.createEvent(barracks.playerId, this.x, this.y))
             }
 
-            private fun canTrainMarine(context: BGameContext, barracks: BHumanBarracks): Boolean {
+            fun isEnable(context: BGameContext, barracks: BHumanBarracks): Boolean {
                 val controller = context.mapController
                 val otherUnit = controller.getUnitByPosition(context, this.x, this.y)
                 if (otherUnit !is BEmptyField) {
@@ -321,8 +320,9 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnLevelActionPipe.Event
                 && this.barracks.levelableId == event.levelableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 this.pushEventIntoPipes(event)
                 this.changeHitPointsByLevel()
                 return event
@@ -370,8 +370,9 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnHitPointsActionPipe.Event
                 && event.hitPointableId == this.barracks.hitPointableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 this.pushEventIntoPipes(event)
                 if (this.barracks.currentHitPoints <= 0) {
                     this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.barracks.unitId))

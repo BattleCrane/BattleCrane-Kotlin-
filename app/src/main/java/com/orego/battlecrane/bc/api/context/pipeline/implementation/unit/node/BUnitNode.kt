@@ -23,12 +23,10 @@ class BUnitNode(context: BGameContext) : BNode(context) {
         this.connectInnerPipe(BOnDestroyUnitPipe(context))
     }
 
-    override fun handle(event: BEvent) : BEvent? {
-        return if (event is BUnitPipe.Event) {
+    override fun handle(event: BEvent) =
+        if (event is BUnitPipe.Event) {
             this.pushEventIntoPipes(event)
-            event
         } else {
             null
         }
-    }
 }

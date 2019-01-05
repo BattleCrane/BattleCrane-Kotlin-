@@ -15,6 +15,7 @@ class BHumanAdjutant(context: BGameContext, playerId: Long) : BAdjutant(context,
      * Context.
      */
 
+    //TODO: CONNECTION!!!
     val onCreateBarracksPipeId: Long
 
     val onCreateBarracksNodeId: Long

@@ -141,7 +141,7 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is Event
                 && event.playerId == this.playerId
-                && event.createFactory(this.context)
+                && event.perform(this.context)
             ) {
                 return this.pushEventIntoPipes(event)
             }
@@ -154,7 +154,7 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
 
-            fun createFactory(context: BGameContext): Boolean {
+            fun perform(context: BGameContext): Boolean {
                 val controller = context.mapController
                 val factory = BHumanFactory(context, this.playerId, this.x, this.y)
                 val isSuccessful = controller.placeUnitOnMap(factory)
@@ -217,9 +217,11 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnProduceEnablePipe.Event
                 && this.factory.producableId == event.producableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
-                return this.pushEventIntoPipes(event)
+                event.perform(this.context)
+                this.pushEventIntoPipes(event)
+                return event
             }
             return null
         }
@@ -231,7 +233,7 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         companion object {
 
             fun createEvent(factoryUnitId: Long, x: Int, y: Int) =
-                ProduceTankEvent(factoryUnitId, x, y)
+                Event(factoryUnitId, x, y)
         }
 
         /**
@@ -250,11 +252,12 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         override fun handle(event: BEvent): BEvent? {
             val producableId = this.factory.producableId
-            if (event is ProduceTankEvent
+            if (event is Event
                 && producableId == event.producableId
                 && this.factory.isProduceEnable
-                && event.perform(this.context, this.factory)
+                && event.isEnable(this.context, this.factory)
             ) {
+                event.perform(this.context, this.factory)
                 this.pushEventIntoPipes(event)
                 this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
                 return event
@@ -266,18 +269,14 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
          * Event.
          */
 
-        class ProduceTankEvent(producableId: Long, val x: Int, val y: Int) :
+        class Event(producableId: Long, val x: Int, val y: Int) :
             BOnProduceActionPipe.Event(producableId) {
 
-            fun perform(context: BGameContext, factory: BHumanFactory) : Boolean {
-                val canProduceTank = this.canProduceTank(context, factory)
-                if (canProduceTank) {
-                    context.pipeline.pushEvent(BHumanTank.OnCreateNode.createEvent(factory.playerId, this.x, this.y))
-                }
-                return canProduceTank
+            fun perform(context: BGameContext, factory: BHumanFactory) {
+                context.pipeline.pushEvent(BHumanTank.OnCreateNode.createEvent(factory.playerId, this.x, this.y))
             }
 
-            private fun canProduceTank(context: BGameContext, factory: BHumanFactory): Boolean {
+            fun isEnable(context: BGameContext, factory: BHumanFactory): Boolean {
                 val controller = context.mapController
                 val otherUnit = controller.getUnitByPosition(context, this.x, this.y)
                 if (otherUnit !is BEmptyField) {
@@ -322,8 +321,9 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnLevelActionPipe.Event
                 && this.factory.levelableId == event.levelableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 this.pushEventIntoPipes(event)
                 this.changeHitPointsByLevel()
                 return event
@@ -371,8 +371,9 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnHitPointsActionPipe.Event
                 && event.hitPointableId == this.factory.hitPointableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 this.pushEventIntoPipes(event)
                 if (this.factory.currentHitPoints <= 0) {
                     this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.factory.unitId))

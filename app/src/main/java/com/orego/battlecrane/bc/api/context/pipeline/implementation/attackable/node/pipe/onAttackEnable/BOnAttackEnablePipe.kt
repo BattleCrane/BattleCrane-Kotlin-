@@ -27,13 +27,14 @@ class BOnAttackEnablePipe(context: BGameContext) : BPipe(context) {
     open class Event(val attackableId: Long, val isEnable: Boolean) :
         BAttackablePipe.Event() {
 
-        fun perform(context: BGameContext): Boolean {
+        open fun isEnable(context: BGameContext): Boolean {
             val attackable = context.storage.getHeap(BAttackableHeap::class.java)[this.attackableId]
-            val isSuccessful = attackable.isAttackEnable != this.isEnable
-            if (isSuccessful) {
-                attackable.isAttackEnable = this.isEnable
-            }
-            return isSuccessful
+            return attackable.isAttackEnable != this.isEnable
+        }
+
+        open fun perform(context: BGameContext) {
+            val attackable = context.storage.getHeap(BAttackableHeap::class.java)[this.attackableId]
+            attackable.isAttackEnable = this.isEnable
         }
     }
 }

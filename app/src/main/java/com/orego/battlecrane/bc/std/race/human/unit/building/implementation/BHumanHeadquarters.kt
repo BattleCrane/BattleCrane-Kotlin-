@@ -3,6 +3,7 @@ package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.BOnProduceActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.node.BOnProduceActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.node.BOnProduceEnableNode
@@ -111,7 +112,7 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
         override fun handle(event: BEvent): BEvent? {
             if (event is Event
                 && event.playerId == this.playerId
-                && event.createHeadquarters(this.context)
+                && event.perform(this.context)
             ) {
                 return this.pushEventIntoPipes(event)
             }
@@ -124,7 +125,7 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
 
         class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
 
-            fun createHeadquarters(context: BGameContext): Boolean {
+            fun perform(context: BGameContext): Boolean {
                 val controller = context.mapController
                 val headquarters = BHumanHeadquarters(context, this.playerId, this.x, this.y)
                 val isSuccessful = controller.placeUnitOnMap(headquarters)
@@ -199,8 +200,9 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnProduceEnablePipe.Event
                 && this.headquarters.producableId == event.producableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 return this.pushEventIntoPipes(event)
             }
             return null
@@ -226,14 +228,28 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
 
         override fun handle(event: BEvent): BEvent? {
             val producableId = this.headquarters.producableId
-            if (event is BHumanEvents.Construct.Event
+            if (event is BOnProduceActionPipe.Event
                 && producableId == event.producableId
                 && this.headquarters.isProduceEnable
-                && event.perform(this.context, this.headquarters.playerId)
             ) {
-                this.pushEventIntoPipes(event)
-                this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
-                return event
+                when(event) {
+                    is BHumanEvents.Construct.Event -> {
+                        if (event.isEnable(this.context, this.headquarters.playerId)) {
+                            event.perform(this.context, this.headquarters.playerId)
+                            this.pushEventIntoPipes(event)
+                            this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+                            return event
+                        }
+                    }
+                    is BHumanEvents.Upgrade.Event -> {
+                        if (event.isEnable(this.context)) {
+                            event.perform(this.pipeline)
+                            this.pushEventIntoPipes(event)
+                            this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+                            return event
+                        }
+                    }
+                }
             }
             return null
         }
@@ -259,8 +275,9 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnHitPointsActionPipe.Event
                 && event.hitPointableId == this.headquarters.hitPointableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 this.pushEventIntoPipes(event)
                 if (this.headquarters.currentHitPoints <= 0) {
                     this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.headquarters.unitId))

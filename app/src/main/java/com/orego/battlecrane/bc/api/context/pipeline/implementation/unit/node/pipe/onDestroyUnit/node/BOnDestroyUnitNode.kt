@@ -16,11 +16,10 @@ class BOnDestroyUnitNode(context: BGameContext) : BNode(context) {
 
     override val name = NAME
 
-    override fun handle(event: BEvent): BEvent? {
-        return if (event is BOnDestroyUnitPipe.Event) {
-            event.also { pushEventIntoPipes(it) }
+    override fun handle(event: BEvent) =
+        if (event is BOnDestroyUnitPipe.Event) {
+            this.pushEventIntoPipes(event)
         } else {
             null
         }
-    }
 }

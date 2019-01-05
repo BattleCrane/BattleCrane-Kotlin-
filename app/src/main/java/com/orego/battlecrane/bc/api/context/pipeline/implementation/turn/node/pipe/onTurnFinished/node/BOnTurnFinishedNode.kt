@@ -17,9 +17,9 @@ class BOnTurnFinishedNode(context: BGameContext) : BNode(context) {
 
     override val name = NAME
 
-    private val playerController by lazy {
-        this.context.playerController
-    }
+    private val playerController = context.playerController
+
+    private val pipeline = context.pipeline
 
     override fun handle(event: BEvent): BEvent? {
 
@@ -28,8 +28,8 @@ class BOnTurnFinishedNode(context: BGameContext) : BNode(context) {
             this.pushEventIntoPipes(event)
             //Switch player:
             val nextPlayerId = this.setNextAblePlayer()
-            val pipeline = this.context.pipeline
-            pipeline.pushEvent(BOnTurnStartedPipe.Event(nextPlayerId))
+            this.pipeline.pushEvent(BOnTurnStartedPipe.Event(nextPlayerId))
+            //Return event:
             event
         } else {
             null

@@ -27,13 +27,14 @@ class BOnProduceEnablePipe(context: BGameContext) : BPipe(context) {
     open class Event(val producableId: Long, val isEnable: Boolean) :
         BProducablePipe.Event() {
 
-        fun perform(context: BGameContext): Boolean {
+        fun isEnable(context: BGameContext): Boolean {
             val producable = context.storage.getHeap(BProducableHeap::class.java)[this.producableId]
-            val isSuccessful = producable.isProduceEnable != this.isEnable
-            if (isSuccessful) {
-                producable.isProduceEnable = this.isEnable
-            }
-            return isSuccessful
+            return producable.isProduceEnable != this.isEnable
+        }
+
+        fun perform(context: BGameContext) {
+            val producable = context.storage.getHeap(BProducableHeap::class.java)[this.producableId]
+            producable.isProduceEnable = this.isEnable
         }
     }
 }

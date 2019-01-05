@@ -5,6 +5,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.BOnProduceActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.node.BOnProduceActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.node.BOnProduceEnableNode
@@ -28,11 +29,7 @@ import com.orego.battlecrane.bc.std.race.human.event.BHumanEvents
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 
 /**
- * Construct buildings..
- */
-
-/**
- * Trains marines.
+ * Construct buildings.
  */
 
 class BHumanGenerator(context: BGameContext, playerId: Long, x: Int, y: Int) :
@@ -141,7 +138,7 @@ class BHumanGenerator(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is Event
                 && event.playerId == this.playerId
-                && event.createGenerator(this.context)
+                && event.perform(this.context)
             ) {
                 return this.pushEventIntoPipes(event)
             }
@@ -154,7 +151,7 @@ class BHumanGenerator(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
 
-            fun createGenerator(context: BGameContext): Boolean {
+            fun perform(context: BGameContext): Boolean {
                 val controller = context.mapController
                 val generator = BHumanGenerator(context, this.playerId, this.x, this.y)
                 val isSuccessful = controller.placeUnitOnMap(generator)
@@ -217,8 +214,9 @@ class BHumanGenerator(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnProduceEnablePipe.Event
                 && this.generator.producableId == event.producableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 return this.pushEventIntoPipes(event)
             }
             return null
@@ -244,14 +242,28 @@ class BHumanGenerator(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         override fun handle(event: BEvent): BEvent? {
             val producableId = this.generator.producableId
-            if (event is BHumanEvents.Construct.Event
+            if (event is BOnProduceActionPipe.Event
                 && producableId == event.producableId
                 && this.generator.isProduceEnable
-                && event.perform(this.context, this.generator.playerId)
             ) {
-                this.pushEventIntoPipes(event)
-                this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
-                return event
+                when(event) {
+                    is BHumanEvents.Construct.Event -> {
+                        if (event.isEnable(this.context, this.generator.playerId)) {
+                            event.perform(this.context, this.generator.playerId)
+                            this.pushEventIntoPipes(event)
+                            this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+                            return event
+                        }
+                    }
+                    is BHumanEvents.Upgrade.Event -> {
+                        if (event.isEnable(this.context)) {
+                            event.perform(this.pipeline)
+                            this.pushEventIntoPipes(event)
+                            this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+                            return event
+                        }
+                    }
+                }
             }
             return null
         }
@@ -277,8 +289,9 @@ class BHumanGenerator(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnLevelActionPipe.Event
                 && this.generator.levelableId == event.levelableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 this.pushEventIntoPipes(event)
                 this.changeHitPointsByLevel()
                 return event
@@ -326,8 +339,9 @@ class BHumanGenerator(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnHitPointsActionPipe.Event
                 && event.hitPointableId == this.generator.hitPointableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 this.pushEventIntoPipes(event)
                 if (this.generator.currentHitPoints <= 0) {
                     this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.generator.unitId))

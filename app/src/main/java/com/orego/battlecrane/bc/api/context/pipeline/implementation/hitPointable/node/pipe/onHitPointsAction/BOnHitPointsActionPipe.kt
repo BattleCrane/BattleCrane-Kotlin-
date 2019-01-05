@@ -28,7 +28,9 @@ class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
     abstract class Event(val hitPointableId: Long, val range: Int) :
         BHitPointablePipe.Event() {
 
-        abstract fun perform(context: BGameContext): Boolean
+        abstract fun isEnable(context: BGameContext): Boolean
+
+        abstract fun perform(context: BGameContext)
     }
 
     object Current {
@@ -45,50 +47,48 @@ class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
         open class OnIncreasedEvent(hitPointableId: Long, range: Int) :
             Event(hitPointableId, range) {
 
-            override fun perform(context: BGameContext): Boolean {
+            override fun isEnable(context: BGameContext): Boolean {
+                val hitPointable = context.storage.getHeap(BHitPointableHeap::class.java)[this.hitPointableId]
+                return this.range > 0 && hitPointable.currentHitPoints < hitPointable.maxHitPoints
+            }
+
+            override fun perform(context: BGameContext) {
                 val hitPointable = context.storage.getHeap(BHitPointableHeap::class.java)[this.hitPointableId]
                 val currentHitPoints = hitPointable.currentHitPoints
                 val maxHitPoints = hitPointable.maxHitPoints
-                val hasRestore = this.range > 0 && currentHitPoints < maxHitPoints
-                if (hasRestore) {
-                    val newHitPoints = currentHitPoints + this.range
-                    if (newHitPoints < maxHitPoints) {
-                        hitPointable.currentHitPoints = newHitPoints
-                    } else {
-                        hitPointable.currentHitPoints = maxHitPoints
-                    }
+                val newHitPoints = currentHitPoints + this.range
+                if (newHitPoints < maxHitPoints) {
+                    hitPointable.currentHitPoints = newHitPoints
+                } else {
+                    hitPointable.currentHitPoints = maxHitPoints
                 }
-                return hasRestore
             }
         }
 
         open class OnDecreasedEvent(hitPointableId: Long, range: Int) :
             Event(hitPointableId, range) {
 
-            override fun perform(context: BGameContext): Boolean {
+            override fun isEnable(context: BGameContext) = this.range > 0
+
+            override fun perform(context: BGameContext) {
                 val hitPointable = context.storage.getHeap(BHitPointableHeap::class.java)[this.hitPointableId]
-                val hasDamage = this.range > 0
-                if (hasDamage) {
-                    hitPointable.currentHitPoints -= this.range
-                }
-                return hasDamage
+                hitPointable.currentHitPoints -= this.range
             }
         }
 
         open class OnChangedEvent(hitPointableId: Long, range: Int) :
             Event(hitPointableId, range) {
 
-            override fun perform(context: BGameContext): Boolean {
+            override fun isEnable(context: BGameContext): Boolean {
                 val hitPointable = context.storage.getHeap(BHitPointableHeap::class.java)[this.hitPointableId]
-                val maxHitPoints = hitPointable.maxHitPoints
-                val hasChanged = this.range in 0..maxHitPoints
-                if (hasChanged) {
-                    hitPointable.currentHitPoints = this.range
-                }
-                return hasChanged
+                return this.range in 0..hitPointable.maxHitPoints
+            }
+
+            override fun perform(context: BGameContext) {
+                val hitPointable = context.storage.getHeap(BHitPointableHeap::class.java)[this.hitPointableId]
+                hitPointable.currentHitPoints = this.range
             }
         }
-
     }
 
     object Max {
@@ -105,45 +105,39 @@ class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
         open class OnIncreasedEvent(hitPointableId: Long, range: Int) :
             Event(hitPointableId, range) {
 
-            override fun perform(context: BGameContext): Boolean {
+            override fun isEnable(context: BGameContext) = this.range > 0
+
+            override fun perform(context: BGameContext) {
                 val hitPointable = context.storage.getHeap(BHitPointableHeap::class.java)[this.hitPointableId]
-                val hasRestore = this.range > 0
-                if (hasRestore) {
-                    hitPointable.maxHitPoints += this.range
-                }
-                return hasRestore
+                hitPointable.maxHitPoints += this.range
             }
         }
 
         open class OnChangedEvent(hitPointableId: Long, range: Int) :
             Event(hitPointableId, range) {
 
-            override fun perform(context: BGameContext): Boolean {
+            override fun isEnable(context: BGameContext) = this.range != 0
+
+            override fun perform(context: BGameContext) {
                 val hitPointable = context.storage.getHeap(BHitPointableHeap::class.java)[this.hitPointableId]
-                val hasRange = this.range != 0
-                if (hasRange) {
-                    hitPointable.maxHitPoints = this.range
-                    if (hitPointable.currentHitPoints > hitPointable.maxHitPoints) {
-                        hitPointable.currentHitPoints = hitPointable.maxHitPoints
-                    }
+                hitPointable.maxHitPoints = this.range
+                if (hitPointable.currentHitPoints > hitPointable.maxHitPoints) {
+                    hitPointable.currentHitPoints = hitPointable.maxHitPoints
                 }
-                return hasRange
             }
         }
 
         open class OnDecreasedEvent(hitPointableId: Long, range: Int) :
             Event(hitPointableId, range) {
 
-            override fun perform(context: BGameContext): Boolean {
+            override fun isEnable(context: BGameContext) = this.range > 0
+
+            override fun perform(context: BGameContext) {
                 val hitPointable = context.storage.getHeap(BHitPointableHeap::class.java)[this.hitPointableId]
-                val hasRange = this.range > 0
-                if (hasRange) {
-                    hitPointable.maxHitPoints -= this.range
-                    if (hitPointable.currentHitPoints > hitPointable.maxHitPoints) {
-                        hitPointable.currentHitPoints = hitPointable.maxHitPoints
-                    }
+                hitPointable.maxHitPoints -= this.range
+                if (hitPointable.currentHitPoints > hitPointable.maxHitPoints) {
+                    hitPointable.currentHitPoints = hitPointable.maxHitPoints
                 }
-                return hasRange
             }
         }
     }

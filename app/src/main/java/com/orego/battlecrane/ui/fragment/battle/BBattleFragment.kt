@@ -11,6 +11,7 @@ import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.context.controller.player.BPlayerController
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
+import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
 import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BHumanAdjutant
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.model.api.modeController.BClickController

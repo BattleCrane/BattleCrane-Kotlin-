@@ -1,142 +1,365 @@
 package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
-import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.api.model.entity.main.BAction
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.BOnAttackActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.node.BOnAttackActionNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.BTurnNode
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.node.BOnDestroyUnitNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
+import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 
-class BHumanTurret(context: BGameContext, owner: BPlayer) : BHumanBuilding(context, owner),
-    BHitPointable,
-    BLevelable,
-    BAttackable {
+/**
+ * Attacks enemies in radius.
+ */
+
+class BHumanTurret(context: BGameContext, playerId: Long, x: Int, y: Int) :
+    BHumanBuilding(context, playerId, x, y), BHitPointable, BLevelable, BAttackable {
 
     companion object {
 
-        private const val DEFAULT_VERTICAL_SIDE = 2
+        const val HEIGHT = 1
 
-        private const val DEFAULT_HORIZONTAL_SIDE = 1
+        const val WIDTH = 1
 
-        private const val DEFAULT_MAX_HEALTH = 2
+        const val LEVEL_1_MAX_HIT_POINTS = 2
 
-        private const val DEFAULT_LEVEL = 1
+        const val LEVEL_2_MAX_HIT_POINTS = 4
 
-        private const val DEFAULT_MAX_LEVEL = 2
+        const val FIRST_LEVEL = 1
 
-        private const val DEFAULT_DAMAGE = 1
+        const val SECOND_LEVEL = 2
 
-        private const val DEFAULT_IS_ATTACK_ENABLE = false
+        const val MAX_LEVEL = SECOND_LEVEL
 
-        private const val DEFAULT_RADIUS_ATTACK = 2
+        const val DAMAGE = 1
+
+        const val ALWAYS_ATTACK_ENABLE = false
+
+        const val RADIUS_ATTACK = 2
     }
 
     /**
-     * Properties.
+     * Id.
      */
 
-    override val height = DEFAULT_VERTICAL_SIDE
+    override val hitPointableId: Long
 
-    override val width = DEFAULT_HORIZONTAL_SIDE
+    override val levelableId: Long
 
-    override var currentHitPoints = DEFAULT_MAX_HEALTH
+    override val attackableId: Long
 
-    override var maxHitPoints = DEFAULT_MAX_HEALTH
-
-    override var currentLevel = DEFAULT_LEVEL
-
-    override var maxLevel = DEFAULT_MAX_LEVEL
-
-    override var damage = DEFAULT_DAMAGE
-
-    override var isAttackEnable = DEFAULT_IS_ATTACK_ENABLE
-
-    var radiusAttack = DEFAULT_RADIUS_ATTACK
-
-    var currentAttack = Attack()
+    init {
+        val generator = context.contextGenerator
+        this.hitPointableId = generator.getIdGenerator(BHitPointable::class.java).generateId()
+        this.levelableId = generator.getIdGenerator(BLevelable::class.java).generateId()
+        this.attackableId = generator.getIdGenerator(BAttackable::class.java).generateId()
+    }
 
     /**
-     * Observers.
+     * Property.
      */
 
-    override val decreaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
+    override val height = HEIGHT
 
-    override val increaseHitPointsObserver: MutableMap<Long, BHitPointable.Listener> = mutableMapOf()
+    override val width = WIDTH
 
-    override val levelUpObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
+    override var currentHitPoints = LEVEL_1_MAX_HIT_POINTS
 
-    override val levelDownObserver: MutableMap<Long, BLevelable.Listener> = mutableMapOf()
+    override var maxHitPoints = LEVEL_1_MAX_HIT_POINTS
 
-    override val attackObserver: MutableMap<Long, BAttackable.AttackListener> = mutableMapOf()
+    override var currentLevel = FIRST_LEVEL
 
-    override val damageObserver: MutableMap<Long, BAttackable.DamageListener> = mutableMapOf()
+    override var maxLevel = MAX_LEVEL
 
-    override val attackEnableObserver: MutableMap<Long, BAttackable.AttackEnableListener> = mutableMapOf()
+    override var damage = DAMAGE
 
-    override fun getAttackableAbilities(pipeline: BPipeline) {
-        return if (this.isAttackEnable) {
-            this.currentAttack
-        } else {
-            null
+    override var isAttackEnable = ALWAYS_ATTACK_ENABLE
+
+    var radiusAttack = RADIUS_ATTACK
+
+
+    /**
+     * Context.
+     */
+
+    val turnConnection = BPipeConnection.createByNode(
+        context, BTurnNode.NAME, OnTurnNode(context, this.unitId)
+    )
+
+    val attackActionConnection = BPipeConnection.createByNode(
+        context, BOnAttackActionNode.NAME, OnAttackActionNode(context, this.unitId)
+    )
+
+    val levelActionConnection = BPipeConnection.createByNode(
+        context, BOnLevelActionNode.NAME, OnLevelActionNode(context, this.unitId)
+    )
+
+    val hitPointsActionConnection = BPipeConnection.createByNode(
+        context, BOnHitPointsActionNode.NAME, OnHitPointsActionNode(context, this.unitId)
+    )
+
+    val destroyConnection = BPipeConnection.createByNode(
+        context, BOnDestroyUnitNode.NAME, OnDestroyNode(context, this.unitId)
+    )
+
+    /**
+     * Node.
+     */
+
+    @BAdjutantComponent
+    class OnCreateNode(context: BGameContext, private val playerId: Long) : BNode(context) {
+
+        companion object {
+
+            fun createEvent(playerId: Long, x: Int, y: Int) = Event(playerId, x, y)
+        }
+
+        /**
+         * Context.
+         */
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is Event && event.playerId == this.playerId) {
+                val turret = event.perform(this.context)
+                if (turret != null) {
+                    this.pushEventIntoPipes(event)
+                    this.context.pipeline.pushEvent(BOnAttackActionPipe.createEvent(turret.attackableId))
+                    return event
+                }
+            }
+            return null
+        }
+
+        /**
+         * Event.
+         */
+
+        class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
+
+            fun perform(context: BGameContext): BHumanTurret? {
+                val controller = context.mapController
+                val turret = BHumanTurret(context, this.playerId, this.x, this.y)
+                val isSuccessful = controller.placeUnitOnMap(turret)
+                if (isSuccessful) {
+                    context.storage.addObject(turret)
+                    return turret
+                }
+                return null
+            }
         }
     }
 
-    override fun onCreate() {
-        this.currentAttack.perform()
+    @BUnitComponent
+    class OnTurnNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        /**
+         * Context.
+         */
+
+        private val pipeline = context.pipeline
+
+        /**
+         * Unit.
+         */
+
+        private val turret by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanTurret
+        }
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnTurnStartedPipe.Event && this.turret.playerId == event.playerId) {
+                val attackableId = this.turret.attackableId
+                this.pushEventIntoPipes(event)
+                this.pipeline.pushEvent(BOnAttackActionPipe.createEvent(attackableId))
+                return event
+            }
+            return null
+        }
     }
 
-    override fun onTurnStarted() {
-        this.switchAttackEnable(true)
-        this.currentAttack = Attack()
-        this.currentAttack.perform()
+    @BUnitComponent
+    class OnAttackActionNode(context: BGameContext, unitId: Long) : BNode(context) {
 
-    }
+        private val turret by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanTurret
+        }
 
-    override fun onTurnEnded() {
-        this.switchAttackEnable(false)
-    }
+        override fun handle(event: BEvent): BEvent? {
+            if (event is Event && event.attackableId == this.turret.attackableId) {
+                event.perform(this.context, this.turret)
+                return this.pushEventIntoPipes(event)
+            }
+            return null
+        }
 
-    /**
-     * Functions.
-     */
+        class Event(attackableId: Long) : BOnAttackActionPipe.Event(attackableId) {
 
-    fun attackInRadius() {
-        val mapManager = this.context.mapManager
-        val playerManager = this.context.playerManager
-        //"Пирамидальный сдвиг": с каждой итерируется по горизонтали с формулой 2i -1
-        var countShift = 0
-        val x = this.pivot!!.x
-        val y = this.pivot!!.y
-        for (i in x - this.radiusAttack until x + this.radiusAttack + 1) {
-            for (j in y - countShift until y + 1 + countShift) {
-                if (mapManager.inBounds(i, j)) {
-                    val currentUnit = mapManager.getUnitByPosition(i, j)
-                    val isEnemy = playerManager.isEnemies(this, currentUnit)
-                    if (isEnemy && currentUnit is BHitPointable) {
-                        this.attack(currentUnit)
+            fun perform(context: BGameContext, turret: BHumanTurret) {
+                val player = context.storage.getHeap(BPlayerHeap::class.java)[turret.playerId]
+                val mapController = context.mapController
+                val pipeline = context.pipeline
+                //"Пирамидальный сдвиг": с каждой итерируется по горизонтали с формулой 2i -1
+                var countShift = 0
+                val turretX = turret.x
+                val turretY = turret.y
+                val radius = turret.radiusAttack
+                val turretDamage = turret.damage
+                for (x in turretX - radius until turretX + radius + 1) {
+                    for (y in turretY - countShift until turretY + 1 + countShift) {
+                        if (BMapController.inBounds(x, y)) {
+                            val otherUnit = mapController.getUnitByPosition(context, x, y)
+                            if (otherUnit is BHitPointable && player.isEnemy(otherUnit.playerId)) {
+                                this.attack(pipeline, otherUnit.hitPointableId, turretDamage)
+                            }
+                        }
+                    }
+                    countShift++
+                    if (x >= turretX) {
+                        //Перетягивание countShift--
+                        countShift -= 2
                     }
                 }
             }
-            countShift++
-            if (i >= x) {
-                //Перетягивание countShift--
-                countShift -= 2
+
+            private fun attack(pipeline: BPipeline, hitPointableId: Long, damage: Int) {
+                pipeline.pushEvent(BOnHitPointsActionPipe.Current.createOnDecreasedEvent(hitPointableId, damage))
             }
         }
     }
 
-    /**
-     * Action.
-     */
+    @BUnitComponent
+    class OnLevelActionNode(context: BGameContext, unitId: Long) : BNode(context) {
 
-    inner class Attack : BAction(this.context, this.playerId) {
+        /**
+         * Context.
+         */
 
-        override fun performAction(): Boolean {
-            this@BHumanTurret.attackInRadius()
-            this@BHumanTurret.switchAttackEnable(false)
-            return true
+        private val pipeline = context.pipeline
+
+        /**
+         * Unit.
+         */
+
+        private val turret by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanTurret
+        }
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnLevelActionPipe.Event
+                && this.turret.levelableId == event.levelableId
+                && event.isEnable(this.context)
+            ) {
+                event.perform(this.context)
+                this.pushEventIntoPipes(event)
+                this.changeHitPointsByLevel()
+                return event
+            }
+            return null
+        }
+
+        private fun changeHitPointsByLevel() {
+            val hitPointableId = this.turret.hitPointableId
+            val currentLevel = this.turret.currentLevel
+            if (currentLevel in FIRST_LEVEL..MAX_LEVEL) {
+                val newHitPoints =
+                    when (currentLevel) {
+                        FIRST_LEVEL -> LEVEL_1_MAX_HIT_POINTS
+                        else -> LEVEL_2_MAX_HIT_POINTS
+                    }
+                this.pipeline.pushEvent(
+                    BOnHitPointsActionPipe.Max.createOnChangedEvent(hitPointableId, newHitPoints)
+                )
+                this.pipeline.pushEvent(
+                    BOnHitPointsActionPipe.Current.createOnChangedEvent(hitPointableId, newHitPoints)
+                )
+            }
+        }
+    }
+
+    @BUnitComponent
+    class OnHitPointsActionNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        /**
+         * Context.
+         */
+
+        private val pipeline = context.pipeline
+
+        /**
+         * Unit.
+         */
+
+        private val turret by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanTurret
+        }
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnHitPointsActionPipe.Event
+                && event.hitPointableId == this.turret.hitPointableId
+                && event.isEnable(this.context)
+            ) {
+                event.perform(this.context)
+                this.pushEventIntoPipes(event)
+                if (this.turret.currentHitPoints <= 0) {
+                    this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.turret.unitId))
+                }
+                return event
+            }
+            return null
+        }
+    }
+
+    @BUnitComponent
+    class OnDestroyNode(context: BGameContext, unitId: Long) : BNode(context) {
+
+        /**
+         * Context.
+         */
+
+        private val storage = context.storage
+
+        /**
+         * Unit.
+         */
+
+        private val turret by lazy {
+            context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanTurret
+        }
+
+        override fun handle(event: BEvent): BEvent? {
+            if (event is BOnDestroyUnitPipe.Event && event.unitId == this.turret.unitId) {
+                this.pushEventIntoPipes(event)
+                this.unbindPipes()
+                this.storage.removeObject(event.unitId, BUnitHeap::class.java)
+                return event
+            }
+            return null
+        }
+
+        private fun unbindPipes() {
+            this.turret.turnConnection.disconnect(this.context)
+            this.turret.destroyConnection.disconnect(this.context)
+            this.turret.levelActionConnection.disconnect(this.context)
+            this.turret.hitPointsActionConnection.disconnect(this.context)
+            this.turret.attackActionConnection.disconnect(this.context)
         }
     }
 }

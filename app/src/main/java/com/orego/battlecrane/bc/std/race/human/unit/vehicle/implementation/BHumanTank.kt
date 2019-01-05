@@ -1,7 +1,6 @@
 package com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.BOnAttackActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.node.BOnAttackActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.node.BOnAttackEnableNode
@@ -18,14 +17,17 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BA
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAttackableHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BCreature
 import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BVehicle
 import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.std.location.grass.field.BField
+import com.orego.battlecrane.bc.std.race.human.event.BHumanEvents
+import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.BHumanMarine
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.BHumanVehicle
 
 
@@ -81,65 +83,25 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Node.
      */
 
-    val onTurnPipeId: Long
+    val turnConnection = BPipeConnection.createByNode(
+        context, BTurnNode.NAME, OnTurnNode(context, this.unitId)
+    )
 
-    val onTurnNodeId: Long
+    val attackActionConnection = BPipeConnection.createByNode(
+        context, BOnAttackActionNode.NAME, OnAttackActionNode(context, this.unitId)
+    )
 
-    val onAttackActionPipeId: Long
+    val attackEnableConnection = BPipeConnection.createByNode(
+        context, BOnAttackEnableNode.NAME, OnAttackEnableNode(context, this.unitId)
+    )
 
-    val onAttackActionNodeId: Long
+    val hitPointsConnection = BPipeConnection.createByNode(
+        context, BOnHitPointsActionNode.NAME, OnHitPointsActionNode(context, this.unitId)
+    )
 
-    val onAttackEnableNodeId: Long
-
-    val onAttackEnablePipeId: Long
-
-    val onHitPointsActionPipeId : Long
-
-    val onHitPointsActionNodeId : Long
-
-    val onDestroyPipeId : Long
-
-    val onDestroyNodeId : Long
-
-    init {
-        //Get pipeline:
-        val pipeline = context.pipeline
-
-        //On turn:
-        val onTurnNode = OnTurnNode(context, this.unitId)
-        val onTurnPipe = onTurnNode.wrapInPipe()
-        this.onTurnNodeId = onTurnNode.id
-        this.onTurnPipeId = onTurnPipe.id
-        pipeline.bindPipeToNode(BTurnNode.NAME, onTurnPipe)
-
-        //On attack acton:
-        val onAttackActionNode = OnAttackActionNode(context, this.unitId)
-        val onAttackActionPipe = onAttackActionNode.wrapInPipe()
-        this.onAttackActionNodeId = onAttackActionNode.id
-        this.onAttackActionPipeId = onAttackActionPipe.id
-        pipeline.bindPipeToNode(BOnAttackActionNode.NAME, onAttackActionPipe)
-
-        //On attack enable:
-        val onAttackEnableNode = OnAttackEnableNode(context, this.unitId)
-        val onAttackEnablePipe = onAttackEnableNode.wrapInPipe()
-        this.onAttackEnableNodeId = onAttackEnableNode.id
-        this.onAttackEnablePipeId = onAttackEnablePipe.id
-        pipeline.bindPipeToNode(BOnAttackEnableNode.NAME, onAttackEnablePipe)
-
-        //On hit points action:
-        val onHitPointsActionNode = OnHitPointsActionNode(context, this.unitId)
-        val onHitPointsActionPipe = onHitPointsActionNode.wrapInPipe()
-        this.onHitPointsActionNodeId = onHitPointsActionNode.id
-        this.onHitPointsActionPipeId = onHitPointsActionPipe.id
-        pipeline.bindPipeToNode(BOnHitPointsActionNode.NAME, onHitPointsActionPipe)
-
-        //On destroy:
-        val onDestroyNode = OnDestroyNode(context, this.unitId)
-        val onDestroyPipe = onDestroyNode.wrapInPipe()
-        this.onDestroyPipeId = onDestroyPipe.id
-        this.onDestroyNodeId = onDestroyNode.id
-        pipeline.bindPipeToNode(BOnDestroyUnitNode.NAME, onDestroyPipe)
-    }
+    val destroyConnection = BPipeConnection.createByNode(
+        context, BOnDestroyUnitNode.NAME, OnDestroyNode(context, this.unitId)
+    )
 
     /**
      * Node.
@@ -159,12 +121,11 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
         private val storage = this.context.storage
 
         override fun handle(event: BEvent): BEvent? {
-            if (event is Event && event.playerId == this.playerId) {
-                val tank = BHumanTank(this.context, this.playerId, event.x, event.y)
-                if (this.mapController.placeUnitOnMap(tank)) {
-                    this.storage.addObject(tank)
-                    return this.pushEventIntoPipes(event)
-                }
+            if (event is Event
+                && event.playerId == this.playerId
+                && event.perform(this.context)
+            ) {
+                return this.pushEventIntoPipes(event)
             }
             return null
         }
@@ -174,7 +135,17 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
          */
 
         open class Event(val playerId: Long, x: Int, y: Int) :
-            BOnCreateUnitPipe.Event(x, y)
+            BOnCreateUnitPipe.Event(x, y) {
+
+            fun perform(context: BGameContext): Boolean {
+                val tank = BHumanTank(context, this.playerId, this.x, this.y)
+                val isSuccessful = context.mapController.placeUnitOnMap(tank)
+                if (isSuccessful) {
+                    context.storage.addObject(tank)
+                }
+                return isSuccessful
+            }
+        }
     }
 
     @BUnitComponent
@@ -235,127 +206,54 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         override fun handle(event: BEvent): BEvent? {
-            if (event !is Event || event.attackableId != this.tank.attackableId) {
-                return null
-            }
-            val targetX = event.targetX
-            val targetY = event.targetY
-            val targetUnit = this.mapController.getUnitByPosition(this.context, targetX, targetY)
-            if (targetUnit !is BHitPointable) {
-                return null
-            }
-            val tankOwner = this.playerHeap[this.tank.playerId]
-            if (!tankOwner.isEnemy(targetUnit.playerId)) {
-                return null
-            }
-            if (this.isPossibleAttackGeometry(targetX, targetY)) {
+            if (event is BHumanMarine.OnAttackActionNode.Event
+                && event.attackableId == this.tank.attackableId
+                && event.isEnable(this.context)
+            ) {
+                event.perform(this.context, this.tank.damage)
                 this.pushEventIntoPipes(event)
-                this.pipeline.pushEvent(
-                    BOnHitPointsActionPipe.Current.createOnDecreasedEvent(targetUnit.hitPointableId, this.tank.damage)
-                )
                 return event
             }
             return null
         }
 
         /**
-         * Attack geometry check.
+         * Event.
          */
 
-        private fun isPossibleAttackGeometry(targetX: Int, targetY: Int): Boolean {
-            val tankX = this.tank.x
-            val tankY = this.tank.y
-            return when {
-                this.isPossibleAttackByXAxis(tankX, tankY, targetX, targetY) -> true
-                this.isPossibleAttackByYAxis(tankX, tankY, targetX, targetY) -> true
-                this.isPossibleAttackByDiagonal(tankX, tankY, targetX, targetY) -> true
-                else -> false
+        open class Event(attackableId: Long, tankX: Int, tankY: Int, targetX: Int, targetY: Int) :
+            BHumanEvents.Attack.LineEvent(attackableId, tankX, tankY, targetX, targetY) {
+
+            override fun isEnable(context: BGameContext): Boolean {
+                if (super.isEnable(context)) {
+                    val storage = context.storage
+                    val tank = storage.getHeap(BAttackableHeap::class.java)[this.attackableId] as BHumanTank
+                    val player = storage.getHeap(BPlayerHeap::class.java)[tank.playerId]
+                    val targetUnit = context.mapController.getUnitByPosition(context, this.targetX, this.targetY)
+                    return player.isEnemy(targetUnit.playerId)
+                }
+                return false
             }
-        }
 
-
-        private fun isPossibleAttackByXAxis(tankX: Int, tankY: Int, targetX: Int, targetY: Int): Boolean {
-            if (tankX == targetX) {
-                for (y in Integer.min(tankY, targetY) + 1 until Integer.max(tankY, targetY)) {
-                    val otherUnit = this.mapController.getUnitByPosition(this.context, targetX, y)
-                    if (this.isAttackBlock(otherUnit)) {
-                        return false
-                    }
+            override fun isAttackBlock(context: BGameContext, x: Int, y: Int): Boolean {
+                val storage = context.storage
+                val tank = storage.getHeap(BAttackableHeap::class.java)[this.attackableId] as BHumanTank
+                val playerId = tank.playerId
+                val otherUnit = context.mapController.getUnitByPosition(context, x, y)
+                val otherPlayerId = otherUnit.playerId
+                if (otherUnit is BCreature || otherUnit is BVehicle || otherUnit is BField) {
+                    return false
+                }
+                if (playerId == otherPlayerId) {
+                    return false
+                }
+                val tankOwner = storage.getHeap(BPlayerHeap::class.java)[playerId]
+                if (tankOwner.isAlly(otherPlayerId)) {
+                    return false
                 }
                 return true
             }
-            return false
         }
-
-        private fun isPossibleAttackByYAxis(tankX: Int, tankY: Int, targetX: Int, targetY: Int): Boolean {
-            if (tankY == targetY) {
-                for (x in Integer.min(tankX, targetX) + 1 until Integer.max(tankX, targetX)) {
-                    val otherUnit = this.mapController.getUnitByPosition(this.context, x, targetY)
-                    if (this.isAttackBlock(otherUnit)) {
-                        return false
-                    }
-                }
-                return true
-            }
-            return false
-        }
-
-        private fun isPossibleAttackByDiagonal(tankX: Int, tankY: Int, targetX: Int, targetY: Int): Boolean {
-            val distanceX = tankX - targetX
-            val distanceY = tankY - targetY
-            val isDiagonal = Math.abs(distanceX) == Math.abs(distanceY)
-            if (isDiagonal) {
-                //Any distance:
-                val distanceBetweenUnits = distanceX - 1
-                val dx =
-                    if (distanceX > 0) {
-                        VECTOR
-                    } else {
-                        -VECTOR
-                    }
-                val dy =
-                    if (distanceY > 0) {
-                        VECTOR
-                    } else {
-                        -VECTOR
-                    }
-                var x = tankX
-                var y = tankY
-                repeat(distanceBetweenUnits) {
-                    x += dx
-                    y += dy
-                    val otherUnit = this.mapController.getUnitByPosition(this.context, x, y)
-                    if (this.isAttackBlock(otherUnit)) {
-                        return false
-                    }
-                }
-                return true
-            }
-            return false
-        }
-
-        private fun isAttackBlock(otherUnit: BUnit): Boolean {
-            val tankOwnerId = this.tank.playerId
-            val otherPlayerId = otherUnit.playerId
-            if (otherUnit is BCreature || otherUnit is BVehicle || otherUnit is BField) {
-                return false
-            }
-            if (tankOwnerId == otherPlayerId) {
-                return false
-            }
-            val tankOwner = this.playerHeap[tankOwnerId]
-            if (tankOwner.isAlly(otherPlayerId)) {
-                return false
-            }
-            return true
-        }
-
-        /**
-         * ProduceTankEvent.
-         */
-
-        open class Event(attackableId: Long, val targetX: Int, val targetY: Int) :
-            BOnAttackActionPipe.Event(attackableId)
     }
 
     @BUnitComponent
@@ -366,20 +264,14 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         override fun handle(event: BEvent): BEvent? {
-            if (event is BOnAttackEnablePipe.Event && this.tank.attackableId == event.attackableId) {
-                if (this.switchEnable(event.isEnable)) {
-                    this.pushEventIntoPipes(event)
-                }
+            if (event is BOnAttackEnablePipe.Event
+                && this.tank.attackableId == event.attackableId
+                && event.isEnable(this.context)
+            ) {
+                event.perform(this.context)
+                return this.pushEventIntoPipes(event)
             }
             return null
-        }
-
-        private fun switchEnable(enable: Boolean): Boolean {
-            val isSuccessful = this.tank.isAttackEnable != enable
-            if (isSuccessful) {
-                this.tank.isAttackEnable = enable
-            }
-            return isSuccessful
         }
     }
 
@@ -400,97 +292,17 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
             context.storage.getHeap(BUnitHeap::class.java)[unitId] as BHumanTank
         }
 
-        /**
-         * Handler functon.
-         */
-
-        private val decreaseCurrentHitPointsFunc: (Int) -> Boolean = { damage ->
-            val hasDamage = damage > 0
-            if (hasDamage) {
-                this.tank.currentHitPoints -= damage
-            }
-            hasDamage
-        }
-
-        private val increaseCurrentHitPointsFunc: (Int) -> Boolean = { restore ->
-            val currentHitPoints = this.tank.currentHitPoints
-            val maxHitPoints = this.tank.maxHitPoints
-            val hasRestore = restore > 0 && currentHitPoints < maxHitPoints
-            if (hasRestore) {
-                val newHitPoints = currentHitPoints + restore
-                if (newHitPoints < maxHitPoints) {
-                    this.tank.currentHitPoints = newHitPoints
-                } else {
-                    this.tank.currentHitPoints = maxHitPoints
-                }
-            }
-            hasRestore
-        }
-
-        private val changeCurrentHitPointsFunc: (Int) -> Boolean = { newHitPointsValue ->
-            val maxHitPoints = this.tank.maxHitPoints
-            val hasChanged = newHitPointsValue in 0..maxHitPoints
-            if (hasChanged) {
-                this.tank.currentHitPoints = newHitPointsValue
-            }
-            hasChanged
-        }
-
-        private val decreaseMaxHitPointsFunc: (Int) -> Boolean = { range ->
-            val hasRange = range > 0
-            if (hasRange) {
-                this.tank.maxHitPoints -= range
-                if (this.tank.currentHitPoints > this.tank.maxHitPoints) {
-                    this.tank.currentHitPoints = this.tank.maxHitPoints
-                }
-            }
-            hasRange
-        }
-
-        private val increaseMaxHitPointsFunc: (Int) -> Boolean = { range ->
-            val hasRestore = range > 0
-            if (hasRestore) {
-                this.tank.maxHitPoints += range
-            }
-            hasRestore
-        }
-
-        private val changeMaxHitPointsFunc: (Int) -> Boolean = { newMaxHitPonts ->
-            val hasRange = newMaxHitPonts != 0
-            if (hasRange) {
-                this.tank.maxHitPoints = newMaxHitPonts
-                if (this.tank.currentHitPoints > this.tank.maxHitPoints) {
-                    this.tank.currentHitPoints = this.tank.maxHitPoints
-                }
-            }
-            hasRange
-        }
-
-        /**
-         * Function map.
-         */
-
-        val eventHandlerFuncMap = mutableMapOf<Class<*>, (Int) -> Boolean>(
-            BOnHitPointsActionPipe.Current.OnIncreasedEvent::class.java to this.increaseCurrentHitPointsFunc,
-            BOnHitPointsActionPipe.Current.OnDecreasedEvent::class.java to this.decreaseCurrentHitPointsFunc,
-            BOnHitPointsActionPipe.Current.OnChangedEvent::class.java to this.changeCurrentHitPointsFunc,
-            BOnHitPointsActionPipe.Max.OnIncreasedEvent::class.java to this.increaseMaxHitPointsFunc,
-            BOnHitPointsActionPipe.Max.OnDecreasedEvent::class.java to this.decreaseMaxHitPointsFunc,
-            BOnHitPointsActionPipe.Max.OnChangedEvent::class.java to this.changeMaxHitPointsFunc
-        )
-
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnHitPointsActionPipe.Event
                 && event.hitPointableId == this.tank.hitPointableId
+                && event.isEnable(this.context)
             ) {
-                val handlerFunc = this.eventHandlerFuncMap[event::class.java]
-                if (handlerFunc != null && handlerFunc(event.range)) {
-                    this.pushEventIntoPipes(event)
-                    if (this.tank.currentHitPoints <= 0) {
-                        this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.tank.unitId))
-                    }
-                    return event
+                event.perform(this.context)
+                this.pushEventIntoPipes(event)
+                if (this.tank.currentHitPoints <= 0) {
+                    this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.tank.unitId))
                 }
+                return event
             }
             return null
         }
@@ -504,8 +316,6 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
          */
 
         private val storage = context.storage
-
-        private val pipeline = context.pipeline
 
         /**
          * Unit.
@@ -526,11 +336,11 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
         }
 
         private fun unbindNodes() {
-            this.pipeline.unbindPipeFromNode(BTurnNode.NAME, this.tank.onTurnPipeId)
-            this.pipeline.unbindPipeFromNode(BOnAttackActionNode.NAME, this.tank.onAttackActionPipeId)
-            this.pipeline.unbindPipeFromNode(BOnAttackEnableNode.NAME, this.tank.onAttackEnablePipeId)
-            this.pipeline.unbindPipeFromNode(BOnDestroyUnitNode.NAME, this.tank.onDestroyPipeId)
-            this.pipeline.unbindPipeFromNode(BOnHitPointsActionNode.NAME, this.tank.onHitPointsActionPipeId)
+            this.tank.turnConnection.disconnect(this.context)
+            this.tank.attackActionConnection.disconnect(this.context)
+            this.tank.attackEnableConnection.disconnect(this.context)
+            this.tank.hitPointsConnection.disconnect(this.context)
+            this.tank.destroyConnection.disconnect(this.context)
         }
     }
 }

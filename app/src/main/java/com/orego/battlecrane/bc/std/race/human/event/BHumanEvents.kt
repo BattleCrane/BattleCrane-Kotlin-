@@ -2,10 +2,16 @@ package com.orego.battlecrane.bc.std.race.human.event
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController
+import com.orego.battlecrane.bc.api.context.pipeline.BPipeline
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.BOnAttackActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.BOnProduceActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BLevelableHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
+import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
@@ -13,39 +19,136 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.*
 
 object BHumanEvents {
 
-    object Upgrade {
+    object Attack {
 
+        abstract class LineEvent(
+            attackableId: Long, val attackableX: Int, val attackableY: Int, val targetX: Int, val targetY: Int
+        ) : BOnAttackActionPipe.Event(attackableId) {
 
-        open class Event(producableId: Long, x: Int, y: Int) :
-            BOnProduceActionPipe.Event(producableId) {
+            companion object {
 
-            open fun canUpgrade() : Boolean {
-                return true
+                private const val VECTOR = 1
             }
 
-            fun upgrade() {
+            open fun isEnable(context: BGameContext): Boolean {
+                val targetUnit = context.mapController.getUnitByPosition(context, this.targetX, this.targetY)
+                return targetUnit is BHitPointable && this.isPossibleAttackGeometry(context)
+            }
 
+            fun perform(context: BGameContext, damage: Int) {
+                val target = context.mapController.getUnitByPosition(context, this.targetX, this.targetY)
+                        as BHitPointable
+                context.pipeline.pushEvent(
+                    BOnHitPointsActionPipe.Current.createOnDecreasedEvent(target.hitPointableId, damage)
+                )
+            }
+
+            abstract fun isAttackBlock(context: BGameContext, x: Int, y : Int) : Boolean
+
+            /**
+             * Attack geometry check.
+             */
+
+            private fun isPossibleAttackGeometry(context: BGameContext) = this.isPossibleAttackByXAxis(context)
+                    || this.isPossibleAttackByYAxis(context)
+                    || this.isPossibleAttackByDiagonal(context)
+
+            private fun isPossibleAttackByXAxis(context: BGameContext): Boolean {
+                if (this.attackableX == this.targetX) {
+                    val start = Integer.min(this.attackableY, this.targetY) + 1
+                    val end = Integer.max(this.attackableY, this.targetY)
+                    for (y in start until end) {
+                        if (this.isAttackBlock(context, this.targetX, y)) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+                return false
+            }
+
+            private fun isPossibleAttackByYAxis(context: BGameContext): Boolean {
+                if (this.attackableY == this.targetY) {
+                    val start = Integer.min(this.attackableX, this.targetX) + 1
+                    val end = Integer.max(this.attackableX, this.targetX)
+                    for (x in start until end) {
+                        if (this.isAttackBlock(context, x, this.targetY)) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+                return false
+            }
+
+            private fun isPossibleAttackByDiagonal(context: BGameContext): Boolean {
+                val distanceX = this.attackableX - this.targetX
+                val distanceY = this.attackableY - this.targetY
+                val isDiagonal = Math.abs(distanceX) == Math.abs(distanceY)
+                if (isDiagonal) {
+                    //Any distance:
+                    val distanceBetweenUnits = distanceX - 1
+                    val dx =
+                        if (distanceX > 0) {
+                            VECTOR
+                        } else {
+                            -VECTOR
+                        }
+                    val dy =
+                        if (distanceY > 0) {
+                            VECTOR
+                        } else {
+                            -VECTOR
+                        }
+                    var x = this.attackableX
+                    var y = this.attackableY
+                    repeat(distanceBetweenUnits) {
+                        x += dx
+                        y += dy
+                        if (this.isAttackBlock(context, x, y)) {
+                            return false
+                        }
+                    }
+                    return true
+                }
+                return false
+            }
+        }
+    }
+
+    object Upgrade {
+
+        open class Event(producableId: Long, val levelableId: Long) :
+            BOnProduceActionPipe.Event(producableId) {
+
+            companion object {
+
+                const val RANGE = 1
+            }
+
+            open fun isEnable(context: BGameContext): Boolean {
+                val levelable = context.storage.getHeap(BLevelableHeap::class.java)[this.levelableId]
+                return levelable is BHumanBuilding && levelable.currentLevel + RANGE <= levelable.maxLevel
+            }
+
+            fun perform(pipeline: BPipeline) {
+                pipeline.pushEvent(
+                    BOnLevelActionPipe.createOnLevelIncreasedEvent(this.levelableId, RANGE)
+                )
             }
         }
     }
 
     object Construct {
 
-        abstract class Event(
-            producableId: Long, val startX: Int, val startY: Int, val width: Int, val height: Int
-        ) : BOnProduceActionPipe.Event(producableId) {
+        abstract class Event(producableId: Long, val startX: Int, val startY: Int, val width: Int, val height: Int) :
+            BOnProduceActionPipe.Event(producableId) {
 
-            fun perform(context: BGameContext, playerId: Long) : Boolean {
-                val canConstruct = this.canConstruct(context, playerId)
-                if (canConstruct) {
-                    context.pipeline.pushEvent(this.getOnCreateBuildingEvent(playerId, this.startX, this.startY))
-                }
-                return canConstruct
+            open fun perform(context: BGameContext, playerId: Long) {
+                context.pipeline.pushEvent(this.getEvent(playerId, this.startX, this.startY))
             }
 
-            protected abstract fun getOnCreateBuildingEvent(playerId: Long, x: Int, y: Int): BOnCreateUnitPipe.Event
-
-            protected open fun canConstruct(context: BGameContext, playerId: Long): Boolean {
+            open fun isEnable(context: BGameContext, playerId: Long): Boolean {
                 val player = context.storage.getHeap(BPlayerHeap::class.java)[playerId]
                 val mapController = context.mapController
                 val endX = this.startX + this.width
@@ -86,6 +189,8 @@ object BHumanEvents {
                 return false
             }
 
+            abstract fun getEvent(playerId: Long, x: Int, y: Int): BOnCreateUnitPipe.Event
+
             private fun hasNeighborBuilding(context: BGameContext, player: BPlayer, x: Int, y: Int): Boolean {
                 val mapController = context.mapController
                 if (BMapController.inBounds(x, y)) {
@@ -104,15 +209,15 @@ object BHumanEvents {
         class BarracksEvent(producableId: Long, x: Int, y: Int) :
             Event(producableId, x, y, BHumanBarracks.WIDTH, BHumanBarracks.HEIGHT) {
 
-            override fun getOnCreateBuildingEvent(playerId: Long, x: Int, y: Int) =
+            override fun getEvent(playerId: Long, x: Int, y: Int) =
                 BHumanBarracks.OnCreateNode.createEvent(playerId, x, y)
         }
 
         class FactoryEvent(producableId: Long, x: Int, y: Int) :
             Event(producableId, x, y, BHumanFactory.WIDTH, BHumanFactory.HEIGHT) {
 
-            override fun canConstruct(context: BGameContext, playerId: Long): Boolean {
-                if (super.canConstruct(context, playerId)) {
+            override fun isEnable(context: BGameContext, playerId: Long): Boolean {
+                if (super.isEnable(context, playerId)) {
                     val barracksFactoryDiff = this.countDiffBarracksFactory(context, playerId)
                     if (barracksFactoryDiff > 0) {
                         return true
@@ -121,16 +226,16 @@ object BHumanEvents {
                 return false
             }
 
-            override fun getOnCreateBuildingEvent(playerId: Long, x: Int, y: Int) =
+            override fun getEvent(playerId: Long, x: Int, y: Int) =
                 BHumanFactory.OnCreateNode.createEvent(playerId, x, y)
 
-            private fun countDiffBarracksFactory(context: BGameContext, playerId: Long) : Int {
+            private fun countDiffBarracksFactory(context: BGameContext, playerId: Long): Int {
                 val allUnits = context.storage.getHeap(BUnitHeap::class.java).getObjectList()
                 var barracksCount = 0
                 var factoryCount = 0
                 for (unit in allUnits) {
                     if (unit.playerId == playerId) {
-                        when(unit) {
+                        when (unit) {
                             is BHumanBarracks -> barracksCount++
                             is BHumanFactory -> factoryCount++
                         }
@@ -148,8 +253,8 @@ object BHumanEvents {
                 const val GENERATOR_LIMIT = 2
             }
 
-            override fun canConstruct(context: BGameContext, playerId: Long): Boolean {
-                if (super.canConstruct(context, playerId)) {
+            override fun isEnable(context: BGameContext, playerId: Long): Boolean {
+                if (super.isEnable(context, playerId)) {
                     val generatorCount = this.calcGenerators(context, playerId)
                     if (generatorCount < GENERATOR_LIMIT) {
                         return true
@@ -158,10 +263,10 @@ object BHumanEvents {
                 return false
             }
 
-            override fun getOnCreateBuildingEvent(playerId: Long, x: Int, y: Int) =
+            override fun getEvent(playerId: Long, x: Int, y: Int) =
                 BHumanGenerator.OnCreateNode.createEvent(playerId, x, y)
 
-            private fun calcGenerators(context: BGameContext, playerId: Long) : Int {
+            private fun calcGenerators(context: BGameContext, playerId: Long): Int {
                 val allUnits = context.storage.getHeap(BUnitHeap::class.java).getObjectList()
                 var generatorCount = 0
                 for (unit in allUnits) {
@@ -176,14 +281,14 @@ object BHumanEvents {
         class TurretEvent(producableId: Long, x: Int, y: Int) :
             Event(producableId, x, y, BHumanTurret.WIDTH, BHumanTurret.HEIGHT) {
 
-            override fun getOnCreateBuildingEvent(playerId: Long, x: Int, y: Int) =
+            override fun getEvent(playerId: Long, x: Int, y: Int) =
                 BHumanTurret.OnCreateNode.createEvent(playerId, x, y)
         }
 
         class WallEvent(producableId: Long, x: Int, y: Int) :
             Event(producableId, x, y, BHumanWall.WIDTH, BHumanWall.HEIGHT) {
 
-            override fun getOnCreateBuildingEvent(playerId: Long, x: Int, y: Int) =
+            override fun getEvent(playerId: Long, x: Int, y: Int) =
                 BHumanWall.OnCreateNode.createEvent(playerId, x, y)
         }
     }

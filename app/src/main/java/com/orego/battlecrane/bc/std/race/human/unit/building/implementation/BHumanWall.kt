@@ -130,8 +130,9 @@ class BHumanWall(context: BGameContext, playerId: Long, x: Int, y: Int) :
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnHitPointsActionPipe.Event
                 && event.hitPointableId == this.wall.hitPointableId
-                && event.perform(this.context)
+                && event.isEnable(this.context)
             ) {
+                event.perform(this.context)
                 this.pushEventIntoPipes(event)
                 if (this.wall.currentHitPoints <= 0) {
                     this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.wall.unitId))
