@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model.api.uiGameContext.clickController
+package com.orego.battlecrane.ui.model.api.context.clickController
 
 interface BClickMode {
 

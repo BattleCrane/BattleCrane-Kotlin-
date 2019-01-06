@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.destroyed.BDestroyedField
-import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
+import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRenderItem
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.byAssets
 
@@ -17,7 +17,7 @@ class BDestroyedFieldView(unit: BDestroyedField, dimension: Int, context: Contex
 
     override val displayedView = ImageView(context).byAssets(context, dimension, dimension, PATH)
 
-    class Builder : BUnitViewRender.ViewBuilder {
+    class Builder : BUnitViewRenderItem.ViewBuilder {
 
         override val type: String = BDestroyedField::class.java.name
 

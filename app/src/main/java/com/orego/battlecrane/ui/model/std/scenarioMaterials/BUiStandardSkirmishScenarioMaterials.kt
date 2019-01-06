@@ -1,21 +1,21 @@
 package com.orego.battlecrane.ui.model.std.scenarioMaterials
 
 import com.orego.battlecrane.bc.std.scenario.skirmish.BStandardSkirmishScenario
-import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
-import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
+import com.orego.battlecrane.ui.model.api.render.action.BActionViewRenderItem
+import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRenderItem
 import com.orego.battlecrane.ui.model.api.scenarioMaterials.BUiScenarioMaterials
 import com.orego.battlecrane.ui.model.std.view.ground.map.field.destroyed.BDestroyedFieldView
 import com.orego.battlecrane.ui.model.std.view.ground.map.field.empty.BEmptyFieldView
-import com.orego.battlecrane.ui.model.std.view.race.human.BHumanViewBuilders
+import com.orego.battlecrane.ui.model.std.view.race.human.BHumanViewSuppliers
 
 class BUiStandardSkirmishScenarioMaterials : BUiScenarioMaterials(BStandardSkirmishScenario()) {
 
-    override val unitBuilders = mutableSetOf<BUnitViewRender.ViewBuilder>()
+    override val unitBuilders = mutableSetOf<BUnitViewRenderItem.ViewBuilder>()
 
-    private val humanViewBuilders = BHumanViewBuilders()
+    private val humanViewBuilders = BHumanViewSuppliers()
 
     //TODO: MAKE BONUS:
-//    override val defaultBonusToolBuilder: BViewRender.ViewBuilder<Class<out BAction>, BActionView>
+//    override val defaultBonusToolBuilder: BUiItemShell.BUiItemSupplier<Class<out BAction>, BActionView>
 
     init {
         //Field:
@@ -26,13 +26,13 @@ class BUiStandardSkirmishScenarioMaterials : BUiScenarioMaterials(BStandardSkirm
         this.unitBuilders.addAll(this.humanViewBuilders.units)
     }
 
-    override val buildingActionBuilders = mutableSetOf<BActionViewRender.ViewBuilder>()
+    override val buildingActionBuilders = mutableSetOf<BActionViewRenderItem.ViewBuilder>()
 
     init {
         this.buildingActionBuilders.addAll(this.humanViewBuilders.buildingTools)
     }
 
-    override val trainActionBuilders = mutableSetOf<BActionViewRender.ViewBuilder>(
+    override val trainActionBuilders = mutableSetOf<BActionViewRenderItem.ViewBuilder>(
 
     )
 
@@ -40,12 +40,12 @@ class BUiStandardSkirmishScenarioMaterials : BUiScenarioMaterials(BStandardSkirm
         this.trainActionBuilders.addAll(this.humanViewBuilders.armyTools)
     }
 
-    override val bonusActionBuilders = mutableSetOf<BActionViewRender.ViewBuilder>(
+    override val bonusActionBuilders = mutableSetOf<BActionViewRenderItem.ViewBuilder>(
 
     )
 
     //TODO: MAKE BONUSES!!!
 //    init {
-//        this.bonusActionBuilders.addAll(BHumanViewBuilders.bonusTools)
+//        this.bonusActionBuilders.addAll(BHumanViewSuppliers.bonusTools)
 //    }
 }

@@ -1,8 +1,5 @@
-package com.orego.battlecrane.ui.model.api.uiGameContext.clickController
+package com.orego.battlecrane.ui.model.api.context.clickController
 
-import com.orego.battlecrane.ui.model.api.component.context.BUiContextComponent
-
-@BUiContextComponent
 class BClickController {
 
     private var currentClickMode: BClickMode? = null

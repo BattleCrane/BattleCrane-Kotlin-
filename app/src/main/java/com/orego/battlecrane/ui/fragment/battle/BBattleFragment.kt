@@ -1,34 +1,35 @@
 package com.orego.battlecrane.ui.fragment.battle
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.controller.player.BPlayerController
-import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
-import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
-import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BHumanAdjutant
 import com.orego.battlecrane.ui.fragment.BFragment
-import com.orego.battlecrane.ui.model.api.component.context.BUiContextComponent
-import com.orego.battlecrane.ui.model.api.uiGameContext.clickController.BClickController
-import com.orego.battlecrane.ui.model.api.uiGameContext.eventPipe.BUiEventPipe
+import com.orego.battlecrane.ui.model.api.context.clickController.BClickController
+import com.orego.battlecrane.ui.model.api.context.eventPipe.BUiEventPipe
+import com.orego.battlecrane.ui.util.ViewSize
 import com.orego.battlecrane.ui.util.hide
-import com.orego.battlecrane.ui.util.onMeasured
-import com.orego.battlecrane.ui.util.setImageByAssets
+import com.orego.battlecrane.ui.util.measure
 import com.orego.battlecrane.ui.util.show
-import com.orego.battlecrane.ui.viewModel.BViewFactoryViewModel
+import com.orego.battlecrane.ui.viewModel.BScenarioViewModel
 import kotlinx.android.synthetic.main.fragment_battle.*
+import kotlinx.coroutines.*
 
 class BBattleFragment : BFragment() {
 
     override val presenter = Presenter()
+
+    //TODO : WHILE TO BE!!!
+    private var mapSize: ViewSize? = null
+
+    private var buildToolSize: ViewSize? = null
+
+    private var trainTools: ViewSize? = null
 
     override fun onCreateContentView(i: LayoutInflater, c: ViewGroup?, b: Bundle?): View? = i
         .inflate(R.layout.fragment_battle, c, false)!!
@@ -47,141 +48,117 @@ class BBattleFragment : BFragment() {
 
     override fun onStart() {
         super.onStart()
-        this.presenter.start()
+        GlobalScope.launch(Dispatchers.Main) {
+            this@BBattleFragment.mapSize = this@BBattleFragment.fragment_battle_map_constraint_layout.measure()
+            this@BBattleFragment.buildToolSize = this@BBattleFragment.fragment_battle_build_actions.measure()
+            this@BBattleFragment.trainTools = this@BBattleFragment.fragment_battle_train_actions.measure()
+            this@BBattleFragment.presenter.start()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        this.presenter.stop()
     }
 
     inner class Presenter : BFragment.BPresenter() {
 
-        private val applicationContext by lazy {
-            this@BBattleFragment.context!!
-        }
+        private var isPlaying = false
+
+        private var loadingJob: Job? = null
 
         /**
          * Game.
          */
 
-        private val viewFactoryViewModel by lazy {
-            ViewModelProviders
-                .of(this.activity)
-                .get(BViewFactoryViewModel::class.java)
-        }
-
         private val uiGameContext by lazy {
             BUiGameContext(this.manager.gameContext)
         }
 
-        @BUiContextComponent
-        inner class BUiGameContext(val gameContext : BGameContext) {
-
-            @BUiContextComponent
-            val eventPipe = BUiEventPipe(this.gameContext)
-
-            @BUiContextComponent
-            val clickController = BClickController()
+        private val scenarioViewModel by lazy {
+            ViewModelProviders
+                .of(this.activity)
+                .get(BScenarioViewModel::class.java)
         }
 
+        /**
+         * Lifecycle.
+         */
 
         fun start() {
-            this.initRaceController()
-            this.prepareMap(this@BBattleFragment.fragment_battle_map_constraint_layout)
-            this.prepareBuildTools(this@BBattleFragment.fragment_battle_build_actions)
-            this.prepareTrainTools(this@BBattleFragment.fragment_battle_train_actions)
-            this.startGame()
+            if (!this.isPlaying) {
+                this.isPlaying = true
+                this.loadingJob = this.loadGame()
+            }
         }
 
-        private fun prepareMap(constraintLayout: ConstraintLayout) {
-            constraintLayout.onMeasured {
-                this.scenarioViewModel.initMap(this.uiGameContext, constraintLayout)
+        fun stop() {
+            this.loadingJob?.cancel()
+        }
 
+        /**
+         * Logic.
+         */
 
+        private fun loadGame() =
+            GlobalScope.launch(Dispatchers.Main) {
+                this@Presenter.createGameContext()
+                this@Presenter.initUiShell()
+                this@Presenter.startGame()
+            }
 
-                val units = this.uiGameContext.gameContext.storage.getHeap(BUnitHeap::class.java).getObjectList()
-                for (unit in units) {
-                    val type = unit::class.java.name
-                    factory.build(this.uiGameContext, constraintLayout, unit, type)
+        private suspend fun createGameContext() {
+            this.manager.gameContext = withContext(Dispatchers.IO) {
+                val scenario = this@Presenter.scenarioViewModel.scenario
+                if (scenario != null) {
+                    BGameContext(scenario)
+                } else {
+                    throw IllegalStateException("Scenario isn't set!")
                 }
             }
         }
 
-        private fun prepareBuildTools(constraintLayout: ConstraintLayout) {
-            constraintLayout.onMeasured {
-                this.scenarioViewModel.initBuildTools(this.uiGameContext, constraintLayout)
-
-
-                this.buildViewRender.install(
-                    this@BBattleFragment.fragment_battle_build_actions,
-                    this.viewFactoryViewModel.buildActionFactory,
-                    this.modeController,
-                    this.applicationContext
-                )
-            }
+        private fun initUiShell() {
+            this.scenarioViewModel.configureUiShell(this.uiGameContext)
         }
-
-        private fun prepareTrainTools(constraintLayout: ConstraintLayout) {
-            constraintLayout.onMeasured {
-                this.scenarioViewModel.initTrainTools(this.uiGameContext, constraintLayout)
-
-
-                this.trainViewRender.install(
-                    this@BBattleFragment.fragment_battle_train_actions,
-                    this.viewFactoryViewModel.trainActionFactory,
-                    this.modeController,
-                    this.applicationContext
-                )
-            }
-        }
-
-        private fun initRaceController() {
-            this.raceController.init()
-        }
-
-        //TODO: MAKE BONUSES!!!
-//        private fun prepareBonusTools(constraintLayout: ConstraintLayout) {
-//            constraintLayout.onMeasured {
-//                this.bonusToolRender.install(
-//                    this@BBattleFragment.fragment_battle_reinforcements_tools,
-//                    this.viewFactoryViewModel.bonusActionFactory,
-//                    this.applicationContext
-//                )
-//            }
-//        }
 
         private fun startGame() {
             this.uiGameContext.gameContext.startGame()
         }
 
-        inner class RaceToolController(private val context: Context) {
+        /**
+         * Ui Context.
+         */
 
-            private val racePathMap = mutableMapOf<Class<out BAdjutant>, RacePaths>()
+        inner class BUiGameContext(val gameContext: BGameContext) {
 
-            init {
-                this.racePathMap[BHumanAdjutant::class.java] = RacePaths(
-                    "race/human/button/build.png", "race/human/button/train.png"
-                )
+            val applicationContext by lazy {
+                this@BBattleFragment.context!!
             }
 
-            fun init() {
-                this@Presenter.uiGameContext.playerManager.addOnTurnListener(object : BPlayerController.TurnListener {
-
-                    override fun onTurnStarted(player: BPlayer) {
-                        val racePaths = this@RaceToolController.racePathMap[player.adjutant::class.java]!!
-                        this@BBattleFragment.fragment_battle_to_build_image_view.setImageByAssets(
-                            context,
-                            racePaths.buildPath
-                        )
-                        this@BBattleFragment.fragment_battle_to_train_image_view.setImageByAssets(
-                            context,
-                            racePaths.trainPath
-                        )
-                    }
-
-                    override fun onTurnFinished(player: BPlayer) {
-
-                    }
-                })
+            val mapSurface: ConstraintLayout by lazy {
+                this@BBattleFragment.fragment_battle_map_constraint_layout
             }
 
-            inner class RacePaths(val buildPath: String, val trainPath: String)
+            val buildToolsSurface: ConstraintLayout by lazy {
+                this@BBattleFragment.fragment_battle_build_actions
+            }
+
+            val trainToolsSurface: ConstraintLayout by lazy {
+                this@BBattleFragment.fragment_battle_train_actions
+            }
+
+            val buildButton: ImageView by lazy {
+                this@BBattleFragment.fragment_battle_to_build_image_view
+            }
+
+            val trainButton: ImageView by lazy {
+                this@BBattleFragment.fragment_battle_to_train_image_view
+            }
+
+            val eventPipe = BUiEventPipe(this.gameContext)
+
+            val clickController = BClickController()
         }
     }
 }

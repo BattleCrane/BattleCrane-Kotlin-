@@ -1,8 +1,6 @@
 package com.orego.battlecrane.ui.model.std.view.race.human
 
-import com.orego.battlecrane.ui.model.std.view.race.human.unit.building.*
-import com.orego.battlecrane.ui.model.std.view.race.human.unit.infantry.BHumanMarineView
-import com.orego.battlecrane.ui.model.std.view.race.human.unit.vehicle.BHumanTankView
+import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
 import com.orego.battlecrane.ui.model.std.view.race.human.action.building.*
 import com.orego.battlecrane.ui.model.std.view.race.human.action.infantry.BHumanTrainMarineLvl1View
 import com.orego.battlecrane.ui.model.std.view.race.human.action.infantry.BHumanTrainMarineLvl2View
@@ -10,8 +8,11 @@ import com.orego.battlecrane.ui.model.std.view.race.human.action.infantry.BHuman
 import com.orego.battlecrane.ui.model.std.view.race.human.action.vehicle.BHumanTrainTankLvl1View
 import com.orego.battlecrane.ui.model.std.view.race.human.action.vehicle.BHumanTrainTankLvl2View
 import com.orego.battlecrane.ui.model.std.view.race.human.action.vehicle.BHumanTrainTankLvl3View
+import com.orego.battlecrane.ui.model.std.view.race.human.unit.building.*
+import com.orego.battlecrane.ui.model.std.view.race.human.unit.infantry.BHumanMarineView
+import com.orego.battlecrane.ui.model.std.view.race.human.unit.vehicle.BHumanTankView
 
-class BHumanViewBuilders {
+class BHumanViewSuppliers {
 
     val units = setOf(
         //Buildings:
@@ -25,26 +26,6 @@ class BHumanViewBuilders {
         BHumanMarineView.Builder(),
         BHumanTankView.Builder()
     )
-    val buildingTools = setOf(
-        BHumanBuildBarracksView.Builder(),
-        BHumanBuildFactoryView.Builder(),
-        BHumanBuildGeneratorView.Builder(),
-        BHumanBuildTurretView.Builder(),
-        BHumanBuildWallView.Builder(),
-        BHumanUpgradeBuildingView.Builder()
-    )
 
-    val armyTools = setOf(
-        BHumanTrainMarineLvl1View.Builder(),
-        BHumanTrainMarineLvl2View.Builder(),
-        BHumanTrainMarineLvl3View.Builder(),
-        BHumanTrainTankLvl1View.Builder(),
-        BHumanTrainTankLvl2View.Builder(),
-        BHumanTrainTankLvl3View.Builder()
-    )
-
-    //TODO: LATER:
-//    val bonusTools = setOf(
-//
-//    )
+    val adjutant = BHumanAdjutantView.Builder()
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
-import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
+import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRenderItem
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.byAssets
 import com.orego.battlecrane.ui.util.setImageByAssets
@@ -39,7 +39,7 @@ class BHumanWallView(
         this.displayedView.setImageByAssets(this.context, this.getPath())
     }
 
-    class Builder : BUnitViewRender.ViewBuilder {
+    class Builder : BUnitViewRenderItem.ViewBuilder {
 
         override val type: String = BHumanWall::class.java.name
 

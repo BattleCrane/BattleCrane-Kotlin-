@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.BHumanMarine
-import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
+import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRenderItem
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.byAssets
 import com.orego.battlecrane.ui.util.setImageByAssets
@@ -46,7 +46,7 @@ class BHumanMarineView(
         this.displayedView.setImageByAssets(this.context, this.getPath())
     }
 
-    class Builder : BUnitViewRender.ViewBuilder {
+    class Builder : BUnitViewRenderItem.ViewBuilder {
 
         override val type: String = BHumanMarine::class.java.name
 

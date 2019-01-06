@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.entity.main.BAction
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
-import com.orego.battlecrane.ui.model.api.render.action.BActionViewRender
+import com.orego.battlecrane.ui.model.api.render.action.BActionViewRenderItem
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 import com.orego.battlecrane.ui.util.byAssets
 
@@ -17,7 +17,7 @@ class BHumanTrainMarineLvl2View(action: BHumanBarracks.TrainMarineLvl2Factory.Ac
 
     override val displayedView = ImageView(context).byAssets(context, dimension, dimension, PATH)
 
-    class Builder : BActionViewRender.ViewBuilder {
+    class Builder : BActionViewRenderItem.ViewBuilder {
 
         override fun build(value: BAction, dimension: Int, context: Context) =
             BHumanTrainMarineLvl2View(value as BHumanBarracks.TrainMarineLvl2Factory.Action, dimension, context)

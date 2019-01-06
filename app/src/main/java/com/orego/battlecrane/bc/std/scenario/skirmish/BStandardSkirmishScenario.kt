@@ -59,11 +59,11 @@ class BStandardSkirmishScenario : BGameScenario {
             val bluePlayerId = players[0].playerId
             val redPlayerId = players[1].playerId
 
-            //Put headquarters on the map:
+            //Put headquarters on the mapSurface:
             this.add(BHumanHeadquarters(context, bluePlayerId, 14, 14))
             this.add(BHumanHeadquarters(context, redPlayerId, 0, 0))
 
-            //Put walls on the map
+            //Put walls on the mapSurface
             for (j in 0..4) {
                 this.add(BHumanWall(context, redPlayerId, j, 4))
                 this.add(BHumanWall(context, redPlayerId, 4, j))

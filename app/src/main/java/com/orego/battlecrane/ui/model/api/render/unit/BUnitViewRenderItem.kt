@@ -4,10 +4,8 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController.Companion.MAP_SIZE
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController.MAP_SIZE
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
-import com.orego.battlecrane.ui.model.api.render.BViewRender
+import com.orego.battlecrane.ui.model.api.shell.itemShell.BUiItemShell
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
-import com.orego.battlecrane.ui.util.addView
-import com.orego.battlecrane.ui.util.moveTo
 import org.intellij.lang.annotations.MagicConstant
 
 /**
@@ -15,7 +13,7 @@ import org.intellij.lang.annotations.MagicConstant
  * Draw units on constraint layout.
  */
 
-class BUnitViewRender(gameContext: BGameContext) : BViewRender<BUnit, BUnitView>(gameContext)  {
+class BUnitViewRenderItem(gameContext: BGameContext) : BUiItemShell<BUnit, BUnitView>(gameContext)  {
 
     companion object {
 
@@ -85,11 +83,11 @@ class BUnitViewRender(gameContext: BGameContext) : BViewRender<BUnit, BUnitView>
      * Factory.
      */
 
-    class ViewFactory : BViewRender.ViewFactory<BUnit, BUnitView>()
+    class ViewFactory : BUiItemShell.ViewFactory<BUnit, BUnitView>()
 
     /**
      * Unit builder.
      */
 
-    interface ViewBuilder : BViewRender.ViewBuilder<BUnit, BUnitView>
+    interface ViewBuilder : BUiItemShell.ViewBuilder<BUnit, BUnitView>
 }

@@ -20,7 +20,7 @@ class BMapController(context: BGameContext) {
     private val matrix = Array(MAP_SIZE) { Array(MAP_SIZE) { NOT_INITIALIZED_UNIT_ID } }
 
     init {
-        //Place units on map:
+        //Place units on mapSurface:
         val unitHeap = context.storage.getHeap(BUnitHeap::class.java)
         unitHeap.getObjectList().forEach { unit ->
             this.placeUnitOnMap(unit)
@@ -28,12 +28,12 @@ class BMapController(context: BGameContext) {
     }
 
     init {
-        //Check initialized map:
+        //Check initialized mapSurface:
         this.matrix.forEach { column ->
             column.forEach { id ->
                 val isNotInitiablizedField = id == NOT_INITIALIZED_UNIT_ID
                 if (isNotInitiablizedField) {
-                    throw IllegalStateException("All map must be initialized!")
+                    throw IllegalStateException("All mapSurface must be initialized!")
                 }
             }
         }

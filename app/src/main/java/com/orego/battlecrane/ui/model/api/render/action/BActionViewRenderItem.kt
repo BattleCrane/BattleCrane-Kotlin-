@@ -4,15 +4,13 @@ import android.content.Context
 import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 import com.orego.battlecrane.bc.api.context.controller.player.BPlayerController
 import com.orego.battlecrane.bc.api.model.entity.main.BAction
-import com.orego.battlecrane.ui.model.api.render.BViewRender
+import com.orego.battlecrane.ui.model.api.shell.itemShell.BUiItemShell
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
-import com.orego.battlecrane.ui.util.addView
-import com.orego.battlecrane.ui.util.moveTo
 
-abstract class BActionViewRender(
+abstract class BActionViewRenderItem(
     private val columnCount: Int,
     private val rowCount: Int
-) : BViewRender<BAction, BActionView>() {
+) : BUiItemShell<BAction, BActionView>() {
 
     abstract val stack: Set<BAction>
 
@@ -56,22 +54,22 @@ abstract class BActionViewRender(
         this.viewList.clear()
     }
 
-    class ViewFactory : BViewRender.ViewFactory<BAction, BActionView>() {
+    class ViewFactory : BUiItemShell.ViewFactory<BAction, BActionView>() {
 
-        lateinit var defaultBuilder: BViewRender.ViewBuilder<BAction, BActionView>
+        lateinit var defaultBuilder: BUiItemShell.ViewBuilder<BAction, BActionView>
 
         override fun buildByDefault(unit: BAction, dimension: Int, context: Context, type: String) =
             this.defaultBuilder.build(unit, dimension, context)
     }
 
-    interface ViewBuilder : BViewRender.ViewBuilder<BAction, BActionView>
+    interface ViewBuilder : BUiItemShell.ViewBuilder<BAction, BActionView>
 }
 
 /**
  * Primary actions.
  */
 
-abstract class BPrimaryActionViewRender : BActionViewRender(COLUMN_COUNT, ROW_COUNT) {
+abstract class BPrimaryActionViewRenderItem : BActionViewRenderItem(COLUMN_COUNT, ROW_COUNT) {
 
     companion object {
 
@@ -81,13 +79,13 @@ abstract class BPrimaryActionViewRender : BActionViewRender(COLUMN_COUNT, ROW_CO
     }
 }
 
-class BTrainViewRender(private val playerController: BPlayerController) : BPrimaryActionViewRender() {
+class BTrainViewRenderItem(private val playerController: BPlayerController) : BPrimaryActionViewRenderItem() {
 
     override val stack: Set<BAction>
         get() = this.playerController.currentPlayerId.adjutant.resourceManager.trainActions
 }
 
-class BBuildViewRender(private val playerController: BPlayerController) : BPrimaryActionViewRender() {
+class BBuildViewRenderItem(private val playerController: BPlayerController) : BPrimaryActionViewRenderItem() {
 
     override val stack: Set<BAction>
         get() = this.playerController.currentPlayerId.adjutant.resourceManager.buildingActions

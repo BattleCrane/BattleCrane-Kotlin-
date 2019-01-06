@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
-import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
+import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRenderItem
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.byAssets
 
@@ -18,7 +18,7 @@ BEmptyFieldView(unit: BEmptyField, dimension: Int, context: Context) : BUnitView
 
     override val displayedView = ImageView(context).byAssets(context, dimension, dimension, PATH)
 
-    class Builder : BUnitViewRender.ViewBuilder {
+    class Builder : BUnitViewRenderItem.ViewBuilder {
 
         override val type: String = BEmptyField::class.java.name
 
