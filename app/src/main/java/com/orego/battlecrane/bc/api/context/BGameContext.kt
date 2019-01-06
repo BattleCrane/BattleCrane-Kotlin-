@@ -51,8 +51,7 @@ class BGameContext(scenario: BGameScenario) {
      */
 
     fun startGame() {
-        val event = OnGameStartedEvent()
-        this.pipeline.pushEvent(event)
+        this.pipeline.pushEvent(OnGameStartedEvent())
     }
 
     /**

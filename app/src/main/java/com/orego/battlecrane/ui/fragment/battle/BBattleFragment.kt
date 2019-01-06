@@ -8,16 +8,17 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
+import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.player.BPlayerController
+import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
 import com.orego.battlecrane.bc.std.race.human.scenario.skirmish.adjutant.BHumanAdjutant
 import com.orego.battlecrane.ui.fragment.BFragment
-import com.orego.battlecrane.ui.model.api.modeController.BClickController
-import com.orego.battlecrane.ui.model.api.render.action.BBuildViewRender
-import com.orego.battlecrane.ui.model.api.render.action.BTrainViewRender
-import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
+import com.orego.battlecrane.ui.model.api.component.context.BUiContextComponent
+import com.orego.battlecrane.ui.model.api.uiGameContext.clickController.BClickController
+import com.orego.battlecrane.ui.model.api.uiGameContext.eventPipe.BUiEventPipe
 import com.orego.battlecrane.ui.util.hide
 import com.orego.battlecrane.ui.util.onMeasured
 import com.orego.battlecrane.ui.util.setImageByAssets
@@ -44,8 +45,6 @@ class BBattleFragment : BFragment() {
         }
     }
 
-    //TODO: MAKE PRESENTER FUN START
-
     override fun onStart() {
         super.onStart()
         this.presenter.start()
@@ -53,13 +52,13 @@ class BBattleFragment : BFragment() {
 
     inner class Presenter : BFragment.BPresenter() {
 
-        private val gameContext by lazy {
-            this.manager.gameContext
-        }
-
         private val applicationContext by lazy {
             this@BBattleFragment.context!!
         }
+
+        /**
+         * Game.
+         */
 
         private val viewFactoryViewModel by lazy {
             ViewModelProviders
@@ -67,55 +66,48 @@ class BBattleFragment : BFragment() {
                 .get(BViewFactoryViewModel::class.java)
         }
 
-        /**
-         * Renders units on the map.
-         */
-
-        private val modeController = BClickController()
-
-        private val unitRender by lazy {
-            BUnitViewRender(this.gameContext.mapController.unitHeap)
+        private val uiGameContext by lazy {
+            BUiGameContext(this.manager.gameContext)
         }
 
-        private val buildViewRender by lazy {
-            BBuildViewRender(this.gameContext.playerManager)
+        @BUiContextComponent
+        inner class BUiGameContext(val gameContext : BGameContext) {
+
+            @BUiContextComponent
+            val eventPipe = BUiEventPipe(this.gameContext)
+
+            @BUiContextComponent
+            val clickController = BClickController()
         }
 
-        private val trainViewRender by lazy {
-            BTrainViewRender(this.gameContext.playerManager)
-        }
-
-        //TODO: MAKE BONUS:
-//        private val bonusToolRender by lazy {
-//            BBonusToolRender(this.context.playerManager)
-//        }
-
-        private val raceController by lazy {
-            RaceToolController(this.applicationContext)
-        }
 
         fun start() {
             this.initRaceController()
             this.prepareMap(this@BBattleFragment.fragment_battle_map_constraint_layout)
             this.prepareBuildTools(this@BBattleFragment.fragment_battle_build_actions)
             this.prepareTrainTools(this@BBattleFragment.fragment_battle_train_actions)
-//        this.prepareBonusTools(this@BBattleFragment.fragment_battle_reinforcements_tools)
             this.startGame()
         }
 
         private fun prepareMap(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
-                this.unitRender.install(
-                    this@BBattleFragment.fragment_battle_map_constraint_layout,
-                    this.viewFactoryViewModel.unitFactory,
-                    this.modeController,
-                    this.applicationContext
-                )
+                this.scenarioViewModel.initMap(this.uiGameContext, constraintLayout)
+
+
+
+                val units = this.uiGameContext.gameContext.storage.getHeap(BUnitHeap::class.java).getObjectList()
+                for (unit in units) {
+                    val type = unit::class.java.name
+                    factory.build(this.uiGameContext, constraintLayout, unit, type)
+                }
             }
         }
 
         private fun prepareBuildTools(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
+                this.scenarioViewModel.initBuildTools(this.uiGameContext, constraintLayout)
+
+
                 this.buildViewRender.install(
                     this@BBattleFragment.fragment_battle_build_actions,
                     this.viewFactoryViewModel.buildActionFactory,
@@ -127,6 +119,9 @@ class BBattleFragment : BFragment() {
 
         private fun prepareTrainTools(constraintLayout: ConstraintLayout) {
             constraintLayout.onMeasured {
+                this.scenarioViewModel.initTrainTools(this.uiGameContext, constraintLayout)
+
+
                 this.trainViewRender.install(
                     this@BBattleFragment.fragment_battle_train_actions,
                     this.viewFactoryViewModel.trainActionFactory,
@@ -152,7 +147,7 @@ class BBattleFragment : BFragment() {
 //        }
 
         private fun startGame() {
-            this.gameContext.startGame()
+            this.uiGameContext.gameContext.startGame()
         }
 
         inner class RaceToolController(private val context: Context) {
@@ -161,13 +156,12 @@ class BBattleFragment : BFragment() {
 
             init {
                 this.racePathMap[BHumanAdjutant::class.java] = RacePaths(
-                    "race/human/button/build.png",
-                    "race/human/button/train.png"
+                    "race/human/button/build.png", "race/human/button/train.png"
                 )
             }
 
             fun init() {
-                this@Presenter.gameContext.playerManager.addOnTurnListener(object : BPlayerController.TurnListener {
+                this@Presenter.uiGameContext.playerManager.addOnTurnListener(object : BPlayerController.TurnListener {
 
                     override fun onTurnStarted(player: BPlayer) {
                         val racePaths = this@RaceToolController.racePathMap[player.adjutant::class.java]!!

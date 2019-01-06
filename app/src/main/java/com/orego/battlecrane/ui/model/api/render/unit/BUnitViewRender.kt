@@ -1,5 +1,7 @@
 package com.orego.battlecrane.ui.model.api.render.unit
 
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.context.controller.map.BMapController.Companion.MAP_SIZE
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController.MAP_SIZE
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.ui.model.api.render.BViewRender
@@ -13,7 +15,7 @@ import org.intellij.lang.annotations.MagicConstant
  * Draw units on constraint layout.
  */
 
-class BUnitViewRender(private val units: Map<Long, BUnit>) : BViewRender<BUnit, BUnitView>() {
+class BUnitViewRender(gameContext: BGameContext) : BViewRender<BUnit, BUnitView>(gameContext)  {
 
     companion object {
 

@@ -1,7 +1,7 @@
 package com.orego.battlecrane.ui.model.api.view
 
 import android.view.View
-import com.orego.battlecrane.ui.model.api.modeController.BClickController
+import com.orego.battlecrane.ui.model.api.uiGameContext.clickController.BClickController
 
 abstract class BView<T : Any>(open val entity: T) {
 

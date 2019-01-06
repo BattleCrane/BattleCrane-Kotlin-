@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.model.api.view.action
 
 import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 import com.orego.battlecrane.bc.api.model.entity.main.BAction
-import com.orego.battlecrane.ui.model.api.modeController.BClickMode
+import com.orego.battlecrane.ui.model.api.uiGameContext.clickController.BClickMode
 import com.orego.battlecrane.ui.model.api.view.BView
 
 abstract class BActionView(entity: BAction) : BView<BAction>(entity) {

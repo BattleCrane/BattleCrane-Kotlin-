@@ -3,9 +3,10 @@ package com.orego.battlecrane.ui.model.api.render
 import android.content.Context
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import com.orego.battlecrane.ui.model.api.modeController.BClickController
+import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.ui.model.api.uiGameContext.clickController.BClickController
 
-abstract class BViewRender<K : Any, V : Any> {
+abstract class BViewRender<K : Any, V : Any>(gameContext : BGameContext) {
 
     private var isInstalled = false
 
@@ -20,6 +21,11 @@ abstract class BViewRender<K : Any, V : Any> {
     protected val constraintSet = ConstraintSet()
 
     protected val viewList: MutableList<V> = mutableListOf()
+
+
+    init {
+        gameContext.pipeline
+    }
 
     abstract fun draw()
 

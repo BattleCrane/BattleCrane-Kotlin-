@@ -1,5 +1,8 @@
-package com.orego.battlecrane.ui.model.api.modeController
+package com.orego.battlecrane.ui.model.api.uiGameContext.clickController
 
+import com.orego.battlecrane.ui.model.api.component.context.BUiContextComponent
+
+@BUiContextComponent
 class BClickController {
 
     private var currentClickMode: BClickMode? = null
@@ -19,6 +22,4 @@ class BClickController {
     fun forceChangeClickMode(clickMode: BClickMode) {
         this.currentClickMode = clickMode
     }
-
-    
 }

@@ -8,7 +8,8 @@ import com.orego.battlecrane.ui.model.api.render.unit.BUnitViewRender
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import com.orego.battlecrane.ui.util.byAssets
 
-class BEmptyFieldView(unit: BEmptyField, dimension: Int, context: Context) : BUnitView(unit) {
+class
+BEmptyFieldView(unit: BEmptyField, dimension: Int, context: Context) : BUnitView(unit) {
 
     companion object {
 
