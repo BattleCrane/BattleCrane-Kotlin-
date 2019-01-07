@@ -7,8 +7,8 @@ import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
-import com.orego.battlecrane.ui.model.api.shell.BUiShell
-import com.orego.battlecrane.ui.model.api.shell.itemShell.BUiItemShell
+import com.orego.battlecrane.ui.model.api.shell.BUiRaceShell
+import com.orego.battlecrane.ui.model.api.shell.item.BUiItemShell
 
 class BScenarioViewModel : ViewModel() {
 
@@ -22,11 +22,11 @@ class BScenarioViewModel : ViewModel() {
         this.scenario = scenario
     }
 
-    fun addShell(shell: BUiShell) {
-        shell.unitSupplierSet.forEach { supplier ->
-            this.unitShell.addSupplier(supplier)
-        }
+    fun addShell(shell: BUiRaceShell) {
         this.adjutantShell.addSupplier(shell.adjutantSupplier)
+        shell.unitSupplierSet.forEach {
+                supplier -> this.unitShell.addSupplier(supplier)
+        }
     }
 
     fun configureUiShell(uiGameContext: BBattleFragment.Presenter.BUiGameContext) {
@@ -40,6 +40,7 @@ class BScenarioViewModel : ViewModel() {
             val type = unit::class.java.name
             this.unitShell.provide(uiGameContext, unit, type)
         }
+        uiGameContext.mapSurface.apply()
     }
 
     private fun initAdjutants(uiGameContext: BBattleFragment.Presenter.BUiGameContext) {

@@ -1,7 +1,7 @@
-package com.orego.battlecrane.ui.model.api.shell.itemShell
+package com.orego.battlecrane.ui.model.api.shell.item
 
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
-import com.orego.battlecrane.ui.model.api.shell.itemShell.supplier.BUiItemSupplier
+import com.orego.battlecrane.ui.model.api.shell.item.supplier.BUiItemSupplier
 
 open class BUiItemShell<T : Any> {
 

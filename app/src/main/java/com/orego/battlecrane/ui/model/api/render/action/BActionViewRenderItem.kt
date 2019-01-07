@@ -4,7 +4,7 @@ import android.content.Context
 import com.orego.battlecrane.bc.api.context.controller.map.point.BPoint
 import com.orego.battlecrane.bc.api.context.controller.player.BPlayerController
 import com.orego.battlecrane.bc.api.model.entity.main.BAction
-import com.orego.battlecrane.ui.model.api.shell.itemShell.BUiItemShell
+import com.orego.battlecrane.ui.model.api.shell.item.BUiItemShell
 import com.orego.battlecrane.ui.model.api.view.action.BActionView
 
 abstract class BActionViewRenderItem(

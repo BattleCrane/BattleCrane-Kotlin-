@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController.Companion.MAP_SIZE
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController.MAP_SIZE
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
-import com.orego.battlecrane.ui.model.api.shell.itemShell.BUiItemShell
+import com.orego.battlecrane.ui.model.api.shell.item.BUiItemShell
 import com.orego.battlecrane.ui.model.api.view.unit.BUnitView
 import org.intellij.lang.annotations.MagicConstant
 
