@@ -40,7 +40,6 @@ class BScenarioViewModel : ViewModel() {
             val type = unit::class.java.name
             this.unitShell.provide(uiGameContext, unit, type)
         }
-        uiGameContext.mapSurface.apply()
     }
 
     private fun initAdjutants(uiGameContext: BBattleFragment.Presenter.BUiGameContext) {

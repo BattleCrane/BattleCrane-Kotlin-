@@ -133,10 +133,6 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
             fun createEvent(playerId: Long, x: Int, y: Int) = Event(playerId, x, y)
         }
 
-        /**
-         * Context.
-         */
-
         override fun handle(event: BEvent): BEvent? {
             if (event is Event
                 && event.playerId == this.playerId
@@ -155,9 +151,19 @@ class BHumanBarracks(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
             fun perform(context: BGameContext): Boolean {
                 val controller = context.mapController
-                val barracks = BHumanBarracks(context, this.playerId, this.x, this.y)
+                val startX = this.x
+                val startY = this.y
+                val barracks = BHumanBarracks(context, this.playerId, startX, startY)
                 val isSuccessful = controller.placeUnitOnMap(barracks)
                 if (isSuccessful) {
+                    //TODO: ADD DESTROY!!!
+                    val pipeline = context.pipeline
+                    for (x in startX until startX + WIDTH) {
+                        for (y in startY until startY + HEIGHT) {
+                            val unitId = controller.getUnitIdByPosition(x, y)
+                            pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(unitId))
+                        }
+                    }
                     context.storage.addObject(barracks)
                 }
                 return isSuccessful
