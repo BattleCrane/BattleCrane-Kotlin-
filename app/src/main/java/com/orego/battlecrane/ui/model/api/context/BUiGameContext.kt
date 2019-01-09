@@ -16,7 +16,7 @@ import com.orego.battlecrane.ui.model.api.holder.BHolder
 @BContextComponent
 class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragment.UiProvider) {
 
-    val eventPipe = BAnimationPipe(this.gameContext)
+    val animationPipe = BAnimationPipe(this.gameContext)
 
     val clickController = BClickController()
 

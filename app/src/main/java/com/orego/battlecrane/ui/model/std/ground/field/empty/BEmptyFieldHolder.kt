@@ -42,7 +42,7 @@ class BEmptyFieldHolder(uiGameContext: BUiGameContext, emptyField: BEmptyField) 
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnDestroyUnitPipe.Event && event.unitId == this.emptyField.unitId) {
                 this.uiContext.apply {
-                    this.eventPipe.addAnimation {
+                    this.animationPipe.addAnimation {
                         this.uiProvider.mapConstraintLayout.removeView(this@OnDestroyNode.view)
                     }
                 }
