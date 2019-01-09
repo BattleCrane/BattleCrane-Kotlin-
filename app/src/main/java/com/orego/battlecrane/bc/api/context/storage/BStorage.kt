@@ -36,6 +36,10 @@ class BStorage(scenario: BGameScenario, context: BGameContext) {
 
     inline fun <reified T> getHeap(heapClazz: Class<T>): T = this.heapMap[heapClazz] as T
 
+    fun addHeap(heap : BHeap<*>) {
+        this.heapMap[heap::class.java] = heap
+    }
+
     fun addObject(any: Any) {
         val heaps = this.heapMap.values.toList()
         for (i in 0 until heaps.size) {

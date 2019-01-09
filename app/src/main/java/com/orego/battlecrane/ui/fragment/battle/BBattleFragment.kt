@@ -10,8 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.ui.fragment.BFragment
-import com.orego.battlecrane.ui.model.api.clickController.BClickController
-import com.orego.battlecrane.ui.model.api.eventPipe.BUiEventPipe
+import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.util.ViewSize
 import com.orego.battlecrane.ui.util.hide
 import com.orego.battlecrane.ui.util.measure
@@ -72,7 +71,9 @@ class BBattleFragment : BFragment() {
          */
 
         private val uiGameContext by lazy {
-            BUiGameContext(this.manager.gameContext)
+            val gameContext = this.manager.gameContext
+            val uiProvider = UiProvider()
+            BUiGameContext(gameContext, uiProvider)
         }
 
         private val scenarioViewModel by lazy {
@@ -119,46 +120,43 @@ class BBattleFragment : BFragment() {
         }
 
         private fun initUiShell() {
-            this.scenarioViewModel.configureUiShell(this.uiGameContext)
+            this.uiGameContext.configureUiAdjutants(this.scenarioViewModel.uiAdjutantFactory)
+            this.uiGameContext.configureUiUnits(this.scenarioViewModel.uiUnitFactory)
         }
 
         private fun startGame() {
             this.uiGameContext.gameContext.startGame()
         }
+    }
 
-        /**
-         * Ui Context.
-         */
+    /**
+     * Provides interaction with ui.
+     */
 
-        inner class BUiGameContext(val gameContext: BGameContext) {
+    inner class UiProvider {
 
-            val applicationContext by lazy {
-                this@BBattleFragment.context!!
-            }
+        val applicationContext by lazy {
+            this@BBattleFragment.context!!
+        }
 
-            val mapConstraintLayout: ConstraintLayout by lazy {
-                this@BBattleFragment.fragment_battle_map_constraint_layout
-            }
+        val mapConstraintLayout: ConstraintLayout by lazy {
+            this@BBattleFragment.fragment_battle_map_constraint_layout
+        }
 
-            val buildToolsSurface: ConstraintLayout by lazy {
-                this@BBattleFragment.fragment_battle_build_actions
-            }
+        val buildToolConstraintLayout: ConstraintLayout by lazy {
+            this@BBattleFragment.fragment_battle_build_actions
+        }
 
-            val trainToolsSurface: ConstraintLayout by lazy {
-                this@BBattleFragment.fragment_battle_train_actions
-            }
+        val trainToolConstraintLayout: ConstraintLayout by lazy {
+            this@BBattleFragment.fragment_battle_train_actions
+        }
 
-            val buildButton: ImageView by lazy {
-                this@BBattleFragment.fragment_battle_to_build_image_view
-            }
+        val buildButtonImageView: ImageView by lazy {
+            this@BBattleFragment.fragment_battle_to_build_image_view
+        }
 
-            val trainButton: ImageView by lazy {
-                this@BBattleFragment.fragment_battle_to_train_image_view
-            }
-
-            val eventPipe = BUiEventPipe(this.gameContext)
-
-            val clickController = BClickController()
+        val trainButtonImageView: ImageView by lazy {
+            this@BBattleFragment.fragment_battle_to_train_image_view
         }
     }
 }

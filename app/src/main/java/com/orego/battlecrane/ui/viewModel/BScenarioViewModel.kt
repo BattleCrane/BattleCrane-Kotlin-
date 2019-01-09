@@ -1,52 +1,28 @@
 package com.orego.battlecrane.ui.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAdjutantHeap
-import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
-import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
-import com.orego.battlecrane.ui.model.api.shell.BUiRaceShell
-import com.orego.battlecrane.ui.model.api.shell.item.BUiItemShell
+import com.orego.battlecrane.ui.model.api.holder.BHolder
+import com.orego.battlecrane.ui.model.api.holder.adjutant.BAdjutantHolder
+import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.ui.model.api.util.RaceFactory
 
 class BScenarioViewModel : ViewModel() {
 
     var scenario: BGameScenario? = null
 
-    val unitShell = BUiItemShell<BUnit>()
+    val uiUnitFactory: BHolder.Factory<BUnit> = BUnitHolder.Factory()
 
-    val adjutantShell = BUiItemShell<BAdjutant>()
+    val uiAdjutantFactory: BHolder.Factory<BAdjutant> = BAdjutantHolder.Factory()
 
-    fun putScenario(scenario: BGameScenario) {
-        this.scenario = scenario
-    }
-
-    fun addShell(shell: BUiRaceShell) {
-        this.adjutantShell.addSupplier(shell.adjutantSupplier)
-        shell.unitSupplierSet.forEach {
-                supplier -> this.unitShell.addSupplier(supplier)
-        }
-    }
-
-    fun configureUiShell(uiGameContext: BBattleFragment.Presenter.BUiGameContext) {
-        this.initUnits(uiGameContext)
-        this.initAdjutants(uiGameContext)
-    }
-
-    private fun initUnits(uiGameContext: BBattleFragment.Presenter.BUiGameContext) {
-        val units = uiGameContext.gameContext.storage.getHeap(BUnitHeap::class.java).getObjectList()
-        for (unit in units) {
-            val type = unit::class.java.name
-            this.unitShell.provide(uiGameContext, unit, type)
-        }
-    }
-
-    private fun initAdjutants(uiGameContext: BBattleFragment.Presenter.BUiGameContext) {
-        val adjutants = uiGameContext.gameContext.storage.getHeap(BAdjutantHeap::class.java).getObjectList()
-        for (adjutant in adjutants) {
-            val type = adjutant::class.java.name
-            this.adjutantShell.provide(uiGameContext, adjutant, type)
+    fun addRaceFactory(factory: RaceFactory) {
+        val adjutantBuilder = factory.uiAdjutantBuilder
+        val unitBuilders = factory.uiUnitBuilders
+        this.uiAdjutantFactory.addBuilder(adjutantBuilder.first, adjutantBuilder.second)
+        for (entry in unitBuilders) {
+            this.uiUnitFactory.addBuilder(entry)
         }
     }
 }
