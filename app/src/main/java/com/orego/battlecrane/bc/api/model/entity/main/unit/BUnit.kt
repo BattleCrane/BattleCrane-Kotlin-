@@ -14,4 +14,7 @@ abstract class BUnit(
     abstract val height: Int
 
     abstract val width: Int
+
+    override fun toString() = "Name: " + this::class.java.name + " Id: " + this.unitId + " x: " + this.x +
+            " y: " + this.y
 }

@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.BProducablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.BOnProduceActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
@@ -18,9 +19,8 @@ class BProducableNode(context: BGameContext) : BNode(context) {
     override val name = NAME
 
     init {
-        this.connectInnerPipe(
-            BOnProduceEnablePipe(context)
-        )
+        this.connectInnerPipe(BOnProduceEnablePipe(context))
+        this.connectInnerPipe(BOnProduceActionPipe(context))
     }
 
     override fun handle(event: BEvent) : BEvent? {

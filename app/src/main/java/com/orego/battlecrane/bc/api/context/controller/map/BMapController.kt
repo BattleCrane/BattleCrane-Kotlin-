@@ -17,53 +17,54 @@ class BMapController {
         fun inBounds(x: Int, y: Int) = x in 0 until MAP_SIZE && y in 0 until MAP_SIZE
     }
 
-    private val matrix = Array(MAP_SIZE) { Array(MAP_SIZE) { NOT_INITIALIZED_UNIT_ID } }
+    private val matrix = Array(MAP_SIZE) { LongArray(MAP_SIZE) { NOT_INITIALIZED_UNIT_ID } }
 
-    fun initMap(context: BGameContext){
+    fun initMap(context: BGameContext) {
         //Place units on mapConstraintLayout:
         val unitHeap = context.storage.getHeap(BUnitHeap::class.java)
         unitHeap.getObjectList().forEach { unit ->
             this.placeUnitOnMap(unit)
         }
+        println(this)
         //Check initialized mapConstraintLayout:
-        this.matrix.forEach { column ->
-            column.forEach { id ->
-                val isNotInitiablizedField = id == NOT_INITIALIZED_UNIT_ID
+        for (x in 0 until MAP_SIZE) {
+            for (y in 0 until MAP_SIZE) {
+                val isNotInitiablizedField = this.matrix[x][y] == NOT_INITIALIZED_UNIT_ID
                 if (isNotInitiablizedField) {
+                    println("x: $x y: $y")
                     throw IllegalStateException("All mapConstraintLayout must be initialized!")
                 }
             }
         }
     }
 
-    fun placeUnitOnMap(unit: BUnit): Boolean {
+    fun placeUnitOnMap(unit: BUnit) : Boolean {
+        println("! $unit")
         val startX = unit.x
         val startY = unit.y
-        val endX = startX + unit.width
-        val endY = startX + unit.height
-        if (inBounds(startX, startY)
-            && inBounds(startX, endY)
-            && inBounds(endX, startY)
-            && inBounds(endX, endY)
-        ) {
-            val unitId = unit.unitId
-            if (unitId != NOT_INITIALIZED_UNIT_ID) {
-                //Attach unit to matrix:
-                for (i in startX until endX) {
-                    for (j in startY until endY) {
-                        this.matrix[startX][startY] = unitId
-                    }
-                }
-                return true
-            } else {
-                throw IllegalStateException("Any unit must have an generated id!")
+        val unitId = unit.unitId
+        //Attach unit to matrix:
+        for (x in startX until startX + unit.width) {
+            for (y in startY until startY + unit.height) {
+                this.matrix[x][y] = unitId
             }
         }
-        return false
+        return true
     }
 
     fun getUnitIdByPosition(x: Int, y: Int) = this.matrix[x][y]
 
     fun getUnitByPosition(context: BGameContext, x: Int, y: Int) =
         context.storage.getHeap(BUnitHeap::class.java)[this.getUnitIdByPosition(x, y)]
+
+    override fun toString(): String {
+        val stringBuilder = StringBuilder()
+        for (x in 0 until MAP_SIZE) {
+            for (y in 0 until MAP_SIZE) {
+                stringBuilder.append(this.matrix[x][y]).append(' ')
+            }
+            stringBuilder.append('\n')
+        }
+        return stringBuilder.toString()
+    }
 }

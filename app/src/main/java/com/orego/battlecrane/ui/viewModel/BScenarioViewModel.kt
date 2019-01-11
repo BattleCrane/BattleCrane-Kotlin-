@@ -5,6 +5,7 @@ import com.orego.battlecrane.bc.api.scenario.BGameScenario
 import com.orego.battlecrane.bc.std.scenario.skirmish.BStandardSkirmishScenario
 import com.orego.battlecrane.ui.model.api.plugin.BLocationPlugin
 import com.orego.battlecrane.ui.model.api.plugin.BRacePlugin
+import com.orego.battlecrane.ui.model.std.location.grass.BGrassLocationPlugin
 import com.orego.battlecrane.ui.model.std.race.human.BHumanPlugin
 
 class BScenarioViewModel : ViewModel() {
@@ -27,5 +28,6 @@ class BScenarioViewModel : ViewModel() {
     init {
         this.gameScenario = BStandardSkirmishScenario()
         this.racePlugins[BHumanPlugin::class.java] = BHumanPlugin()
+        this.locationPlugin = BGrassLocationPlugin()
     }
 }
