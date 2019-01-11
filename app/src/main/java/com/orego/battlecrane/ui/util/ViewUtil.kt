@@ -6,12 +6,12 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 fun View.onMeasured(callback: () -> Unit) {
-    val observer = this.viewTreeObserver
-    observer.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+    val getObserver: () -> ViewTreeObserver = { this.viewTreeObserver }
+    getObserver().addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
 
         override fun onGlobalLayout() {
             callback()
-            observer.removeOnGlobalLayoutListener(this)
+            getObserver().removeOnGlobalLayoutListener(this)
         }
     })
 }
@@ -19,11 +19,11 @@ fun View.onMeasured(callback: () -> Unit) {
 suspend fun View.measure() =
     suspendCoroutine<ViewSize> { continuation ->
         val view = this
-        val observer = this.viewTreeObserver
-        observer.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        val getObserver: () -> ViewTreeObserver = { this.viewTreeObserver }
+        getObserver().addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
 
             override fun onGlobalLayout() {
-                observer.removeOnGlobalLayoutListener(this)
+                getObserver().removeOnGlobalLayoutListener(this)
                 continuation.resume(ViewSize(view.measuredWidth, view.measuredHeight))
             }
         })

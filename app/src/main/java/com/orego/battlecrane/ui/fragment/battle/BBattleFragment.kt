@@ -44,12 +44,22 @@ class BBattleFragment : BFragment() {
 
     override fun onStart() {
         super.onStart()
-        GlobalScope.launch(Dispatchers.Main) {
-            this@BBattleFragment.mapSize = this@BBattleFragment.fragment_battle_map_constraint_layout.measure()
-            this@BBattleFragment.buildToolSize = this@BBattleFragment.fragment_battle_build_actions.measure()
-            this@BBattleFragment.trainTools = this@BBattleFragment.fragment_battle_train_actions.measure()
+        this.fragment_battle_root.onMeasured {
             this@BBattleFragment.presenter.start()
         }
+
+//        GlobalScope.launch(Dispatchers.Main) {
+//            this@BBattleFragment.mapSize = this@BBattleFragment.fragment_battle_map_constraint_layout.measure()
+//            println("YES")
+//            //YES:
+//            this@BBattleFragment.buildToolSize = this@BBattleFragment.fragment_battle_build_actions.measure()
+//            println("YES")
+//            //YES:
+//            this@BBattleFragment.trainTools = this@BBattleFragment.fragment_battle_train_actions.measure()
+//            println("YES")
+//            //YES:
+//
+//        }
     }
 
     override fun onStop() {
