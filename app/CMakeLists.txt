@@ -16,16 +16,16 @@ add_library( # Sets the itemClassName of the library.
         # Sets the library as a shared library.
         SHARED
 
-        # Provides a relative path to your source file(s).
+        # Provides a relative itemPath to your source file(s).
         src/main/cpp/native-lib.cpp)
 
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
+# Searches for a specified prebuilt library and stores the itemPath as a
+# variable. Because CMake includes system libraries in the search itemPath by
 # default, you only need to specify the itemClassName of the public NDK library
 # you want to connectInnerPipe. CMake verifies that the library exists before
 # completing its buildUnit.
 
-find_library( # Sets the itemClassName of the path variable.
+find_library( # Sets the itemClassName of the itemPath variable.
         log-lib
 
         # Specifies the itemClassName of the NDK library that

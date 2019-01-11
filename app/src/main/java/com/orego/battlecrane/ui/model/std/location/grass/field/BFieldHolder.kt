@@ -1,38 +1,35 @@
-package com.orego.battlecrane.ui.model.std.ground.field.empty
+package com.orego.battlecrane.ui.model.std.location.grass.field
 
 import android.view.View
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
+import com.orego.battlecrane.bc.std.location.grass.field.BField
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 
-class BEmptyFieldHolder(uiGameContext: BUiGameContext, emptyField: BEmptyField) :
-    BUnitHolder(uiGameContext.gameContext, emptyField) {
+abstract class BFieldHolder(uiGameContext: BUiGameContext, item: BField) :
+    BUnitHolder(uiGameContext, item) {
 
-    companion object {
-
-        private const val PATH = "std/grass/unit/empty_field.png"
-    }
-
-    override val unitView: View = BUnitHolder.createImageView(uiGameContext, emptyField, PATH)
+    final override val unitView: View = BUnitHolder.placeImageView(uiGameContext, item, this.getItemPath())
 
     init {
-        OnDestroyNode.connect(uiGameContext, emptyField, this.unitView)
+        OnDestroyNode.connect(uiGameContext, item, this.unitView)
     }
+
+    protected abstract fun getItemPath() : String
 
     @BUnitComponent
     class OnDestroyNode(
         private val uiContext: BUiGameContext,
-        private val emptyField: BEmptyField,
+        private val emptyField: BField,
         private val view: View
     ) : BNode(uiContext.gameContext) {
 
         companion object {
 
-            fun connect(uiContext: BUiGameContext, emptyField: BEmptyField, view: View) {
+            fun connect(uiContext: BUiGameContext, emptyField: BField, view: View) {
                 val onDestroyNode = OnDestroyNode(uiContext, emptyField, view)
                 val pipeId = emptyField.destroyConnection.sourcePipeId
                 uiContext.gameContext.pipeline.bindNodeToPipe(pipeId, onDestroyNode)

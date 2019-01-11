@@ -198,10 +198,4 @@ class BPlayer(context: BGameContext) {
             this@TurnTimerNode.turnTimerTask = this
         }
     }
-
-    /**
-     * Generator.
-     */
-
-
 }

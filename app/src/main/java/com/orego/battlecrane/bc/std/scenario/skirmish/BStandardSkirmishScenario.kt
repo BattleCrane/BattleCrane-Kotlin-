@@ -41,7 +41,7 @@ class BStandardSkirmishScenario : BGameScenario {
             adjutantList.add(BHumanAdjutant(context, players[1].playerId))
             return adjutantList
         } else {
-            throw IllegalArgumentException("Standard skirmish scenario supports two players!")
+            throw IllegalArgumentException("Standard skirmish gameScenario supports two players!")
         }
     }
 
@@ -72,7 +72,7 @@ class BStandardSkirmishScenario : BGameScenario {
             }
             return this
         } else {
-            throw IllegalArgumentException("Standard skirmish scenario supports two players!")
+            throw IllegalArgumentException("Standard skirmish gameScenario supports two players!")
         }
     }
 

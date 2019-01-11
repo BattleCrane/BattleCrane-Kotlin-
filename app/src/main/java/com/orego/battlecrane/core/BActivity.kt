@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentTransaction
 import com.orego.battlecrane.R
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
-import com.orego.battlecrane.ui.fragment.battleLoading.BBattleLoadingFragment
 
 class BActivity : AppCompatActivity() {
 
@@ -28,7 +27,7 @@ class BActivity : AppCompatActivity() {
         if (this.activityController == null) {
             this.activityController = BActivityController()
         }
-        this.activityController!!.requestFragment(BBattleLoadingFragment::class.java, this.supportFragmentManager)
+        this.activityController!!.requestFragment(BBattleFragment::class.java, this.supportFragmentManager)
     }
 
     /**
@@ -39,9 +38,8 @@ class BActivity : AppCompatActivity() {
 
         private lateinit var displayedFragment: BFragment
 
-        private val fragmentMap = mutableMapOf(
-            BBattleFragment::class.java to BBattleFragment(),
-            BBattleLoadingFragment::class.java to BBattleLoadingFragment()
+        private val fragmentMap : MutableMap<Class<out BFragment>, BFragment> = mutableMapOf(
+            BBattleFragment::class.java to BBattleFragment()
         )
 
         fun requestFragment(

@@ -4,22 +4,25 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
-import com.orego.battlecrane.ui.model.api.heap.BUnitHolderHeap
 import com.orego.battlecrane.ui.model.api.holder.BHolder
 
-abstract class BUnitHolder(gameContext: BGameContext, unit : BUnit) : BHolder<BUnit>(unit) {
+abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder<BUnit>(unit) {
 
-    abstract val unitView : View
+    abstract val unitView: View
 
-    val uiUnitId : Long = gameContext.contextGenerator.getIdGenerator(BUnitHolderHeap::class.java).generateId()
+    val uiUnitId: Long
+
+    init {
+        val contextGenerator = uiGameContext.gameContext.contextGenerator
+        this.uiUnitId = contextGenerator.getIdGenerator(BUnitHolder::class.java).generateId()
+    }
 
     companion object {
 
-        fun createImageView(uiContext: BUiGameContext, item : BUnit, itemPath : String) : ImageView {
+        fun placeImageView(uiContext: BUiGameContext, item: BUnit, itemPath: String): ImageView {
             val uiProvider = uiContext.uiProvider
             val applicationContext = uiProvider.applicationContext
             val constraintLayout = uiProvider.mapConstraintLayout
@@ -27,7 +30,7 @@ abstract class BUnitHolder(gameContext: BGameContext, unit : BUnit) : BHolder<BU
             val cellSizeX = constraintLayout.measuredWidth / BMapController.MAP_SIZE
             val cellSizeY = constraintLayout.measuredHeight / BMapController.MAP_SIZE
             //Create params:
-            val constraintParams = ConstraintLayout.LayoutParams(cellSizeX, cellSizeY)
+            val constraintParams = ConstraintLayout.LayoutParams(item.width * cellSizeX, item.height * cellSizeY)
                 .also {
                     it.startToStart = constraintLayoutId
                     it.topToTop = constraintLayoutId

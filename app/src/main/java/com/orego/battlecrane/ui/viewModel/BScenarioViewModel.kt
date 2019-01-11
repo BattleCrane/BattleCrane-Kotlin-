@@ -1,28 +1,23 @@
 package com.orego.battlecrane.ui.viewModel
 
 import androidx.lifecycle.ViewModel
-import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
-import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
-import com.orego.battlecrane.ui.model.api.holder.BHolder
-import com.orego.battlecrane.ui.model.api.holder.adjutant.BAdjutantHolder
-import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
-import com.orego.battlecrane.ui.model.api.util.RaceFactory
+import com.orego.battlecrane.ui.model.api.plugin.BLocationPlugin
+import com.orego.battlecrane.ui.model.api.plugin.BRacePlugin
 
 class BScenarioViewModel : ViewModel() {
 
-    var scenario: BGameScenario? = null
+    /**
+     * Scenario.
+     */
 
-    val uiUnitFactory: BHolder.Factory<BUnit> = BUnitHolder.Factory()
+    var gameScenario: BGameScenario? = null
 
-    val uiAdjutantFactory: BHolder.Factory<BAdjutant> = BAdjutantHolder.Factory()
+    /**
+     * Plugin.
+     */
 
-    fun addRaceFactory(factory: RaceFactory) {
-        val adjutantBuilder = factory.uiAdjutantBuilder
-        val unitBuilders = factory.uiUnitBuilders
-        this.uiAdjutantFactory.addBuilder(adjutantBuilder.first, adjutantBuilder.second)
-        for (entry in unitBuilders) {
-            this.uiUnitFactory.addBuilder(entry)
-        }
-    }
+    val racePlugins : Map<Class<out BRacePlugin>, BRacePlugin> = mutableMapOf()
+
+    var locationPlugin : BLocationPlugin? = null
 }

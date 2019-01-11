@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.model.api.holder
 
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 
-abstract class BHolder<T>(val item : T) {
+abstract class BHolder<T>(open val item : T) {
 
     open class Factory<T : Any> {
 

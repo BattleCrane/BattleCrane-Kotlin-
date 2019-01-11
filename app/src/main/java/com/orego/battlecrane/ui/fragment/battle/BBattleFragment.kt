@@ -11,10 +11,7 @@ import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
-import com.orego.battlecrane.ui.util.ViewSize
-import com.orego.battlecrane.ui.util.hide
-import com.orego.battlecrane.ui.util.measure
-import com.orego.battlecrane.ui.util.show
+import com.orego.battlecrane.ui.util.*
 import com.orego.battlecrane.ui.viewModel.BScenarioViewModel
 import kotlinx.android.synthetic.main.fragment_battle.*
 import kotlinx.coroutines.*
@@ -103,14 +100,14 @@ class BBattleFragment : BFragment() {
 
         private fun loadGame() =
             GlobalScope.launch(Dispatchers.Main) {
-                this@Presenter.createGameContext()
-                this@Presenter.initUiShell()
+                this@Presenter.installGameScenario()
+                this@Presenter.installGraphic()
                 this@Presenter.startGame()
             }
 
-        private suspend fun createGameContext() {
+        private suspend fun installGameScenario() {
             this.manager.gameContext = withContext(Dispatchers.IO) {
-                val scenario = this@Presenter.scenarioViewModel.scenario
+                val scenario = this@Presenter.scenarioViewModel.gameScenario
                 if (scenario != null) {
                     BGameContext(scenario)
                 } else {
@@ -119,13 +116,14 @@ class BBattleFragment : BFragment() {
             }
         }
 
-        private fun initUiShell() {
-            this.uiGameContext.configureUiAdjutants(this.scenarioViewModel.uiAdjutantFactory)
-            this.uiGameContext.configureUiUnits(this.scenarioViewModel.uiUnitFactory)
+        private fun installGraphic() {
+            this.uiGameContext.installLocationPlugin(this.scenarioViewModel.locationPlugin)
+            this.uiGameContext.installRacePlugins(this.scenarioViewModel.racePlugins)
         }
 
         private fun startGame() {
-            this.uiGameContext.gameContext.startGame()
+            this.uiGameContext.startGame()
+            this@BBattleFragment.fragment_battle_loading_constraint_layout.gone()
         }
     }
 
