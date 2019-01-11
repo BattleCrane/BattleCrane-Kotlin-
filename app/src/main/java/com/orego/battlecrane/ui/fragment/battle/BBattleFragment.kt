@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
@@ -166,6 +167,10 @@ class BBattleFragment : BFragment() {
 
         val trainButtonImageView: ImageView by lazy {
             this@BBattleFragment.fragment_battle_to_train_image_view
+        }
+
+        val timeProgressBar : ProgressBar by lazy {
+            this@BBattleFragment.fragment_battle_end_turn_progress_bar
         }
     }
 }
