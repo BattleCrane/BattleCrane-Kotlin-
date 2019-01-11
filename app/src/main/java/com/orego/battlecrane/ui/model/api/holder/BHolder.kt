@@ -17,7 +17,6 @@ abstract class BHolder<T>(open val item: T) {
         }
 
         fun build(uiGameContext: BUiGameContext, item: T): BHolder<T> {
-            println("ITEM: " + item::class.java.name)
             val builder = this.builderMap[item::class.java]!!
             return builder.build(uiGameContext, item)
         }

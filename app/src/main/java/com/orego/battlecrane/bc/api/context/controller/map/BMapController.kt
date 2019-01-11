@@ -25,20 +25,19 @@ class BMapController {
         unitHeap.getObjectList().forEach { unit ->
             this.placeUnitOnMap(unit)
         }
-        println(this)
         //Check initialized mapConstraintLayout:
         for (x in 0 until MAP_SIZE) {
             for (y in 0 until MAP_SIZE) {
                 val isNotInitiablizedField = this.matrix[x][y] == NOT_INITIALIZED_UNIT_ID
                 if (isNotInitiablizedField) {
-                    println("x: $x y: $y")
-                    throw IllegalStateException("All mapConstraintLayout must be initialized!")
+                    println()
+                    throw IllegalStateException("Position x: $x y: $y is not initialized")
                 }
             }
         }
     }
 
-    fun placeUnitOnMap(unit: BUnit) : Boolean {
+    fun placeUnitOnMap(unit: BUnit): Boolean {
         println("! $unit")
         val startX = unit.x
         val startY = unit.y

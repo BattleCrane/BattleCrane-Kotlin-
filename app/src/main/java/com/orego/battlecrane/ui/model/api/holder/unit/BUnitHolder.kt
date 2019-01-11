@@ -8,6 +8,7 @@ import com.orego.battlecrane.bc.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.BHolder
+import org.intellij.lang.annotations.MagicConstant
 
 abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder<BUnit>(unit) {
 
@@ -22,6 +23,9 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
 
     companion object {
 
+        @MagicConstant
+        private const val MAGIC_PADDING = 3
+
         fun placeImageView(uiContext: BUiGameContext, item: BUnit, itemPath: String): ImageView {
             val uiProvider = uiContext.uiProvider
             val applicationContext = uiProvider.applicationContext
@@ -30,7 +34,9 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
             val cellSizeX = constraintLayout.measuredWidth / BMapController.MAP_SIZE
             val cellSizeY = constraintLayout.measuredHeight / BMapController.MAP_SIZE
             //Create params:
-            val constraintParams = ConstraintLayout.LayoutParams(item.width * cellSizeX, item.height * cellSizeY)
+            val constraintParams = ConstraintLayout.LayoutParams(
+                item.width * cellSizeX - MAGIC_PADDING, item.height * cellSizeY - MAGIC_PADDING
+            )
                 .also {
                     it.startToStart = constraintLayoutId
                     it.topToTop = constraintLayoutId
