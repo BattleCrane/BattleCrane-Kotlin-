@@ -14,7 +14,14 @@ import com.orego.battlecrane.bc.api.scenario.BGameScenario
  */
 
 @BContextComponent
-class BGameContext(scenario: BGameScenario) {
+class BGameContext {
+
+    /**
+     * Id Generator.
+     */
+
+    val contextGenerator = BContextGenerator()
+
 
     /**
      * Pipeline.
@@ -28,27 +35,27 @@ class BGameContext(scenario: BGameScenario) {
      */
 
     @BContextComponent
-    val storage = BStorage(scenario, this)
+    val storage = BStorage(this)
 
     /**
      * Controller.
      */
 
     @BContextComponent
-    val mapController = BMapController(this)
+    val mapController = BMapController()
 
     @BContextComponent
-    val playerController = BPlayerController(this, scenario.firstTurnPlayerPosition)
-
-    /**
-     * Id Generator.
-     */
-
-    val contextGenerator = BContextGenerator()
+    val playerController = BPlayerController(this)
 
     /**
      * Launches a game.
      */
+
+    fun setScenario(scenario: BGameScenario) {
+        this.storage.setScenario(scenario)
+        this.playerController.setScenario(scenario)
+        this.mapController.initMap(this)
+    }
 
     fun startGame() {
         this.pipeline.pushEvent(OnGameStartedEvent())

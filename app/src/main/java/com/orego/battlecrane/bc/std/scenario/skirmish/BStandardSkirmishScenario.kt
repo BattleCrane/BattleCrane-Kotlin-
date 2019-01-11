@@ -15,7 +15,7 @@ import java.util.*
 
 class BStandardSkirmishScenario : BGameScenario {
 
-    override val firstTurnPlayerPosition = Random().nextInt(1)
+    override val startTurnPlayerPosition = Random().nextInt(1)
 
     override fun getPlayers(context: BGameContext): List<BPlayer> {
         val playerList = mutableListOf<BPlayer>()
@@ -34,6 +34,7 @@ class BStandardSkirmishScenario : BGameScenario {
 
     override fun getAdjutants(context: BGameContext): List<BAdjutant> {
         val adjutantList = mutableListOf<BAdjutant>()
+        println("HEAP MAP SIZE: " + context.storage.heapMap.size)
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()
         if (players.size == 2) {

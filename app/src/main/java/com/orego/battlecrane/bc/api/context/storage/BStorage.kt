@@ -7,22 +7,7 @@ import com.orego.battlecrane.bc.api.context.storage.heap.implementation.*
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 
 @BContextComponent
-class BStorage(scenario: BGameScenario, context: BGameContext) {
-
-    init {
-        //Player:
-        scenario.getPlayers(context).forEach { player ->
-            this.addObject(player)
-        }
-        //Adjutant:
-        scenario.getAdjutants(context).forEach { adjutant ->
-            this.addObject(adjutant)
-        }
-        //Unit:
-        scenario.getUnits(context).forEach { unit ->
-            this.addObject(unit)
-        }
-    }
+class BStorage(private val context: BGameContext) {
 
     val heapMap = mutableMapOf<Class<*>, BHeap<*>>(
         BPlayerHeap::class.java to BPlayerHeap(),
@@ -33,6 +18,21 @@ class BStorage(scenario: BGameScenario, context: BGameContext) {
         BHitPointableHeap::class.java to BHitPointableHeap(),
         BProducableHeap::class.java to BProducableHeap()
     )
+
+    fun setScenario(scenario: BGameScenario) {
+        //Player:
+        scenario.getPlayers(this.context).forEach { player ->
+            this.addObject(player)
+        }
+        //Adjutant:
+        scenario.getAdjutants(this.context).forEach { adjutant ->
+            this.addObject(adjutant)
+        }
+        //Unit:
+        scenario.getUnits(this.context).forEach { unit ->
+            this.addObject(unit)
+        }
+    }
 
     inline fun <reified T> getHeap(heapClazz: Class<T>): T = this.heapMap[heapClazz] as T
 

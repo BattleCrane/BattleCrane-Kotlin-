@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHea
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 
 @BContextComponent
-class BMapController(context: BGameContext) {
+class BMapController {
 
     companion object {
 
@@ -19,15 +19,12 @@ class BMapController(context: BGameContext) {
 
     private val matrix = Array(MAP_SIZE) { Array(MAP_SIZE) { NOT_INITIALIZED_UNIT_ID } }
 
-    init {
+    fun initMap(context: BGameContext){
         //Place units on mapConstraintLayout:
         val unitHeap = context.storage.getHeap(BUnitHeap::class.java)
         unitHeap.getObjectList().forEach { unit ->
             this.placeUnitOnMap(unit)
         }
-    }
-
-    init {
         //Check initialized mapConstraintLayout:
         this.matrix.forEach { column ->
             column.forEach { id ->

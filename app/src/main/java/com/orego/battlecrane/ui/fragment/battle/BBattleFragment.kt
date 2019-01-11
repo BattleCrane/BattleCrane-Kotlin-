@@ -116,14 +116,15 @@ class BBattleFragment : BFragment() {
             }
 
         private suspend fun installGameScenario() {
-            this.manager.gameContext = withContext(Dispatchers.IO) {
-                val scenario = this@Presenter.scenarioViewModel.gameScenario
-                if (scenario != null) {
-                    BGameContext(scenario)
-                } else {
-                    throw IllegalStateException("Scenario isn't set!")
-                }
-            }
+            this.manager.gameContext =
+                    withContext(Dispatchers.IO) {
+                        val scenario = this@Presenter.scenarioViewModel.gameScenario
+                        if (scenario != null) {
+                            BGameContext().also { it.setScenario(scenario) }
+                        } else {
+                            throw IllegalStateException("Scenario isn't set!")
+                        }
+                    }
         }
 
         private fun installGraphic() {

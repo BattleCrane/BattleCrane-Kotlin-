@@ -33,5 +33,5 @@ interface BGameScenario {
      * 4.) Invokes when player table is ready.
      */
 
-    val firstTurnPlayerPosition: Int
+    val startTurnPlayerPosition: Int
 }
