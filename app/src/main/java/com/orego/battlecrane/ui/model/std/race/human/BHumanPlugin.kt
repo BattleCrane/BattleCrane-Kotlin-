@@ -3,6 +3,7 @@ package com.orego.battlecrane.ui.model.std.race.human
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.*
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.BHumanMarine
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.BHumanTank
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder

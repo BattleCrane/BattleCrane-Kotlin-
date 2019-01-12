@@ -56,7 +56,7 @@ abstract class BNode(protected val context: BGameContext) {
         return null
     }
 
-    fun wrapInPipe() = BPipe(this.context, mutableListOf(this))
+    open fun wrapInPipe() = BPipe(this.context, mutableListOf(this))
 
     protected fun pushEventIntoPipes(event: BEvent) : BEvent {
         val pipes = this.pipeMap.values.toList()

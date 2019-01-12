@@ -98,13 +98,14 @@ class BHumanHeadquartersHolder(uiGameContext: BUiGameContext, override val item:
             val sizeY = constraintLayout.measuredHeight / BMapController.MAP_SIZE
             //Get headquarters:
             val headquarters = this.holder.item
+            val producableId = headquarters.producableId
             val playerId = headquarters.playerId
             //Create images:
             this.actionImageViewSet.clear()
             this.actionImageViewSet.add(
-                BHumanBuildBarracksImageView.create(uiGameContext, headquarters.producableId, playerId)
+                BHumanBuildBarracksImageView.create(uiGameContext, producableId, playerId)
             )
-            this.actionImageViewSet.add(BHumanTurretHolder.placeImageView())
+            this.actionImageViewSet.add(BHumanBuildTurretImageView.create(uiGameContext, producableId, playerId))
             this.actionImageViewSet.add(BHumanWallHolder.placeImageView())
             if (BHumanTools.countGenerators(this.context, playerId) < BHumanTools.GENERATOR_LIMIT) {
                 this.actionImageViewSet.add(BHumanGeneratorHolder.placeImageView())

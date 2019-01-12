@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
 

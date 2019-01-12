@@ -1,21 +1,13 @@
 package com.orego.battlecrane.bc.api.model.player
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.node.BOnTurnStartedNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPlayerComponent
-import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAdjutantHeap
 
-class BPlayer(context: BGameContext) {
+open class BPlayer private constructor(context: BGameContext) {
 
     companion object {
 
-        const val NEUTRAL_PLAYER_ID : Long = 0
+        const val NEUTRAL_PLAYER_ID: Long = 0
     }
 
     /**
@@ -28,7 +20,7 @@ class BPlayer(context: BGameContext) {
      * Property.
      */
 
-    fun isAblePlayer(context: BGameContext) : Boolean {
+    fun isAblePlayer(context: BGameContext): Boolean {
         val adjutantHeap = context.storage.getHeap(BAdjutantHeap::class.java)
         for (id in this.adjutants) {
             val adjutant = adjutantHeap[id]
@@ -44,18 +36,6 @@ class BPlayer(context: BGameContext) {
     val allies = mutableSetOf<Long>()
 
     val enemies = mutableSetOf<Long>()
-
-    /**
-     * Context.
-     */
-
-    val turnStartedConnection = BPipeConnection.createByNode(
-        context, BOnTurnStartedNode.NAME, OnTurnStartedNode(context, this.playerId)
-    )
-
-    val turnFinishedConnection = BPipeConnection.createByNode(
-        context, BOnTurnFinishedNode.NAME, OnTurnFinishedNode(context, this.playerId)
-    )
 
     /**
      * Player.
@@ -75,31 +55,12 @@ class BPlayer(context: BGameContext) {
 
     fun isAlly(player: Long) = this.allies.contains(player)
 
-    @BPlayerComponent
-    class OnTurnStartedNode(context: BGameContext, var playerId: Long) : BNode(context) {
+    /**
+     * Configure player.
+     */
 
-        override fun handle(event: BEvent): BEvent? {
-            return if (event is BOnTurnStartedPipe.Event
-                && event.playerId == this.playerId
-            ) {
-                event.also { this.pushEventIntoPipes(it) }
-            } else {
-                null
-            }
-        }
-    }
+    open class Builder {
 
-    @BPlayerComponent
-    class OnTurnFinishedNode(context: BGameContext, var playerId: Long) : BNode(context) {
-
-        override fun handle(event: BEvent): BEvent? {
-            return if (event is BOnTurnFinishedPipe.Event
-                && event.playerId == this.playerId
-            ) {
-                event.also { this.pushEventIntoPipes(it) }
-            } else {
-                null
-            }
-        }
+        open fun build(context: BGameContext) = BPlayer(context)
     }
 }

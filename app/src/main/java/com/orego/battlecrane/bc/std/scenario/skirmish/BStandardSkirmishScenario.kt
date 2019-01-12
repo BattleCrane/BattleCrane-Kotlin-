@@ -11,6 +11,7 @@ import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
+import com.orego.battlecrane.bc.std.scenario.skirmish.player.BStandardSkirmishPlayerBuilder
 import java.util.*
 
 class BStandardSkirmishScenario : BGameScenario {
@@ -19,8 +20,9 @@ class BStandardSkirmishScenario : BGameScenario {
 
     override fun getPlayers(context: BGameContext): List<BPlayer> {
         val playerList = mutableListOf<BPlayer>()
-        val redPlayer = BPlayer(context)
-        val bluePlayer = BPlayer(context)
+        val builder = BStandardSkirmishPlayerBuilder()
+        val redPlayer = builder.build(context)
+        val bluePlayer = builder.build(context)
 
         //Set enemies:
         redPlayer.addEnemy(bluePlayer.playerId)
@@ -107,4 +109,5 @@ class BStandardSkirmishScenario : BGameScenario {
         }
         return this
     }
+
 }

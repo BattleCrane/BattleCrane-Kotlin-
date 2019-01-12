@@ -15,6 +15,7 @@ import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.*
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.GENERATOR_LIMIT
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countDiffBarracksFactory
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countGenerators
@@ -212,7 +213,7 @@ object BHumanEvents {
             Event(producableId, x, y, BHumanBarracks.WIDTH, BHumanBarracks.HEIGHT) {
 
             override fun getEvent(playerId: Long, x: Int, y: Int) =
-                BHumanBarracks.OnCreateNode.createEvent(playerId, x, y)
+                BHumanBarracks.BHumanBarracksOnCreateNode.createEvent(playerId, x, y)
         }
 
         class FactoryEvent(producableId: Long, x: Int, y: Int) :
