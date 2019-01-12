@@ -1,10 +1,10 @@
-package com.orego.battlecrane.ui.model.std.util.timer
+package com.orego.battlecrane.ui.model.std.scenario.skirmish.timer
 
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPlayerComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.std.scenario.util.timer.BTurnTimerNode
+import com.orego.battlecrane.bc.std.scenario.skirmish.timer.BTurnTimerNode
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 
 @BPlayerComponent
@@ -22,7 +22,11 @@ class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val player
             val turnTimerNode = uiContext.gameContext.pipeline.findNodeBy { node ->
                 node is BTurnTimerNode && node.playerId == playerId
             }
-            turnTimerNode.connectInnerPipe(BUiTurnTimerNode(uiContext, playerId).wrapInPipe())
+            turnTimerNode.connectInnerPipe(
+                BUiTurnTimerNode(
+                    uiContext,
+                    playerId
+                ).wrapInPipe())
         }
     }
 
@@ -30,14 +34,17 @@ class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val player
         val animation: suspend () -> Unit = when (event) {
             is BTurnTimerNode.StartEvent -> {
                 {
-                    this.turnTimeProgressBar.min = DEFAULT_MIN
+                    this.turnTimeProgressBar.min =
+                            DEFAULT_MIN
                     this.turnTimeProgressBar.max = (event.turnTime / BTurnTimerNode.SECOND).toInt()
                 }
             }
             is BTurnTimerNode.StopEvent -> {
                 {
-                    this.turnTimeProgressBar.min = DEFAULT_MIN
-                    this.turnTimeProgressBar.max = DEFAULT_MIN
+                    this.turnTimeProgressBar.min =
+                            DEFAULT_MIN
+                    this.turnTimeProgressBar.max =
+                            DEFAULT_MIN
                 }
             }
             is BTurnTimerNode.TickEvent -> {

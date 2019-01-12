@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
+package com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController
@@ -47,7 +47,8 @@ class BHumanTurret(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         const val SECOND_LEVEL = 2
 
-        const val MAX_LEVEL = SECOND_LEVEL
+        const val MAX_LEVEL =
+            SECOND_LEVEL
 
         const val DAMAGE = 1
 
@@ -77,23 +78,32 @@ class BHumanTurret(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Property.
      */
 
-    override val height = HEIGHT
+    override val height =
+        HEIGHT
 
-    override val width = WIDTH
+    override val width =
+        WIDTH
 
-    override var currentHitPoints = LEVEL_1_MAX_HIT_POINTS
+    override var currentHitPoints =
+        LEVEL_1_MAX_HIT_POINTS
 
-    override var maxHitPoints = LEVEL_1_MAX_HIT_POINTS
+    override var maxHitPoints =
+        LEVEL_1_MAX_HIT_POINTS
 
-    override var currentLevel = FIRST_LEVEL
+    override var currentLevel =
+        FIRST_LEVEL
 
-    override var maxLevel = MAX_LEVEL
+    override var maxLevel =
+        MAX_LEVEL
 
-    override var damage = DAMAGE
+    override var damage =
+        DAMAGE
 
-    override var isAttackEnable = ALWAYS_ATTACK_ENABLE
+    override var isAttackEnable =
+        ALWAYS_ATTACK_ENABLE
 
-    var radiusAttack = RADIUS_ATTACK
+    var radiusAttack =
+        RADIUS_ATTACK
 
 
     /**
@@ -101,23 +111,43 @@ class BHumanTurret(context: BGameContext, playerId: Long, x: Int, y: Int) :
      */
 
     val turnConnection = BPipeConnection.createByNode(
-        context, BTurnNode.NAME, OnTurnNode(context, this.unitId)
+        context, BTurnNode.NAME,
+        OnTurnNode(
+            context,
+            this.unitId
+        )
     )
 
     val attackActionConnection = BPipeConnection.createByNode(
-        context, BOnAttackActionNode.NAME, OnAttackActionNode(context, this.unitId)
+        context, BOnAttackActionNode.NAME,
+        OnAttackActionNode(
+            context,
+            this.unitId
+        )
     )
 
     val levelActionConnection = BPipeConnection.createByNode(
-        context, BOnLevelActionNode.NAME, OnLevelActionNode(context, this.unitId)
+        context, BOnLevelActionNode.NAME,
+        OnLevelActionNode(
+            context,
+            this.unitId
+        )
     )
 
     val hitPointsActionConnection = BPipeConnection.createByNode(
-        context, BOnHitPointsActionNode.NAME, OnHitPointsActionNode(context, this.unitId)
+        context, BOnHitPointsActionNode.NAME,
+        OnHitPointsActionNode(
+            context,
+            this.unitId
+        )
     )
 
     val destroyConnection = BPipeConnection.createByNode(
-        context, BOnDestroyUnitNode.NAME, OnDestroyNode(context, this.unitId)
+        context, BOnDestroyUnitNode.NAME,
+        OnDestroyNode(
+            context,
+            this.unitId
+        )
     )
 
     /**
@@ -129,7 +159,12 @@ class BHumanTurret(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         companion object {
 
-            fun createEvent(playerId: Long, x: Int, y: Int) = Event(playerId, x, y)
+            fun createEvent(playerId: Long, x: Int, y: Int) =
+                Event(
+                    playerId,
+                    x,
+                    y
+                )
         }
 
         /**
@@ -156,7 +191,12 @@ class BHumanTurret(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
             fun perform(context: BGameContext): BHumanTurret? {
                 val controller = context.mapController
-                val turret = BHumanTurret(context, this.playerId, this.x, this.y)
+                val turret = BHumanTurret(
+                    context,
+                    this.playerId,
+                    this.x,
+                    this.y
+                )
                 val isSuccessful = controller.placeUnitOnMap(turret)
                 if (isSuccessful) {
                     context.storage.addObject(turret)

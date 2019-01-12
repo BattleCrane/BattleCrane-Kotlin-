@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
  * Trains marines.
  */
 
-class BHumanBarracks private constructor(context: BGameContext, playerId: Long, x: Int, y: Int) :
+open class BHumanBarracks private constructor(context: BGameContext, playerId: Long, x: Int, y: Int) :
     BHumanBuilding(context, playerId, x, y), BHitPointable, BLevelable, BProducable {
 
     companion object {

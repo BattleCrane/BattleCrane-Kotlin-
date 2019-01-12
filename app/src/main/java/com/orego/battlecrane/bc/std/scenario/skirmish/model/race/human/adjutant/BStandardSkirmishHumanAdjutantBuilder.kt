@@ -1,8 +1,8 @@
-package com.orego.battlecrane.bc.std.scenario.skirmish.adjutant
+package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
-import com.orego.battlecrane.bc.std.race.human.adjutant.trigger.BStandardSkirmishHumanBarracksOnCreateTrigger
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.trigger.BStandardSkirmishHumanBarracksOnCreateTrigger
 
 /**
  * Adjutant.

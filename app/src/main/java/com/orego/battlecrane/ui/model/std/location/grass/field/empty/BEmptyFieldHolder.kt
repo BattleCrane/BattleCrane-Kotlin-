@@ -1,12 +1,12 @@
 package com.orego.battlecrane.ui.model.std.location.grass.field.empty
 
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
-import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
+import com.orego.battlecrane.bc.std.location.grass.field.implementations.empty.BEmptyGrassField
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.ui.model.std.location.grass.field.BFieldHolder
 
-class BEmptyFieldHolder(uiGameContext: BUiGameContext, override val item: BEmptyField) :
+class BEmptyFieldHolder(uiGameContext: BUiGameContext, override val item: BEmptyGrassField) :
     BFieldHolder(uiGameContext, item) {
 
     companion object {
@@ -19,6 +19,6 @@ class BEmptyFieldHolder(uiGameContext: BUiGameContext, override val item: BEmpty
     class Builder : BUnitHolder.Builder() {
 
         override fun build(uiGameContext: BUiGameContext, item: BUnit) =
-            BEmptyFieldHolder(uiGameContext, item as BEmptyField)
+            BEmptyFieldHolder(uiGameContext, item as BEmptyGrassField)
     }
 }

@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
+import com.orego.battlecrane.bc.std.location.grass.field.implementations.empty.BEmptyGrassField
 import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
 import com.orego.battlecrane.ui.model.api.clickController.BClickMode
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
@@ -46,7 +46,7 @@ object BHumanBuildBarracksImageView {
         override fun finish(nextClickMode: BClickMode): Boolean {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
-                if (clickedUnit is BEmptyField) {
+                if (clickedUnit is BEmptyGrassField) {
                     val event = BHumanEvents.Construct.BarracksEvent(producableId, clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.playerId)
                     if (isSuccessful) {

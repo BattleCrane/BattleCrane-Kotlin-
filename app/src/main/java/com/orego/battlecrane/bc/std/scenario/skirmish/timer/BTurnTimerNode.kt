@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.scenario.util.timer
+package com.orego.battlecrane.bc.std.scenario.skirmish.timer
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
@@ -27,7 +27,8 @@ class BTurnTimerNode(context: BGameContext, var playerId: Long) : BNode(context)
 
     override val name = NAME
 
-    var turnTime: Long? = DEFAULT_TURN_TIME
+    var turnTime: Long? =
+        DEFAULT_TURN_TIME
 
     val timeLeft = AtomicLong(0)
 

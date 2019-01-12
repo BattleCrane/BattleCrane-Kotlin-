@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
+package com.orego.battlecrane.bc.std.race.human.unit.building.implementation.factory
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
@@ -26,9 +26,9 @@ import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHea
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.api.model.entity.property.BProducable
-import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
+import com.orego.battlecrane.bc.std.location.grass.field.implementations.empty.BEmptyGrassField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
-import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.BHumanTank
+import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.tank.BHumanTank
 
 
 /**
@@ -56,7 +56,8 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         const val THIRD_LEVEL = 3
 
-        const val MAX_LEVEL = THIRD_LEVEL
+        const val MAX_LEVEL =
+            THIRD_LEVEL
     }
 
     /**
@@ -80,17 +81,23 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Property.
      */
 
-    override val height = HEIGHT
+    override val height =
+        HEIGHT
 
-    override val width = WIDTH
+    override val width =
+        WIDTH
 
-    override var currentHitPoints = LEVEL_1_MAX_HIT_POINTS
+    override var currentHitPoints =
+        LEVEL_1_MAX_HIT_POINTS
 
-    override var maxHitPoints = LEVEL_1_MAX_HIT_POINTS
+    override var maxHitPoints =
+        LEVEL_1_MAX_HIT_POINTS
 
-    override var currentLevel = FIRST_LEVEL
+    override var currentLevel =
+        FIRST_LEVEL
 
-    override var maxLevel = MAX_LEVEL
+    override var maxLevel =
+        MAX_LEVEL
 
     override var isProduceEnable = false
 
@@ -99,27 +106,51 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
      */
 
     val turnConnection = BPipeConnection.createByNode(
-        context, BTurnNode.NAME, OnTurnNode(context, this.unitId)
+        context, BTurnNode.NAME,
+        OnTurnNode(
+            context,
+            this.unitId
+        )
     )
 
     val produceEnableConnection = BPipeConnection.createByNode(
-        context, BOnProduceEnableNode.NAME, OnProduceEnableNode(context, this.unitId)
+        context, BOnProduceEnableNode.NAME,
+        OnProduceEnableNode(
+            context,
+            this.unitId
+        )
     )
 
     val produceActionConnection = BPipeConnection.createByNode(
-        context, BOnProduceActionNode.NAME, OnProduceActionNode(this.unitId, context)
+        context, BOnProduceActionNode.NAME,
+        OnProduceActionNode(
+            this.unitId,
+            context
+        )
     )
 
     val levelActionConnection = BPipeConnection.createByNode(
-        context, BOnLevelActionNode.NAME, OnLevelActionNode(context, this.unitId)
+        context, BOnLevelActionNode.NAME,
+        OnLevelActionNode(
+            context,
+            this.unitId
+        )
     )
 
     val hitPointsActionConnection = BPipeConnection.createByNode(
-        context, BOnHitPointsActionNode.NAME, OnHitPointsActionNode(context, this.unitId)
+        context, BOnHitPointsActionNode.NAME,
+        OnHitPointsActionNode(
+            context,
+            this.unitId
+        )
     )
 
     val destroyConnection = BPipeConnection.createByNode(
-        context, BOnDestroyUnitNode.NAME, OnDestroyNode(context, this.unitId)
+        context, BOnDestroyUnitNode.NAME,
+        OnDestroyNode(
+            context,
+            this.unitId
+        )
     )
 
     /**
@@ -131,7 +162,12 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         companion object {
 
-            fun createEvent(playerId: Long, x: Int, y: Int) = Event(playerId, x, y)
+            fun createEvent(playerId: Long, x: Int, y: Int) =
+                Event(
+                    playerId,
+                    x,
+                    y
+                )
         }
 
         /**
@@ -156,7 +192,13 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
             fun perform(context: BGameContext): Boolean {
                 val controller = context.mapController
-                val factory = BHumanFactory(context, this.playerId, this.x, this.y)
+                val factory =
+                    BHumanFactory(
+                        context,
+                        this.playerId,
+                        this.x,
+                        this.y
+                    )
                 val isSuccessful = controller.placeUnitOnMap(factory)
                 if (isSuccessful) {
                     context.storage.addObject(factory)
@@ -233,7 +275,11 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
         companion object {
 
             fun createEvent(factoryUnitId: Long, x: Int, y: Int) =
-                Event(factoryUnitId, x, y)
+                Event(
+                    factoryUnitId,
+                    x,
+                    y
+                )
         }
 
         /**
@@ -279,7 +325,7 @@ class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
             fun isEnable(context: BGameContext, factory: BHumanFactory): Boolean {
                 val controller = context.mapController
                 val otherUnit = controller.getUnitByPosition(context, this.x, this.y)
-                if (otherUnit !is BEmptyField) {
+                if (otherUnit !is BEmptyGrassField) {
                     return false
                 }
                 val level = factory.currentLevel

@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barr
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 
-class BHumanBarracksHolder(uiGameContext: BUiGameContext, override val item: BHumanBarracks) :
+class BHumanBarracksHolder private constructor(uiGameContext: BUiGameContext, override val item: BHumanBarracks) :
     BUnitHolder(uiGameContext, item) {
 
     companion object {
@@ -23,10 +23,9 @@ class BHumanBarracksHolder(uiGameContext: BUiGameContext, override val item: BHu
                 "${COLOR_MAP[this.item.playerId]}/" +
                 "${this.item.currentLevel}_${this.item.currentHitPoints}.png"
 
-    class Builder : BUnitHolder.Builder() {
+    open class Builder : BUnitHolder.Builder() {
 
         override fun build(uiGameContext: BUiGameContext, item: BUnit) =
             BHumanBarracksHolder(uiGameContext, item as BHumanBarracks)
     }
 }
-

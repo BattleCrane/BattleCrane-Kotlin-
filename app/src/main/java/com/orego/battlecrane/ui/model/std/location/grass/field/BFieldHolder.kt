@@ -5,11 +5,11 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pi
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.std.location.grass.field.BField
+import com.orego.battlecrane.bc.std.location.grass.field.BGrassField
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 
-abstract class BFieldHolder(uiGameContext: BUiGameContext, item: BField) :
+abstract class BFieldHolder(uiGameContext: BUiGameContext, item: BGrassField) :
     BUnitHolder(uiGameContext, item) {
 
     final override val unitView: View = BUnitHolder.placeImageView(uiGameContext, item, this.getItemPath())
@@ -23,21 +23,21 @@ abstract class BFieldHolder(uiGameContext: BUiGameContext, item: BField) :
     @BUnitComponent
     class OnDestroyNode(
         private val uiContext: BUiGameContext,
-        private val emptyField: BField,
+        private val emptyGrassField: BGrassField,
         private val view: View
     ) : BNode(uiContext.gameContext) {
 
         companion object {
 
-            fun connect(uiContext: BUiGameContext, emptyField: BField, view: View) {
-                val onDestroyNode = OnDestroyNode(uiContext, emptyField, view)
-                val pipeId = emptyField.destroyConnection.sourcePipeId
+            fun connect(uiContext: BUiGameContext, emptyGrassField: BGrassField, view: View) {
+                val onDestroyNode = OnDestroyNode(uiContext, emptyGrassField, view)
+                val pipeId = emptyGrassField.destroyConnection.sourcePipeId
                 uiContext.gameContext.pipeline.bindNodeToPipe(pipeId, onDestroyNode)
             }
         }
 
         override fun handle(event: BEvent): BEvent? {
-            if (event is BOnDestroyUnitPipe.Event && event.unitId == this.emptyField.unitId) {
+            if (event is BOnDestroyUnitPipe.Event && event.unitId == this.emptyGrassField.unitId) {
                 this.uiContext.apply {
                     this.animationPipe.addAnimation {
                         this.uiProvider.mapConstraintLayout.removeView(this@OnDestroyNode.view)

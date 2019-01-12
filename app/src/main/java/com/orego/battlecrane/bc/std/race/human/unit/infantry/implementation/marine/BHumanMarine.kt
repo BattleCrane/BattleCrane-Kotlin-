@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation
+package com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.marine
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.node.BOnAttackActionNode
@@ -24,7 +24,7 @@ import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHea
 import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BCreature
 import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
-import com.orego.battlecrane.bc.std.location.grass.field.BField
+import com.orego.battlecrane.bc.std.location.grass.field.BGrassField
 import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanCreature
 
@@ -51,15 +51,20 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
      */
 
 
-    override val height = HEIGHT
+    override val height =
+        HEIGHT
 
-    override val width = WIDTH
+    override val width =
+        WIDTH
 
-    override var currentHitPoints = MAX_HEALTH
+    override var currentHitPoints =
+        MAX_HEALTH
 
-    override var maxHitPoints = MAX_HEALTH
+    override var maxHitPoints =
+        MAX_HEALTH
 
-    override var damage = DAMAGE
+    override var damage =
+        DAMAGE
 
     override var isAttackEnable = false
 
@@ -82,23 +87,43 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
      */
 
     val turnConnection = BPipeConnection.createByNode(
-        context, BTurnNode.NAME, OnTurnNode(context, this.unitId)
+        context, BTurnNode.NAME,
+        OnTurnNode(
+            context,
+            this.unitId
+        )
     )
 
     val attackActionConnection = BPipeConnection.createByNode(
-        context, BOnAttackActionNode.NAME, OnAttackActionNode(context, this.unitId)
+        context, BOnAttackActionNode.NAME,
+        OnAttackActionNode(
+            context,
+            this.unitId
+        )
     )
 
     val attackEnableConnection = BPipeConnection.createByNode(
-        context, BOnAttackEnableNode.NAME, OnAttackEnableNode(context, this.unitId)
+        context, BOnAttackEnableNode.NAME,
+        OnAttackEnableNode(
+            context,
+            this.unitId
+        )
     )
 
     val hitPointsConnection = BPipeConnection.createByNode(
-        context, BOnHitPointsActionNode.NAME, OnHitPointsActionNode(context, this.unitId)
+        context, BOnHitPointsActionNode.NAME,
+        OnHitPointsActionNode(
+            context,
+            this.unitId
+        )
     )
 
     val destroyConnection = BPipeConnection.createByNode(
-        context, BOnDestroyUnitNode.NAME, OnDestroyNode(context, this.unitId)
+        context, BOnDestroyUnitNode.NAME,
+        OnDestroyNode(
+            context,
+            this.unitId
+        )
     )
 
     /**
@@ -110,7 +135,12 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         companion object {
 
-            fun createEvent(playerId: Long, x: Int, y: Int) = Event(playerId, x, y)
+            fun createEvent(playerId: Long, x: Int, y: Int) =
+                Event(
+                    playerId,
+                    x,
+                    y
+                )
         }
 
         override fun handle(event: BEvent): BEvent? {
@@ -131,7 +161,12 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
             BOnCreateUnitPipe.Event(x, y) {
 
             fun perform(context: BGameContext): Boolean {
-                val marine = BHumanMarine(context, this.playerId, this.x, this.y)
+                val marine = BHumanMarine(
+                    context,
+                    this.playerId,
+                    this.x,
+                    this.y
+                )
                 val isSuccessful = context.mapController.placeUnitOnMap(marine)
                 if (isSuccessful) {
                     context.storage.addObject(marine)
@@ -219,7 +254,7 @@ class BHumanMarine(context: BGameContext, playerId: Long, x: Int, y: Int) :
                 val playerId = marine.playerId
                 val otherUnit = context.mapController.getUnitByPosition(context, x, y)
                 val otherPlayerId = otherUnit.playerId
-                if (otherUnit is BCreature || otherUnit is BField) {
+                if (otherUnit is BCreature || otherUnit is BGrassField) {
                     return false
                 }
                 if (playerId == otherPlayerId) {

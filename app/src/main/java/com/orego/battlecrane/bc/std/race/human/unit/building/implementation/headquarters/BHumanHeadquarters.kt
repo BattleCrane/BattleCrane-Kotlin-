@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
+package com.orego.battlecrane.bc.std.race.human.unit.building.implementation.headquarters
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
@@ -59,13 +59,17 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
      * Property.
      */
 
-    override val height = HEIGHT
+    override val height =
+        HEIGHT
 
-    override val width = WIDTH
+    override val width =
+        WIDTH
 
-    override var currentHitPoints = MAX_HIT_POINTS
+    override var currentHitPoints =
+        MAX_HIT_POINTS
 
-    override var maxHitPoints = MAX_HIT_POINTS
+    override var maxHitPoints =
+        MAX_HIT_POINTS
 
     override var isProduceEnable = false
 
@@ -74,23 +78,43 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
      */
 
     val turnConnection = BPipeConnection.createByNode(
-        context, BTurnNode.NAME, OnTurnNode(context, this.unitId)
+        context, BTurnNode.NAME,
+        OnTurnNode(
+            context,
+            this.unitId
+        )
     )
 
     val produceEnableConnection = BPipeConnection.createByNode(
-        context, BOnProduceEnableNode.NAME, OnProduceEnableNode(context, this.unitId)
+        context, BOnProduceEnableNode.NAME,
+        OnProduceEnableNode(
+            context,
+            this.unitId
+        )
     )
 
     val produceActionConnection = BPipeConnection.createByNode(
-        context, BOnProduceActionNode.NAME, OnProduceActionNode(this.unitId, context)
+        context, BOnProduceActionNode.NAME,
+        OnProduceActionNode(
+            this.unitId,
+            context
+        )
     )
 
     val hitPointsActionConnection = BPipeConnection.createByNode(
-        context, BOnHitPointsActionNode.NAME, OnHitPointsActionNode(context, this.unitId)
+        context, BOnHitPointsActionNode.NAME,
+        OnHitPointsActionNode(
+            context,
+            this.unitId
+        )
     )
 
     val destroyConnection = BPipeConnection.createByNode(
-        context, BOnDestroyUnitNode.NAME, OnDestroyNode(context, this.unitId)
+        context, BOnDestroyUnitNode.NAME,
+        OnDestroyNode(
+            context,
+            this.unitId
+        )
     )
 
     /**
@@ -102,7 +126,12 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
 
         companion object {
 
-            fun createEvent(playerId: Long, x: Int, y: Int) = Event(playerId, x, y)
+            fun createEvent(playerId: Long, x: Int, y: Int) =
+                Event(
+                    playerId,
+                    x,
+                    y
+                )
         }
 
         /**
@@ -127,7 +156,13 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
 
             fun perform(context: BGameContext): Boolean {
                 val controller = context.mapController
-                val headquarters = BHumanHeadquarters(context, this.playerId, this.x, this.y)
+                val headquarters =
+                    BHumanHeadquarters(
+                        context,
+                        this.playerId,
+                        this.x,
+                        this.y
+                    )
                 val isSuccessful = controller.placeUnitOnMap(headquarters)
                 if (isSuccessful) {
                     context.storage.addObject(headquarters)

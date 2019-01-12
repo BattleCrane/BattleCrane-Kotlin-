@@ -12,10 +12,13 @@ import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BLevelab
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
+import com.orego.battlecrane.bc.std.location.grass.field.implementations.empty.BEmptyGrassField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.*
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.factory.BHumanFactory
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.generator.BHumanGenerator
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.wall.BHumanWall
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.GENERATOR_LIMIT
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countDiffBarracksFactory
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countGenerators
@@ -159,7 +162,7 @@ object BHumanEvents {
                 for (x in this.startX until endX) {
                     for (y in this.startY until endY) {
                         val inBonds = BMapController.inBounds(x, y)
-                        if (!inBonds || mapController.getUnitByPosition(context, x, y) !is BEmptyField) {
+                        if (!inBonds || mapController.getUnitByPosition(context, x, y) !is BEmptyGrassField) {
                             return false
                         }
                     }

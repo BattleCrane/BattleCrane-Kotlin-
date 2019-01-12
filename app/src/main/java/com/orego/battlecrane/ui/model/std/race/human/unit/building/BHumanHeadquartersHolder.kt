@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitC
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.headquarters.BHumanHeadquarters
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder

@@ -7,11 +7,11 @@ import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
-import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
-import com.orego.battlecrane.bc.std.scenario.skirmish.player.BStandardSkirmishPlayerBuilder
+import com.orego.battlecrane.bc.std.location.grass.field.implementations.empty.BEmptyGrassField
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.headquarters.BHumanHeadquarters
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.wall.BHumanWall
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.player.BStandardSkirmishPlayerBuilder
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.BStandardSkirmishHumanAdjutantBuilder
 import java.util.*
 
 class BStandardSkirmishScenario : BGameScenario {
@@ -36,12 +36,12 @@ class BStandardSkirmishScenario : BGameScenario {
 
     override fun getAdjutants(context: BGameContext): List<BAdjutant> {
         val adjutantList = mutableListOf<BAdjutant>()
-        println("HEAP MAP SIZE: " + context.storage.heapMap.size)
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()
+        val builder = BStandardSkirmishHumanAdjutantBuilder()
         if (players.size == 2) {
-            adjutantList.add(BHumanAdjutant(context, players[0].playerId))
-            adjutantList.add(BHumanAdjutant(context, players[1].playerId))
+            adjutantList.add(builder.build(context, players[0].playerId))
+            adjutantList.add(builder.build(context, players[1].playerId))
             return adjutantList
         } else {
             throw IllegalArgumentException("Standard skirmish gameScenario supports two players!")
@@ -63,15 +63,57 @@ class BStandardSkirmishScenario : BGameScenario {
             val redPlayerId = players[1].playerId
 
             //Put headquarters on the mapConstraintLayout:
-            this.add(BHumanHeadquarters(context, bluePlayerId, 14, 14))
-            this.add(BHumanHeadquarters(context, redPlayerId, 0, 0))
+            this.add(
+                BHumanHeadquarters(
+                    context,
+                    bluePlayerId,
+                    14,
+                    14
+                )
+            )
+            this.add(
+                BHumanHeadquarters(
+                    context,
+                    redPlayerId,
+                    0,
+                    0
+                )
+            )
 
             //Put walls on the mapConstraintLayout
             for (j in 0..4) {
-                this.add(BHumanWall(context, redPlayerId, j, 4))
-                this.add(BHumanWall(context, redPlayerId, 4, j))
-                this.add(BHumanWall(context, bluePlayerId, 15 - j, 11))
-                this.add(BHumanWall(context, bluePlayerId, 11, 15 - j))
+                this.add(
+                    BHumanWall(
+                        context,
+                        redPlayerId,
+                        j,
+                        4
+                    )
+                )
+                this.add(
+                    BHumanWall(
+                        context,
+                        redPlayerId,
+                        4,
+                        j
+                    )
+                )
+                this.add(
+                    BHumanWall(
+                        context,
+                        bluePlayerId,
+                        15 - j,
+                        11
+                    )
+                )
+                this.add(
+                    BHumanWall(
+                        context,
+                        bluePlayerId,
+                        11,
+                        15 - j
+                    )
+                )
             }
             return this
         } else {
@@ -100,14 +142,14 @@ class BStandardSkirmishScenario : BGameScenario {
             }
         }
         //Fill rest fileds:
+        val emptyGrassBuilder = BEmptyGrassField.Builder()
         for (x in 0 until BMapController.MAP_SIZE) {
             for (y in 0 until BMapController.MAP_SIZE) {
                 if (matrix[x][y] == BMapController.NOT_INITIALIZED_UNIT_ID) {
-                    this.add(BEmptyField(context, BPlayer.NEUTRAL_PLAYER_ID, x, y))
+                    this.add(emptyGrassBuilder.build(context, BPlayer.NEUTRAL_PLAYER_ID, x, y))
                 }
             }
         }
         return this
     }
-
 }
