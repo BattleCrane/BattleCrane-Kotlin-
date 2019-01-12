@@ -4,12 +4,12 @@ class BClickController {
 
     private var currentClickMode: BClickMode? = null
 
-    fun changeClickMode(clickMode: BClickMode): Boolean {
+    fun changeClickMode(nextClickMode: BClickMode): Boolean {
         val isEmptyMode = this.currentClickMode == null
         if (isEmptyMode) {
-            this.currentClickMode = clickMode
+            this.currentClickMode = nextClickMode
         } else {
-            if (this.currentClickMode!!.finish(clickMode)) {
+            if (this.currentClickMode!!.finish(nextClickMode)) {
                 this.currentClickMode = null
             }
         }

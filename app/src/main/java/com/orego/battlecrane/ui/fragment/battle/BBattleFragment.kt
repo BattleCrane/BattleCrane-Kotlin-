@@ -2,9 +2,7 @@ package com.orego.battlecrane.ui.fragment.battle
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
@@ -12,7 +10,8 @@ import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.ui.fragment.BFragment
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
-import com.orego.battlecrane.ui.util.*
+import com.orego.battlecrane.ui.util.gone
+import com.orego.battlecrane.ui.util.onMeasured
 import com.orego.battlecrane.ui.viewModel.BScenarioViewModel
 import kotlinx.android.synthetic.main.fragment_battle.*
 import kotlinx.coroutines.*
@@ -21,46 +20,12 @@ class BBattleFragment : BFragment() {
 
     override val presenter = Presenter()
 
-    //TODO : WHILE TO BE!!!
-    private var mapSize: ViewSize? = null
-
-    private var buildToolSize: ViewSize? = null
-
-    private var trainTools: ViewSize? = null
-
-    override fun onCreateContentView(i: LayoutInflater, c: ViewGroup?, b: Bundle?): View? = i
+    override fun onCreateContentView(i: LayoutInflater, c: ViewGroup?, b: Bundle?) = i
         .inflate(R.layout.fragment_battle, c, false)!!
-
-    override fun onContentViewCreated() {
-        this.initListeners()
-    }
-
-    //TODO: MAKE NORMAL LISTENER INIT!
-    private fun initListeners() {
-        this.fragment_battle_to_build_constraint_layout.setOnClickListener {
-            this.fragment_battle_build_actions.show()
-            it.hide()
-        }
-    }
 
     override fun onStart() {
         super.onStart()
-        this.fragment_battle_root.onMeasured {
-            this@BBattleFragment.presenter.start()
-        }
-
-//        GlobalScope.launch(Dispatchers.Main) {
-//            this@BBattleFragment.mapSize = this@BBattleFragment.fragment_battle_map_constraint_layout.measure()
-//            println("YES")
-//            //YES:
-//            this@BBattleFragment.buildToolSize = this@BBattleFragment.fragment_battle_build_actions.measure()
-//            println("YES")
-//            //YES:
-//            this@BBattleFragment.trainTools = this@BBattleFragment.fragment_battle_train_actions.measure()
-//            println("YES")
-//            //YES:
-//
-//        }
+        this.fragment_battle_root.onMeasured { this.presenter.start() }
     }
 
     override fun onStop() {
@@ -153,23 +118,15 @@ class BBattleFragment : BFragment() {
             this@BBattleFragment.fragment_battle_map_constraint_layout
         }
 
-        val buildToolConstraintLayout: ConstraintLayout by lazy {
-            this@BBattleFragment.fragment_battle_build_actions
+        val rightConstraintLayout: ConstraintLayout by lazy {
+            this@BBattleFragment.fragment_battle_right_constraint_layout
         }
 
-        val trainToolConstraintLayout: ConstraintLayout by lazy {
-            this@BBattleFragment.fragment_battle_train_actions
+        val leftConstraintLayout: ConstraintLayout by lazy {
+            this@BBattleFragment.fragment_battle_left_constraint_layout
         }
 
-        val buildButtonImageView: ImageView by lazy {
-            this@BBattleFragment.fragment_battle_to_build_image_view
-        }
-
-        val trainButtonImageView: ImageView by lazy {
-            this@BBattleFragment.fragment_battle_to_train_image_view
-        }
-
-        val lineProgressBar : ProgressBar by lazy {
+        val lineProgressBar: ProgressBar by lazy {
             this@BBattleFragment.fragment_battle_end_turn_progress_bar
         }
     }

@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.race.human.event
+package com.orego.battlecrane.bc.std.race.human.util
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController
@@ -10,12 +10,14 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.n
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BLevelableHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
-import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.std.location.grass.field.empty.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.*
+import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.GENERATOR_LIMIT
+import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countDiffBarracksFactory
+import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countGenerators
 
 object BHumanEvents {
 
@@ -218,7 +220,7 @@ object BHumanEvents {
 
             override fun isEnable(context: BGameContext, playerId: Long): Boolean {
                 if (super.isEnable(context, playerId)) {
-                    val barracksFactoryDiff = this.countDiffBarracksFactory(context, playerId)
+                    val barracksFactoryDiff = countDiffBarracksFactory(context, playerId)
                     if (barracksFactoryDiff > 0) {
                         return true
                     }
@@ -228,34 +230,15 @@ object BHumanEvents {
 
             override fun getEvent(playerId: Long, x: Int, y: Int) =
                 BHumanFactory.OnCreateNode.createEvent(playerId, x, y)
-
-            private fun countDiffBarracksFactory(context: BGameContext, playerId: Long): Int {
-                val allUnits = context.storage.getHeap(BUnitHeap::class.java).getObjectList()
-                var barracksCount = 0
-                var factoryCount = 0
-                for (unit in allUnits) {
-                    if (unit.playerId == playerId) {
-                        when (unit) {
-                            is BHumanBarracks -> barracksCount++
-                            is BHumanFactory -> factoryCount++
-                        }
-                    }
-                }
-                return barracksCount - factoryCount
-            }
         }
 
         class GeneratorEvent(producableId: Long, x: Int, y: Int) :
             Event(producableId, x, y, BHumanGenerator.WIDTH, BHumanGenerator.HEIGHT) {
 
-            companion object {
-
-                const val GENERATOR_LIMIT = 2
-            }
 
             override fun isEnable(context: BGameContext, playerId: Long): Boolean {
                 if (super.isEnable(context, playerId)) {
-                    val generatorCount = this.calcGenerators(context, playerId)
+                    val generatorCount = countGenerators(context, playerId)
                     if (generatorCount < GENERATOR_LIMIT) {
                         return true
                     }
@@ -265,17 +248,6 @@ object BHumanEvents {
 
             override fun getEvent(playerId: Long, x: Int, y: Int) =
                 BHumanGenerator.OnCreateNode.createEvent(playerId, x, y)
-
-            private fun calcGenerators(context: BGameContext, playerId: Long): Int {
-                val allUnits = context.storage.getHeap(BUnitHeap::class.java).getObjectList()
-                var generatorCount = 0
-                for (unit in allUnits) {
-                    if (unit is BHumanGenerator && unit.playerId == playerId) {
-                        generatorCount++
-                    }
-                }
-                return generatorCount
-            }
         }
 
         class TurretEvent(producableId: Long, x: Int, y: Int) :

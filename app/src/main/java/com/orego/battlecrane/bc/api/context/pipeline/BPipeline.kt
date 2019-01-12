@@ -21,8 +21,11 @@ class BPipeline(context: BGameContext) {
 
     private val pipeMap = mutableMapOf<Long, BPipe>()
 
-    private val onPipelineWorkFinshedObserver =
-        mutableMapOf<Class<out OnPipelineWorkFinishedListener>, OnPipelineWorkFinishedListener>()
+    private val onPipelineWorkFinshedObserver:
+            MutableMap<Class<out OnPipelineWorkFinishedListener>, OnPipelineWorkFinishedListener> = mutableMapOf()
+
+    private val onBroadcastEventObserver:
+            MutableMap<Class<out OnBroadcastEventListener>, OnBroadcastEventListener> = mutableMapOf()
 
     /**
      * Adds root pipes:
@@ -40,6 +43,13 @@ class BPipeline(context: BGameContext) {
     /**
      * Event.
      */
+
+    fun broacastEvent(event: BEvent) {
+        this.pushEvent(event)
+        this.onBroadcastEventObserver.values.forEach { listener ->
+            listener.onBroadcastEvent(event)
+        }
+    }
 
     fun pushEvent(event: BEvent?) {
         if (event != null) {
@@ -106,7 +116,7 @@ class BPipeline(context: BGameContext) {
         throw IllegalStateException("Node not found!")
     }
 
-    fun bindPipeToNode(nodeName: String, pipe: BPipe) : BNode {
+    fun bindPipeToNode(nodeName: String, pipe: BPipe): BNode {
         val node = this.findNode(nodeName)
         node.connectInnerPipe(pipe)
         return node
@@ -116,15 +126,15 @@ class BPipeline(context: BGameContext) {
         this.findNode(nodeId).connectInnerPipe(pipe)
     }
 
-    fun unbindPipeFromNode(nodeName: String, pipeId : Long) {
+    fun unbindPipeFromNode(nodeName: String, pipeId: Long) {
         this.findNode(nodeName).disconnectInnerPipe(pipeId)
     }
 
-    fun unbindPipeFromNode(nodeId: Long, pipeId : Long) {
+    fun unbindPipeFromNode(nodeId: Long, pipeId: Long) {
         this.findNode(nodeId).disconnectInnerPipe(pipeId)
     }
 
-    fun bindNodeToPipe(pipeId : Long, node : BNode) {
+    fun bindNodeToPipe(pipeId: Long, node: BNode) {
         this.findPipe(pipeId).placeNode(node)
     }
 
@@ -143,5 +153,10 @@ class BPipeline(context: BGameContext) {
     interface OnPipelineWorkFinishedListener {
 
         fun onPipelineWorkFinished()
+    }
+
+    interface OnBroadcastEventListener {
+
+        fun onBroadcastEvent(event: BEvent?)
     }
 }

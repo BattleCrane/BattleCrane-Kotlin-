@@ -25,7 +25,7 @@ import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BCreature
 import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.std.location.grass.field.BField
-import com.orego.battlecrane.bc.std.race.human.event.BHumanEvents
+import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.BHumanCreature
 
 /**

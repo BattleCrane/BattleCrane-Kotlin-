@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.bc.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
+import com.orego.battlecrane.ui.model.api.clickController.BClickMode
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.BHolder
 import org.intellij.lang.annotations.MagicConstant
@@ -56,6 +57,8 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
             return imageView
         }
     }
+
+    abstract class ClickMode(val unitHolder : BUnitHolder) : BClickMode
 
     class Factory : BHolder.Factory<BUnit>()
 

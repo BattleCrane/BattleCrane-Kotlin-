@@ -25,7 +25,7 @@ import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHea
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
 import com.orego.battlecrane.bc.api.model.entity.property.BProducable
-import com.orego.battlecrane.bc.std.race.human.event.BHumanEvents
+import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 
 /**
