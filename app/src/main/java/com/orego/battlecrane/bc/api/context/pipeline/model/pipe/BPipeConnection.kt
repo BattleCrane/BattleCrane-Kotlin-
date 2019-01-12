@@ -8,7 +8,7 @@ data class BPipeConnection(val sourcePipeId: Long, val destinationNodeId : Long)
     companion object {
 
         fun createByNode(context: BGameContext, destinationNodeName: String, sourceNode: BNode): BPipeConnection {
-            val sourcePipe = sourceNode.wrapInPipe()
+            val sourcePipe = sourceNode.intoPipe()
             val destinationNode = context.pipeline.bindPipeToNode(destinationNodeName, sourcePipe)
             return BPipeConnection(
                 sourcePipe.id,

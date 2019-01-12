@@ -11,7 +11,7 @@ import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHea
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 
 @BUnitComponent
-class BUnitOnDestroyTrigger private constructor(context: BGameContext, private val unit : BUnit) :
+class BUnitOnDestroyTrigger private constructor(context: BGameContext, val unit: BUnit) :
     BNode(context) {
 
     companion object {
@@ -20,7 +20,7 @@ class BUnitOnDestroyTrigger private constructor(context: BGameContext, private v
             val pipe = BUnitOnDestroyTrigger(
                 context,
                 unit
-            ).wrapInPipe()
+            ).intoPipe()
             context.pipeline.bindPipeToNode(BOnDestroyUnitNode.NAME, pipe)
         }
     }
@@ -31,6 +31,8 @@ class BUnitOnDestroyTrigger private constructor(context: BGameContext, private v
 
     private val storage = context.storage
 
+    private val unitMap = this.storage.getHeap(BUnitHeap::class.java).objectMap
+
     override fun handle(event: BEvent): BEvent? {
         val unitId = this.unit.unitId
         if (event is BOnDestroyUnitPipe.Event && event.unitId == unitId) {
@@ -40,10 +42,18 @@ class BUnitOnDestroyTrigger private constructor(context: BGameContext, private v
         return null
     }
 
-    override fun wrapInPipe() = Pipe()
+    override fun intoPipe() = Pipe()
+
+    override fun isUnused() = !this.unitMap.containsKey(this.unit.unitId)
+
+    /**
+     * Pipe.
+     */
 
     inner class Pipe : BPipe(this.context, mutableListOf(this)) {
 
-        val unitId = this@BUnitOnDestroyTrigger.unit.unitId
+        val unit = this@BUnitOnDestroyTrigger.unit
+
+        override fun isUnused() = this@BUnitOnDestroyTrigger.isUnused()
     }
 }

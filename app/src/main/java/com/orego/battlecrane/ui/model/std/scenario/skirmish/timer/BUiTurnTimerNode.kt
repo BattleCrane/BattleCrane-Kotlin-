@@ -26,7 +26,7 @@ class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val player
                 BUiTurnTimerNode(
                     uiContext,
                     playerId
-                ).wrapInPipe())
+                ).intoPipe())
         }
     }
 

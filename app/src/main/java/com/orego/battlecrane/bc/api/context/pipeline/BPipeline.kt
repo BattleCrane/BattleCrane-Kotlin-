@@ -64,6 +64,7 @@ class BPipeline(context: BGameContext) {
                     val nextEvent = this.eventQueue.removeAt(0)
                     this.pushEvent(nextEvent)
                 } else {
+                    this.removeUnusedComponents()
                     this.onPipelineWorkFinshedObserver.values.forEach { listener ->
                         listener.onPipelineWorkFinished()
                     }
@@ -98,7 +99,7 @@ class BPipeline(context: BGameContext) {
     }
 
     /**
-     * Node.
+     * Find.
      */
 
     fun findNode(name: String) = this.findNodeBy { it.name == name }
@@ -115,6 +116,10 @@ class BPipeline(context: BGameContext) {
         }
         throw IllegalStateException("Node not found!")
     }
+
+    /**
+     * Bind.
+     */
 
     fun bindPipeToNode(nodeName: String, pipe: BPipe): BNode {
         val node = this.findNode(nodeName)
@@ -136,6 +141,21 @@ class BPipeline(context: BGameContext) {
 
     fun bindNodeToPipe(pipeId: Long, node: BNode) {
         this.findPipe(pipeId).placeNode(node)
+    }
+
+    /**
+     * Remove.
+     */
+
+    fun removeUnusedComponents() {
+        val pipes = this.pipeMap.values.toList()
+        for (i in 0 until pipes.size) {
+            val pipe = pipes[i]
+            pipe.removeUnusedComponents()
+            if (pipe.isUnused()) {
+                this.pipeMap.remove(pipe.id)
+            }
+        }
     }
 
     /**

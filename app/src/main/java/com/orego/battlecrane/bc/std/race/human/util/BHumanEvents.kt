@@ -12,7 +12,7 @@ import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BLevelab
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.std.location.grass.field.implementations.empty.BEmptyGrassField
+import com.orego.battlecrane.bc.std.location.grass.field.implementation.empty.BEmptyGrassField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.factory.BHumanFactory

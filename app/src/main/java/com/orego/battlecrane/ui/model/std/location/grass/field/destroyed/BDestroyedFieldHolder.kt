@@ -1,7 +1,7 @@
 package com.orego.battlecrane.ui.model.std.location.grass.field.destroyed
 
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
-import com.orego.battlecrane.bc.std.location.grass.field.implementations.destroyed.BDestroyedGrassField
+import com.orego.battlecrane.bc.std.location.grass.field.implementation.destroyed.BDestroyedGrassField
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.BHolder
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder

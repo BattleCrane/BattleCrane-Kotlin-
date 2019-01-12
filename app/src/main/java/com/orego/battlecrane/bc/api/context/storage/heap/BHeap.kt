@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.api.context.storage.heap
 
 abstract class BHeap<T> {
 
-    protected val objectMap = mutableMapOf<Long, T>()
+    val objectMap = mutableMapOf<Long, T>()
 
     operator fun get(id: Long) : T = this.objectMap[id]!!
 

@@ -7,9 +7,9 @@ import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.std.location.grass.field.implementations.empty.BEmptyGrassField
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.headquarters.BHumanHeadquarters
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.wall.BHumanWall
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.location.grass.BStandardSkirmishEmptyGrassFieldBuilder
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.player.BStandardSkirmishPlayerBuilder
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.BStandardSkirmishHumanAdjutantBuilder
 import java.util.*
@@ -142,7 +142,7 @@ class BStandardSkirmishScenario : BGameScenario {
             }
         }
         //Fill rest fileds:
-        val emptyGrassBuilder = BEmptyGrassField.Builder()
+        val emptyGrassBuilder = BStandardSkirmishEmptyGrassFieldBuilder()
         for (x in 0 until BMapController.MAP_SIZE) {
             for (y in 0 until BMapController.MAP_SIZE) {
                 if (matrix[x][y] == BMapController.NOT_INITIALIZED_UNIT_ID) {

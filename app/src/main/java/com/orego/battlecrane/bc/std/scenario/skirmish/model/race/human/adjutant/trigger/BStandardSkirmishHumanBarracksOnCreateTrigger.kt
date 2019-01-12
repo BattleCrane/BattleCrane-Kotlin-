@@ -21,7 +21,7 @@ class BStandardSkirmishHumanBarracksOnCreateTrigger(context: BGameContext, priva
             val pipe = BStandardSkirmishHumanBarracksOnCreateTrigger(
                 context,
                 playerId
-            ).wrapInPipe()
+            ).intoPipe()
             context.pipeline.bindPipeToNode(BOnCreateUnitNode.NAME, pipe)
         }
 
@@ -40,7 +40,7 @@ class BStandardSkirmishHumanBarracksOnCreateTrigger(context: BGameContext, priva
         return null
     }
 
-    override fun wrapInPipe() = Pipe()
+    override fun intoPipe() = Pipe()
 
     /**
      * Event.

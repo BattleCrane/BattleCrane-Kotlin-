@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
  * Trains marines.
  */
 
-open class BHumanBarracks private constructor(context: BGameContext, playerId: Long, x: Int, y: Int) :
+class BHumanBarracks private constructor(context: BGameContext, playerId: Long, x: Int, y: Int) :
     BHumanBuilding(context, playerId, x, y), BHitPointable, BLevelable, BProducable {
 
     companion object {
@@ -25,7 +25,7 @@ open class BHumanBarracks private constructor(context: BGameContext, playerId: L
 
         const val LEVEL_3_MAX_HIT_POINTS = 4
 
-        const val FIRST_LEVEL = 11
+        const val FIRST_LEVEL = 1
 
         const val SECOND_LEVEL = 2
 
@@ -77,7 +77,7 @@ open class BHumanBarracks private constructor(context: BGameContext, playerId: L
     override var isProduceEnable = false
 
     /**
-     * Builder
+     * Builder.
      */
 
     open class Builder {

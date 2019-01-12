@@ -26,7 +26,7 @@ abstract class BNode(protected val context: BGameContext) {
         this.pipeMap[pipe.id] = pipe
     }
 
-    open fun disconnectInnerPipe(pipeId : Long) {
+    open fun disconnectInnerPipe(pipeId: Long) {
         this.pipeMap.remove(pipeId)
     }
 
@@ -56,9 +56,9 @@ abstract class BNode(protected val context: BGameContext) {
         return null
     }
 
-    open fun wrapInPipe() = BPipe(this.context, mutableListOf(this))
+    open fun intoPipe() = BPipe(this.context, mutableListOf(this))
 
-    protected fun pushEventIntoPipes(event: BEvent) : BEvent {
+    protected fun pushEventIntoPipes(event: BEvent): BEvent {
         val pipes = this.pipeMap.values.toList()
         val size = pipes.size
         for (i in 0 until size) {
@@ -66,4 +66,17 @@ abstract class BNode(protected val context: BGameContext) {
         }
         return event
     }
+
+    fun removeUnusedComponents() {
+        val pipes = this.pipeMap.values.toList()
+        for (i in 0 until pipes.size) {
+            val pipe = pipes[i]
+            pipe.removeUnusedComponents()
+            if (pipe.isUnused()) {
+                this.pipeMap.remove(pipe.id)
+            }
+        }
+    }
+
+    open fun isUnused() = false
 }

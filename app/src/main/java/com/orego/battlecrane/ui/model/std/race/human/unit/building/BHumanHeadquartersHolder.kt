@@ -39,7 +39,7 @@ class BHumanHeadquartersHolder(uiGameContext: BUiGameContext, override val item:
         val node = pipe.findNodeBy { node ->
             node is BHumanHeadquarters.OnProduceEnableNode
         }
-        node!!.connectInnerPipe(OnProduceEnableNode(uiGameContext, this).wrapInPipe())
+        node!!.connectInnerPipe(OnProduceEnableNode(uiGameContext, this).intoPipe())
     }
 
     private fun getPath() =

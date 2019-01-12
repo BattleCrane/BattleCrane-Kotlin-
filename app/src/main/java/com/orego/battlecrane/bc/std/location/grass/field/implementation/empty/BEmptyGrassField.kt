@@ -1,10 +1,11 @@
-package com.orego.battlecrane.bc.std.location.grass.field.implementations.empty
+package com.orego.battlecrane.bc.std.location.grass.field.implementation.empty
 
 import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BEmptyField
 import com.orego.battlecrane.bc.std.location.grass.field.BGrassField
 
 class BEmptyGrassField private constructor(context: BGameContext, playerid: Long, x: Int, y: Int) :
-    BGrassField(context, playerid, x, y) {
+    BGrassField(context, playerid, x, y), BEmptyField {
 
     /**
      * Builder.

@@ -4,10 +4,6 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.trigger.BStandardSkirmishHumanBarracksOnCreateTrigger
 
-/**
- * Adjutant.
- */
-
 class BStandardSkirmishHumanAdjutantBuilder : BHumanAdjutant.Builder() {
 
     override fun build(context: BGameContext, playerId: Long): BHumanAdjutant {

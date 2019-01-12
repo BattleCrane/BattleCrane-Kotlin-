@@ -58,4 +58,16 @@ open class BPipe(
             return null
         }
     }
+
+    open fun isUnused() = false
+
+    fun removeUnusedComponents() {
+        for (i in 0 until this.nodes.size) {
+            val node = nodes[i]
+            node.removeUnusedComponents()
+            if (node.isUnused()) {
+                this.nodes.remove(node)
+            }
+        }
+    }
 }
