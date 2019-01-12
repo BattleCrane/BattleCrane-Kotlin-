@@ -169,7 +169,7 @@ class BBattleFragment : BFragment() {
             this@BBattleFragment.fragment_battle_to_train_image_view
         }
 
-        val timeProgressBar : ProgressBar by lazy {
+        val lineProgressBar : ProgressBar by lazy {
             this@BBattleFragment.fragment_battle_end_turn_progress_bar
         }
     }

@@ -1,7 +1,6 @@
 package com.orego.battlecrane.bc.api.model.player
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.node.BOnTurnFinishedNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
@@ -9,9 +8,8 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pi
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPlayerComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAdjutantHeap
-import java.util.*
-import java.util.concurrent.atomic.AtomicLong
 
 class BPlayer(context: BGameContext) {
 
@@ -51,49 +49,13 @@ class BPlayer(context: BGameContext) {
      * Context.
      */
 
-    val onTurnStartedPipeId: Long
+    val turnStartedConnection = BPipeConnection.createByNode(
+        context, BOnTurnStartedNode.NAME, OnTurnStartedNode(context, this.playerId)
+    )
 
-    val onTurnStartedNodeId : Long
-    
-    val onTurnFinishedPipeId: Long
-    
-    val onTurnFinishedNodeId :Long
-    
-    val turnTimerPipeId : Long
-    
-    val turnTimerNodeId : Long
-
-    init {
-        //Get pipeline:
-        val pipeline = context.pipeline
-
-        //Turn timer:
-        val turnTimerNode = TurnTimerNode(context, this.playerId)
-        val turnTimerPipe = turnTimerNode.wrapInPipe()
-
-        //On turn started:
-        val onTurnStartedNode =
-            OnTurnStartedNode(context, this.playerId)
-        onTurnStartedNode.connectInnerPipe(turnTimerPipe)
-        val onTurnStartedPipe = onTurnStartedNode.wrapInPipe()
-
-        //On turn finished:
-        val onTurnFinishedNode =
-            OnTurnFinishedNode(context, this.playerId)
-        val onTurnFinishedPipe = onTurnFinishedNode.wrapInPipe()
-
-        //Save pipe ids:
-        this.onTurnStartedPipeId = onTurnStartedPipe.id
-        this.onTurnStartedNodeId = onTurnStartedNode.id 
-        this.onTurnFinishedPipeId = onTurnFinishedPipe.id
-        this.onTurnFinishedNodeId = onTurnFinishedNode.id
-        this.turnTimerPipeId = turnTimerPipe.id
-        this.turnTimerNodeId = turnTimerNode.id
-
-        //Bind pipes:
-        pipeline.bindPipeToNode(BOnTurnStartedNode.NAME, onTurnStartedPipe)
-        pipeline.bindPipeToNode(BOnTurnFinishedNode.NAME, onTurnFinishedPipe)
-    }
+    val turnFinishedConnection = BPipeConnection.createByNode(
+        context, BOnTurnFinishedNode.NAME, OnTurnFinishedNode(context, this.playerId)
+    )
 
     /**
      * Player.
@@ -139,71 +101,5 @@ class BPlayer(context: BGameContext) {
                 null
             }
         }
-    }
-
-    @BPlayerComponent
-    class TurnTimerNode(context: BGameContext, var playerId: Long) : BNode(context) {
-
-        companion object {
-
-            private const val DEFAULT_TURN_TIME: Long = 45000
-
-            private const val SECOND: Long = 1000
-
-            private const val TIMER_NAME = "TURN_TIMER"
-
-            const val NAME = "TURN_TIMER_NODE"
-        }
-
-        override val name = NAME
-
-        var turnTime: Long? = DEFAULT_TURN_TIME
-
-        val timeLeft = AtomicLong(0)
-
-        private lateinit var turnTimerTask: TimerTask
-
-        override fun handle(event: BEvent): BEvent? {
-            if (event is BTurnPipe.Event && this.playerId == event.playerId) {
-//                when (event) {
-//                    is BOnTurnStartedPipe.Event -> {
-//                        val turnTime = this.turnTime
-//                        if (turnTime != null) {
-//                            this.timeLeft.set(turnTime)
-//                            timer(name = TIMER_NAME, period = SECOND, action = this.action)
-//                        }
-//                    }
-//                    is BOnTurnFinishedPipe.Event -> {
-//                        this.turnTimerTask.cancel()
-//                    }
-//                }
-                return event
-            } else {
-                return null
-            }
-        }
-
-        /**
-         * Clumsy timer.
-         */
-
-        private val action: TimerTask.() -> Unit = {
-            val time = this@TurnTimerNode.timeLeft.get()
-            val isTurnFinished = time <= 0
-            if (isTurnFinished) {
-                this.cancel()
-                this@TurnTimerNode.context.pipeline.pushEvent(
-                    BOnTurnFinishedPipe.Event(this@TurnTimerNode.playerId)
-                )
-            } else {
-                this@TurnTimerNode.timeLeft.set(time - SECOND)
-                val timeLeft = this@TurnTimerNode.timeLeft.get() / 1000
-                this@TurnTimerNode.pushEventIntoPipes(TimeLeftEvent(this@TurnTimerNode.playerId, timeLeft))
-                println("Time left: $timeLeft")
-            }
-            this@TurnTimerNode.turnTimerTask = this
-        }
-
-        class TimeLeftEvent(playerId : Long, val timeLeft : Long) : BTurnPipe.Event(playerId)
     }
 }

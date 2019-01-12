@@ -38,7 +38,6 @@ class BMapController {
     }
 
     fun placeUnitOnMap(unit: BUnit): Boolean {
-        println("! $unit")
         val startX = unit.x
         val startY = unit.y
         val unitId = unit.unitId
