@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.std.scenario.skirmish.BStandardSkirmishScenario
+import com.orego.battlecrane.bc.std.scenario.skirmish.BSkirmishScenario
 import com.orego.battlecrane.ui.model.api.plugin.BLocationPlugin
 import com.orego.battlecrane.ui.model.api.plugin.BRacePlugin
 import com.orego.battlecrane.ui.model.std.location.grass.BGrassLocationPlugin
@@ -26,7 +26,7 @@ class BScenarioViewModel : ViewModel() {
 
     //TODO: SEVERAL TIME!
     init {
-        this.gameScenario = BStandardSkirmishScenario()
+        this.gameScenario = BSkirmishScenario()
         this.racePlugins[BHumanPlugin::class.java] = BHumanPlugin()
         this.locationPlugin = BGrassLocationPlugin()
     }

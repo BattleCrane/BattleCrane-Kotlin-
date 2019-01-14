@@ -59,78 +59,8 @@ class BHumanWall(context: BGameContext, playerId: Long, x: Int, y: Int) :
         MAX_HIT_POINTS
 
     /**
-     * Context.
-     */
-
-    val hitPointsActionConnection = BPipeConnection.createByNode(
-        context, BOnHitPointsActionNode.NAME,
-        OnHitPointsActionNode(
-            context,
-            this.unitId
-        )
-    )
-
-    val destroyConnection = BPipeConnection.createByNode(
-        context, BOnDestroyUnitNode.NAME,
-        OnDestroyNode(
-            context,
-            this.unitId
-        )
-    )
-
-    /**
      * Node.
      */
-
-    @BAdjutantComponent
-    class OnCreateNode(context: BGameContext, private val playerId: Long) : BNode(context) {
-
-        companion object {
-
-            fun createEvent(playerId: Long, x: Int, y: Int) =
-                Event(
-                    playerId,
-                    x,
-                    y
-                )
-        }
-
-        /**
-         * Context.
-         */
-
-        override fun handle(event: BEvent): BEvent? {
-            if (event is Event
-                && event.playerId == this.playerId
-                && event.createWall(this.context)
-            ) {
-                return this.pushEventIntoPipes(event)
-            }
-            return null
-        }
-
-        /**
-         * Event.
-         */
-
-        class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
-
-            fun createWall(context: BGameContext): Boolean {
-                val controller = context.mapController
-                val wall = BHumanWall(
-                    context,
-                    this.playerId,
-                    this.x,
-                    this.y
-                )
-                val isSuccessful = controller.placeUnitOnMap(wall)
-                if (isSuccessful) {
-                    context.storage.addObject(wall)
-                }
-                return isSuccessful
-            }
-        }
-    }
 
     @BUnitComponent
     class OnHitPointsActionNode(context: BGameContext, unitId: Long) : BNode(context) {

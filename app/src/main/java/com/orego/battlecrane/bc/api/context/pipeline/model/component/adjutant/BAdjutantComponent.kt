@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant
 
 /**
- * Specifies that unique component in game context.
+ * Specifies that unique component of adjutant.
  */
 
 @Retention(value = AnnotationRetention.SOURCE)

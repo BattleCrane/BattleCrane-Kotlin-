@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.trigger.*
 
-class BStandardSkirmishHumanBarracksBuilder : BHumanBarracks.Builder() {
+class BSkirmishHumanBarracksBuilder : BHumanBarracks.Builder() {
 
     override fun build(context: BGameContext, playerId: Long, x: Int, y: Int): BHumanBarracks {
         val barracks = super.build(context, playerId, x, y)

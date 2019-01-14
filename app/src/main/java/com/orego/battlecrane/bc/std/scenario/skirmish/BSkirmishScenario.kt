@@ -11,10 +11,10 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.head
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.wall.BHumanWall
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.location.grass.BStandardSkirmishEmptyGrassFieldBuilder
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.player.BStandardSkirmishPlayerBuilder
-import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.BStandardSkirmishHumanAdjutantBuilder
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.BSkirmishHumanAdjutantBuilder
 import java.util.*
 
-class BStandardSkirmishScenario : BGameScenario {
+class BSkirmishScenario : BGameScenario {
 
     override val startTurnPlayerPosition = Random().nextInt(1)
 
@@ -38,7 +38,7 @@ class BStandardSkirmishScenario : BGameScenario {
         val adjutantList = mutableListOf<BAdjutant>()
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()
-        val builder = BStandardSkirmishHumanAdjutantBuilder()
+        val builder = BSkirmishHumanAdjutantBuilder()
         if (players.size == 2) {
             adjutantList.add(builder.build(context, players[0].playerId))
             adjutantList.add(builder.build(context, players[1].playerId))

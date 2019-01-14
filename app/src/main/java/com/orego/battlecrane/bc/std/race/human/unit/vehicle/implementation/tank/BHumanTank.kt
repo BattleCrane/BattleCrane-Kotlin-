@@ -21,8 +21,8 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAttackableHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BCreature
-import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BVehicle
+import com.orego.battlecrane.bc.api.model.entity.main.unit.type.BCreature
+import com.orego.battlecrane.bc.api.model.entity.main.unit.type.BVehicle
 import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.std.location.grass.field.BGrassField
@@ -88,99 +88,6 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
      * Node.
      */
 
-    val turnConnection = BPipeConnection.createByNode(
-        context, BTurnNode.NAME,
-        OnTurnNode(
-            context,
-            this.unitId
-        )
-    )
-
-    val attackActionConnection = BPipeConnection.createByNode(
-        context, BOnAttackActionNode.NAME,
-        OnAttackActionNode(
-            context,
-            this.unitId
-        )
-    )
-
-    val attackEnableConnection = BPipeConnection.createByNode(
-        context, BOnAttackEnableNode.NAME,
-        OnAttackEnableNode(
-            context,
-            this.unitId
-        )
-    )
-
-    val hitPointsConnection = BPipeConnection.createByNode(
-        context, BOnHitPointsActionNode.NAME,
-        OnHitPointsActionNode(
-            context,
-            this.unitId
-        )
-    )
-
-    val destroyConnection = BPipeConnection.createByNode(
-        context, BOnDestroyUnitNode.NAME,
-        OnDestroyNode(
-            context,
-            this.unitId
-        )
-    )
-
-    /**
-     * Node.
-     */
-
-    @BAdjutantComponent
-    class OnCreateNode(context: BGameContext, private val playerId: Long) : BNode(context) {
-
-        companion object {
-
-            fun createEvent(playerId: Long, x: Int, y: Int) =
-                Event(
-                    playerId,
-                    x,
-                    y
-                )
-        }
-
-        private val mapController = this.context.mapController
-
-        private val storage = this.context.storage
-
-        override fun handle(event: BEvent): BEvent? {
-            if (event is Event
-                && event.playerId == this.playerId
-                && event.perform(this.context)
-            ) {
-                return this.pushEventIntoPipes(event)
-            }
-            return null
-        }
-
-        /**
-         * Event.
-         */
-
-        open class Event(val playerId: Long, x: Int, y: Int) :
-            BOnCreateUnitPipe.Event(x, y) {
-
-            fun perform(context: BGameContext): Boolean {
-                val tank = BHumanTank(
-                    context,
-                    this.playerId,
-                    this.x,
-                    this.y
-                )
-                val isSuccessful = context.mapController.placeUnitOnMap(tank)
-                if (isSuccessful) {
-                    context.storage.addObject(tank)
-                }
-                return isSuccessful
-            }
-        }
-    }
 
     @BUnitComponent
     class OnTurnNode(context: BGameContext, unitId: Long) : BNode(context) {

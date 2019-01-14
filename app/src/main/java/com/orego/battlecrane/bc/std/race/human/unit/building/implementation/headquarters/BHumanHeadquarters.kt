@@ -11,10 +11,8 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPi
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.BTurnNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.node.BOnDestroyUnitNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
@@ -22,8 +20,8 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
 import com.orego.battlecrane.bc.api.model.entity.property.BProducable
-import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
+import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
 
 /**
  * Command center of human race.
@@ -116,61 +114,6 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
             this.unitId
         )
     )
-
-    /**
-     * Node.
-     */
-
-    @BAdjutantComponent
-    class OnCreateNode(context: BGameContext, private val playerId: Long) : BNode(context) {
-
-        companion object {
-
-            fun createEvent(playerId: Long, x: Int, y: Int) =
-                Event(
-                    playerId,
-                    x,
-                    y
-                )
-        }
-
-        /**
-         * Context.
-         */
-
-        override fun handle(event: BEvent): BEvent? {
-            if (event is Event
-                && event.playerId == this.playerId
-                && event.perform(this.context)
-            ) {
-                return this.pushEventIntoPipes(event)
-            }
-            return null
-        }
-
-        /**
-         * Event.
-         */
-
-        class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
-
-            fun perform(context: BGameContext): Boolean {
-                val controller = context.mapController
-                val headquarters =
-                    BHumanHeadquarters(
-                        context,
-                        this.playerId,
-                        this.x,
-                        this.y
-                    )
-                val isSuccessful = controller.placeUnitOnMap(headquarters)
-                if (isSuccessful) {
-                    context.storage.addObject(headquarters)
-                }
-                return isSuccessful
-            }
-        }
-    }
 
     @BUnitComponent
     class OnTurnNode(context: BGameContext, unitId: Long) : BNode(context) {

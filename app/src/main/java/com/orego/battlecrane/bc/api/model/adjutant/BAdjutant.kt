@@ -12,6 +12,10 @@ abstract class BAdjutant protected constructor(context: BGameContext, val player
 
     abstract var isAble : Boolean
 
+    /**
+     * Builder.
+     */
+
     abstract class Builder {
 
         abstract fun build(context: BGameContext, playerId: Long) : BAdjutant

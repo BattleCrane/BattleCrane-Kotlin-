@@ -20,12 +20,10 @@ class BMapController {
     private val matrix = Array(MAP_SIZE) { LongArray(MAP_SIZE) { NOT_INITIALIZED_UNIT_ID } }
 
     fun initMap(context: BGameContext) {
-        //Place units on mapConstraintLayout:
         val unitHeap = context.storage.getHeap(BUnitHeap::class.java)
         unitHeap.getObjectList().forEach { unit ->
             this.placeUnitOnMap(unit)
         }
-        //Check initialized mapConstraintLayout:
         for (x in 0 until MAP_SIZE) {
             for (y in 0 until MAP_SIZE) {
                 val isNotInitiablizedField = this.matrix[x][y] == NOT_INITIALIZED_UNIT_ID

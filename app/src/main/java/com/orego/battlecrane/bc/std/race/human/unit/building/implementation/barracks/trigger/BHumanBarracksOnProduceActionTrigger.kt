@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.api.model.entity.main.unit.attribute.BEmptyField
+import com.orego.battlecrane.bc.api.model.entity.main.unit.type.BEmptyField
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.marine.BHumanMarine
 
