@@ -33,8 +33,9 @@ class BSkirmishHumanGeneratorOnCreateTrigger private constructor(context: BGameC
      * Event.
      */
 
-    class Event(playerId: Long, x: Int, y: Int) : BUnitOnCreateTrigger.Event(playerId, x, y) {
-        override fun createUnit(context: BGameContext) =
+    class Event private constructor(playerId: Long, x: Int, y: Int) : BUnitOnCreateTrigger.Event(playerId, x, y) {
+
+        override fun create(context: BGameContext) =
             BHumanGenerator(
                 context,
                 this.playerId,

@@ -16,7 +16,7 @@ open class BUnitOnCreateTrigger protected constructor(context: BGameContext, var
 
     override fun handle(event: BEvent): BEvent? {
         if (event is Event && event.playerId == this.playerId && event.perform(this.context)) {
-            return this.pushEventIntoPipes(event)
+            return this.pushToInnerPipes(event)
         }
         return null
     }
@@ -32,31 +32,28 @@ open class BUnitOnCreateTrigger protected constructor(context: BGameContext, var
         val playerId = this@BUnitOnCreateTrigger.playerId
     }
 
-
     /**
      * Event.
      */
 
     abstract class Event protected constructor(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
 
-        fun perform(context: BGameContext): Boolean {
+        open fun perform(context: BGameContext): Boolean {
             val controller = context.mapController
-            val startX = this.x
-            val startY = this.y
-            val unit = this.createUnit(context)
-            val isSuccessful = controller.placeUnitOnMap(unit)
+            val unit = this.create(context)
             val pipeline = context.pipeline
-            for (x in startX until startX + unit.width) {
-                for (y in startY until startY + unit.height) {
+            controller.placeUnitOnMap(unit)
+            for (x in this.x until this.x + unit.width) {
+                for (y in this.y until this.y + unit.height) {
                     val unitId = controller.getUnitIdByPosition(x, y)
                     pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(unitId))
                 }
             }
             context.storage.addObject(unit)
-            return isSuccessful
+            return true
         }
 
-        abstract fun createUnit(context: BGameContext): BUnit
+        protected abstract fun create(context: BGameContext): BUnit
     }
 
     companion object {

@@ -30,13 +30,13 @@ class BTurnNode(context: BGameContext) : BNode(context) {
     override fun handle(event: BEvent) =
         when (event) {
             is BGameContext.OnGameStartedEvent -> {
-                this.pushEventIntoPipes(BOnTurnStartedPipe.Event(this.playerController.currentPlayerId))
+                this.pushToInnerPipes(BOnTurnStartedPipe.Event(this.playerController.currentPlayerId))
             }
             is BGameContext.OnGameFinishedEvent -> {
-                this.pushEventIntoPipes(event)
+                this.pushToInnerPipes(event)
             }
             is BTurnPipe.Event -> {
-                this.pushEventIntoPipes(event)
+                this.pushToInnerPipes(event)
             }
             else -> null
         }

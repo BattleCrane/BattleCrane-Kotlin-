@@ -23,7 +23,7 @@ class BHitPointableNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent): BEvent? {
         return if (event is BHitPointablePipe.Event) {
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
         } else {
             null
         }

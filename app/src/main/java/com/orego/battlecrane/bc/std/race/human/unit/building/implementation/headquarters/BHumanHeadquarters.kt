@@ -137,7 +137,7 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
                 val producableId = this.headquarters.producableId
                 when (event) {
                     is BOnTurnStartedPipe.Event -> {
-                        this.pushEventIntoPipes(event)
+                        this.pushToInnerPipes(event)
                         if (this.isBattleMode()) {
                             this.makeAttack()
                         }
@@ -147,7 +147,7 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
                         return event
                     }
                     is BOnTurnFinishedPipe.Event -> {
-                        this.pushEventIntoPipes(event)
+                        this.pushToInnerPipes(event)
                         this.pipeline.pushEvent(
                             BOnProduceEnablePipe.createEvent(producableId, false)
                         )
@@ -181,7 +181,7 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
                 && event.isEnable(this.context)
             ) {
                 event.perform(this.context)
-                return this.pushEventIntoPipes(event)
+                return this.pushToInnerPipes(event)
             }
             return null
         }
@@ -214,7 +214,7 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
                     is BHumanEvents.Construct.Event -> {
                         if (event.isEnable(this.context, this.headquarters.playerId)) {
                             event.perform(this.context, this.headquarters.playerId)
-                            this.pushEventIntoPipes(event)
+                            this.pushToInnerPipes(event)
                             this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
                             return event
                         }
@@ -222,7 +222,7 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
                     is BHumanEvents.Upgrade.Event -> {
                         if (event.isEnable(this.context)) {
                             event.perform(this.pipeline)
-                            this.pushEventIntoPipes(event)
+                            this.pushToInnerPipes(event)
                             this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
                             return event
                         }
@@ -256,7 +256,7 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
                 && event.isEnable(this.context)
             ) {
                 event.perform(this.context)
-                this.pushEventIntoPipes(event)
+                this.pushToInnerPipes(event)
                 if (this.headquarters.currentHitPoints <= 0) {
                     this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.headquarters.unitId))
                 }
@@ -285,7 +285,7 @@ class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) 
 
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnDestroyUnitPipe.Event && event.unitId == this.headquarters.unitId) {
-                this.pushEventIntoPipes(event)
+                this.pushToInnerPipes(event)
                 this.unbindPipes()
                 this.storage.removeObject(event.unitId, BUnitHeap::class.java)
                 return event

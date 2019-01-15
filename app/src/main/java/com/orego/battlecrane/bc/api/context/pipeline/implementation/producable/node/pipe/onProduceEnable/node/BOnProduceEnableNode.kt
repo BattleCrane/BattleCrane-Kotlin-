@@ -18,7 +18,7 @@ class BOnProduceEnableNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnProduceEnablePipe.Event) {
-            return this.pushEventIntoPipes(event)
+            return this.pushToInnerPipes(event)
         }
         return null
     }

@@ -38,14 +38,14 @@ class BHumanBarracksOnTurnTrigger(context: BGameContext, val barracks: BHumanBar
             val producableId = this.barracks.producableId
             when (event) {
                 is BOnTurnStartedPipe.Event -> {
-                    this.pushEventIntoPipes(event)
+                    this.pushToInnerPipes(event)
                     this.pipeline.pushEvent(
                         BOnProduceEnablePipe.createEvent(producableId, true)
                     )
                     return event
                 }
                 is BOnTurnFinishedPipe.Event -> {
-                    this.pushEventIntoPipes(event)
+                    this.pushToInnerPipes(event)
                     this.pipeline.pushEvent(
                         BOnProduceEnablePipe.createEvent(producableId, false)
                     )

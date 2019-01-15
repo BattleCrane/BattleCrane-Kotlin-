@@ -18,7 +18,7 @@ class BOnDestroyUnitNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent) =
         if (event is BOnDestroyUnitPipe.Event) {
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
         } else {
             null
         }

@@ -47,7 +47,7 @@ class BTurnTimerNode(context: BGameContext, var playerId: Long) : BNode(context)
                     val turnTime = this.turnTime
                     if (turnTime != null) {
                         this.timeLeft.set(turnTime)
-                        this.pushEventIntoPipes(
+                        this.pushToInnerPipes(
                             StartEvent(
                                 this.playerId,
                                 turnTime
@@ -57,7 +57,7 @@ class BTurnTimerNode(context: BGameContext, var playerId: Long) : BNode(context)
                     }
                 }
                 is BOnTurnFinishedPipe.Event -> {
-                    this.pushEventIntoPipes(
+                    this.pushToInnerPipes(
                         StopEvent(
                             this.playerId
                         )
@@ -83,7 +83,7 @@ class BTurnTimerNode(context: BGameContext, var playerId: Long) : BNode(context)
             this@BTurnTimerNode.pipeline.pushEvent(BOnTurnFinishedPipe.Event(this@BTurnTimerNode.playerId))
         } else {
             this@BTurnTimerNode.timeLeft.set(timeLeft - SECOND)
-            this@BTurnTimerNode.pushEventIntoPipes(
+            this@BTurnTimerNode.pushToInnerPipes(
                 TickEvent(
                     this@BTurnTimerNode.playerId,
                     this@BTurnTimerNode.timeLeft.get()

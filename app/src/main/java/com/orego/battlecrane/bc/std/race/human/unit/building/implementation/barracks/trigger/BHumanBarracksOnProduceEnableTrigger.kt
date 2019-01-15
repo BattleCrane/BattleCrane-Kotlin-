@@ -30,7 +30,7 @@ class BHumanBarracksOnProduceEnableTrigger(context: BGameContext, val barracks: 
             && event.isEnable(this.context)
         ) {
             event.perform(this.context)
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
             return event
         }
         return null

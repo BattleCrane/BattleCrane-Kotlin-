@@ -23,7 +23,7 @@ class BOnCreateUnitNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent) =
         if (event is BOnCreateUnitPipe.Event) {
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
         } else {
             null
         }

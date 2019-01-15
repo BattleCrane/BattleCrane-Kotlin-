@@ -36,7 +36,7 @@ class BHumanBarracksOnHitPointsActionTrigger(context: BGameContext, val barracks
             && event.isEnable(this.context)
         ) {
             event.perform(this.context)
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
             if (this.barracks.currentHitPoints <= 0) {
                 this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.barracks.unitId))
             }

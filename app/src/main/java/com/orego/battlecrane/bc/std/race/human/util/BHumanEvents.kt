@@ -262,8 +262,14 @@ object BHumanEvents {
         }
 
         class WallEvent(producableId: Long, x: Int, y: Int) :
-            Event(producableId, x, y, BHumanWall.WIDTH, BHumanWall.HEIGHT) {
+            Event(producableId, x, y, BHumanWall.WIDTH, BHumanWall.HEIGHT * WALL_COUNT) {
 
+            companion object {
+
+                const val WALL_COUNT = 2
+            }
+
+            //TODO: MAKE TWO WALLS:
             override fun getEvent(playerId: Long, x: Int, y: Int) =
                 BHumanWall.OnCreateNode.createEvent(playerId, x, y)
         }

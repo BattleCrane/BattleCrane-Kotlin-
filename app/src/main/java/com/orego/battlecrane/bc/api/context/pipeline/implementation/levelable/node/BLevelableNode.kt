@@ -18,7 +18,7 @@ class BLevelableNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent) : BEvent? {
         return if (event is BLevelablePipe.Event) {
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
         } else {
             null
         }

@@ -25,7 +25,7 @@ class BUnitNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent) =
         if (event is BUnitPipe.Event) {
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
         } else {
             null
         }

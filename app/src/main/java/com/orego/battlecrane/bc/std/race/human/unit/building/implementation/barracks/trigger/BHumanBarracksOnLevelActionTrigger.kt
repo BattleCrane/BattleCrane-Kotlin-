@@ -38,7 +38,7 @@ class BHumanBarracksOnLevelActionTrigger(context: BGameContext, val barracks: BH
             && event.isEnable(this.context)
         ) {
             event.perform(this.context)
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
             this.changeHitPointsByLevel()
             return event
         }

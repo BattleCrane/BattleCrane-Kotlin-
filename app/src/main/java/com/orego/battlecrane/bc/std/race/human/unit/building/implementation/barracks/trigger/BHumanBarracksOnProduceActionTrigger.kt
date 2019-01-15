@@ -49,7 +49,7 @@ class BHumanBarracksOnProduceActionTrigger private constructor(context: BGameCon
             && event.isEnable(this.context, this.barracks)
         ) {
             event.perform(this.context, this.barracks)
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
             this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
             return event
         }

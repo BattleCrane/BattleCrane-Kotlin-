@@ -25,7 +25,7 @@ class BOnTurnFinishedNode(context: BGameContext) : BNode(context) {
 
         return if (event is BOnTurnFinishedPipe.Event) {
             //Make broadcast for each pipes:
-            this.pushEventIntoPipes(event)
+            this.pushToInnerPipes(event)
             //Switch player:
             val nextPlayerId = this.setNextAblePlayer()
             this.pipeline.pushEvent(BOnTurnStartedPipe.Event(nextPlayerId))

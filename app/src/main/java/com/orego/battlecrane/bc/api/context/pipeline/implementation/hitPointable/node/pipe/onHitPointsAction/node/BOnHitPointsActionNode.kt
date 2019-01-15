@@ -18,7 +18,7 @@ class BOnHitPointsActionNode(context: BGameContext) : BNode(context) {
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnHitPointsActionPipe.Event) {
-            return this.pushEventIntoPipes(event)
+            return this.pushToInnerPipes(event)
         }
         return null
     }

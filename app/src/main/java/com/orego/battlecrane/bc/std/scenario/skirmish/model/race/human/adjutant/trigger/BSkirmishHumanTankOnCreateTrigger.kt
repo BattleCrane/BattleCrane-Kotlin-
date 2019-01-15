@@ -1,42 +1,30 @@
 package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.trigger
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.node.BOnCreateUnitNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.tank.BHumanTank
+import com.orego.battlecrane.bc.api.model.adjutant.trigger.BUnitOnCreateTrigger
+import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
 
 @BAdjutantComponent
-class BSkirmishHumanTankOnCreateTrigger private constructor(context: BGameContext, private val playerId: Long) :
-    BNode(context) {
+class BSkirmishHumanTankOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
+    BUnitOnCreateTrigger(context, playerId) {
 
     companion object {
 
         fun connect(context: BGameContext, playerId: Long) {
-            val pipe = BSkirmishHumanTankOnCreateTrigger(
-                context,
-                playerId
-            ).intoPipe()
-            context.pipeline.bindPipeToNode(BOnCreateUnitNode.NAME, pipe)
+            BUnitOnCreateTrigger.connect(context) {
+                BSkirmishHumanTankOnCreateTrigger(
+                    context,
+                    playerId
+                )
+            }
         }
-
-        fun createEvent(playerId: Long, x: Int, y: Int) =
-            Event(
-                playerId,
-                x,
-                y
-            )
     }
 
     override fun handle(event: BEvent): BEvent? {
-        if (event is Event
-            && event.playerId == this.playerId
-            && event.perform(this.context)
-        ) {
-            return this.pushEventIntoPipes(event)
+        if (event is Event) {
+            return super.handle(event)
         }
         return null
     }
@@ -44,33 +32,24 @@ class BSkirmishHumanTankOnCreateTrigger private constructor(context: BGameContex
     override fun intoPipe() = Pipe()
 
     /**
-     * Event.
-     */
-
-    open class Event(val playerId: Long, x: Int, y: Int) :
-        BOnCreateUnitPipe.Event(x, y) {
-
-        fun perform(context: BGameContext): Boolean {
-            val tank = BHumanTank(
-                context,
-                this.playerId,
-                this.x,
-                this.y
-            )
-            val isSuccessful = context.mapController.placeUnitOnMap(tank)
-            if (isSuccessful) {
-                context.storage.addObject(tank)
-            }
-            return isSuccessful
-        }
-    }
-
-    /**
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
+    inner class Pipe : BUnitOnCreateTrigger.Pipe()
 
-        val playerId = this@BSkirmishHumanTankOnCreateTrigger.playerId
+    /**
+     * Event.
+     */
+
+    class Event private constructor(playerId: Long, x: Int, y: Int) : BUnitOnCreateTrigger.Event(playerId, x, y) {
+
+        override fun create(context: BGameContext): BUnit {
+            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        }
+
+        companion object {
+
+            fun create(playerId: Long, x: Int, y: Int) = Event(playerId, x, y)
+        }
     }
 }

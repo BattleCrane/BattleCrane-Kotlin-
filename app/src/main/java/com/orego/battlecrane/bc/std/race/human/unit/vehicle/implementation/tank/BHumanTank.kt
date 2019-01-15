@@ -1,23 +1,15 @@
 package com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.tank
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.node.BOnAttackActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.node.BOnAttackEnableNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.BTurnNode
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.node.BOnDestroyUnitNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAttackableHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
@@ -100,7 +92,7 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
             return if (event is BTurnPipe.Event && this.tank.playerId == event.playerId) {
                 val pipeline = this.context.pipeline
                 val attackableId = this.tank.attackableId
-                this.pushEventIntoPipes(event)
+                this.pushToInnerPipes(event)
                 when (event) {
                     is BOnTurnStartedPipe.Event -> {
                         pipeline.pushEvent(
@@ -152,7 +144,7 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
                 && event.isEnable(this.context)
             ) {
                 event.perform(this.context, this.tank.damage)
-                this.pushEventIntoPipes(event)
+                this.pushToInnerPipes(event)
                 return event
             }
             return null
@@ -210,7 +202,7 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
                 && event.isEnable(this.context)
             ) {
                 event.perform(this.context)
-                return this.pushEventIntoPipes(event)
+                return this.pushToInnerPipes(event)
             }
             return null
         }
@@ -239,7 +231,7 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
                 && event.isEnable(this.context)
             ) {
                 event.perform(this.context)
-                this.pushEventIntoPipes(event)
+                this.pushToInnerPipes(event)
                 if (this.tank.currentHitPoints <= 0) {
                     this.pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(this.tank.unitId))
                 }
@@ -268,7 +260,7 @@ class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
         override fun handle(event: BEvent): BEvent? {
             if (event is BOnDestroyUnitPipe.Event && event.unitId == this.tank.unitId) {
-                this.pushEventIntoPipes(event)
+                this.pushToInnerPipes(event)
                 this.unbindNodes()
                 this.storage.removeObject(event.unitId, BUnitHeap::class.java)
                 return event

@@ -45,7 +45,7 @@ class BSkirmishHumanBarracksOnCreateTrigger private constructor(context: BGameCo
 
     class Event private constructor(playerId: Long, x: Int, y: Int) : BUnitOnCreateTrigger.Event(playerId, x, y) {
 
-        override fun createUnit(context: BGameContext) =
+        override fun create(context: BGameContext) =
             BSkirmishHumanBarracksBuilder().build(
                 context,
                 this.playerId,
