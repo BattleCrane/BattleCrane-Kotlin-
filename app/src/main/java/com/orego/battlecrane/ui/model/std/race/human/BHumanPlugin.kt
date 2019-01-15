@@ -1,9 +1,9 @@
 package com.orego.battlecrane.ui.model.std.race.human
 
-import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
+import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.factory.BHumanFactory
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.generator.BHumanGenerator
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.headquarters.BHumanHeadquarters
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret

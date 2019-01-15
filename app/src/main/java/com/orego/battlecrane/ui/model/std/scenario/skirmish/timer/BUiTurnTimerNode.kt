@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPla
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.std.scenario.skirmish.timer.BTurnTimerNode
+import com.orego.battlecrane.bc.std.scenario.skirmish.timer.BTurnTimerTrigger
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 
 @BPlayerComponent
@@ -20,7 +20,7 @@ class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val player
         fun connect(uiContext: BUiGameContext, player: BPlayer) {
             val playerId = player.playerId
             val turnTimerNode = uiContext.gameContext.pipeline.findNodeBy { node ->
-                node is BTurnTimerNode && node.playerId == playerId
+                node is BTurnTimerTrigger && node.playerId == playerId
             }
             turnTimerNode.connectInnerPipe(
                 BUiTurnTimerNode(
@@ -32,14 +32,14 @@ class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val player
 
     override fun handle(event: BEvent): BEvent? {
         val animation: suspend () -> Unit = when (event) {
-            is BTurnTimerNode.StartEvent -> {
+            is BTurnTimerTrigger.StartEvent -> {
                 {
                     this.turnTimeProgressBar.min =
                             DEFAULT_MIN
-                    this.turnTimeProgressBar.max = (event.turnTime / BTurnTimerNode.SECOND).toInt()
+                    this.turnTimeProgressBar.max = (event.turnTime / BTurnTimerTrigger.SECOND).toInt()
                 }
             }
-            is BTurnTimerNode.StopEvent -> {
+            is BTurnTimerTrigger.StopEvent -> {
                 {
                     this.turnTimeProgressBar.min =
                             DEFAULT_MIN
@@ -47,9 +47,9 @@ class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val player
                             DEFAULT_MIN
                 }
             }
-            is BTurnTimerNode.TickEvent -> {
+            is BTurnTimerTrigger.TickEvent -> {
                 {
-                    this.turnTimeProgressBar.progress = (event.timeLeft / BTurnTimerNode.SECOND).toInt()
+                    this.turnTimeProgressBar.progress = (event.timeLeft / BTurnTimerTrigger.SECOND).toInt()
                 }
             }
             else -> {

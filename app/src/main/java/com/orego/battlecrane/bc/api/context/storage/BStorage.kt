@@ -1,12 +1,10 @@
 package com.orego.battlecrane.bc.api.context.storage
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.storage.heap.BHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.*
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 
-@BContextComponent
 class BStorage(private val context: BGameContext) {
 
     val heapMap = mutableMapOf<Class<*>, BHeap<*>>(

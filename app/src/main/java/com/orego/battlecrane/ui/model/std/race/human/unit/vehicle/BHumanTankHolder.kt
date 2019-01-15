@@ -1,6 +1,6 @@
 package com.orego.battlecrane.ui.model.std.race.human.unit.vehicle
 
-import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
+import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.tank.BHumanTank
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder

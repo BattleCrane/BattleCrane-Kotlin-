@@ -13,10 +13,10 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAttackableHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.api.model.entity.main.unit.type.BCreature
-import com.orego.battlecrane.bc.api.model.entity.main.unit.type.BVehicle
-import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
-import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
+import com.orego.battlecrane.bc.api.model.unit.type.BCreature
+import com.orego.battlecrane.bc.api.model.unit.type.BVehicle
+import com.orego.battlecrane.bc.api.model.property.attackable.BAttackable
+import com.orego.battlecrane.bc.api.model.property.hitPointable.BHitPointable
 import com.orego.battlecrane.bc.std.location.grass.field.BGrassField
 import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.marine.BHumanMarine
@@ -28,7 +28,8 @@ import com.orego.battlecrane.bc.std.race.human.unit.vehicle.BHumanVehicle
  */
 
 class BHumanTank(context: BGameContext, playerId: Long, x: Int, y: Int) :
-    BHumanVehicle(context, playerId, x, y), BHitPointable, BAttackable {
+    BHumanVehicle(context, playerId, x, y), BHitPointable,
+    BAttackable {
 
     companion object {
 

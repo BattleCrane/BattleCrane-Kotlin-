@@ -18,8 +18,8 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipeConnection
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
-import com.orego.battlecrane.bc.api.model.entity.property.BProducable
+import com.orego.battlecrane.bc.api.model.property.hitPointable.BHitPointable
+import com.orego.battlecrane.bc.api.model.property.producable.BProducable
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
 
@@ -28,7 +28,8 @@ import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
  */
 
 class BHumanHeadquarters(context: BGameContext, playerId: Long, x: Int, y: Int) :
-    BHumanBuilding(context, playerId, x, y), BHitPointable, BProducable {
+    BHumanBuilding(context, playerId, x, y), BHitPointable,
+    BProducable {
 
     companion object {
 

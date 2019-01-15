@@ -2,17 +2,10 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointabl
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
-@BContextComponent
 class BOnHitPointsActionNode(context: BGameContext) : BNode(context) {
-
-    companion object {
-
-        const val NAME = "ON_HIT_POINTS_ACTION_NODE"
-    }
 
     override val name = NAME
 
@@ -21,5 +14,14 @@ class BOnHitPointsActionNode(context: BGameContext) : BNode(context) {
             return this.pushToInnerPipes(event)
         }
         return null
+    }
+
+    companion object {
+
+        const val NAME = "ON_HIT_POINTS_ACTION_NODE"
+
+        fun connect(context: BGameContext, create: () -> BNode) {
+            context.pipeline.bindPipeToNode(NAME, create().intoPipe())
+        }
     }
 }

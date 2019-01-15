@@ -2,11 +2,9 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.n
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.BLevelablePipe
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
-@BContextComponent
 class BLevelableNode(context: BGameContext) : BNode(context) {
 
     companion object {

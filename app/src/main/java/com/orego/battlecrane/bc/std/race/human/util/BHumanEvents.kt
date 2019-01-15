@@ -10,12 +10,12 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.n
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BLevelableHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
-import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
+import com.orego.battlecrane.bc.api.model.property.hitPointable.BHitPointable
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.std.location.grass.field.implementation.empty.BEmptyGrassField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.factory.BHumanFactory
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.generator.BHumanGenerator
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.wall.BHumanWall

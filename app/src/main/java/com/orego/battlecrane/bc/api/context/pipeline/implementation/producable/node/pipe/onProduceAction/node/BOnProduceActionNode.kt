@@ -2,17 +2,10 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.BOnProduceActionPipe
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
-@BContextComponent
 class BOnProduceActionNode(context: BGameContext) : BNode(context){
-
-    companion object {
-
-        const val NAME = "ON_PRODUCE_ACTION_NODE"
-    }
 
     override val name = NAME
 
@@ -21,5 +14,14 @@ class BOnProduceActionNode(context: BGameContext) : BNode(context){
             return this.pushToInnerPipes(event)
         }
         return null
+    }
+
+    companion object {
+
+        const val NAME = "ON_PRODUCE_ACTION_NODE"
+
+        fun connect(context: BGameContext, create: () -> BNode) {
+            context.pipeline.bindPipeToNode(NAME, create().intoPipe())
+        }
     }
 }

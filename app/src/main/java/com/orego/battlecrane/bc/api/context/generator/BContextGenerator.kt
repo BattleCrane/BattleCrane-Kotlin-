@@ -1,17 +1,15 @@
 package com.orego.battlecrane.bc.api.context.generator
 
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
-import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
-import com.orego.battlecrane.bc.api.model.entity.property.BAttackable
-import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
-import com.orego.battlecrane.bc.api.model.entity.property.BLevelable
-import com.orego.battlecrane.bc.api.model.entity.property.BProducable
+import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.api.model.property.attackable.BAttackable
+import com.orego.battlecrane.bc.api.model.property.hitPointable.BHitPointable
+import com.orego.battlecrane.bc.api.model.property.levelable.BLevelable
+import com.orego.battlecrane.bc.api.model.property.producable.BProducable
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 
-@BContextComponent
 class BContextGenerator {
 
     val generatorMap = mutableMapOf<Class<*>, IdGenerator>(

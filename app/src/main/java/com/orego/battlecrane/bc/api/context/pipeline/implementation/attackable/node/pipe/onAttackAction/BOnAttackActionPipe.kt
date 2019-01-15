@@ -3,10 +3,8 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.BAttackablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.node.BOnAttackActionNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 
-@BContextComponent
 class BOnAttackActionPipe(context: BGameContext) : BPipe(context) {
 
     companion object {

@@ -2,17 +2,10 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.p
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
-@BContextComponent
 class BOnDestroyUnitNode(context: BGameContext) : BNode(context) {
-
-    companion object {
-
-        const val NAME = "ON_DESTROY_UNIT_NODE"
-    }
 
     override val name = NAME
 
@@ -22,4 +15,13 @@ class BOnDestroyUnitNode(context: BGameContext) : BNode(context) {
         } else {
             null
         }
+
+    companion object {
+
+        const val NAME = "ON_DESTROY_UNIT_NODE"
+
+        fun connect(context: BGameContext, create: () -> BNode) {
+            context.pipeline.bindPipeToNode(NAME, create().intoPipe())
+        }
+    }
 }

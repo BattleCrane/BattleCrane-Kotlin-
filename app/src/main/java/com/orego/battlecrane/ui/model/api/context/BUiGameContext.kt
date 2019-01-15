@@ -1,7 +1,6 @@
 package com.orego.battlecrane.ui.model.api.context
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAdjutantHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
@@ -14,7 +13,6 @@ import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.ui.model.api.plugin.BLocationPlugin
 import com.orego.battlecrane.ui.model.api.plugin.BRacePlugin
 
-@BContextComponent
 class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragment.UiProvider) {
 
     val animationPipe = BAnimationPipe(this.gameContext)

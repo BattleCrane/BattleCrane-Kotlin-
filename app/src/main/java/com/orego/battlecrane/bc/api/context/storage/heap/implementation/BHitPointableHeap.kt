@@ -1,10 +1,8 @@
 package com.orego.battlecrane.bc.api.context.storage.heap.implementation
 
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.storage.heap.BHeap
-import com.orego.battlecrane.bc.api.model.entity.property.BHitPointable
+import com.orego.battlecrane.bc.api.model.property.hitPointable.BHitPointable
 
-@BContextComponent
 class BHitPointableHeap : BHeap<BHitPointable>() {
 
     override fun addObject(any: Any) {

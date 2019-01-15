@@ -3,11 +3,9 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.BAttackablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.node.BOnAttackEnableNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAttackableHeap
 
-@BContextComponent
 class BOnAttackEnablePipe(context: BGameContext) : BPipe(context) {
 
     companion object {

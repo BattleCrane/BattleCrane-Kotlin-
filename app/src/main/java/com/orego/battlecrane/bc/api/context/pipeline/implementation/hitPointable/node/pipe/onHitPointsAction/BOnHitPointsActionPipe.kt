@@ -3,11 +3,9 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointabl
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.BHitPointablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BHitPointableHeap
 
-@BContextComponent
 class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
 
     companion object {

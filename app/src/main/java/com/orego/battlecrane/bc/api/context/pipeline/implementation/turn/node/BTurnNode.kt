@@ -4,17 +4,10 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
-@BContextComponent
 class BTurnNode(context: BGameContext) : BNode(context) {
-
-    companion object {
-
-        const val NAME = "TURN_NODE"
-    }
 
     override val name = NAME
 
@@ -40,4 +33,13 @@ class BTurnNode(context: BGameContext) : BNode(context) {
             }
             else -> null
         }
+
+    companion object {
+
+        const val NAME = "TURN_NODE"
+
+        fun connect(context: BGameContext, create: () -> BNode) {
+            context.pipeline.bindPipeToNode(NAME, create().intoPipe())
+        }
+    }
 }

@@ -1,7 +1,7 @@
 package com.orego.battlecrane.ui.model.std.race.human.unit.building
 
-import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.factory.BHumanFactory
+import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 

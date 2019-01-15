@@ -7,12 +7,10 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.BL
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.BProducablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.BUnitPipe
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 
-@BContextComponent
 class BPipeline(context: BGameContext) {
 
     private var isWorking = false

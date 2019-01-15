@@ -9,7 +9,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.n
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.unit.BUnitComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.api.model.entity.main.unit.BUnit
+import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.headquarters.BHumanHeadquarters
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext

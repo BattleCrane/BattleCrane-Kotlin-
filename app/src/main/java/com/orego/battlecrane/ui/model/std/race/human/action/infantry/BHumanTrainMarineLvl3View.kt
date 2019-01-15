@@ -3,7 +3,7 @@
 //import android.content.Context
 //import android.widget.ImageView
 //import com.orego.battlecrane.bc.api.model.entity.main.BAction
-//import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.barracks.BHumanBarracks
+//import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.producable.BHumanBarracks
 //import com.orego.battlecrane.ui.model.api.render.action.BActionViewRenderItem
 //import com.orego.battlecrane.ui.model.api.view.action.BActionView
 //import com.orego.battlecrane.ui.util.byAssets

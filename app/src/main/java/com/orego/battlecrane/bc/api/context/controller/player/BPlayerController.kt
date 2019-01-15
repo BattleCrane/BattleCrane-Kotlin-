@@ -1,12 +1,10 @@
 package com.orego.battlecrane.bc.api.context.controller.player
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
 import com.orego.battlecrane.bc.util.mapWithFilter
 
-@BContextComponent
 class BPlayerController(private val context: BGameContext) {
 
     companion object {

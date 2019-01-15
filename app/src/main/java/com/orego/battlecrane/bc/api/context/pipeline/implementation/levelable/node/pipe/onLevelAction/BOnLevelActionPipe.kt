@@ -3,11 +3,9 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.n
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.BLevelablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.context.BContextComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BLevelableHeap
 
-@BContextComponent
 class BOnLevelActionPipe(context: BGameContext) : BPipe(context) {
 
     companion object {
