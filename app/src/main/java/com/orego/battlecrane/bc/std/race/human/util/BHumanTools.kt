@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.api.model.property.levelable.BLevelable
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.generator.BHumanGenerator
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
 
 object BHumanTools {
 

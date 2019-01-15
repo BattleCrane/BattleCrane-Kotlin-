@@ -4,10 +4,10 @@ import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.std.race.human.adjutant.BHumanAdjutant
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.generator.BHumanGenerator
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.headquarters.BHumanHeadquarters
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.wall.BHumanWall
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.marine.BHumanMarine
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.tank.BHumanTank
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder

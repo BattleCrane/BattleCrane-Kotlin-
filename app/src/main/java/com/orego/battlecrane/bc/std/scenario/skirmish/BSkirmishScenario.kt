@@ -7,8 +7,8 @@ import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.headquarters.BHumanHeadquarters
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.wall.BHumanWall
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.location.grass.field.empty.BStandardSkirmishEmptyGrassFieldBuilder
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.player.BStandardSkirmishPlayerBuilder
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.BSkirmishHumanAdjutantBuilder

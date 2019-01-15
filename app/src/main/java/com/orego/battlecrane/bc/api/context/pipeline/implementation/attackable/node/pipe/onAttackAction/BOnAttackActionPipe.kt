@@ -10,8 +10,6 @@ class BOnAttackActionPipe(context: BGameContext) : BPipe(context) {
     companion object {
 
         const val NAME = "ON_ATTACK_ACTION_PIPE"
-
-        fun createEvent(attackableId: Long) = Event(attackableId)
     }
 
     override val name = NAME
@@ -20,5 +18,11 @@ class BOnAttackActionPipe(context: BGameContext) : BPipe(context) {
         this.placeNode(BOnAttackActionNode(context))
     }
 
-    open class Event(val attackableId: Long) : BAttackablePipe.Event()
+    open class Event protected constructor(val attackableId: Long) : BAttackablePipe.Event() {
+
+        companion object {
+
+            fun create(attackableId: Long) = Event(attackableId)
+        }
+    }
 }

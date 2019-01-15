@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.generator.trigger
+package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.headquarters.trigger
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
@@ -8,10 +8,12 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pi
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
 
-class BSkirmishHumanGeneratorOnTurnTrigger private constructor(context: BGameContext, var generator: BHumanGenerator) :
-    BNode(context) {
+class BSkirmishHumanHeadquartersOnTurnTrigger private constructor(
+    context: BGameContext,
+    var headquarters: BHumanHeadquarters
+) : BNode(context) {
 
     /**
      * Context.
@@ -20,11 +22,14 @@ class BSkirmishHumanGeneratorOnTurnTrigger private constructor(context: BGameCon
     private val pipeline = context.pipeline
 
     override fun handle(event: BEvent): BEvent? {
-        if (event is BTurnPipe.Event && this.generator.playerId == event.playerId) {
-            val producableId = this.generator.producableId
+        if (event is BTurnPipe.Event && this.headquarters.playerId == event.playerId) {
+            val producableId = this.headquarters.producableId
             when (event) {
                 is BOnTurnStartedPipe.Event -> {
                     this.pushToInnerPipes(event)
+                    if (this.isBattleMode()) {
+                        this.makeAttack()
+                    }
                     this.pipeline.pushEvent(
                         BOnProduceEnablePipe.createEvent(producableId, true)
                     )
@@ -42,11 +47,20 @@ class BSkirmishHumanGeneratorOnTurnTrigger private constructor(context: BGameCon
         return null
     }
 
+    private fun isBattleMode(): Boolean {
+        //TODO
+        return false
+    }
+
+    private fun makeAttack() {
+        //TODO
+    }
+
     companion object {
 
-        fun connect(context: BGameContext, generator: BHumanGenerator) {
+        fun connect(context: BGameContext, headquarters: BHumanHeadquarters) {
             BTurnNode.connect(context) {
-                BSkirmishHumanGeneratorOnTurnTrigger(context, generator)
+                BSkirmishHumanHeadquartersOnTurnTrigger(context, headquarters)
             }
         }
     }

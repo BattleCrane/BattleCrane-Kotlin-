@@ -16,9 +16,9 @@ import com.orego.battlecrane.bc.std.location.grass.field.implementation.empty.BE
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.generator.BHumanGenerator
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.wall.BHumanWall
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.GENERATOR_LIMIT
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countDiffBarracksFactory
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countGenerators

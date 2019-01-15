@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.generator.trigger
+package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.turret.trigger
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
@@ -6,9 +6,9 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.no
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
 
-class BSkirmishHumanGeneratorOnLevelActionTrigger private constructor(context: BGameContext, var generator: BHumanGenerator) :
+class BSkirmishHumanTurretOnLevelActionTrigger private constructor(context: BGameContext, var turret: BHumanTurret) :
     BNode(context) {
 
     /**
@@ -19,7 +19,7 @@ class BSkirmishHumanGeneratorOnLevelActionTrigger private constructor(context: B
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnLevelActionPipe.Event
-            && this.generator.levelableId == event.levelableId
+            && this.turret.levelableId == event.levelableId
             && event.isEnable(this.context)
         ) {
             event.perform(this.context)
@@ -31,14 +31,13 @@ class BSkirmishHumanGeneratorOnLevelActionTrigger private constructor(context: B
     }
 
     private fun changeHitPointsByLevel() {
-        val hitPointableId = this.generator.hitPointableId
-        val currentLevel = this.generator.currentLevel
-        if (currentLevel in BHumanGenerator.FIRST_LEVEL..BHumanGenerator.MAX_LEVEL) {
+        val hitPointableId = this.turret.hitPointableId
+        val currentLevel = this.turret.currentLevel
+        if (currentLevel in BHumanTurret.FIRST_LEVEL..BHumanTurret.MAX_LEVEL) {
             val newHitPoints =
                 when (currentLevel) {
-                    BHumanGenerator.FIRST_LEVEL -> BHumanGenerator.LEVEL_1_MAX_HIT_POINTS
-                    BHumanGenerator.SECOND_LEVEL -> BHumanGenerator.LEVEL_2_MAX_HIT_POINTS
-                    else -> BHumanGenerator.LEVEL_3_MAX_HIT_POINTS
+                    BHumanTurret.FIRST_LEVEL -> BHumanTurret.LEVEL_1_MAX_HIT_POINTS
+                    else -> BHumanTurret.LEVEL_2_MAX_HIT_POINTS
                 }
             this.pipeline.pushEvent(
                 BOnHitPointsActionPipe.Max.createOnChangedEvent(hitPointableId, newHitPoints)
@@ -51,9 +50,9 @@ class BSkirmishHumanGeneratorOnLevelActionTrigger private constructor(context: B
 
     companion object {
 
-        fun connect(context: BGameContext, generator: BHumanGenerator) {
+        fun connect(context: BGameContext, turret: BHumanTurret) {
             BOnLevelActionNode.connect(context) {
-                BSkirmishHumanGeneratorOnLevelActionTrigger(context, generator)
+                BSkirmishHumanTurretOnLevelActionTrigger(context, turret)
             }
         }
     }

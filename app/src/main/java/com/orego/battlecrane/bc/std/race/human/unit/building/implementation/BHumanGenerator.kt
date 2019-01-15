@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.race.human.unit.building.implementation.generator
+package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.model.property.hitPointable.BHitPointable
@@ -85,6 +85,11 @@ class BHumanGenerator private constructor(context: BGameContext, playerId: Long,
     open class Builder {
 
         open fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
-            BHumanGenerator(context, playerId, x, y)
+            BHumanGenerator(
+                context,
+                playerId,
+                x,
+                y
+            )
     }
 }

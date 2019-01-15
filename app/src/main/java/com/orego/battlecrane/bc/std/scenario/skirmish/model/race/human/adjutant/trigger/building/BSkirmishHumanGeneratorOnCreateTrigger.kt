@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.generator.BHumanGenerator
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
 
 @BAdjutantComponent
 class BSkirmishHumanGeneratorOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
