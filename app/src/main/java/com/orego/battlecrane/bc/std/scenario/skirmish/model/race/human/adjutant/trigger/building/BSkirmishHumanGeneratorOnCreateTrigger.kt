@@ -1,12 +1,10 @@
 package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.trigger.building
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.generator.builder.BSkirmishHumanGeneratorBuilder
 
-@BAdjutantComponent
 class BSkirmishHumanGeneratorOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
     BOnCreateUnitTrigger(context, playerId) {
 
@@ -36,7 +34,7 @@ class BSkirmishHumanGeneratorOnCreateTrigger private constructor(context: BGameC
     class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
 
         override fun create(context: BGameContext) =
-            BHumanGenerator(
+            BSkirmishHumanGeneratorBuilder().build(
                 context,
                 this.playerId,
                 this.x,

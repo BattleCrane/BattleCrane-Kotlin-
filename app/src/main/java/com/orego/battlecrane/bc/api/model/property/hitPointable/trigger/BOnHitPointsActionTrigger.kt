@@ -49,7 +49,7 @@ class BOnHitPointsActionTrigger private constructor(context: BGameContext, val h
 
     inner class Pipe : BPipe(this.context, mutableListOf(this)) {
 
-        val barracks = this@BOnHitPointsActionTrigger.hitPointable
+        val hitPointable = this@BOnHitPointsActionTrigger.hitPointable
 
         override fun isUnused() = this@BOnHitPointsActionTrigger.isUnused()
     }

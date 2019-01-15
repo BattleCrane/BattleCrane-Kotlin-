@@ -65,7 +65,7 @@ class BHumanMarine private constructor(context: BGameContext, playerId: Long, x:
 
     open class Builder {
 
-        fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
+        open fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
             BHumanMarine(context, playerId, x, y)
     }
 }

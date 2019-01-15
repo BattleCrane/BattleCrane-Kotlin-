@@ -1,12 +1,10 @@
 package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.trigger.building
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.barracks.builder.BSkirmishHumanBarracksBuilder
 
-@BAdjutantComponent
 class BSkirmishHumanBarracksOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
     BOnCreateUnitTrigger(context, playerId) {
 

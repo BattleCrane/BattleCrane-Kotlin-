@@ -10,18 +10,10 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.n
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BLevelableHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
-import com.orego.battlecrane.bc.api.model.property.hitPointable.BHitPointable
 import com.orego.battlecrane.bc.api.model.player.BPlayer
+import com.orego.battlecrane.bc.api.model.property.hitPointable.BHitPointable
 import com.orego.battlecrane.bc.std.location.grass.field.implementation.empty.BEmptyGrassField
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanTurret
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
-import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.GENERATOR_LIMIT
-import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countDiffBarracksFactory
-import com.orego.battlecrane.bc.std.race.human.util.BHumanTools.countGenerators
 
 object BHumanEvents {
 
@@ -49,7 +41,7 @@ object BHumanEvents {
                 )
             }
 
-            abstract fun isAttackBlock(context: BGameContext, x: Int, y : Int) : Boolean
+            abstract fun isAttackBlock(context: BGameContext, x: Int, y: Int): Boolean
 
             /**
              * Attack geometry check.
@@ -210,68 +202,6 @@ object BHumanEvents {
                 }
                 return false
             }
-        }
-
-        class BarracksEvent(producableId: Long, x: Int, y: Int) :
-            Event(producableId, x, y, BHumanBarracks.WIDTH, BHumanBarracks.HEIGHT) {
-
-            override fun getEvent(playerId: Long, x: Int, y: Int) =
-                BHumanBarracks.BHumanBarracksOnCreateNode.createEvent(playerId, x, y)
-        }
-
-        class FactoryEvent(producableId: Long, x: Int, y: Int) :
-            Event(producableId, x, y, BHumanFactory.WIDTH, BHumanFactory.HEIGHT) {
-
-            override fun isEnable(context: BGameContext, playerId: Long): Boolean {
-                if (super.isEnable(context, playerId)) {
-                    val barracksFactoryDiff = countDiffBarracksFactory(context, playerId)
-                    if (barracksFactoryDiff > 0) {
-                        return true
-                    }
-                }
-                return false
-            }
-
-            override fun getEvent(playerId: Long, x: Int, y: Int) =
-                BHumanFactory.OnCreateNode.createEvent(playerId, x, y)
-        }
-
-        class GeneratorEvent(producableId: Long, x: Int, y: Int) :
-            Event(producableId, x, y, BHumanGenerator.WIDTH, BHumanGenerator.HEIGHT) {
-
-
-            override fun isEnable(context: BGameContext, playerId: Long): Boolean {
-                if (super.isEnable(context, playerId)) {
-                    val generatorCount = countGenerators(context, playerId)
-                    if (generatorCount < GENERATOR_LIMIT) {
-                        return true
-                    }
-                }
-                return false
-            }
-
-            override fun getEvent(playerId: Long, x: Int, y: Int) =
-                BHumanGenerator.OnCreateNode.createEvent(playerId, x, y)
-        }
-
-        class TurretEvent(producableId: Long, x: Int, y: Int) :
-            Event(producableId, x, y, BHumanTurret.WIDTH, BHumanTurret.HEIGHT) {
-
-            override fun getEvent(playerId: Long, x: Int, y: Int) =
-                BHumanTurret.OnCreateNode.createEvent(playerId, x, y)
-        }
-
-        class WallEvent(producableId: Long, x: Int, y: Int) :
-            Event(producableId, x, y, BHumanWall.WIDTH, BHumanWall.HEIGHT * WALL_COUNT) {
-
-            companion object {
-
-                const val WALL_COUNT = 2
-            }
-
-            //TODO: MAKE TWO WALLS:
-            override fun getEvent(playerId: Long, x: Int, y: Int) =
-                BHumanWall.OnCreateNode.createEvent(playerId, x, y)
         }
     }
 }

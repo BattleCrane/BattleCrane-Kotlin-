@@ -53,7 +53,7 @@ class BHumanWall private constructor(context: BGameContext, playerId: Long, x: I
 
     open class Builder {
 
-        fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
+        open fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
             BHumanWall(context, playerId, x, y)
     }
 }

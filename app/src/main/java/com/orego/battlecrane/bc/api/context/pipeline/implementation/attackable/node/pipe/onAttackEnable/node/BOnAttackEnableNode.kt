@@ -7,11 +7,6 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
 class BOnAttackEnableNode(context: BGameContext) : BNode(context) {
 
-    companion object {
-
-        const val NAME = "ON_ATTACK_ENABLE_NODE"
-    }
-
     override val name = NAME
 
     override fun handle(event: BEvent): BEvent? {
@@ -19,6 +14,15 @@ class BOnAttackEnableNode(context: BGameContext) : BNode(context) {
             this.pushToInnerPipes(event)
         } else {
             null
+        }
+    }
+
+    companion object {
+
+        const val NAME = "ON_ATTACK_ENABLE_NODE"
+
+        fun connect(context: BGameContext, create: () -> BNode) {
+            context.pipeline.bindPipeToNode(NAME, create().intoPipe())
         }
     }
 }

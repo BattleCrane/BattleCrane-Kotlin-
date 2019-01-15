@@ -1,27 +1,12 @@
 package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.trigger.infantry
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
-import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.infantry.builder.BSkirmishHumanMarineBuilder
 
-
-@BAdjutantComponent
 class BSkirmishHumanMarineOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
     BOnCreateUnitTrigger(context, playerId) {
-
-    companion object {
-
-        fun connect(context: BGameContext, playerId: Long) {
-            BOnCreateUnitTrigger.connect(context) {
-                BSkirmishHumanMarineOnCreateTrigger(
-                    context,
-                    playerId
-                )
-            }
-        }
-    }
 
     override fun handle(event: BEvent): BEvent? {
         if (event is Event) {
@@ -44,8 +29,8 @@ class BSkirmishHumanMarineOnCreateTrigger private constructor(context: BGameCont
 
     class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
 
-        override fun create(context: BGameContext): BUnit {
-        }
+        override fun create(context: BGameContext) =
+            BSkirmishHumanMarineBuilder().build(context, this.playerId, this.x, this.y)
 
         companion object {
 
@@ -57,4 +42,17 @@ class BSkirmishHumanMarineOnCreateTrigger private constructor(context: BGameCont
                 )
         }
     }
+
+    companion object {
+
+        fun connect(context: BGameContext, playerId: Long) {
+            BOnCreateUnitTrigger.connect(context) {
+                BSkirmishHumanMarineOnCreateTrigger(
+                    context,
+                    playerId
+                )
+            }
+        }
+    }
+
 }

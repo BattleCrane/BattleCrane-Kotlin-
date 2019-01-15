@@ -53,4 +53,14 @@ class BHumanHeadquarters private constructor(context: BGameContext, playerId: Lo
         MAX_HIT_POINTS
 
     override var isProduceEnable = false
+
+    /**
+     * Builder.
+     */
+
+    open class Builder {
+
+        open fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
+            BHumanHeadquarters(context, playerId, x, y)
+    }
 }

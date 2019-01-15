@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
  * Attacks enemies in radius.
  */
 
-class BHumanTurret(context: BGameContext, playerId: Long, x: Int, y: Int) :
+class BHumanTurret private constructor(context: BGameContext, playerId: Long, x: Int, y: Int) :
     BHumanBuilding(context, playerId, x, y), BHitPointable,
     BLevelable,
     BAttackable {
@@ -93,7 +93,7 @@ class BHumanTurret(context: BGameContext, playerId: Long, x: Int, y: Int) :
 
     open class Builder {
 
-        fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
+        open fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
             BHumanTurret(context, playerId, x, y)
     }
 }

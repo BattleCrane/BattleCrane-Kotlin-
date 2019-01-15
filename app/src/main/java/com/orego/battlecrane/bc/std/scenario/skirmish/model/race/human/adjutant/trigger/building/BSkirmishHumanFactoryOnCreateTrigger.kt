@@ -1,12 +1,10 @@
 package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.trigger.building
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.factory.builder.BSkirmishHumanFactoryBuilder
 
-@BAdjutantComponent
 class BSkirmishHumanFactoryOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
     BOnCreateUnitTrigger(context, playerId) {
 
@@ -37,12 +35,7 @@ class BSkirmishHumanFactoryOnCreateTrigger private constructor(context: BGameCon
     class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
 
         override fun create(context: BGameContext) =
-            BHumanFactory(
-                context,
-                this.playerId,
-                this.x,
-                this.y
-            )
+            BSkirmishHumanFactoryBuilder().build(context, this.playerId, this.x, this.y)
 
         companion object {
 

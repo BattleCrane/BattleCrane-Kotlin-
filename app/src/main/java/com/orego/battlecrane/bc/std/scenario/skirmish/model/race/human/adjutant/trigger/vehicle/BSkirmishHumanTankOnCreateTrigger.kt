@@ -1,26 +1,12 @@
 package com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.trigger.vehicle
 
 import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.adjutant.BAdjutantComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
-import com.orego.battlecrane.bc.api.model.unit.BUnit
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.vehicle.builder.BSkirmishHumanTankBuilder
 
-@BAdjutantComponent
 class BSkirmishHumanTankOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
     BOnCreateUnitTrigger(context, playerId) {
-
-    companion object {
-
-        fun connect(context: BGameContext, playerId: Long) {
-            BOnCreateUnitTrigger.connect(context) {
-                BSkirmishHumanTankOnCreateTrigger(
-                    context,
-                    playerId
-                )
-            }
-        }
-    }
 
     override fun handle(event: BEvent): BEvent? {
         if (event is Event) {
@@ -43,9 +29,8 @@ class BSkirmishHumanTankOnCreateTrigger private constructor(context: BGameContex
 
     class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
 
-        override fun create(context: BGameContext): BUnit {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
+        override fun create(context: BGameContext) =
+            BSkirmishHumanTankBuilder().build(context, this.playerId, this.x, this.y)
 
         companion object {
 
@@ -55,6 +40,18 @@ class BSkirmishHumanTankOnCreateTrigger private constructor(context: BGameContex
                     x,
                     y
                 )
+        }
+    }
+
+    companion object {
+
+        fun connect(context: BGameContext, playerId: Long) {
+            BOnCreateUnitTrigger.connect(context) {
+                BSkirmishHumanTankOnCreateTrigger(
+                    context,
+                    playerId
+                )
+            }
         }
     }
 }

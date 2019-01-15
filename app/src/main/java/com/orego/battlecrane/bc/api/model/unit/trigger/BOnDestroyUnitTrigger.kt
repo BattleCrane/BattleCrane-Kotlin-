@@ -12,18 +12,6 @@ import com.orego.battlecrane.bc.api.model.unit.BUnit
 class BOnDestroyUnitTrigger private constructor(context: BGameContext, val unit: BUnit) :
     BNode(context) {
 
-    companion object {
-
-        fun connect(context: BGameContext, unit: BUnit) {
-            BOnDestroyUnitNode.connect(context) {
-                BOnDestroyUnitTrigger(
-                    context,
-                    unit
-                )
-            }
-        }
-    }
-
     /**
      * Context.
      */
@@ -54,5 +42,17 @@ class BOnDestroyUnitTrigger private constructor(context: BGameContext, val unit:
         val unit = this@BOnDestroyUnitTrigger.unit
 
         override fun isUnused() = this@BOnDestroyUnitTrigger.isUnused()
+    }
+
+    companion object {
+
+        fun connect(context: BGameContext, unit: BUnit) {
+            BOnDestroyUnitNode.connect(context) {
+                BOnDestroyUnitTrigger(
+                    context,
+                    unit
+                )
+            }
+        }
     }
 }

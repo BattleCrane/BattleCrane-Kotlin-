@@ -4,7 +4,6 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanTurret
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.turret.builder.BSkirmishHumanTurretBuilder
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.turret.trigger.BSkirmishHumanTurretOnAttackActionTrigger
 
@@ -48,9 +47,8 @@ class BSkirmishHumanTurretOnCreateTrigger private constructor(context: BGameCont
 
     class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
 
-        override fun create(context: BGameContext): BHumanTurret {
-            return BSkirmishHumanTurretBuilder().build(this.context)
-        }
+        override fun create(context: BGameContext) =
+            BSkirmishHumanTurretBuilder().build(context, this.playerId, this.x, this.y)
 
         override fun perform(context: BGameContext): Boolean {
             val controller = context.mapController
