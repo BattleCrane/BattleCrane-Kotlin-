@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.BT
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanTurret
 
 class BSkirmishHumanTurretOnTurnTrigger private constructor(context: BGameContext, var turret: BHumanTurret) :
     BNode(context) {

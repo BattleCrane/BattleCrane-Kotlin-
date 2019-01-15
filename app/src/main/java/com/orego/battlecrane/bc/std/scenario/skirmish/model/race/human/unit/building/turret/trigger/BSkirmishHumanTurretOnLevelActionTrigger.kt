@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.no
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanTurret
 
 class BSkirmishHumanTurretOnLevelActionTrigger private constructor(context: BGameContext, var turret: BHumanTurret) :
     BNode(context) {

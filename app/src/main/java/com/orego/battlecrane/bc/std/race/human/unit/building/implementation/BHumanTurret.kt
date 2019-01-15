@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret
+package com.orego.battlecrane.bc.std.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.model.property.attackable.BAttackable

@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.api.model.property.hitPointable.BHitPointable
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanTurret
 
 class BSkirmishHumanTurretOnAttackActionTrigger private constructor(context: BGameContext, var turret: BHumanTurret) :
     BNode(context) {

@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHum
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanFactory
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanTurret
 import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.marine.BHumanMarine
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.tank.BHumanTank

@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.turret.BHumanTurret
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanTurret
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.turret.builder.BSkirmishHumanTurretBuilder
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.turret.trigger.BSkirmishHumanTurretOnAttackActionTrigger
 
