@@ -2,7 +2,7 @@ package com.orego.battlecrane.ui.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.orego.battlecrane.ui.model.api.scenario.BUiGameScenario
-import com.orego.battlecrane.ui.model.std.scenario.skirmish.timer.BUiSkirmishScenario
+import com.orego.battlecrane.ui.model.std.scenario.skirmish.BUiSkirmishScenario
 
 class BScenarioViewModel : ViewModel() {
 

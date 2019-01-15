@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model.api.clickController
+package com.orego.battlecrane.ui.model.api.context.clickController
 
 class BClickController {
 

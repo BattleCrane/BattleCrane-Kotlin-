@@ -1,9 +1,9 @@
-package com.orego.battlecrane.ui.model.std.scenario.skirmish.timer
+package com.orego.battlecrane.ui.model.std.scenario.skirmish
 
 import com.orego.battlecrane.bc.std.scenario.skirmish.BSkirmishScenario
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
-import com.orego.battlecrane.ui.model.api.plugin.BRacePlugin
 import com.orego.battlecrane.ui.model.api.scenario.BUiGameScenario
+import com.orego.battlecrane.ui.model.api.scenario.plugin.BRacePlugin
 import com.orego.battlecrane.ui.model.std.location.grass.BGrassLocationPlugin
 import com.orego.battlecrane.ui.model.std.race.human.BHumanPlugin
 

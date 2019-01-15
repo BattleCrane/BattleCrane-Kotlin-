@@ -22,7 +22,7 @@ class BHumanWallHolder(uiGameContext: BUiGameContext, override val item: BHumanW
                 "${COLOR_MAP[this.item.playerId]}/" +
                 "${this.item.currentHitPoints}.png"
 
-    class Builder : BUnitHolder.Builder() {
+    open class Builder : BUnitHolder.Builder() {
 
         override fun build(uiGameContext: BUiGameContext, item: BUnit) =
             BHumanWallHolder(uiGameContext, item as BHumanWall)

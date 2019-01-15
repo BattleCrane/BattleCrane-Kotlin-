@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model.api.eventPipe
+package com.orego.battlecrane.ui.model.api.context.eventPipe
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.BPipeline

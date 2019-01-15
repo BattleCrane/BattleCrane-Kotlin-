@@ -25,7 +25,7 @@ class BHumanGeneratorHolder(uiGameContext: BUiGameContext, override val item: BH
                 "${this.item.currentLevel}_${this.item.currentHitPoints}.png"
 
 
-    class Builder : BUnitHolder.Builder() {
+    open class Builder : BUnitHolder.Builder() {
 
         override fun build(uiGameContext: BUiGameContext, item: BUnit) =
             BHumanGeneratorHolder(uiGameContext, item as BHumanGenerator)

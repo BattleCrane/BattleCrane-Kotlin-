@@ -4,14 +4,14 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAdjutantHeap
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
-import com.orego.battlecrane.ui.model.api.clickController.BClickController
-import com.orego.battlecrane.ui.model.api.eventPipe.BAnimationPipe
-import com.orego.battlecrane.ui.model.api.heap.BAdjutantHolderHeap
-import com.orego.battlecrane.ui.model.api.heap.BUnitHolderHeap
+import com.orego.battlecrane.ui.model.api.context.clickController.BClickController
+import com.orego.battlecrane.ui.model.api.context.eventPipe.BAnimationPipe
+import com.orego.battlecrane.ui.model.api.context.heap.BAdjutantHolderHeap
+import com.orego.battlecrane.ui.model.api.context.heap.BUnitHolderHeap
 import com.orego.battlecrane.ui.model.api.holder.adjutant.BAdjutantHolder
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
-import com.orego.battlecrane.ui.model.api.plugin.BLocationPlugin
-import com.orego.battlecrane.ui.model.api.plugin.BRacePlugin
+import com.orego.battlecrane.ui.model.api.scenario.plugin.BLocationPlugin
+import com.orego.battlecrane.ui.model.api.scenario.plugin.BRacePlugin
 
 class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragment.UiProvider) {
 

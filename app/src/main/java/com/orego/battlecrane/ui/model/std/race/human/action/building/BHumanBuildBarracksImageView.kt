@@ -6,7 +6,7 @@ import android.widget.ImageView
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.std.location.grass.field.implementation.empty.BEmptyGrassField
 import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
-import com.orego.battlecrane.ui.model.api.clickController.BClickMode
+import com.orego.battlecrane.ui.model.api.context.clickController.BClickMode
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 

@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model.api.plugin
+package com.orego.battlecrane.ui.model.api.scenario.plugin
 
 import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.unit.BUnit

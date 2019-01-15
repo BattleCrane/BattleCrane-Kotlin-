@@ -1,4 +1,4 @@
-package com.orego.battlecrane.ui.model.api.heap
+package com.orego.battlecrane.ui.model.api.context.heap
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.generator.BContextGenerator

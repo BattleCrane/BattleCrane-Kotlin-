@@ -11,7 +11,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHum
 import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.marine.BHumanMarine
 import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.tank.BHumanTank
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
-import com.orego.battlecrane.ui.model.api.plugin.BRacePlugin
+import com.orego.battlecrane.ui.model.api.scenario.plugin.BRacePlugin
 import com.orego.battlecrane.ui.model.std.race.human.adjutant.BHumanAdjutantHolder
 import com.orego.battlecrane.ui.model.std.race.human.unit.building.*
 import com.orego.battlecrane.ui.model.std.race.human.unit.infantry.BHumanMarineHolder
