@@ -6,7 +6,6 @@ import com.orego.battlecrane.bc.api.model.property.levelable.BLevelable
 import com.orego.battlecrane.bc.api.model.property.producable.BProducable
 import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
 
-
 /**
  * Produces tanks.
  */

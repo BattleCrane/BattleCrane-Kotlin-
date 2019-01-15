@@ -24,8 +24,8 @@ class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragm
     val uiAdjutantFactory: BAdjutantHolder.Factory = BAdjutantHolder.Factory()
 
     init {
-        BAdjutantHolderHeap.configure(this.gameContext)
-        BUnitHolderHeap.configure(this.gameContext)
+        BAdjutantHolderHeap.connect(this.gameContext)
+        BUnitHolderHeap.connect(this.gameContext)
     }
 
     fun installLocationPlugin(locationPlugin: BLocationPlugin?) {

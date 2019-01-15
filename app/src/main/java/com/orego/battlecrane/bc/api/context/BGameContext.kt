@@ -25,7 +25,7 @@ class BGameContext {
      * Pipeline.
      */
 
-    val pipeline = BPipeline(this)
+    val pipeline = BPipeline()
 
     /**
      * Storage.
@@ -46,6 +46,7 @@ class BGameContext {
      */
 
     fun setScenario(scenario: BGameScenario) {
+        scenario.install(this)
         this.storage.setScenario(scenario)
         this.playerController.setScenario(scenario)
         this.mapController.initMap(this)

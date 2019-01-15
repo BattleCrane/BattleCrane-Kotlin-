@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.std.scenario.skirmish.timer
+package com.orego.battlecrane.bc.std.scenario.skirmish.trigger.timer
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe

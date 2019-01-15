@@ -16,7 +16,11 @@ class BEmptyFieldHolder(uiGameContext: BUiGameContext, override val item: BEmpty
 
     override fun getItemPath() = PATH
 
-    class Builder : BUnitHolder.Builder() {
+    /**
+     * Builder.
+     */
+
+    open class Builder : BUnitHolder.Builder() {
 
         override fun build(uiGameContext: BUiGameContext, item: BUnit) =
             BEmptyFieldHolder(uiGameContext, item as BEmptyGrassField)

@@ -7,19 +7,6 @@ import com.orego.battlecrane.ui.model.api.holder.adjutant.BAdjutantHolder
 
 class BAdjutantHolderHeap : BHeap<BAdjutantHolder>() {
 
-    companion object {
-
-        private const val START_ID: Long = 0
-
-        fun configure(gameContext: BGameContext) {
-            val heap = BAdjutantHolderHeap()
-            val idGenerator = BContextGenerator.IdGenerator(START_ID)
-            gameContext.storage.addHeap(heap)
-            gameContext.contextGenerator.generatorMap[BAdjutantHolder::class.java] = idGenerator
-        }
-    }
-
-
     override fun addObject(any: Any) {
         if (any is BAdjutantHolder) {
             this.objectMap[any.uiAdjutantId] = any
@@ -29,6 +16,18 @@ class BAdjutantHolderHeap : BHeap<BAdjutantHolder>() {
     override fun removeObject(any: Any) {
         if (any is BAdjutantHolder) {
             this.objectMap.remove(any.uiAdjutantId)
+        }
+    }
+
+    companion object {
+
+        private const val START_ID: Long = 0
+
+        fun connect(gameContext: BGameContext) {
+            val heap = BAdjutantHolderHeap()
+            val idGenerator = BContextGenerator.IdGenerator(START_ID)
+            gameContext.storage.addHeap(heap)
+            gameContext.contextGenerator.generatorMap[BAdjutantHolder::class.java] = idGenerator
         }
     }
 }

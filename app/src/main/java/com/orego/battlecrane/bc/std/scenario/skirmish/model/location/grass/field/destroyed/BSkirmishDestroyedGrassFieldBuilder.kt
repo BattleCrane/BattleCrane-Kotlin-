@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnDestroyUnitTrigger
 import com.orego.battlecrane.bc.std.location.grass.field.implementation.destroyed.BDestroyedGrassField
 
-class BStandardSkirmishDestroyedGrassFieldBuilder : BDestroyedGrassField.Builder() {
+class BSkirmishDestroyedGrassFieldBuilder : BDestroyedGrassField.Builder() {
 
     override fun build(context: BGameContext, playerid: Long, x: Int, y: Int): BDestroyedGrassField {
         val destroyedField = super.build(context, playerid, x, y)

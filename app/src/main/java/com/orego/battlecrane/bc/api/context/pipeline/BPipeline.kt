@@ -1,17 +1,10 @@
 package com.orego.battlecrane.bc.api.context.pipeline
 
-import com.orego.battlecrane.bc.api.context.BGameContext
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.attackable.BAttackablePipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.hitPointable.BHitPointablePipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.BLevelablePipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.BProducablePipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.turn.BTurnPipe
-import com.orego.battlecrane.bc.api.context.pipeline.implementation.unit.BUnitPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
 
-class BPipeline(context: BGameContext) {
+class BPipeline {
 
     private var isWorking = false
 
@@ -24,19 +17,6 @@ class BPipeline(context: BGameContext) {
 
     private val onBroadcastEventObserver:
             MutableMap<Class<out OnBroadcastEventListener>, OnBroadcastEventListener> = mutableMapOf()
-
-    /**
-     * Adds root pipes:
-     */
-
-    init {
-        this.connectInnerPipe(BUnitPipe(context))
-        this.connectInnerPipe(BAttackablePipe(context))
-        this.connectInnerPipe(BHitPointablePipe(context))
-        this.connectInnerPipe(BLevelablePipe(context))
-        this.connectInnerPipe(BProducablePipe(context))
-        this.connectInnerPipe(BTurnPipe(context))
-    }
 
     /**
      * Event.

@@ -7,16 +7,24 @@ import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.BUnit
 import com.orego.battlecrane.bc.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanHeadquarters
-import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanWall
-import com.orego.battlecrane.bc.std.scenario.skirmish.model.location.grass.field.empty.BStandardSkirmishEmptyGrassFieldBuilder
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.location.grass.field.destroyed.trigger.BSkirmishDestroyedGrassFieldOnCreateTrigger
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.location.grass.field.empty.BSkirmishEmptyGrassFieldBuilder
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.location.grass.field.empty.trigger.BSkirmishEmptyGrassFieldOnCreateTrigger
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.player.BStandardSkirmishPlayerBuilder
 import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.adjutant.BSkirmishHumanAdjutantBuilder
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.headquarters.builder.BSkirmishHumanHeadquartersBuilder
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.unit.building.wall.builder.BSkirmishHumanWallBuilder
 import java.util.*
 
-class BSkirmishScenario : BGameScenario {
+class BSkirmishScenario : BGameScenario() {
 
     override val startTurnPlayerPosition = Random().nextInt(1)
+
+    override fun install(context: BGameContext) {
+        super.install(context)
+        BSkirmishEmptyGrassFieldOnCreateTrigger.connect(context)
+        BSkirmishDestroyedGrassFieldOnCreateTrigger.connect(context)
+    }
 
     override fun getPlayers(context: BGameContext): List<BPlayer> {
         val playerList = mutableListOf<BPlayer>()
@@ -62,9 +70,10 @@ class BSkirmishScenario : BGameScenario {
             val bluePlayerId = players[0].playerId
             val redPlayerId = players[1].playerId
 
-            //Put headquarters on the mapConstraintLayout:
+            //Put headquarters on the map:
+            val headquartersBuilder = BSkirmishHumanHeadquartersBuilder()
             this.add(
-                BHumanHeadquarters(
+                headquartersBuilder.build(
                     context,
                     bluePlayerId,
                     14,
@@ -72,7 +81,7 @@ class BSkirmishScenario : BGameScenario {
                 )
             )
             this.add(
-                BHumanHeadquarters(
+                headquartersBuilder.build(
                     context,
                     redPlayerId,
                     0,
@@ -80,10 +89,11 @@ class BSkirmishScenario : BGameScenario {
                 )
             )
 
-            //Put walls on the mapConstraintLayout
+            //Put walls on the map:
+            val wallBuiler = BSkirmishHumanWallBuilder()
             for (j in 0..4) {
                 this.add(
-                    BHumanWall(
+                    wallBuiler.build(
                         context,
                         redPlayerId,
                         j,
@@ -91,7 +101,7 @@ class BSkirmishScenario : BGameScenario {
                     )
                 )
                 this.add(
-                    BHumanWall(
+                    wallBuiler.build(
                         context,
                         redPlayerId,
                         4,
@@ -99,7 +109,7 @@ class BSkirmishScenario : BGameScenario {
                     )
                 )
                 this.add(
-                    BHumanWall(
+                    wallBuiler.build(
                         context,
                         bluePlayerId,
                         15 - j,
@@ -107,7 +117,7 @@ class BSkirmishScenario : BGameScenario {
                     )
                 )
                 this.add(
-                    BHumanWall(
+                    wallBuiler.build(
                         context,
                         bluePlayerId,
                         11,
@@ -142,8 +152,7 @@ class BSkirmishScenario : BGameScenario {
             }
         }
         //Fill rest fileds:
-        val emptyGrassBuilder =
-            BStandardSkirmishEmptyGrassFieldBuilder()
+        val emptyGrassBuilder = BSkirmishEmptyGrassFieldBuilder()
         for (x in 0 until BMapController.MAP_SIZE) {
             for (y in 0 until BMapController.MAP_SIZE) {
                 if (matrix[x][y] == BMapController.NOT_INITIALIZED_UNIT_ID) {

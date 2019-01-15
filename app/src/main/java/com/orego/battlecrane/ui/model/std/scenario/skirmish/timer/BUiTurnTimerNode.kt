@@ -1,13 +1,11 @@
 package com.orego.battlecrane.ui.model.std.scenario.skirmish.timer
 
-import com.orego.battlecrane.bc.api.context.pipeline.model.component.player.BPlayerComponent
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.model.player.BPlayer
-import com.orego.battlecrane.bc.std.scenario.skirmish.timer.BTurnTimerTrigger
+import com.orego.battlecrane.bc.std.scenario.skirmish.trigger.timer.BTurnTimerTrigger
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 
-@BPlayerComponent
 class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val playerId: Long) :
     BNode(uiContext.gameContext) {
 

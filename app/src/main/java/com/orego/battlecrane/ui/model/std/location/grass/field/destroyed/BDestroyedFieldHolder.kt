@@ -17,7 +17,11 @@ class BDestroyedFieldHolder(uiGameContext: BUiGameContext, override val  item: B
 
     override fun getItemPath() = PATH
 
-    class Builder : BUnitHolder.Builder() {
+    /**
+     * Builder.
+     */
+
+    open class Builder : BUnitHolder.Builder() {
 
         override fun build(uiGameContext: BUiGameContext, item: BUnit): BHolder<BUnit> =
             BDestroyedFieldHolder(uiGameContext, item as BDestroyedGrassField)
