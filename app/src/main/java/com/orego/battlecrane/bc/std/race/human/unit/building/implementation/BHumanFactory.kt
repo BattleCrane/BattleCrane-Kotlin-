@@ -11,7 +11,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.BHumanBuilding
  * Produces tanks.
  */
 
-class BHumanFactory(context: BGameContext, playerId: Long, x: Int, y: Int) :
+class BHumanFactory private constructor(context: BGameContext, playerId: Long, x: Int, y: Int) :
     BHumanBuilding(context, playerId, x, y), BHitPointable,
     BLevelable,
     BProducable {
