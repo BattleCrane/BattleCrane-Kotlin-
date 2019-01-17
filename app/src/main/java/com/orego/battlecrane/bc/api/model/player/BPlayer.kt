@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.api.model.player
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BAdjutantHeap
 
-open class BPlayer private constructor(context: BGameContext) {
+class BPlayer private constructor(context: BGameContext) {
 
     companion object {
 

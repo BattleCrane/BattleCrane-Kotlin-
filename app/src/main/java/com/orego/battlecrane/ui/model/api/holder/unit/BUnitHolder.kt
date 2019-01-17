@@ -25,7 +25,7 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
     companion object {
 
         @MagicConstant
-        private const val MAGIC_PADDING = 3
+        private const val CELL_COEFFICIENT = 0.9
 
         fun placeImageView(uiContext: BUiGameContext, item: BUnit, itemPath: String): ImageView {
             val uiProvider = uiContext.uiProvider
@@ -36,7 +36,7 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
             val cellSizeY = constraintLayout.measuredHeight / BMapController.MAP_SIZE
             //Create params:
             val constraintParams = ConstraintLayout.LayoutParams(
-                item.width * cellSizeX - MAGIC_PADDING, item.height * cellSizeY - MAGIC_PADDING
+                (item.width * cellSizeX * CELL_COEFFICIENT).toInt(), (item.height * cellSizeY * CELL_COEFFICIENT).toInt()
             )
                 .also {
                     it.startToStart = constraintLayoutId
@@ -58,7 +58,7 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
         }
     }
 
-    abstract class ClickMode(val unitHolder : BUnitHolder) : BClickMode
+    abstract class ClickMode(val unitHolder: BUnitHolder) : BClickMode
 
     class Factory : BHolder.Factory<BUnit>()
 

@@ -84,7 +84,7 @@ class BBattleFragment : BFragment() {
         private suspend fun installGameScenario() {
             this.manager.gameContext =
                     withContext(Dispatchers.IO) {
-                        val scenario = this@Presenter.scenarioViewModel.gameScenario
+                        val scenario = this@Presenter.scenarioViewModel.uiGameScenario?.gameScenario
                         if (scenario != null) {
                             BGameContext().also { it.setScenario(scenario) }
                         } else {
@@ -94,8 +94,9 @@ class BBattleFragment : BFragment() {
         }
 
         private fun installGraphic() {
-            this.uiGameContext.installLocationPlugin(this.scenarioViewModel.locationPlugin)
-            this.uiGameContext.installRacePlugins(this.scenarioViewModel.racePlugins)
+            val uiScenario = this.scenarioViewModel.uiGameScenario
+            this.uiGameContext.installLocationPlugin(uiScenario?.locationPlugin)
+            this.uiGameContext.installRacePlugins(uiScenario?.racePlugins)
         }
 
         private fun startGame() {

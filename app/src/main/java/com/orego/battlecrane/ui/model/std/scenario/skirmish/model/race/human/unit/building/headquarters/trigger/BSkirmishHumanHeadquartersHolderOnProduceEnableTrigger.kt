@@ -1,26 +1,19 @@
-package com.orego.battlecrane.ui.model.std.scenario.skirmish.model.unit.building.headquarters.trigger
+package com.orego.battlecrane.ui.model.std.scenario.skirmish.model.race.human.unit.building.headquarters.trigger
 
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bc.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.api.model.property.producable.BProducable
 import com.orego.battlecrane.bc.api.model.property.producable.trigger.BOnProduceEnableTrigger
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.context.heap.BUnitHolderHeap
-import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
-import com.orego.battlecrane.ui.model.std.race.human.action.building.BHumanBuildBarracksImageView
-import com.orego.battlecrane.ui.model.std.race.human.unit.building.BHumanFactoryHolder
-import com.orego.battlecrane.ui.model.std.race.human.unit.building.BHumanGeneratorHolder
 import com.orego.battlecrane.ui.model.std.race.human.unit.building.BHumanHeadquartersHolder
-import com.orego.battlecrane.ui.model.std.race.human.unit.building.BHumanWallHolder
+import com.orego.battlecrane.ui.model.std.scenario.skirmish.model.race.human.action.building.*
 import com.orego.battlecrane.ui.util.gone
 import com.orego.battlecrane.ui.util.show
 import org.intellij.lang.annotations.MagicConstant
@@ -77,8 +70,8 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         //Get right layout:
         val constraintLayout = uiGameContext.uiProvider.rightConstraintLayout
         val constraintLayoutId = constraintLayout.id
-        val sizeX = constraintLayout.measuredWidth / BMapController.MAP_SIZE
-        val sizeY = constraintLayout.measuredHeight / BMapController.MAP_SIZE
+        val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
+        val cellSize : Int = (columnSize * CELL_COEFFICIENT).toInt()
         //Get headquarters:
         val headquarters = this.holder.item
         val producableId = headquarters.producableId
@@ -86,45 +79,44 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         //Create images:
         this.actionImageViewSet.clear()
         this.actionImageViewSet.add(
-            BHumanBuildBarracksImageView.create(uiGameContext, producableId, playerId)
+            BSkirmishBuildHumanBarracksImageView.create(uiGameContext, producableId, playerId)
         )
         this.actionImageViewSet.add(
-            BHumanBuildTurretImageView.create(uiGameContext, producableId, playerId)
+            BSkirmishBuildHumanTurretImageView.create(uiGameContext, producableId, playerId)
         )
         this.actionImageViewSet.add(
-            BHumanWallHolder.create(uiGameContext, producableId, playerId)
+            BSkirmishBuildHumanWallImageView.create(uiGameContext, producableId, playerId)
         )
         if (BHumanTools.countGenerators(this.context, playerId) < BHumanTools.GENERATOR_LIMIT) {
             this.actionImageViewSet.add(
-                BHumanGeneratorHolder.create(uiGameContext, producableId, playerId)
+                BSkirmishBuildHumanGeneratorImageView.create(uiGameContext, producableId, playerId)
             )
         }
         if (BHumanTools.countDiffBarracksFactory(this.context, playerId) > 0) {
             this.actionImageViewSet.add(
-                BHumanFactoryHolder.create(uiGameContext, producableId, playerId)
+                BSkirmishBuildHumanFactoryImageView.create(uiGameContext, producableId, playerId)
             )
         }
         if (BHumanTools.countPossibleBuildingUpgrades(this.context, playerId) > 0) {
             this.actionImageViewSet.add(
-                BHumanUpgradeBuilding.create(uiGameContext, producableId, playerId)
+                BSkirmishUpgradeHumanBuilding.create(uiGameContext, producableId, playerId)
             )
         }
         var x = 0
         var y = 0
         for (imageView in this.actionImageViewSet) {
-            if (x == 3) {
+            if (x == COLUMN_COUNT) {
                 x = 0
                 y++
             }
-            val constraintParams = ConstraintLayout.LayoutParams(sizeX - MAGIC_PADDING, sizeY - MAGIC_PADDING)
-                .also {
-                    it.startToStart = constraintLayoutId
-                    it.topToTop = constraintLayoutId
-                    it.marginStart = sizeX * x
-                    it.topMargin = sizeY * y
-                }
+            val constraintParams = ConstraintLayout.LayoutParams(cellSize, cellSize)
+            constraintParams.startToStart = constraintLayoutId
+            constraintParams.topToTop = constraintLayoutId
+            constraintParams.marginStart = columnSize * x
+            constraintParams.topMargin = columnSize * y
             imageView.layoutParams = constraintParams
             constraintLayout.addView(imageView)
+            x++
         }
     }
 
@@ -146,7 +138,9 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
     companion object {
 
         @MagicConstant
-        private const val MAGIC_PADDING = 5
+        private const val CELL_COEFFICIENT = 0.9
+
+        private const val COLUMN_COUNT = 2
 
         fun connect(uiGameContext: BUiGameContext, holder: BHumanHeadquartersHolder) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->

@@ -5,14 +5,14 @@ import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.scenario.BUiGameScenario
 import com.orego.battlecrane.ui.model.api.scenario.plugin.BRacePlugin
 import com.orego.battlecrane.ui.model.std.location.grass.BGrassLocationPlugin
-import com.orego.battlecrane.ui.model.std.race.human.BHumanPlugin
+import com.orego.battlecrane.ui.model.std.scenario.skirmish.model.race.human.BSkirmishHumanPlugin
 
 class BUiSkirmishScenario : BUiGameScenario() {
 
     override val gameScenario = BSkirmishScenario()
 
     override val racePlugins: Map<Class<out BRacePlugin>, BRacePlugin> = mutableMapOf(
-        BHumanPlugin::class.java to BHumanPlugin()
+        BSkirmishHumanPlugin::class.java to BSkirmishHumanPlugin()
     )
 
     override val locationPlugin = BGrassLocationPlugin()

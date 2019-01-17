@@ -36,15 +36,17 @@ class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragm
         }
     }
 
-    fun installRacePlugins(racePluginMap: Map<Class<out BRacePlugin>, BRacePlugin>) {
-        val plugins = racePluginMap.values
-        for (plugin in plugins) {
-            val uiUnitBuilderMap = plugin.uiUnitBuilderMap
-            val uiAdjutantBuilderPair = plugin.uiAdjutantBuilderPair
-            for (uiUnitBuilderEntry in uiUnitBuilderMap) {
-                this.uiUnitFactory.addBuilder(uiUnitBuilderEntry)
+    fun installRacePlugins(racePluginMap: Map<Class<out BRacePlugin>, BRacePlugin>?) {
+        if (racePluginMap != null) {
+            val plugins = racePluginMap.values
+            for (plugin in plugins) {
+                val uiUnitBuilderMap = plugin.uiUnitBuilderMap
+                val uiAdjutantBuilderPair = plugin.uiAdjutantBuilderPair
+                for (uiUnitBuilderEntry in uiUnitBuilderMap) {
+                    this.uiUnitFactory.addBuilder(uiUnitBuilderEntry)
+                }
+                this.uiAdjutantFactory.addBuilder(uiAdjutantBuilderPair.first, uiAdjutantBuilderPair.second)
             }
-            this.uiAdjutantFactory.addBuilder(uiAdjutantBuilderPair.first, uiAdjutantBuilderPair.second)
         }
     }
 

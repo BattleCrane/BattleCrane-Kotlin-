@@ -1,18 +1,18 @@
-package com.orego.battlecrane.ui.model.std.race.human.action.building
+package com.orego.battlecrane.ui.model.std.scenario.skirmish.model.race.human.action.building
 
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.std.location.grass.field.implementation.empty.BEmptyGrassField
-import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
-import com.orego.battlecrane.ui.model.api.context.clickController.BClickMode
+import com.orego.battlecrane.bc.std.scenario.skirmish.model.race.human.event.BSkirmishHumanEvents
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
+import com.orego.battlecrane.ui.model.api.context.clickController.BClickMode
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 
-object BHumanBuildBarracksImageView {
+object BSkirmishBuildHumanFactoryImageView {
 
-    const val PATH = "race/human/action/build_barracks.png"
+    const val PATH = "race/human/action/build_factiory.png"
 
     fun create(uiGameContext: BUiGameContext, producableId: Long, playerId: Long): ImageView {
         val applicationContext = uiGameContext.uiProvider.applicationContext
@@ -22,13 +22,23 @@ object BHumanBuildBarracksImageView {
                 val drawable = Drawable.createFromStream(imageStream, null)
                 it.id = View.generateViewId()
                 it.setImageDrawable(drawable)
-                it.setOnClickListener { this.selectBuildBarracksMode(uiGameContext, producableId, playerId) }
+                it.setOnClickListener {
+                    selectBuildMode(
+                        uiGameContext,
+                        producableId,
+                        playerId
+                    )
+                }
             }
     }
 
-    private fun selectBuildBarracksMode(uiGameContext: BUiGameContext, producableId: Long, playerId: Long) {
+    private fun selectBuildMode(uiGameContext: BUiGameContext, producableId: Long, playerId: Long) {
         uiGameContext.clickController.forceChangeClickMode(
-            ClickMode(uiGameContext.gameContext, producableId, playerId)
+            ClickMode(
+                uiGameContext.gameContext,
+                producableId,
+                playerId
+            )
         )
         println("CHANGED MODE!!!")
     }
@@ -47,7 +57,7 @@ object BHumanBuildBarracksImageView {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
                 if (clickedUnit is BEmptyGrassField) {
-                    val event = BHumanEvents.Construct.BarracksEvent(producableId, clickedUnit.x, clickedUnit.y)
+                    val event = BSkirmishHumanEvents.Construct.BarracksEvent(this.producableId, clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.playerId)
                     if (isSuccessful) {
                         this.gameContext.pipeline.broacastEvent(event)
