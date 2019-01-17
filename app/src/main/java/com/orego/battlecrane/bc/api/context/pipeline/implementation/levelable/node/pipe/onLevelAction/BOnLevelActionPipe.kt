@@ -10,7 +10,7 @@ class BOnLevelActionPipe(context: BGameContext) : BPipe(context) {
 
     companion object {
 
-        const val NAME = "ON_LEVEL_CHANGED_PIPE"
+        const val NAME = "ON_LEVEL_ACTION_PIPE"
 
         fun createOnLevelIncreasedEvent(levelableId: Long, range: Int) =
             OnIncreasedEvent(levelableId, range)

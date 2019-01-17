@@ -18,7 +18,7 @@ class BOnLevelActionNode(context: BGameContext) : BNode(context) {
 
     companion object {
 
-        const val NAME = "ON_LEVEL_CHANGED_NODE"
+        const val NAME = "ON_LEVEL_ACTION_NODE"
 
         fun connect(context: BGameContext, create: () -> BNode) {
             context.pipeline.bindPipeToNode(NAME, create().intoPipe())

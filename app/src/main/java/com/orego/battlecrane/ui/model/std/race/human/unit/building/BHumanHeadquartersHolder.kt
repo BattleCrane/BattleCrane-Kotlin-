@@ -27,7 +27,6 @@ class BHumanHeadquartersHolder(uiGameContext: BUiGameContext, override val item:
 
     }
 
-
     /**
      * Builder.
      */

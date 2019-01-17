@@ -33,7 +33,7 @@ object BSkirmishBuildHumanWallImageView {
     }
 
     private fun selectBuildMode(uiGameContext: BUiGameContext, producableId: Long, playerId: Long) {
-        uiGameContext.clickController.forceChangeClickMode(
+        uiGameContext.clickController.forcePushClickMode(
             ClickMode(
                 uiGameContext.gameContext,
                 producableId,
@@ -53,7 +53,7 @@ object BSkirmishBuildHumanWallImageView {
         private val playerId: Long
     ) : BClickMode {
 
-        override fun finish(nextClickMode: BClickMode): Boolean {
+        override fun handle(nextClickMode: BClickMode): BClickMode? {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
                 if (clickedUnit is BEmptyGrassField) {
@@ -63,10 +63,10 @@ object BSkirmishBuildHumanWallImageView {
                         this.gameContext.pipeline.broacastEvent(event)
                     }
                     println("BUILD BARRACKS!!!")
-                    return isSuccessful
+                    return null
                 }
             }
-            return false
+            return this
         }
     }
 }

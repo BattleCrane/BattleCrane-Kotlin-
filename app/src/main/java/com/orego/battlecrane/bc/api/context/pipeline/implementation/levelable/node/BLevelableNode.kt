@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.n
 
 import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.BLevelablePipe
+import com.orego.battlecrane.bc.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 
@@ -13,6 +14,10 @@ class BLevelableNode(context: BGameContext) : BNode(context) {
     }
 
     override val name = NAME
+
+    init {
+        this.connectInnerPipe(BOnLevelActionPipe(context))
+    }
 
     override fun handle(event: BEvent) : BEvent? {
         return if (event is BLevelablePipe.Event) {
