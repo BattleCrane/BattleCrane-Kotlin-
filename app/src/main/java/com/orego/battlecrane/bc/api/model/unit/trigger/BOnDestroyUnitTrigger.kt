@@ -23,6 +23,7 @@ class BOnDestroyUnitTrigger private constructor(context: BGameContext, val unit:
     override fun handle(event: BEvent): BEvent? {
         val unitId = this.unit.unitId
         if (event is BOnDestroyUnitPipe.Event && event.unitId == unitId) {
+            println("BOnDestroyUnitTrigger: ${this.unit}")
             this.storage.removeObject(unitId, BUnitHeap::class.java)
             return this.pushToInnerPipes(event)
         }

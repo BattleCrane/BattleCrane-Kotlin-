@@ -6,6 +6,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
 import com.orego.battlecrane.bc.scenario.skirmish.model.race.human.unit.building.turret.builder.BSkirmishHumanTurretBuilder
 import com.orego.battlecrane.bc.scenario.skirmish.model.race.human.unit.building.turret.trigger.BSkirmishHumanTurretOnAttackActionTrigger
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanTurret
 
 class BSkirmishHumanTurretOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
     BOnCreateUnitTrigger(context, playerId) {
@@ -46,6 +47,10 @@ class BSkirmishHumanTurretOnCreateTrigger private constructor(context: BGameCont
      */
 
     class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
+
+        override val width = BHumanTurret.WIDTH
+
+        override val height = BHumanTurret.HEIGHT
 
         override fun create(context: BGameContext) =
             BSkirmishHumanTurretBuilder().build(context, this.playerId, this.x, this.y)

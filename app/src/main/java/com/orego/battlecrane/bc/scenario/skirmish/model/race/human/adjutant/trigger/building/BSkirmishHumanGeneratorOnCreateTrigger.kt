@@ -4,6 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
 import com.orego.battlecrane.bc.scenario.skirmish.model.race.human.unit.building.generator.builder.BSkirmishHumanGeneratorBuilder
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanGenerator
 
 class BSkirmishHumanGeneratorOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
     BOnCreateUnitTrigger(context, playerId) {
@@ -32,6 +33,10 @@ class BSkirmishHumanGeneratorOnCreateTrigger private constructor(context: BGameC
      */
 
     class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
+
+        override val width = BHumanGenerator.WIDTH
+
+        override val height = BHumanGenerator.HEIGHT
 
         override fun create(context: BGameContext) =
             BSkirmishHumanGeneratorBuilder().build(

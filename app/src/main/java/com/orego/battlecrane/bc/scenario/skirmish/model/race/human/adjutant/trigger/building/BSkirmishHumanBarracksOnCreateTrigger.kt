@@ -4,6 +4,7 @@ import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
 import com.orego.battlecrane.bc.scenario.skirmish.model.race.human.unit.building.barracks.builder.BSkirmishHumanBarracksBuilder
+import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHumanBarracks
 
 class BSkirmishHumanBarracksOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
     BOnCreateUnitTrigger(context, playerId) {
@@ -45,6 +46,10 @@ class BSkirmishHumanBarracksOnCreateTrigger private constructor(context: BGameCo
      */
 
     class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
+
+        override val width = BHumanBarracks.WIDTH
+
+        override val height = BHumanBarracks.HEIGHT
 
         override fun create(context: BGameContext) =
             BSkirmishHumanBarracksBuilder().build(

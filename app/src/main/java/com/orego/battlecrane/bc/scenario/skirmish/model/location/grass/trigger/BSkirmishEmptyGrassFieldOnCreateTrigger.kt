@@ -5,6 +5,7 @@ import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.model.player.BPlayer
 import com.orego.battlecrane.bc.api.model.unit.trigger.BOnCreateUnitTrigger
 import com.orego.battlecrane.bc.scenario.skirmish.model.location.grass.field.empty.BSkirmishEmptyGrassFieldBuilder
+import com.orego.battlecrane.bc.std.location.grass.field.BGrassField
 
 class BSkirmishEmptyGrassFieldOnCreateTrigger(context: BGameContext) :
     BOnCreateUnitTrigger(context, BPlayer.NEUTRAL_PLAYER_ID) {
@@ -45,6 +46,10 @@ class BSkirmishEmptyGrassFieldOnCreateTrigger(context: BGameContext) :
      */
 
     class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
+
+        override val width = BGrassField.WIDTH
+
+        override val height = BGrassField.HEIGHT
 
         override fun create(context: BGameContext) =
             BSkirmishEmptyGrassFieldBuilder().build(

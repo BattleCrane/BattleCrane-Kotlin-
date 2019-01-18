@@ -15,13 +15,13 @@ class BHumanTank private constructor(context: BGameContext, playerId: Long, x: I
 
     companion object {
 
-        private const val HEIGHT = 1
+        const val HEIGHT = 1
 
-        private const val WIDTH = 1
+        const val WIDTH = 1
 
-        private const val MAX_HEALTH = 2
+        const val MAX_HEALTH = 2
 
-        private const val DAMAGE = 2
+        const val DAMAGE = 2
     }
 
     /**
