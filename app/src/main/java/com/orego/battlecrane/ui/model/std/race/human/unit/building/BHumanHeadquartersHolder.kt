@@ -5,7 +5,10 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHum
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 
-class BHumanHeadquartersHolder(uiGameContext: BUiGameContext, override val item: BHumanHeadquarters) :
+class BHumanHeadquartersHolder private constructor(
+    uiGameContext: BUiGameContext,
+    override val item: BHumanHeadquarters
+) :
     BUnitHolder(uiGameContext, item) {
 
     companion object {

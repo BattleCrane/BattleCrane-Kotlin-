@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.building.implementation.BHum
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 
-class BHumanGeneratorHolder(uiGameContext: BUiGameContext, override val item: BHumanGenerator) :
+class BHumanGeneratorHolder private constructor(uiGameContext: BUiGameContext, override val item: BHumanGenerator) :
     BUnitHolder(uiGameContext, item) {
 
 

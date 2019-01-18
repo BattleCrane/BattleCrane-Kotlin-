@@ -19,7 +19,8 @@ class BOnProduceEnableTrigger private constructor(context: BGameContext, val pro
             && this.producable.producableId == event.producableId
             && event.isEnable(this.context)
         ) {
-            println("HANDLE ENABLE TRIGGER!")
+            println("BOnProduceEnableTrigger: HANDLE!")
+            println(this.producable)
             event.perform(this.context)
             this.pushToInnerPipes(event)
             return event
@@ -45,7 +46,7 @@ class BOnProduceEnableTrigger private constructor(context: BGameContext, val pro
     companion object {
 
         fun connect(context: BGameContext, producable: BProducable) {
-            println("CONNECT ON PRODUCE ENABLE TRIGGER")
+            println("BOnProduceEnableTrigger: CONNECT")
             BOnProduceEnableNode.connect(context) {
                 BOnProduceEnableTrigger(
                     context,

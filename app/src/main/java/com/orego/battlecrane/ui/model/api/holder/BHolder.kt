@@ -18,7 +18,9 @@ abstract class BHolder<T>(open val item: T) {
 
         fun build(uiGameContext: BUiGameContext, item: T): BHolder<T> {
             val builder = this.builderMap[item::class.java]!!
-            return builder.build(uiGameContext, item)
+            val holder = builder.build(uiGameContext, item)
+            uiGameContext.gameContext.storage.addObject(holder)
+            return holder
         }
     }
 

@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.infantry.implementation.mari
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 
-class BHumanMarineHolder(uiGameContext: BUiGameContext, override val item: BHumanMarine) :
+class BHumanMarineHolder private constructor(uiGameContext: BUiGameContext, override val item: BHumanMarine) :
     BUnitHolder(uiGameContext, item) {
 
     companion object {
@@ -30,7 +30,7 @@ class BHumanMarineHolder(uiGameContext: BUiGameContext, override val item: BHuma
                 }
                 }.png"
 
-    class Builder : BUnitHolder.Builder() {
+    open class Builder : BUnitHolder.Builder() {
 
         override fun build(uiGameContext: BUiGameContext, item: BUnit) =
             BHumanMarineHolder(uiGameContext, item as BHumanMarine)

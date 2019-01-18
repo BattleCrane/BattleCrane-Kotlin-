@@ -4,9 +4,10 @@ import com.orego.battlecrane.bc.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.BHolder
 
-abstract class BAdjutantHolder(uiGameContext: BUiGameContext, adjutant: BAdjutant) : BHolder<BAdjutant>(adjutant) {
+abstract class BAdjutantHolder protected constructor(uiGameContext: BUiGameContext, adjutant: BAdjutant) :
+    BHolder<BAdjutant>(adjutant) {
 
-    val uiAdjutantId : Long
+    val uiAdjutantId: Long
 
     init {
         val contextGenerator = uiGameContext.gameContext.contextGenerator

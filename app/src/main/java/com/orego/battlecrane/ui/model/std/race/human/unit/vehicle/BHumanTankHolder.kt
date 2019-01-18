@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.std.race.human.unit.vehicle.implementation.tank.
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
 import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
 
-class BHumanTankHolder(uiGameContext: BUiGameContext, override val item: BHumanTank) :
+class BHumanTankHolder private constructor(uiGameContext: BUiGameContext, override val item: BHumanTank) :
     BUnitHolder(uiGameContext, item) {
 
     companion object {
@@ -15,7 +15,6 @@ class BHumanTankHolder(uiGameContext: BUiGameContext, override val item: BHumanT
             2.toLong() to "red"
         )
     }
-
 
     override val unitView = BUnitHolder.placeImageView(uiGameContext, this.item, this.getPath())
 
@@ -30,7 +29,7 @@ class BHumanTankHolder(uiGameContext: BUiGameContext, override val item: BHumanT
                 }
                 }.png"
 
-    class Builder : BUnitHolder.Builder() {
+    open class Builder : BUnitHolder.Builder() {
 
         override fun build(uiGameContext: BUiGameContext, item: BUnit) =
             BHumanTankHolder(uiGameContext, item as BHumanTank)
