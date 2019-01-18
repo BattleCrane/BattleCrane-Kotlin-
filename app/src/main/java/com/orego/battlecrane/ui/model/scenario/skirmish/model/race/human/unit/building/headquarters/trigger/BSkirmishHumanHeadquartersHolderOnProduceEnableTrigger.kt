@@ -4,26 +4,32 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
+import com.orego.battlecrane.bc.api.context.BGameContext
 import com.orego.battlecrane.bc.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.api.context.pipeline.model.pipe.BPipe
+import com.orego.battlecrane.bc.api.model.property.levelable.BLevelable
 import com.orego.battlecrane.bc.api.model.property.producable.trigger.BOnProduceEnableTrigger
+import com.orego.battlecrane.bc.scenario.skirmish.model.race.human.event.BSkirmishHumanEvents
+import com.orego.battlecrane.bc.std.location.grass.field.implementation.empty.BEmptyGrassField
+import com.orego.battlecrane.bc.std.race.human.util.BHumanEvents
 import com.orego.battlecrane.bc.std.race.human.util.BHumanTools
 import com.orego.battlecrane.ui.model.api.context.BUiGameContext
+import com.orego.battlecrane.ui.model.api.context.clickController.BClickMode
 import com.orego.battlecrane.ui.model.api.context.heap.BUnitHolderHeap
+import com.orego.battlecrane.ui.model.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.ui.model.api.util.BToolBuilder
+import com.orego.battlecrane.ui.model.std.race.human.asset.BHumanPaths
 import com.orego.battlecrane.ui.model.std.race.human.unit.building.BHumanHeadquartersHolder
-import com.orego.battlecrane.ui.model.scenario.skirmish.model.race.human.action.building.*
 import com.orego.battlecrane.ui.util.gone
 import com.orego.battlecrane.ui.util.show
 import org.intellij.lang.annotations.MagicConstant
 
 class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor(
-    uiGameContext: BUiGameContext,
-    private val holder: BHumanHeadquartersHolder
+    private val uiGameContext: BUiGameContext,
+    val holder: BHumanHeadquartersHolder
 ) : BNode(uiGameContext.gameContext) {
-
-    private val animationPipe = uiGameContext.animationPipe
 
     private val unitMap = this.context.storage.getHeap(BUnitHolderHeap::class.java).objectMap
 
@@ -31,7 +37,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
      * ImageView.
      */
 
-    private val isEnableImageView: ImageView = this.createBackground(uiGameContext)
+    private val isEnableImageView: ImageView = this.createIsEnableImageView()
 
     private val actionImageViewSet = mutableSetOf<ImageView>()
 
@@ -45,13 +51,13 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
                 } else {
                     { this.isEnableImageView.gone() }
                 }
-            this.animationPipe.addAnimation(animation)
+            this.uiGameContext.animationPipe.addAnimation(animation)
         }
         return null
     }
 
-    private fun createBackground(uiGameContext: BUiGameContext): ImageView {
-        val uiProvider = uiGameContext.uiProvider
+    private fun createIsEnableImageView(): ImageView {
+        val uiProvider = this.uiGameContext.uiProvider
         val applicationContext = uiProvider.applicationContext
         val constraintLayout = uiProvider.mapConstraintLayout
         //Create image unitView:
@@ -61,70 +67,154 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.showActions(uiGameContext)
-            this.holder.showDescription(uiGameContext)
+            this.refreshActions()
+            this.holder.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
     }
 
-    private fun showActions(uiGameContext: BUiGameContext) {
+    private fun refreshActions() {
         //Get right layout:
-        val constraintLayout = uiGameContext.uiProvider.rightConstraintLayout
+        val constraintLayout = this.uiGameContext.uiProvider.rightConstraintLayout
         val constraintLayoutId = constraintLayout.id
         val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
-        val cellSize : Int = (columnSize * CELL_COEFFICIENT).toInt()
+        val cellSize = (columnSize * CELL_COEFFICIENT).toInt()
         //Get headquarters:
         val headquarters = this.holder.item
         val producableId = headquarters.producableId
         val playerId = headquarters.playerId
-        //Create images:
+        constraintLayout.removeAllViews()
         this.actionImageViewSet.clear()
-        this.actionImageViewSet.add(
-            BSkirmishBuildHumanBarracksImageView.create(uiGameContext, producableId, playerId)
-        )
-        this.actionImageViewSet.add(
-            BSkirmishBuildHumanTurretImageView.create(uiGameContext, producableId, playerId)
-        )
-        this.actionImageViewSet.add(
-            BSkirmishBuildHumanWallImageView.create(uiGameContext, producableId, playerId)
-        )
-        if (BHumanTools.countGenerators(this.context, playerId) < BHumanTools.GENERATOR_LIMIT) {
+        if (headquarters.isProduceEnable) {
+            //Create images:
             this.actionImageViewSet.add(
-                BSkirmishBuildHumanGeneratorImageView.create(uiGameContext, producableId, playerId)
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.BARRACKS, object : BuildClickMode() {
+
+                    override fun createEvent(x: Int, y: Int) =
+                        BSkirmishHumanEvents.Construct.BarracksEvent(producableId, x, y)
+                })
             )
-        }
-        if (BHumanTools.countDiffBarracksFactory(this.context, playerId) > 0) {
             this.actionImageViewSet.add(
-                BSkirmishBuildHumanFactoryImageView.create(uiGameContext, producableId, playerId)
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.TURRET, object : BuildClickMode() {
+
+                    override fun createEvent(x: Int, y: Int) =
+                        BSkirmishHumanEvents.Construct.TurretEvent(producableId, x, y)
+                })
             )
-        }
-        if (BHumanTools.countPossibleBuildingUpgrades(this.context, playerId) > 0) {
             this.actionImageViewSet.add(
-                BSkirmishUpgradeHumanBuilding.create(uiGameContext, producableId, playerId)
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.WALL, object : BuildClickMode() {
+
+                    override fun createEvent(x: Int, y: Int) =
+                        BSkirmishHumanEvents.Construct.WallEvent(producableId, x, y)
+                })
             )
-        }
-        var x = 0
-        var y = 0
-        for (imageView in this.actionImageViewSet) {
-            if (x == COLUMN_COUNT) {
-                x = 0
-                y++
+            if (BHumanTools.countGenerators(this.context, playerId) < BHumanTools.GENERATOR_LIMIT) {
+                this.actionImageViewSet.add(
+                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.GENERATOR, object : BuildClickMode() {
+
+                        override fun createEvent(x: Int, y: Int) =
+                            BSkirmishHumanEvents.Construct.GeneratorEvent(producableId, x, y)
+                    })
+                )
             }
-            val constraintParams = ConstraintLayout.LayoutParams(cellSize, cellSize)
-            constraintParams.startToStart = constraintLayoutId
-            constraintParams.topToTop = constraintLayoutId
-            constraintParams.marginStart = columnSize * x
-            constraintParams.topMargin = columnSize * y
-            imageView.layoutParams = constraintParams
-            constraintLayout.addView(imageView)
-            x++
+            if (BHumanTools.countDiffBarracksFactory(this.context, playerId) > 0) {
+                this.actionImageViewSet.add(
+                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.FACTORY, object : BuildClickMode() {
+
+                        override fun createEvent(x: Int, y: Int) =
+                            BSkirmishHumanEvents.Construct.FactoryEvent(producableId, x, y)
+                    })
+                )
+            }
+            if (BHumanTools.countPossibleBuildingUpgrades(this.context, playerId) > 0) {
+                this.actionImageViewSet.add(
+                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Upgrade.BUILDING, UpgradeBuildingClickMode())
+                )
+            }
+            var x = 0
+            var y = 0
+            for (imageView in this.actionImageViewSet) {
+                if (x == COLUMN_COUNT) {
+                    x = 0
+                    y++
+                }
+                val constraintParams = ConstraintLayout.LayoutParams(cellSize, cellSize)
+                constraintParams.startToStart = constraintLayoutId
+                constraintParams.topToTop = constraintLayoutId
+                constraintParams.marginStart = columnSize * x
+                constraintParams.topMargin = columnSize * y
+                imageView.layoutParams = constraintParams
+                constraintLayout.addView(imageView)
+                x++
+            }
         }
     }
 
     override fun intoPipe() = Pipe()
 
 //    override fun isUnused() = this.unitMap.containsKey(this.holder.uiUnitId)
+
+    /**
+     * Click mode.
+     */
+
+    private abstract inner class BuildClickMode : BClickMode {
+
+        private val unit = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.holder.item
+
+        private val gameContext: BGameContext = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.context
+
+        protected abstract fun createEvent(x: Int, y: Int): BHumanEvents.Construct.Event
+
+        override fun handle(nextClickMode: BClickMode): BClickMode? {
+            if (nextClickMode is BUnitHolder.ClickMode) {
+                val clickedUnit = nextClickMode.unitHolder.item
+                if (clickedUnit is BEmptyGrassField) {
+                    val event = this.createEvent(clickedUnit.x, clickedUnit.y)
+                    val isSuccessful = event.isEnable(this.gameContext, this.unit.playerId)
+                    if (isSuccessful) {
+                        println("BUILD COMPLETE!!!")
+                        this.gameContext.pipeline.broacastEvent(event)
+                        this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.refreshActions()
+                        return null
+                    }
+                    println("PASS!!!")
+                }
+            }
+            return this
+        }
+    }
+
+    private inner class UpgradeBuildingClickMode : BClickMode {
+
+        private val unit = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.holder.item
+
+        private val gameContext: BGameContext = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.context
+
+        private val animationPipe =
+            this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.uiGameContext.animationPipe
+
+        override fun handle(nextClickMode: BClickMode): BClickMode? {
+            if (nextClickMode is BUnitHolder.ClickMode) {
+                val clickedUnit = nextClickMode.unitHolder.item
+                if (clickedUnit is BLevelable) {
+                    val event = BHumanEvents.Upgrade.Event(this.unit.producableId, clickedUnit.levelableId)
+                    val isSuccessful = event.isEnable(this.gameContext)
+                    if (isSuccessful) {
+                        println("UPGRADE COMPLETE!!!")
+                        this.gameContext.pipeline.broacastEvent(event)
+                        this.animationPipe.addAnimation {
+                            this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.refreshActions()
+                        }
+                        return null
+                    }
+                    println("PASS!!!")
+                }
+            }
+            return this
+        }
+    }
 
     /**
      * Pipe.
