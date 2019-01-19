@@ -11,15 +11,6 @@ class BOnLevelActionPipe(context: BGameContext) : BPipe(context) {
     companion object {
 
         const val NAME = "ON_LEVEL_ACTION_PIPE"
-
-        fun createOnLevelIncreasedEvent(levelableId: Long, range: Int) =
-            OnIncreasedEvent(levelableId, range)
-
-        fun createOnLevelDecreasedEvent(levelableId: Long, range: Int) =
-            OnDecreasedEvent(levelableId, range)
-
-        fun createOnLevelChangedEvent(levelableId: Long, range: Int) =
-            OnChangedEvent(levelableId, range)
     }
 
     override val name = NAME

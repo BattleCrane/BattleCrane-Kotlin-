@@ -10,8 +10,6 @@ class BOnDestroyUnitPipe(context: BGameContext) : BPipe(context) {
     companion object {
 
         const val NAME = "ON_DESTROY_UNIT_PIPE"
-
-        fun createEvent(unitId: Long) = Event(unitId)
     }
 
     override val name = NAME

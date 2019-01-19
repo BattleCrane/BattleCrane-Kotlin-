@@ -1,6 +1,7 @@
-package com.orego.battlecrane.bc.engine.api.model.unit.trigger
+package com.orego.battlecrane.bc.engine.api.util.trigger.unit
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
+import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.node.BOnCreateUnitNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
@@ -34,11 +35,11 @@ open class BOnCreateUnitTrigger protected constructor(context: BGameContext, var
      * Event.
      */
 
-    abstract class Event protected constructor(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
+    abstract class Event(val playerId: Long, x: Int, y: Int) : BOnCreateUnitPipe.Event(x, y) {
 
-        protected abstract val width : Int
+        protected abstract val width: Int
 
-        protected abstract val height : Int
+        protected abstract val height: Int
 
         open fun perform(context: BGameContext): Boolean {
             val controller = context.mapController
@@ -46,18 +47,20 @@ open class BOnCreateUnitTrigger protected constructor(context: BGameContext, var
             //Destroy previous units:
             for (x in this.x until this.x + this.width) {
                 for (y in this.y until this.y + this.height) {
-                    val unitId = controller.getUnitIdByPosition(x, y)
-                    pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(unitId))
+                    if (BMapController.inBounds(x, y)) {
+                        val unitId = controller.getUnitIdByPosition(x, y)
+                        pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId))
+                    }
                 }
             }
             //Create new unit:
-            val unit = this.create(context)
+            val unit = this.createUnit(context)
             controller.placeUnitOnMap(unit)
             context.storage.addObject(unit)
             return true
         }
 
-        protected abstract fun create(context: BGameContext): BUnit
+        protected abstract fun createUnit(context: BGameContext): BUnit
     }
 
     companion object {

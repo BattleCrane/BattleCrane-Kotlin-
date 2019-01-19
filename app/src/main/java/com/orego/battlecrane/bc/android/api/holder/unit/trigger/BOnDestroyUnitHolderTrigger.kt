@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.android.api.holder.unit.trigger
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.model.unit.trigger.BOnDestroyUnitTrigger
+import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnDestroyUnitTrigger
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 

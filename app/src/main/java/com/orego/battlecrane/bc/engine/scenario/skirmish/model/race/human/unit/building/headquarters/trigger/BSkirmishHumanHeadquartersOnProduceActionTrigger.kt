@@ -6,8 +6,9 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanUpgradeBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanHeadquarters
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanEvents
 
 class BSkirmishHumanHeadquartersOnProduceActionTrigger private constructor(
     context: BGameContext,
@@ -27,20 +28,20 @@ class BSkirmishHumanHeadquartersOnProduceActionTrigger private constructor(
             && this.headquarters.isProduceEnable
         ) {
             when (event) {
-                is BHumanEvents.Construct.Event -> {
+                is BHumanConstructBuildingEvent -> {
                     if (event.isEnable(this.context, this.headquarters.playerId)) {
                         event.perform(this.context, this.headquarters.playerId)
                         println("GET CONSTRUCT EVENT!")
                         this.pushToInnerPipes(event)
-                        this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+                        this.pipeline.pushEvent(BOnProduceEnablePipe.Event(producableId, false))
                         return event
                     }
                 }
-                is BHumanEvents.Upgrade.Event -> {
+                is BHumanUpgradeBuildingEvent -> {
                     if (event.isEnable(this.context)) {
                         event.perform(this.pipeline)
                         this.pushToInnerPipes(event)
-                        this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+                        this.pipeline.pushEvent(BOnProduceEnablePipe.Event(producableId, false))
                         return event
                     }
                 }

@@ -1,13 +1,13 @@
 package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.factory.builder
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.util.trigger.BOnProduceEnableTrigger
-import com.orego.battlecrane.bc.engine.api.model.unit.trigger.BOnDestroyUnitTrigger
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanFactory
+import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnDestroyUnitTrigger
+import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
+import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BProduceEnableOnTurnTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.factory.trigger.BSkirmishHumanFactoryOnLevelActionTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.factory.trigger.BSkirmishHumanFactoryOnProduceActionTrigger
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.factory.trigger.BSkirmishHumanFactoryOnTurnTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger.BSkirmishOnHitPointsActionTrigger
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanFactory
 
 class BSkirmishHumanFactoryBuilder : BHumanFactory.Builder() {
 
@@ -18,7 +18,7 @@ class BSkirmishHumanFactoryBuilder : BHumanFactory.Builder() {
         BOnDestroyUnitTrigger.connect(context, factory)
         BSkirmishHumanFactoryOnLevelActionTrigger.connect(context, factory)
         BSkirmishHumanFactoryOnProduceActionTrigger.connect(context, factory)
-        BSkirmishHumanFactoryOnTurnTrigger.connect(context, factory)
+        BProduceEnableOnTurnTrigger.connect(context, factory)
         return factory
     }
 }

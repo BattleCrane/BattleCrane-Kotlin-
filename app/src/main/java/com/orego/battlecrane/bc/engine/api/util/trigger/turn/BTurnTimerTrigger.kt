@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.engine.api.util.trigger
+package com.orego.battlecrane.bc.engine.api.util.trigger.turn
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.BTurnPipe
@@ -10,18 +10,7 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.concurrent.timer
 
-class BTurnTimerTrigger(context: BGameContext, var playerId: Long) : BNode(context) {
-
-    companion object {
-
-        private const val DEFAULT_TURN_TIME: Long = 45000
-
-        private const val TIMER_NAME = "TURN_TIMER"
-
-        const val SECOND: Long = 1000
-
-        const val NAME = "TURN_TIMER_NODE"
-    }
+class BTurnTimerTrigger private constructor(context: BGameContext, var playerId: Long) : BNode(context) {
 
     override val name = NAME
 
@@ -91,9 +80,24 @@ class BTurnTimerTrigger(context: BGameContext, var playerId: Long) : BNode(conte
         this@BTurnTimerTrigger.turnTimerTask = this
     }
 
+    /**
+     * Event.
+     */
+
     class TickEvent(playerId: Long, val timeLeft: Long) : BTurnPipe.Event(playerId)
 
     class StartEvent(playerId: Long, val turnTime: Long) : BTurnPipe.Event(playerId)
 
     class StopEvent(playerId: Long) : BTurnPipe.Event(playerId)
+
+    companion object {
+
+        private const val DEFAULT_TURN_TIME: Long = 45000
+
+        private const val TIMER_NAME = "TURN_TIMER"
+
+        const val SECOND: Long = 1000
+
+        const val NAME = "TURN_TIMER_NODE"
+    }
 }

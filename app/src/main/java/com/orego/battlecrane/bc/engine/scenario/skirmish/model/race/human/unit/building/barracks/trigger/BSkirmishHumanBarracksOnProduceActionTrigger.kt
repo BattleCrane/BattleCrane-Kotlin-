@@ -10,8 +10,8 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.infantry.BSkirmishHumanMarineOnCreateTrigger
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 
 class BSkirmishHumanBarracksOnProduceActionTrigger private constructor(
     context: BGameContext,
@@ -35,7 +35,7 @@ class BSkirmishHumanBarracksOnProduceActionTrigger private constructor(
         ) {
             event.perform(this.context, this.barracks)
             this.pushToInnerPipes(event)
-            this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+            this.pipeline.pushEvent(BOnProduceEnablePipe.Event(producableId, false))
             return event
         }
         return null
@@ -56,12 +56,12 @@ class BSkirmishHumanBarracksOnProduceActionTrigger private constructor(
      * Event.
      */
 
-    class Event private constructor(producableId: Long, val x: Int, val y: Int) :
+    class Event(producableId: Long, val x: Int, val y: Int) :
         BOnProduceActionPipe.Event(producableId) {
 
         fun perform(context: BGameContext, barracks: BHumanBarracks) {
             context.pipeline.pushEvent(
-                BSkirmishHumanMarineOnCreateTrigger.Event.create(
+                BSkirmishHumanMarineOnCreateTrigger.Event(
                     barracks.playerId,
                     this.x,
                     this.y
@@ -90,11 +90,6 @@ class BSkirmishHumanBarracksOnProduceActionTrigger private constructor(
                 return true
             }
             return false
-        }
-
-        companion object {
-
-            fun create(barracksUnitId: Long, x: Int, y: Int) = Event(barracksUnitId, x, y)
         }
     }
 

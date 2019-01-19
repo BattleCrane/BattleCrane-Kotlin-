@@ -18,11 +18,5 @@ class BOnAttackActionPipe(context: BGameContext) : BPipe(context) {
         this.placeNode(BOnAttackActionNode(context))
     }
 
-    open class Event protected constructor(val attackableId: Long) : BAttackablePipe.Event() {
-
-        companion object {
-
-            fun create(attackableId: Long) = Event(attackableId)
-        }
-    }
+    open class Event protected constructor(val attackableId: Long) : BAttackablePipe.Event()
 }

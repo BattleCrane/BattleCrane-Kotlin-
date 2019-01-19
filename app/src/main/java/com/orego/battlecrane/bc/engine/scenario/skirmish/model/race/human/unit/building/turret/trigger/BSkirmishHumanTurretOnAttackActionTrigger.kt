@@ -23,7 +23,6 @@ class BSkirmishHumanTurretOnAttackActionTrigger private constructor(context: BGa
         return null
     }
 
-    //TODO: MAYBE IT NEEDS TO MOVE INTO TRIGGER AND DELETE EVENT...
     class Event(attackableId: Long) : BOnAttackActionPipe.Event(attackableId) {
 
         fun perform(context: BGameContext, turret: BHumanTurret) {
@@ -54,12 +53,7 @@ class BSkirmishHumanTurretOnAttackActionTrigger private constructor(context: BGa
         }
 
         private fun attack(pipeline: BPipeline, hitPointableId: Long, damage: Int) {
-            pipeline.pushEvent(BOnHitPointsActionPipe.Current.createOnDecreasedEvent(hitPointableId, damage))
-        }
-
-        companion object {
-
-            fun create(attackableId: Long) = Event(attackableId)
+            pipeline.pushEvent(BOnHitPointsActionPipe.Current.OnDecreasedEvent(hitPointableId, damage))
         }
     }
 

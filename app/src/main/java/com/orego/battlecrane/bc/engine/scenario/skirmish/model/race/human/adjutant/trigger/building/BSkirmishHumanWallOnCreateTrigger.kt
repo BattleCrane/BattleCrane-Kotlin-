@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
-import com.orego.battlecrane.bc.engine.api.model.unit.trigger.BOnCreateUnitTrigger
+import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnCreateUnitTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.wall.builder.BSkirmishHumanWallBuilder
 
 class BSkirmishHumanWallOnCreateTrigger private constructor(context: BGameContext, playerId: Long) :
@@ -24,8 +24,8 @@ class BSkirmishHumanWallOnCreateTrigger private constructor(context: BGameContex
             val unitId1 = controller.getUnitIdByPosition(x, y)
             val unitId2 = controller.getUnitIdByPosition(x, nextY)
             //Delete previous units:
-            pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(unitId1))
-            pipeline.pushEvent(BOnDestroyUnitPipe.createEvent(unitId2))
+            pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId1))
+            pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId2))
             //Create walls:
             val wall1 = BSkirmishHumanWallBuilder().build(this.context, this.playerId, x, y)
             val wall2 = BSkirmishHumanWallBuilder().build(this.context, this.playerId, x, nextY)
@@ -51,7 +51,7 @@ class BSkirmishHumanWallOnCreateTrigger private constructor(context: BGameContex
      * Event.
      */
 
-    class Event private constructor(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
+    class Event(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
 
         override val width: Int
             get() {
@@ -67,18 +67,8 @@ class BSkirmishHumanWallOnCreateTrigger private constructor(context: BGameContex
             throw IllegalStateException("The trigger handles this event manually!")
         }
 
-        override fun create(context: BGameContext): BUnit {
+        override fun createUnit(context: BGameContext): BUnit {
             throw IllegalStateException("The trigger handles this event manually!")
-        }
-
-        companion object {
-
-            fun create(playerId: Long, x: Int, y: Int) =
-                Event(
-                    playerId,
-                    x,
-                    y
-                )
         }
     }
 

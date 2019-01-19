@@ -1,12 +1,12 @@
 package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.headquarters.builder
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.util.trigger.BOnProduceEnableTrigger
-import com.orego.battlecrane.bc.engine.api.model.unit.trigger.BOnDestroyUnitTrigger
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanHeadquarters
+import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnDestroyUnitTrigger
+import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.headquarters.trigger.BSkirmishHumanHeadquartersOnProduceActionTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.headquarters.trigger.BSkirmishHumanHeadquartersOnTurnTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger.BSkirmishOnHitPointsActionTrigger
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanHeadquarters
 
 class BSkirmishHumanHeadquartersBuilder : BHumanHeadquarters.Builder() {
 

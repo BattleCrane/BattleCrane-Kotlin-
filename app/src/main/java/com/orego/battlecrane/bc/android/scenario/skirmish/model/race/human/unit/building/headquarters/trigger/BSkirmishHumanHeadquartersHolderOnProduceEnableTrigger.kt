@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
-import com.orego.battlecrane.bc.engine.api.util.trigger.BOnProduceEnableTrigger
+import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.BSkirmishHumanEvents
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanEvents
@@ -92,7 +92,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
                 BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.BARRACKS, object : BuildClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
-                        BSkirmishHumanEvents.Construct.BarracksEvent(producableId, x, y)
+                        BSkirmishHumanEvents.Construct.BHumanConstructBarracksEvent(producableId, x, y)
                 })
             )
             this.actionImageViewSet.add(

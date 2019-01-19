@@ -2,14 +2,14 @@ package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.engine.api.util.trigger.levelable.BOnLevelActionTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanGenerator
 
-class BSkirmishHumanGeneratorOnLevelActionTrigger private constructor(context: BGameContext, var generator: BHumanGenerator) :
-    BNode(context) {
+class BSkirmishHumanGeneratorOnLevelActionTrigger private constructor(
+    context: BGameContext,
+    override val levelable: BHumanGenerator
+) : BOnLevelActionTrigger(context, levelable) {
 
     /**
      * Context.
@@ -17,22 +17,9 @@ class BSkirmishHumanGeneratorOnLevelActionTrigger private constructor(context: B
 
     private val pipeline = context.pipeline
 
-    override fun handle(event: BEvent): BEvent? {
-        if (event is BOnLevelActionPipe.Event
-            && this.generator.levelableId == event.levelableId
-            && event.isEnable(this.context)
-        ) {
-            event.perform(this.context)
-            this.pushToInnerPipes(event)
-            this.changeHitPointsByLevel()
-            return event
-        }
-        return null
-    }
-
-    private fun changeHitPointsByLevel() {
-        val hitPointableId = this.generator.hitPointableId
-        val currentLevel = this.generator.currentLevel
+    override fun onLevelChanged() {
+        val hitPointableId = this.levelable.hitPointableId
+        val currentLevel = this.levelable.currentLevel
         if (currentLevel in BHumanGenerator.FIRST_LEVEL..BHumanGenerator.MAX_LEVEL) {
             val newHitPoints =
                 when (currentLevel) {
@@ -41,10 +28,10 @@ class BSkirmishHumanGeneratorOnLevelActionTrigger private constructor(context: B
                     else -> BHumanGenerator.LEVEL_3_MAX_HIT_POINTS
                 }
             this.pipeline.pushEvent(
-                BOnHitPointsActionPipe.Max.createOnChangedEvent(hitPointableId, newHitPoints)
+                BOnHitPointsActionPipe.Max.OnChangedEvent(hitPointableId, newHitPoints)
             )
             this.pipeline.pushEvent(
-                BOnHitPointsActionPipe.Current.createOnChangedEvent(hitPointableId, newHitPoints)
+                BOnHitPointsActionPipe.Current.OnChangedEvent(hitPointableId, newHitPoints)
             )
         }
     }

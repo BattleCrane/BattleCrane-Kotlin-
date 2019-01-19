@@ -10,8 +10,6 @@ class BOnProduceActionPipe(context: BGameContext) : BPipe(context){
     companion object {
 
         const val NAME = "ON_PRODUCE_ACTION_PIPE"
-
-        fun createEvent(producableId: Long) = Event(producableId)
     }
 
     override val name = NAME

@@ -9,7 +9,7 @@ import com.orego.battlecrane.bc.engine.api.util.geometry.BSquareMatcher
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.BHumanBuilding
 
-abstract class BConstructBuildingEvent(
+abstract class BHumanConstructBuildingEvent(
     producableId: Long,
     val startX: Int,
     val startY: Int,
@@ -29,24 +29,24 @@ abstract class BConstructBuildingEvent(
         //Check square:
         val squareMatcher = object : BSquareMatcher(context) {
 
-            override fun lie(x: Int, y: Int) =
+            override fun isBlock(x: Int, y: Int) =
                 mapController.getUnitByPosition(context, x, y) !is BEmptyGrassField
         }
         val endX = this.startX + this.width
         val endY = this.startY + this.height
-        if (squareMatcher.notLieAny(this.startX, this.startY, endX, endY)) {
+        if (squareMatcher.hasNotBlocks(this.startX, this.startY, endX, endY)) {
             return false
         }
         //Check neighbour buildings around:
         val perimeterMatcher = object : BPerimeterMatcher(context) {
 
-            override fun lie(x: Int, y: Int): Boolean {
+            override fun isFound(x: Int, y: Int): Boolean {
                 val unit = mapController.getUnitByPosition(context, x, y)
                 val unitOwnerId = unit.playerId
                 return unit is BHumanBuilding && (player.isMine(unitOwnerId) || player.isAlly(unitOwnerId))
             }
         }
-        return perimeterMatcher.lieOnPerimeter(this.startX, this.startY, this.width, this.height)
+        return perimeterMatcher.hasOnPerimeter(this.startX, this.startY, this.width, this.height)
     }
 
     abstract fun getEvent(playerId: Long, x: Int, y: Int): BOnCreateUnitPipe.Event

@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.engine.api.model.unit.trigger
+package com.orego.battlecrane.bc.engine.api.util.trigger.unit
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe

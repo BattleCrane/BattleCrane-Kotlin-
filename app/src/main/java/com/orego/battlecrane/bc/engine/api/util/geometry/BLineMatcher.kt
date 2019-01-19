@@ -15,12 +15,12 @@ abstract class BLineMatcher(protected val context: BGameContext) {
      * Attack geometry check.
      */
 
-    fun lieAny(attackablePoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>) =
-        this.lieOnX(attackablePoint, targerPoint)
-                || this.lieOnY(attackablePoint, targerPoint)
-                || this.lieOnDiagonal(attackablePoint, targerPoint)
+    fun hasNotBlocks(attackablePoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>) =
+        this.hasNotBlocksOnX(attackablePoint, targerPoint)
+                || this.hasNotBlocksOnY(attackablePoint, targerPoint)
+                || this.hasNotBlocksOnDiagonal(attackablePoint, targerPoint)
 
-    fun lieOnX(attackPoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>): Boolean {
+    fun hasNotBlocksOnX(attackPoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>): Boolean {
         val attackX = attackPoint.first
         if (attackX == targerPoint.first) {
             val attackY = attackPoint.second
@@ -37,7 +37,7 @@ abstract class BLineMatcher(protected val context: BGameContext) {
         return false
     }
 
-    fun lieOnY(attackPoint: Pair<Int, Int>, targetPoint: Pair<Int, Int>): Boolean {
+    fun hasNotBlocksOnY(attackPoint: Pair<Int, Int>, targetPoint: Pair<Int, Int>): Boolean {
         val attackY = attackPoint.second
         if (attackY == targetPoint.second) {
             val attackX = attackPoint.first
@@ -54,7 +54,7 @@ abstract class BLineMatcher(protected val context: BGameContext) {
         return false
     }
 
-    fun lieOnDiagonal(attackPoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>): Boolean {
+    fun hasNotBlocksOnDiagonal(attackPoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>): Boolean {
         val attackX = attackPoint.first
         val attackY = attackPoint.second
         val distanceX = attackX - targerPoint.first

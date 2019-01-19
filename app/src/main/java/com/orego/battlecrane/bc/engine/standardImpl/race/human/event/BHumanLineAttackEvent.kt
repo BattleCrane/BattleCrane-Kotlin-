@@ -14,7 +14,7 @@ abstract class BHumanLineAttackEvent(
         val targetUnit = context.mapController.getUnitByPosition(context, this.targetX, this.targetY)
         if (targetUnit is BHitPointable) {
             val trajectory = this.getLineAttackMatcher(context)
-            return trajectory.lieAny(
+            return trajectory.hasNotBlocks(
                 this.attackableX to this.attackableY, this.targetX to this.targetY
             )
         }
@@ -26,7 +26,7 @@ abstract class BHumanLineAttackEvent(
             context, this.targetX, this.targetY
         ) as BHitPointable
         context.pipeline.pushEvent(
-            BOnHitPointsActionPipe.Current.createOnDecreasedEvent(target.hitPointableId, damage)
+            BOnHitPointsActionPipe.Current.OnDecreasedEvent(target.hitPointableId, damage)
         )
     }
 

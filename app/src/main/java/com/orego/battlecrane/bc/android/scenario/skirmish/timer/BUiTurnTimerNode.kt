@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.timer
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
-import com.orego.battlecrane.bc.engine.api.util.trigger.BTurnTimerTrigger
+import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BTurnTimerTrigger
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 
 class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val playerId: Long) :

@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.engine.api.util.trigger
+package com.orego.battlecrane.bc.engine.api.util.trigger.producable
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe

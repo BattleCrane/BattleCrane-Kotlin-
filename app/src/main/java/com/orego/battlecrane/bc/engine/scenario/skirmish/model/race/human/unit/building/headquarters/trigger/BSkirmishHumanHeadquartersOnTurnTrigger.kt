@@ -31,14 +31,14 @@ class BSkirmishHumanHeadquartersOnTurnTrigger private constructor(
                         this.makeAttack()
                     }
                     this.pipeline.pushEvent(
-                        BOnProduceEnablePipe.createEvent(producableId, true)
+                        BOnProduceEnablePipe.Event(producableId, true)
                     )
                     return event
                 }
                 is BOnTurnFinishedPipe.Event -> {
                     this.pushToInnerPipes(event)
                     this.pipeline.pushEvent(
-                        BOnProduceEnablePipe.createEvent(producableId, false)
+                        BOnProduceEnablePipe.Event(producableId, false)
                     )
                     return event
                 }

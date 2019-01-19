@@ -57,7 +57,7 @@ object BSkirmishProduceHumanTankImageView {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
                 if (clickedUnit is BEmptyGrassField) {
-                    val event = BSkirmishHumanEvents.Construct.BarracksEvent(this.producableId, clickedUnit.x, clickedUnit.y)
+                    val event = BSkirmishHumanEvents.Construct.BHumanConstructBarracksEvent(this.producableId, clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.playerId)
                     if (isSuccessful) {
                         this.gameContext.pipeline.broacastEvent(event)

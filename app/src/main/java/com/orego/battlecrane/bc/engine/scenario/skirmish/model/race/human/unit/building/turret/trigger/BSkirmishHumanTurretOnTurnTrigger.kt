@@ -20,7 +20,7 @@ class BSkirmishHumanTurretOnTurnTrigger private constructor(context: BGameContex
         if (event is BOnTurnStartedPipe.Event && this.turret.playerId == event.playerId) {
             val attackableId = this.turret.attackableId
             this.pushToInnerPipes(event)
-            this.pipeline.pushEvent(BSkirmishHumanTurretOnAttackActionTrigger.Event.create(attackableId))
+            this.pipeline.pushEvent(BSkirmishHumanTurretOnAttackActionTrigger.Event(attackableId))
             return event
         }
         return null

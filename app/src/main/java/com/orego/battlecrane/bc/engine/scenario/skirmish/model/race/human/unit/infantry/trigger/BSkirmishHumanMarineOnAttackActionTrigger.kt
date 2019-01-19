@@ -7,9 +7,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAttackableHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BCreature
+import com.orego.battlecrane.bc.engine.api.util.geometry.BLineMatcher
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.BGrassField
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanLineAttackEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.infantry.implementation.BHumanMarine
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanEvents
 
 class BSkirmishHumanMarineOnAttackActionTrigger private constructor(context: BGameContext, var marine: BHumanMarine) :
     BNode(context) {
@@ -30,8 +31,30 @@ class BSkirmishHumanMarineOnAttackActionTrigger private constructor(context: BGa
      * Event.
      */
 
-    class Event private constructor(attackableId: Long, marineX: Int, marineY: Int, targetX: Int, targetY: Int) :
-        BHumanEvents.Attack.LineEvent(attackableId, marineX, marineY, targetX, targetY) {
+    class Event(attackableId: Long, marineX: Int, marineY: Int, targetX: Int, targetY: Int) :
+        BHumanLineAttackEvent(attackableId, marineX, marineY, targetX, targetY) {
+
+        override fun getLineAttackMatcher(context: BGameContext) = object : BLineMatcher(context) {
+
+            override fun isBlock(x: Int, y: Int): Boolean {
+                val storage = context.storage
+                val marine = storage.getHeap(BAttackableHeap::class.java)[this@Event.attackableId] as BHumanMarine
+                val playerId = marine.playerId
+                val otherUnit = context.mapController.getUnitByPosition(context, x, y)
+                val otherPlayerId = otherUnit.playerId
+                if (otherUnit is BCreature || otherUnit is BGrassField) {
+                    return false
+                }
+                if (playerId == otherPlayerId) {
+                    return false
+                }
+                val marineOwner = storage.getHeap(BPlayerHeap::class.java)[playerId]
+                if (marineOwner.isAlly(otherPlayerId)) {
+                    return false
+                }
+                return true
+            }
+        }
 
         override fun isEnable(context: BGameContext): Boolean {
             if (super.isEnable(context)) {
@@ -42,31 +65,6 @@ class BSkirmishHumanMarineOnAttackActionTrigger private constructor(context: BGa
                 return player.isEnemy(targetUnit.playerId)
             }
             return false
-        }
-
-        override fun isAttackBlock(context: BGameContext, x: Int, y: Int): Boolean {
-            val storage = context.storage
-            val marine = storage.getHeap(BAttackableHeap::class.java)[this.attackableId] as BHumanMarine
-            val playerId = marine.playerId
-            val otherUnit = context.mapController.getUnitByPosition(context, x, y)
-            val otherPlayerId = otherUnit.playerId
-            if (otherUnit is BCreature || otherUnit is BGrassField) {
-                return false
-            }
-            if (playerId == otherPlayerId) {
-                return false
-            }
-            val marineOwner = storage.getHeap(BPlayerHeap::class.java)[playerId]
-            if (marineOwner.isAlly(otherPlayerId)) {
-                return false
-            }
-            return true
-        }
-
-        companion object {
-
-            fun create(attackableId: Long, marineX: Int, marineY: Int, targetX: Int, targetY: Int) =
-                Event(attackableId, marineX, marineY, targetX, targetY)
         }
     }
 

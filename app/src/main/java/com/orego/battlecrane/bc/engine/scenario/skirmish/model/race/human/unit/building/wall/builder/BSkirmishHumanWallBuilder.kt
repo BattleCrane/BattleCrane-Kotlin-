@@ -1,9 +1,9 @@
 package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.wall.builder
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.model.unit.trigger.BOnDestroyUnitTrigger
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanWall
+import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnDestroyUnitTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger.BSkirmishOnHitPointsActionTrigger
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanWall
 
 class BSkirmishHumanWallBuilder : BHumanWall.Builder() {
 

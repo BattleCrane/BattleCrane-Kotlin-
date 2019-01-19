@@ -33,15 +33,6 @@ class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
 
     object Current {
 
-        fun createOnIncreasedEvent(hitPointableId: Long, range: Int) =
-            OnIncreasedEvent(hitPointableId, range)
-
-        fun createOnDecreasedEvent(hitPointableId: Long, range: Int) =
-            OnDecreasedEvent(hitPointableId, range)
-
-        fun createOnChangedEvent(hitPointableId: Long, range: Int) =
-            OnChangedEvent(hitPointableId, range)
-
         open class OnIncreasedEvent(hitPointableId: Long, range: Int) :
             Event(hitPointableId, range) {
 
@@ -90,15 +81,6 @@ class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
     }
 
     object Max {
-
-        fun createOnIncreasedEvent(hitPointableId: Long, range: Int) =
-            OnIncreasedEvent(hitPointableId, range)
-
-        fun createOnDecreasedEvent(hitPointableId: Long, range: Int) =
-            OnDecreasedEvent(hitPointableId, range)
-
-        fun createOnChangedEvent(hitPointableId: Long, range: Int) =
-            OnChangedEvent(hitPointableId, range)
 
         open class OnIncreasedEvent(hitPointableId: Long, range: Int) :
             Event(hitPointableId, range) {

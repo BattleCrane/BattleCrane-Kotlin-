@@ -11,9 +11,6 @@ class BOnAttackEnablePipe(context: BGameContext) : BPipe(context) {
     companion object {
 
         const val NAME = "ON_ATTACK_ENABLE_PIPE"
-
-        fun createEvent(attackableId: Long, isEnable: Boolean) =
-            Event(attackableId, isEnable)
     }
 
     override val name = NAME

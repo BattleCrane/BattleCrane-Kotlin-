@@ -2,16 +2,15 @@ package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
+import com.orego.battlecrane.bc.engine.api.util.trigger.levelable.BOnLevelActionTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 
-class BSkirmishHumanBarracksOnLevelActionTrigger private constructor(context: BGameContext, val barracks: BHumanBarracks) :
-    BNode(context) {
+class BSkirmishHumanBarracksOnLevelActionTrigger private constructor(
+    context: BGameContext,
+    override val levelable: BHumanBarracks
+) : BOnLevelActionTrigger(context, levelable) {
 
     /**
      * Context.
@@ -19,25 +18,9 @@ class BSkirmishHumanBarracksOnLevelActionTrigger private constructor(context: BG
 
     private val pipeline = context.pipeline
 
-    private val unitMap = context.storage.getHeap(BUnitHeap::class.java).objectMap
-
-
-    override fun handle(event: BEvent): BEvent? {
-        if (event is BOnLevelActionPipe.Event
-            && this.barracks.levelableId == event.levelableId
-            && event.isEnable(this.context)
-        ) {
-            event.perform(this.context)
-            this.pushToInnerPipes(event)
-            this.changeHitPointsByLevel()
-            return event
-        }
-        return null
-    }
-
-    private fun changeHitPointsByLevel() {
-        val hitPointableId = this.barracks.hitPointableId
-        val currentLevel = this.barracks.currentLevel
+    override fun onLevelChanged() {
+        val hitPointableId = this.levelable.hitPointableId
+        val currentLevel = this.levelable.currentLevel
         if (currentLevel in BHumanBarracks.FIRST_LEVEL..BHumanBarracks.MAX_LEVEL) {
             val newHitPoints =
                 when (currentLevel) {
@@ -46,17 +29,15 @@ class BSkirmishHumanBarracksOnLevelActionTrigger private constructor(context: BG
                     else -> BHumanBarracks.LEVEL_3_MAX_HIT_POINTS
                 }
             this.pipeline.pushEvent(
-                BOnHitPointsActionPipe.Max.createOnChangedEvent(hitPointableId, newHitPoints)
+                BOnHitPointsActionPipe.Max.OnChangedEvent(hitPointableId, newHitPoints)
             )
             this.pipeline.pushEvent(
-                BOnHitPointsActionPipe.Current.createOnChangedEvent(hitPointableId, newHitPoints)
+                BOnHitPointsActionPipe.Current.OnChangedEvent(hitPointableId, newHitPoints)
             )
         }
     }
 
     override fun intoPipe() = Pipe()
-
-    override fun isUnused() = !this.unitMap.containsKey(this.barracks.unitId)
 
     /**
      * Pipe.
@@ -64,7 +45,7 @@ class BSkirmishHumanBarracksOnLevelActionTrigger private constructor(context: BG
 
     inner class Pipe : BPipe(this.context, mutableListOf(this)) {
 
-        val barracks = this@BSkirmishHumanBarracksOnLevelActionTrigger.barracks
+        val barracks = this@BSkirmishHumanBarracksOnLevelActionTrigger.levelable
 
         override fun isUnused() = this@BSkirmishHumanBarracksOnLevelActionTrigger.isUnused()
     }

@@ -7,7 +7,7 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BLevelableHeap
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.BHumanBuilding
 
-open class BUpgradeBuildingEvent(producableId: Long, val levelableId: Long) : BOnProduceActionPipe.Event(producableId) {
+open class BHumanUpgradeBuildingEvent(producableId: Long, val levelableId: Long) : BOnProduceActionPipe.Event(producableId) {
 
     companion object {
 
@@ -21,7 +21,7 @@ open class BUpgradeBuildingEvent(producableId: Long, val levelableId: Long) : BO
 
     fun perform(pipeline: BPipeline) {
         pipeline.pushEvent(
-            BOnLevelActionPipe.createOnLevelIncreasedEvent(this.levelableId, RANGE)
+            BOnLevelActionPipe.OnIncreasedEvent(this.levelableId, RANGE)
         )
     }
 }

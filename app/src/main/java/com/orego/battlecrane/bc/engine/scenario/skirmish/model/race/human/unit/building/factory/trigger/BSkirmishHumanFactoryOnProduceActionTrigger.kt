@@ -7,9 +7,9 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.vehicle.BSkirmishHumanTankOnCreateTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanFactory
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.vehicle.BSkirmishHumanTankOnCreateTrigger
 
 class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
     context: BGameContext,
@@ -31,7 +31,7 @@ class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
         ) {
             event.perform(this.context, this.factory)
             this.pushToInnerPipes(event)
-            this.pipeline.pushEvent(BOnProduceEnablePipe.createEvent(producableId, false))
+            this.pipeline.pushEvent(BOnProduceEnablePipe.Event(producableId, false))
             return event
         }
         return null
@@ -41,11 +41,11 @@ class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
      * Event.
      */
 
-    class Event private constructor(producableId: Long, val x: Int, val y: Int) :
+    class Event(producableId: Long, val x: Int, val y: Int) :
         BOnProduceActionPipe.Event(producableId) {
 
         fun perform(context: BGameContext, factory: BHumanFactory) {
-            context.pipeline.pushEvent(BSkirmishHumanTankOnCreateTrigger.Event.create(factory.playerId, this.x, this.y))
+            context.pipeline.pushEvent(BSkirmishHumanTankOnCreateTrigger.Event(factory.playerId, this.x, this.y))
         }
 
         fun isEnable(context: BGameContext, factory: BHumanFactory): Boolean {
@@ -69,11 +69,6 @@ class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
                 return true
             }
             return false
-        }
-
-        companion object {
-
-            fun create(factoryUnitId: Long, x: Int, y: Int) = Event(factoryUnitId, x, y)
         }
     }
 
