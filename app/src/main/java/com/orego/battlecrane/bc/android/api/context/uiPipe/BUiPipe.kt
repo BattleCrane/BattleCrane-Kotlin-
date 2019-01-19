@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.android.api.context.eventPipe
+package com.orego.battlecrane.bc.android.api.context.uiPipe
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.BPipeline

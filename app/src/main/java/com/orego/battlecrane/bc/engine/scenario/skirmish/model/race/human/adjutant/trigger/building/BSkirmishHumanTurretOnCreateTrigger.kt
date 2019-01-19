@@ -17,7 +17,7 @@ class BSkirmishHumanTurretOnCreateTrigger private constructor(context: BGameCont
 
     override fun handle(event: BEvent): BEvent? {
         if (event is Event) {
-            return super.pushToInnerPipes(event)
+            return super.handle(event)
         }
         return null
     }

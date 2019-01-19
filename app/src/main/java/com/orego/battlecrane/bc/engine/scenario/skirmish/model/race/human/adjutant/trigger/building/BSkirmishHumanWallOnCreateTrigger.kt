@@ -74,7 +74,7 @@ class BSkirmishHumanWallOnCreateTrigger private constructor(context: BGameContex
 
     companion object {
 
-        private const val NEXT_WALL_POSITION = -1
+        const val NEXT_WALL_POSITION = 1
 
         fun connect(context: BGameContext, playerId: Long) {
             BOnCreateUnitTrigger.connect(context) {

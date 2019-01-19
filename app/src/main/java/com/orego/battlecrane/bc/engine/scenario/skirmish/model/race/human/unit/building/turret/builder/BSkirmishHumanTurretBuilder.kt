@@ -16,7 +16,7 @@ class BSkirmishHumanTurretBuilder : BHumanTurret.Builder() {
         BOnDestroyUnitTrigger.connect(context, turret)
         BSkirmishHumanTurretOnAttackActionTrigger.connect(context, turret)
         BSkirmishHumanTurretOnLevelActionTrigger.connect(context, turret)
-        BSkirmishHumanTurretOnTurnTrigger.connecct(context, turret)
+        BSkirmishHumanTurretOnTurnTrigger.connect(context, turret)
         return turret
     }
 }

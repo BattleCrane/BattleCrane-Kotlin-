@@ -28,7 +28,7 @@ class BSkirmishHumanTurretOnTurnTrigger private constructor(context: BGameContex
 
     companion object {
 
-        fun connecct(context: BGameContext, turret: BHumanTurret) {
+        fun connect(context: BGameContext, turret: BHumanTurret) {
             BTurnNode.connect(context) {
                 BSkirmishHumanTurretOnTurnTrigger(context, turret)
             }

@@ -17,10 +17,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
+import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct.*
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.utils.BSkirmishHumanRule
-import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanUpgradeBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
@@ -171,7 +171,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         override fun handle(nextClickMode: BClickMode): BClickMode? {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
-                if (clickedUnit is BEmptyGrassField) {
+                if (clickedUnit is BEmptyField) {
                     val event = this.createEvent(clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.unit.playerId)
                     println("IS SUCCESSFUL: $isSuccessful")
@@ -181,7 +181,6 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
                         this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.refreshActions()
                         return null
                     }
-                    println("PASS!!!")
                 }
             }
             return this

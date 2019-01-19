@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.api.context
 
 import com.orego.battlecrane.bc.android.api.context.clickController.BClickController
-import com.orego.battlecrane.bc.android.api.context.eventPipe.BUiPipe
+import com.orego.battlecrane.bc.android.api.context.uiPipe.BUiPipe
 import com.orego.battlecrane.bc.android.api.context.heap.BAdjutantHolderHeap
 import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
 import com.orego.battlecrane.bc.android.api.holder.adjutant.BAdjutantHolder

@@ -28,7 +28,7 @@ class BSkirmishHumanMarineOnCreateTrigger private constructor(context: BGameCont
      * Event.
      */
 
-    class Event (playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
+    class Event(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
 
         override val width = BHumanMarine.WIDTH
 

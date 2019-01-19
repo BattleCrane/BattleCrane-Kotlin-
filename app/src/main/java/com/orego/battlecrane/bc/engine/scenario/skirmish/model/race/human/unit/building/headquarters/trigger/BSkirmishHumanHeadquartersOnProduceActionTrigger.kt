@@ -31,7 +31,6 @@ class BSkirmishHumanHeadquartersOnProduceActionTrigger private constructor(
                 is BHumanConstructBuildingEvent -> {
                     if (event.isEnable(this.context, this.headquarters.playerId)) {
                         event.perform(this.context, this.headquarters.playerId)
-                        println("GET CONSTRUCT EVENT!")
                         this.pushToInnerPipes(event)
                         this.pipeline.pushEvent(BOnProduceEnablePipe.Event(producableId, false))
                         return event
