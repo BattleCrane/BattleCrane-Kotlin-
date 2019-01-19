@@ -6,7 +6,7 @@ object BHumanPaths {
 
         const val BARRACKS = "race/human/action/build_barracks.png"
 
-        const val FACTORY = "race/human/action/build_factiory.png"
+        const val FACTORY = "race/human/action/build_factory.png"
 
         const val GENERATOR = "race/human/action/build_generator.png"
 

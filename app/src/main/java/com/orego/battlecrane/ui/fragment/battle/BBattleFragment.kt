@@ -7,9 +7,9 @@ import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
+import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.ui.fragment.BFragment
-import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.ui.util.gone
 import com.orego.battlecrane.ui.util.onMeasured
 import com.orego.battlecrane.ui.viewModel.BScenarioViewModel
@@ -129,6 +129,10 @@ class BBattleFragment : BFragment() {
 
         val lineProgressBar: ProgressBar by lazy {
             this@BBattleFragment.fragment_battle_end_turn_progress_bar
+        }
+
+        val endTurnConstraintLayout: ConstraintLayout by lazy {
+            this@BBattleFragment.fragment_battle_end_turn_constraint_layout
         }
     }
 }

@@ -17,9 +17,9 @@ class BHumanFactory private constructor(context: BGameContext, playerId: Long, x
 
     companion object {
 
-        const val HEIGHT = 3
+        const val HEIGHT = 2
 
-        const val WIDTH = 2
+        const val WIDTH = 3
 
         const val LEVEL_1_MAX_HIT_POINTS = 1
 

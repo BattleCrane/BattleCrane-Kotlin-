@@ -37,9 +37,7 @@ class BOnTurnFinishedNode(context: BGameContext) : BNode(context) {
     private fun setNextAblePlayer(): Long {
         val ablePlayers = this.playerController.ablePlayers
         val ablePlayerCount = ablePlayers.size
-        if (this.playerController.currentPlayerPosition < ablePlayerCount) {
-            this.playerController.currentPlayerPosition++
-        } else {
+        if (++this.playerController.currentPlayerPosition >= ablePlayerCount) {
             this.playerController.currentPlayerPosition = 0
         }
         val nextAblePlayerId = ablePlayers[this.playerController.currentPlayerPosition]

@@ -1,14 +1,15 @@
 package com.orego.battlecrane.bc.android.api.context
 
 import com.orego.battlecrane.bc.android.api.context.clickController.BClickController
-import com.orego.battlecrane.bc.android.api.context.uiPipe.BUiPipe
 import com.orego.battlecrane.bc.android.api.context.heap.BAdjutantHolderHeap
 import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
+import com.orego.battlecrane.bc.android.api.context.uiPipe.BUiPipe
 import com.orego.battlecrane.bc.android.api.holder.adjutant.BAdjutantHolder
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BLocationPlugin
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BRacePlugin
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
+import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAdjutantHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
@@ -24,8 +25,13 @@ class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragm
     val uiAdjutantFactory: BAdjutantHolder.Factory = BAdjutantHolder.Factory()
 
     init {
+        //Add holder heaps:
         BAdjutantHolderHeap.connect(this.gameContext)
         BUnitHolderHeap.connect(this.gameContext)
+        //Configure end turn button:
+        this.uiProvider.endTurnConstraintLayout.setOnClickListener {
+            this.gameContext.pipeline.broacastEvent(BOnTurnFinishedPipe.Event(this.gameContext.playerController.currentPlayerId))
+        }
     }
 
     fun installLocationPlugin(locationPlugin: BLocationPlugin?) {
