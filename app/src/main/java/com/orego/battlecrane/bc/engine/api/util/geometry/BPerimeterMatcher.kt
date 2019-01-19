@@ -9,25 +9,25 @@ abstract class BPerimeterMatcher {
     fun findAroundPerimeter(startX: Int, startY: Int, width: Int, height: Int): Boolean {
         //Check neighbour buildings around:
         val neighborStartX = startX - 1
-        val neighborEndX = startX + width + 1
+        val neighborEndX = startX + width
         val neighborStartY = startY - 1
-        val neighborEndY = startY + height + 1
-        for (x in neighborStartX until neighborEndX) {
+        val neighborEndY = startY + height
+        for (x in neighborStartX..neighborEndX) {
             if (BMapController.inBounds(x, neighborStartY) && this.isFound(x, neighborStartY)) {
                 return true
             }
         }
-        for (x in neighborStartX until neighborEndX) {
+        for (x in neighborStartX..neighborEndX) {
             if (BMapController.inBounds(x, neighborEndY) && this.isFound(x, neighborEndY)) {
                 return true
             }
         }
-        for (y in neighborStartY until neighborEndY) {
+        for (y in neighborStartY..neighborEndY) {
             if (BMapController.inBounds(y, neighborStartX) && this.isFound(neighborStartX, y)) {
                 return true
             }
         }
-        for (y in neighborStartY until neighborEndY) {
+        for (y in neighborStartY..neighborEndY) {
             if (BMapController.inBounds(y, neighborEndX) && this.isFound(neighborEndX, y)) {
                 return true
             }

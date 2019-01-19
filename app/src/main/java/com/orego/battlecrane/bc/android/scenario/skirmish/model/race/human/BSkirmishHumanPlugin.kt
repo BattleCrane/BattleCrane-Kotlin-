@@ -5,9 +5,9 @@ import com.orego.battlecrane.bc.android.api.scenario.plugin.BRacePlugin
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.adjutant.BSkirmishHumanAdjutantHolderBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.barracks.builder.BSkirmishHumanBarracksHolderBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.factory.builder.BSkirmishHumanFactoryHolderBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.generator.builder.BSkirmishHumanGeneratorHolderBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.headquarters.builder.BSkirmishHumanHeadquartersHolderBuilder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.adjutant.BHumanAdjutantHolder
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanGeneratorHolder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanTurretHolder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanWallHolder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.infantry.BHumanMarineHolder
@@ -27,7 +27,7 @@ class BSkirmishHumanPlugin : BRacePlugin() {
         //Building:
         BHumanBarracks::class.java to BSkirmishHumanBarracksHolderBuilder(),
         BHumanFactory::class.java to BSkirmishHumanFactoryHolderBuilder(),
-        BHumanGenerator::class.java to BHumanGeneratorHolder.Builder(),
+        BHumanGenerator::class.java to BSkirmishHumanGeneratorHolderBuilder(),
         BHumanHeadquarters::class.java to BSkirmishHumanHeadquartersHolderBuilder(),
         BHumanTurret::class.java to BHumanTurretHolder.Builder(),
         BHumanWall::class.java to BHumanWallHolder.Builder(),
