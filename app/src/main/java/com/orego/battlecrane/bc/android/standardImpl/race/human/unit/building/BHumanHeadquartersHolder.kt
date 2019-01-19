@@ -1,15 +1,14 @@
 package com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building
 
-import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanHeadquarters
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanHeadquarters
 
 class BHumanHeadquartersHolder private constructor(
     uiGameContext: BUiGameContext,
     override val item: BHumanHeadquarters
-) :
-    BUnitHolder(uiGameContext, item) {
+) : BUnitHolder(uiGameContext, item) {
 
     companion object {
 
@@ -25,10 +24,6 @@ class BHumanHeadquartersHolder private constructor(
         "race/human/unit/headquarters/" +
                 "${COLOR_MAP[this.item.playerId]}/" +
                 "${this.item.currentHitPoints}.png"
-
-    fun showDescription(uiGameContext: BUiGameContext) {
-
-    }
 
     /**
      * Builder.

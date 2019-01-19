@@ -22,6 +22,9 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
         this.uiUnitId = contextGenerator.getIdGenerator(BUnitHolder::class.java).generateId()
     }
 
+    open fun showDescription(uiGameContext: BUiGameContext) {
+    }
+
     abstract class ClickMode(val unitHolder: BUnitHolder) : BClickMode
 
     class Factory : BHolder.Factory<BUnit>()
@@ -42,14 +45,14 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
             val cellSizeY = constraintLayout.measuredHeight / BMapController.MAP_SIZE
             //Create params:
             val constraintParams = ConstraintLayout.LayoutParams(
-                (item.width * cellSizeX * CELL_COEFFICIENT).toInt(), (item.height * cellSizeY * CELL_COEFFICIENT).toInt()
-            )
-                .also {
-                    it.startToStart = constraintLayoutId
-                    it.topToTop = constraintLayoutId
-                    it.marginStart = cellSizeX * item.x
-                    it.topMargin = cellSizeY * item.y
-                }
+                (item.width * cellSizeX * CELL_COEFFICIENT).toInt(),
+                (item.height * cellSizeY * CELL_COEFFICIENT).toInt()
+            ).also {
+                it.startToStart = constraintLayoutId
+                it.topToTop = constraintLayoutId
+                it.marginStart = cellSizeX * item.x
+                it.topMargin = cellSizeY * item.y
+            }
             //Create image unitView:
             val imageView = ImageView(applicationContext)
                 .also {

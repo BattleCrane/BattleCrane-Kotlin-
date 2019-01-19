@@ -22,9 +22,12 @@ object BHumanPaths {
 
     object Train {
 
+        const val MARINE = "race/human/action/train_marine_lvl_1.png"
+
     }
 
     object Produce {
 
+        const val TANK = "race/human/action/train_tank_lvl_1.png"
     }
 }
