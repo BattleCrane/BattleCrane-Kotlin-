@@ -7,9 +7,9 @@ import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bc.api.context.BGameContext
+import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.ui.fragment.BFragment
-import com.orego.battlecrane.ui.model.api.context.BUiGameContext
+import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.ui.util.gone
 import com.orego.battlecrane.ui.util.onMeasured
 import com.orego.battlecrane.ui.viewModel.BScenarioViewModel
