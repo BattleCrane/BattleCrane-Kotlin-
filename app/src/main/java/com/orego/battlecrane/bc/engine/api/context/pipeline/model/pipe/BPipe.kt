@@ -65,7 +65,7 @@ open class BPipe(
         for (i in 0 until this.nodes.size) {
             val node = nodes[i]
             node.removeUnusedComponents()
-            if (node.isUnused()) {
+            if (node.isFinished()) {
                 this.nodes.remove(node)
             }
         }

@@ -54,7 +54,7 @@ class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val player
                 {}
             }
         }
-        this.uiContext.animationPipe.addAnimation(animation)
+        this.uiContext.uiPipe.addAnimation(animation)
         return null
     }
 }

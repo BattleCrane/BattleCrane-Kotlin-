@@ -34,7 +34,7 @@ class BSkirmishHumanTankOnAttackActionTrigger private constructor(context: BGame
     class Event(attackableId: Long, tankX: Int, tankY: Int, targetX: Int, targetY: Int) :
         BHumanLineAttackEvent(attackableId, tankX, tankY, targetX, targetY) {
 
-        override fun getLineAttackMatcher(context: BGameContext) = object : BLineMatcher(context) {
+        override fun getLineAttackMatcher(context: BGameContext) = object : BLineMatcher() {
 
             override fun isBlock(x: Int, y: Int): Boolean {
                 val storage = context.storage

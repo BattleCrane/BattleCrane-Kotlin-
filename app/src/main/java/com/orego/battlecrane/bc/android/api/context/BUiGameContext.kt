@@ -1,21 +1,21 @@
 package com.orego.battlecrane.bc.android.api.context
 
-import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAdjutantHeap
-import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
 import com.orego.battlecrane.bc.android.api.context.clickController.BClickController
-import com.orego.battlecrane.bc.android.api.context.eventPipe.BAnimationPipe
+import com.orego.battlecrane.bc.android.api.context.eventPipe.BUiPipe
 import com.orego.battlecrane.bc.android.api.context.heap.BAdjutantHolderHeap
 import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
 import com.orego.battlecrane.bc.android.api.holder.adjutant.BAdjutantHolder
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BLocationPlugin
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BRacePlugin
+import com.orego.battlecrane.bc.engine.api.context.BGameContext
+import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAdjutantHeap
+import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
+import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
 
 class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragment.UiProvider) {
 
-    val animationPipe = BAnimationPipe(this.gameContext)
+    val uiPipe = BUiPipe(this.gameContext)
 
     val clickController = BClickController()
 

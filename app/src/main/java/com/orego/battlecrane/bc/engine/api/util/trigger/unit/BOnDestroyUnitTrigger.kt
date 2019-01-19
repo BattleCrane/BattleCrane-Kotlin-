@@ -32,7 +32,7 @@ class BOnDestroyUnitTrigger private constructor(context: BGameContext, val unit:
 
     override fun intoPipe() = Pipe()
 
-    override fun isUnused() = !this.unitMap.containsKey(this.unit.unitId)
+    override fun isFinished() = !this.unitMap.containsKey(this.unit.unitId)
 
     /**
      * Pipe.
@@ -42,7 +42,7 @@ class BOnDestroyUnitTrigger private constructor(context: BGameContext, val unit:
 
         val unit = this@BOnDestroyUnitTrigger.unit
 
-        override fun isUnused() = this@BOnDestroyUnitTrigger.isUnused()
+        override fun isUnused() = this@BOnDestroyUnitTrigger.isFinished()
     }
 
     companion object {

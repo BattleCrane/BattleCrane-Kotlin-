@@ -36,7 +36,7 @@ abstract class BOnHitPointsActionTrigger protected constructor(context: BGameCon
 
     override fun intoPipe() = Pipe()
 
-    override fun isUnused() = !this.hitPointableMap.containsKey(this.hitPointable.hitPointableId)
+    override fun isFinished() = !this.hitPointableMap.containsKey(this.hitPointable.hitPointableId)
 
     /**
      * Pipe.
@@ -46,6 +46,6 @@ abstract class BOnHitPointsActionTrigger protected constructor(context: BGameCon
 
         val hitPointable = this@BOnHitPointsActionTrigger.hitPointable
 
-        override fun isUnused() = this@BOnHitPointsActionTrigger.isUnused()
+        override fun isUnused() = this@BOnHitPointsActionTrigger.isFinished()
     }
 }

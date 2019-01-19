@@ -30,7 +30,7 @@ class BOnProduceEnableTrigger private constructor(context: BGameContext, val pro
 
     override fun intoPipe() = Pipe()
 
-    override fun isUnused() = !this.map.containsKey(this.producable.producableId)
+    override fun isFinished() = !this.map.containsKey(this.producable.producableId)
 
     /**
      * Pipe.
@@ -40,7 +40,7 @@ class BOnProduceEnableTrigger private constructor(context: BGameContext, val pro
 
         val producable = this@BOnProduceEnableTrigger.producable
 
-        override fun isUnused() = this@BOnProduceEnableTrigger.isUnused()
+        override fun isUnused() = this@BOnProduceEnableTrigger.isFinished()
     }
 
     companion object {

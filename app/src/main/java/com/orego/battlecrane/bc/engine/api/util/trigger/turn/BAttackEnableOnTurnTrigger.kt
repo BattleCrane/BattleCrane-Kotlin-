@@ -36,7 +36,7 @@ class BAttackEnableOnTurnTrigger private constructor(context: BGameContext, var 
         )
     }
 
-    override fun isUnused() = !this.attckableMap.containsKey(this.attackable.attackableId)
+    override fun isFinished() = !this.attckableMap.containsKey(this.attackable.attackableId)
 
     override fun intoPipe() = Pipe()
 
@@ -48,7 +48,7 @@ class BAttackEnableOnTurnTrigger private constructor(context: BGameContext, var 
 
         val attackable = this@BAttackEnableOnTurnTrigger.attackable
 
-        override fun isUnused() = this@BAttackEnableOnTurnTrigger.isUnused()
+        override fun isUnused() = this@BAttackEnableOnTurnTrigger.isFinished()
     }
 
     companion object {

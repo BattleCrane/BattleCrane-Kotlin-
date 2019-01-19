@@ -4,11 +4,11 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
-import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
 import com.orego.battlecrane.bc.android.api.holder.BHolder
+import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
+import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import org.intellij.lang.annotations.MagicConstant
 
 abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder<BUnit>(unit) {
@@ -21,6 +21,12 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
         val contextGenerator = uiGameContext.gameContext.contextGenerator
         this.uiUnitId = contextGenerator.getIdGenerator(BUnitHolder::class.java).generateId()
     }
+
+    abstract class ClickMode(val unitHolder: BUnitHolder) : BClickMode
+
+    class Factory : BHolder.Factory<BUnit>()
+
+    abstract class Builder : BHolder.Builder<BUnit>()
 
     companion object {
 
@@ -57,10 +63,4 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
             return imageView
         }
     }
-
-    abstract class ClickMode(val unitHolder: BUnitHolder) : BClickMode
-
-    class Factory : BHolder.Factory<BUnit>()
-
-    abstract class Builder : BHolder.Builder<BUnit>()
 }

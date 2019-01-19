@@ -15,7 +15,7 @@ class BOnDestroyUnitHolderTrigger private constructor(
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnDestroyUnitPipe.Event && event.unitId == this.holder.item.unitId) {
             this.uiContext.apply {
-                this.animationPipe.addAnimation {
+                this.uiPipe.addAnimation {
                     this.uiProvider.mapConstraintLayout.removeView(this@BOnDestroyUnitHolderTrigger.holder.unitView)
                 }
             }

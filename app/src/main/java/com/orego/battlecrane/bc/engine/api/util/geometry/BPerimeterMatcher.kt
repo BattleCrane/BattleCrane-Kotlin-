@@ -1,13 +1,12 @@
 package com.orego.battlecrane.bc.engine.api.util.geometry
 
-import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 
-abstract class BPerimeterMatcher(protected val context: BGameContext) {
+abstract class BPerimeterMatcher {
 
     protected abstract fun isFound(x: Int, y: Int): Boolean
 
-    fun hasOnPerimeter(startX: Int, startY: Int, width: Int, height: Int): Boolean {
+    fun findAroundPerimeter(startX: Int, startY: Int, width: Int, height: Int): Boolean {
         //Check neighbour buildings around:
         val neighborStartX = startX - 1
         val neighborEndX = startX + width + 1

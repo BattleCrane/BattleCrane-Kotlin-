@@ -78,5 +78,5 @@ abstract class BNode(protected val context: BGameContext) {
         }
     }
 
-    open fun isUnused() = false
+    open fun isFinished() = false
 }

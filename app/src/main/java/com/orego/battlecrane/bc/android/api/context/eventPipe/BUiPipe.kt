@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class BAnimationPipe(gameContext: BGameContext) : BPipeline.OnPipelineWorkFinishedListener {
+class BUiPipe(gameContext: BGameContext) : BPipeline.OnPipelineWorkFinishedListener {
 
     init {
         gameContext.pipeline.registerOnPipelineWorkFinishedListener(this)
@@ -20,8 +20,8 @@ class BAnimationPipe(gameContext: BGameContext) : BPipeline.OnPipelineWorkFinish
 
     override fun onPipelineWorkFinished() {
         GlobalScope.launch(Dispatchers.Main) {
-            this@BAnimationPipe.animationQueue.forEach { animation -> animation() }
-            this@BAnimationPipe.animationQueue.clear()
+            this@BUiPipe.animationQueue.forEach { animation -> animation() }
+            this@BUiPipe.animationQueue.clear()
         }
     }
 }

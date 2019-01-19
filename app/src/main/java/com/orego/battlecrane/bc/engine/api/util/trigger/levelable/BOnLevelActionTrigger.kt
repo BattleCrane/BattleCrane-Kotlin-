@@ -31,5 +31,5 @@ abstract class BOnLevelActionTrigger protected constructor(context: BGameContext
         return null
     }
 
-    override fun isUnused() = !this.levelableMap.containsKey(this.levelable.levelableId)
+    override fun isFinished() = !this.levelableMap.containsKey(this.levelable.levelableId)
 }

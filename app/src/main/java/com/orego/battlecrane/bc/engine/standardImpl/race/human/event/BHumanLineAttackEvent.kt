@@ -14,7 +14,7 @@ abstract class BHumanLineAttackEvent(
         val targetUnit = context.mapController.getUnitByPosition(context, this.targetX, this.targetY)
         if (targetUnit is BHitPointable) {
             val trajectory = this.getLineAttackMatcher(context)
-            return trajectory.hasNotBlocks(
+            return !trajectory.hasBlocks(
                 this.attackableX to this.attackableY, this.targetX to this.targetY
             )
         }

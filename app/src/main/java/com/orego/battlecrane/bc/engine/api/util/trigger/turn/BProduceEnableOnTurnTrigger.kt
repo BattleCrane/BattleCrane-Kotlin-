@@ -36,7 +36,7 @@ class BProduceEnableOnTurnTrigger private constructor(context: BGameContext, var
         )
     }
 
-    override fun isUnused() = !this.producableMap.containsKey(this.producable.producableId)
+    override fun isFinished() = !this.producableMap.containsKey(this.producable.producableId)
 
     override fun intoPipe() = Pipe()
 
@@ -48,7 +48,7 @@ class BProduceEnableOnTurnTrigger private constructor(context: BGameContext, var
 
         val producable = this@BProduceEnableOnTurnTrigger.producable
 
-        override fun isUnused() = this@BProduceEnableOnTurnTrigger.isUnused()
+        override fun isUnused() = this@BProduceEnableOnTurnTrigger.isFinished()
     }
 
     companion object {

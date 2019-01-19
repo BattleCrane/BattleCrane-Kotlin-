@@ -1,8 +1,6 @@
 package com.orego.battlecrane.bc.engine.api.util.geometry
 
-import com.orego.battlecrane.bc.engine.api.context.BGameContext
-
-abstract class BLineMatcher(protected val context: BGameContext) {
+abstract class BLineMatcher {
 
     companion object {
 
@@ -15,12 +13,12 @@ abstract class BLineMatcher(protected val context: BGameContext) {
      * Attack geometry check.
      */
 
-    fun hasNotBlocks(attackablePoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>) =
-        this.hasNotBlocksOnX(attackablePoint, targerPoint)
-                || this.hasNotBlocksOnY(attackablePoint, targerPoint)
-                || this.hasNotBlocksOnDiagonal(attackablePoint, targerPoint)
+    fun hasBlocks(attackablePoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>) =
+        this.hasBlocksOnX(attackablePoint, targerPoint)
+                && this.hasBlocksOnY(attackablePoint, targerPoint)
+                && this.hasBlocksOnDiagonal(attackablePoint, targerPoint)
 
-    fun hasNotBlocksOnX(attackPoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>): Boolean {
+    fun hasBlocksOnX(attackPoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>): Boolean {
         val attackX = attackPoint.first
         if (attackX == targerPoint.first) {
             val attackY = attackPoint.second
@@ -29,15 +27,15 @@ abstract class BLineMatcher(protected val context: BGameContext) {
             val end = Integer.max(attackY, targetY)
             for (y in start until end) {
                 if (this.isBlock(attackX, y)) {
-                    return false
+                    return true
                 }
             }
-            return true
+            return false
         }
-        return false
+        return true
     }
 
-    fun hasNotBlocksOnY(attackPoint: Pair<Int, Int>, targetPoint: Pair<Int, Int>): Boolean {
+    fun hasBlocksOnY(attackPoint: Pair<Int, Int>, targetPoint: Pair<Int, Int>): Boolean {
         val attackY = attackPoint.second
         if (attackY == targetPoint.second) {
             val attackX = attackPoint.first
@@ -46,15 +44,15 @@ abstract class BLineMatcher(protected val context: BGameContext) {
             val end = Integer.max(attackX, targetX)
             for (x in start until end) {
                 if (this.isBlock(x, attackY)) {
-                    return false
+                    return true
                 }
             }
-            return true
+            return false
         }
-        return false
+        return true
     }
 
-    fun hasNotBlocksOnDiagonal(attackPoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>): Boolean {
+    fun hasBlocksOnDiagonal(attackPoint: Pair<Int, Int>, targerPoint: Pair<Int, Int>): Boolean {
         val attackX = attackPoint.first
         val attackY = attackPoint.second
         val distanceX = attackX - targerPoint.first
@@ -81,11 +79,11 @@ abstract class BLineMatcher(protected val context: BGameContext) {
                 x += dx
                 y += dy
                 if (this.isBlock(x, y)) {
-                    return false
+                    return true
                 }
             }
-            return true
+            return false
         }
-        return false
+        return true
     }
 }

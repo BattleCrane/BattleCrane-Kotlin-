@@ -4,17 +4,6 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
-import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.BSkirmishHumanEvents
-import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanEvents
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
 import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
@@ -22,6 +11,19 @@ import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanHeadquartersHolder
+import com.orego.battlecrane.bc.engine.api.context.BGameContext
+import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
+import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
+import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
+import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
+import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct.*
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.utils.BSkirmishHumanRule
+import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanUpgradeBuildingEvent
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
 import com.orego.battlecrane.ui.util.gone
 import com.orego.battlecrane.ui.util.show
 import org.intellij.lang.annotations.MagicConstant
@@ -43,15 +45,14 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnProduceEnablePipe.Event && event.producableId == this.holder.item.producableId) {
-            println("BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger HANDLE!")
-            println(this.holder.item)
+            println("BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger ${this.holder.item}!")
             val animation: suspend () -> Unit =
                 if (event.isEnable) {
                     { this.isEnableImageView.show() }
                 } else {
                     { this.isEnableImageView.gone() }
                 }
-            this.uiGameContext.animationPipe.addAnimation(animation)
+            this.uiGameContext.uiPipe.addAnimation(animation)
         }
         return null
     }
@@ -92,29 +93,29 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
                 BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.BARRACKS, object : BuildClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
-                        BSkirmishHumanEvents.Construct.BHumanConstructBarracksEvent(producableId, x, y)
+                        BSkirmishHumanConstructBarracksEvent(producableId, x, y)
                 })
             )
             this.actionImageViewSet.add(
                 BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.TURRET, object : BuildClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
-                        BSkirmishHumanEvents.Construct.TurretEvent(producableId, x, y)
+                        BSkirmishHumanConstructTurretEvent(producableId, x, y)
                 })
             )
             this.actionImageViewSet.add(
                 BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.WALL, object : BuildClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
-                        BSkirmishHumanEvents.Construct.WallEvent(producableId, x, y)
+                        BSkirmishHumanConstructWallEvent(producableId, x, y)
                 })
             )
-            if (BHumanCalculations.countGenerators(this.context, playerId) < BHumanCalculations.GENERATOR_LIMIT) {
+            if (BHumanCalculations.countGenerators(this.context, playerId) < BSkirmishHumanRule.GENERATOR_LIMIT) {
                 this.actionImageViewSet.add(
                     BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.GENERATOR, object : BuildClickMode() {
 
                         override fun createEvent(x: Int, y: Int) =
-                            BSkirmishHumanEvents.Construct.GeneratorEvent(producableId, x, y)
+                            BSkirmishHumanConstructGeneratorEvent(producableId, x, y)
                     })
                 )
             }
@@ -123,7 +124,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
                     BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.FACTORY, object : BuildClickMode() {
 
                         override fun createEvent(x: Int, y: Int) =
-                            BSkirmishHumanEvents.Construct.FactoryEvent(producableId, x, y)
+                            BSkirmishHumanConstructFactoryEvent(producableId, x, y)
                     })
                 )
             }
@@ -153,7 +154,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
 
     override fun intoPipe() = Pipe()
 
-//    override fun isUnused() = this.unitMap.containsKey(this.holder.uiUnitId)
+    override fun isFinished() = !this.unitMap.containsKey(this.holder.uiUnitId)
 
     /**
      * Click mode.
@@ -165,7 +166,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
 
         private val gameContext: BGameContext = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.context
 
-        protected abstract fun createEvent(x: Int, y: Int): BHumanEvents.Construct.Event
+        protected abstract fun createEvent(x: Int, y: Int): BHumanConstructBuildingEvent
 
         override fun handle(nextClickMode: BClickMode): BClickMode? {
             if (nextClickMode is BUnitHolder.ClickMode) {
@@ -173,6 +174,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
                 if (clickedUnit is BEmptyGrassField) {
                     val event = this.createEvent(clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.unit.playerId)
+                    println("IS SUCCESSFUL: $isSuccessful")
                     if (isSuccessful) {
                         println("BUILD COMPLETE!!!")
                         this.gameContext.pipeline.broacastEvent(event)
@@ -192,24 +194,22 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
 
         private val gameContext: BGameContext = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.context
 
-        private val animationPipe =
-            this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.uiGameContext.animationPipe
+        private val uiPipe =
+            this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.uiGameContext.uiPipe
 
         override fun handle(nextClickMode: BClickMode): BClickMode? {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
                 if (clickedUnit is BLevelable) {
-                    val event = BHumanEvents.Upgrade.Event(this.unit.producableId, clickedUnit.levelableId)
+                    val event = BHumanUpgradeBuildingEvent(this.unit.producableId, clickedUnit.levelableId)
                     val isSuccessful = event.isEnable(this.gameContext)
                     if (isSuccessful) {
-                        println("UPGRADE COMPLETE!!!")
                         this.gameContext.pipeline.broacastEvent(event)
-                        this.animationPipe.addAnimation {
+                        this.uiPipe.addAnimation {
                             this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.refreshActions()
                         }
                         return null
                     }
-                    println("PASS!!!")
                 }
             }
             return this
@@ -224,7 +224,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
 
         val holder = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.holder
 
-        override fun isUnused() = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.isUnused()
+        override fun isUnused() = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.isFinished()
     }
 
     companion object {

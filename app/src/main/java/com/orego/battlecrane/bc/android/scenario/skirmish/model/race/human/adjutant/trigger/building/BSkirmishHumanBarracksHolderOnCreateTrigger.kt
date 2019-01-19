@@ -13,7 +13,7 @@ class BSkirmishHumanBarracksHolderOnCreateTrigger private constructor(
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BSkirmishHumanBarracksOnCreateTrigger.Event && event.playerId == this.holder.item.playerId) {
-            this.uiGameContext.animationPipe.addAnimation {
+            this.uiGameContext.uiPipe.addAnimation {
                 val gameContext = this.uiGameContext.gameContext
                 val barracks = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, barracks)
