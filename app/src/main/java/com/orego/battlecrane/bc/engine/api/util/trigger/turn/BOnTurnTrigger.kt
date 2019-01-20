@@ -14,11 +14,11 @@ abstract class BOnTurnTrigger protected constructor(context: BGameContext) :
      * Context.
      */
 
-    abstract fun onTurnStarted()
+    open fun onTurnStarted() {}
 
-    abstract fun onTurnFinished()
+    open fun onTurnFinished() {}
 
-    protected abstract var playerId : Long
+    protected abstract var playerId: Long
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BTurnPipe.Event && this.playerId == event.playerId) {

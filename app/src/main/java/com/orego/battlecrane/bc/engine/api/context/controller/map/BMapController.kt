@@ -3,17 +3,11 @@ package com.orego.battlecrane.bc.engine.api.context.controller.map
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.api.util.common.BPoint
+import com.orego.battlecrane.bc.engine.api.util.common.x
+import com.orego.battlecrane.bc.engine.api.util.common.y
 
 class BMapController {
-
-    companion object {
-
-        const val MAP_SIZE = 16
-
-        const val NOT_INITIALIZED_UNIT_ID: Long = -1
-
-        fun inBounds(x: Int, y: Int) = x in 0 until MAP_SIZE && y in 0 until MAP_SIZE
-    }
 
     private val matrix = Array(MAP_SIZE) { LongArray(MAP_SIZE) { NOT_INITIALIZED_UNIT_ID } }
 
@@ -48,6 +42,9 @@ class BMapController {
 
     fun getUnitIdByPosition(x: Int, y: Int) = this.matrix[x][y]
 
+    fun getUnitByPosition(context: BGameContext, point: BPoint) =
+        this.getUnitByPosition(context, point.x, point.y)
+
     fun getUnitByPosition(context: BGameContext, x: Int, y: Int) =
         context.storage.getHeap(BUnitHeap::class.java)[this.getUnitIdByPosition(x, y)]
 
@@ -60,5 +57,16 @@ class BMapController {
             stringBuilder.append('\n')
         }
         return stringBuilder.toString()
+    }
+
+    companion object {
+
+        const val MAP_SIZE = 16
+
+        const val NOT_INITIALIZED_UNIT_ID: Long = -1
+
+        fun inBounds(x: Int, y: Int) = x in 0 until MAP_SIZE && y in 0 until MAP_SIZE
+
+        fun inBounds(point : BPoint) = this.inBounds(point.x, point.y)
     }
 }
