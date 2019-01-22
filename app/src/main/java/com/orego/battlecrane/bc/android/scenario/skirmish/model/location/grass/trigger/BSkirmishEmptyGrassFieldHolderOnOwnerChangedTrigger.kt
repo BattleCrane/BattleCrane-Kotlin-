@@ -19,7 +19,6 @@ class BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger private constructor(
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnOwnerChangedUnitPipe.Event && this.holder.item.unitId == event.unitId) {
-            println("BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger ${this.holder.item}!")
             this.uiGameContext.uiPipe.addAnimation {
                 val image = this.holder.unitView
                 image.setImageByAssets(this.uiGameContext.uiProvider.applicationContext, this.holder.getItemPath())

@@ -66,7 +66,6 @@ class BPlayerZoneObserver(private val context: BGameContext) {
             for (point in zone.area) {
                 val unit = this.mapController.getUnitByPosition(this.context, point)
                 if (unit is BEmptyField && unit.playerId != playerId) {
-                    println("CHANGED PLAYER!!!")
                     this.pipeline.pushEvent(BOnOwnerChangedUnitPipe.Event(unit.unitId, playerId))
                 }
             }

@@ -1,7 +1,6 @@
 package com.orego.battlecrane.bc.engine.api.util.trigger.unit
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.node.BOnDestroyUnitNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onOwnerChanged.BOnOwnerChangedUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onOwnerChanged.node.BOnOwnerChangedUnitNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
@@ -24,7 +23,6 @@ class BOnOwnerChangedUnitTrigger private constructor(context: BGameContext, val 
             && event.unitId == unitId
             && event.isEnable(this.context)
         ) {
-            println("BOnOwnerChangedUnitTrigger: ${this.unit}")
             event.perform(this.context)
             return this.pushToInnerPipes(event)
         }

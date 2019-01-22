@@ -29,8 +29,6 @@ class BEmptyGrassFieldHolder(uiGameContext: BUiGameContext, override val item: B
 
     override fun getItemPath(): String {
         return "std/grass/unit/empty_field_${COLOR_MAP[this.item.playerId]}.png"
-//        println("HOLDER_____-: ${this.item}")
-//        return "std/grass/unit/empty_field_neutral.png"
     }
 
     /**

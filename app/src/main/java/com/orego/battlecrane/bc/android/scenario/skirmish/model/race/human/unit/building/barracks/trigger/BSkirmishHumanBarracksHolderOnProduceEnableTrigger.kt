@@ -40,7 +40,6 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnProduceEnablePipe.Event && event.producableId == this.holder.item.producableId) {
-            println("BSkirmishHumanBarracksHolderOnProduceEnableTrigger ${this.holder.item}!")
             val animation: suspend () -> Unit =
                 if (event.isEnable) {
                     { this.isEnableImageView.show() }
@@ -124,9 +123,7 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
                 if (clickedUnit is BEmptyField) {
                     val event = BSkirmishHumanBarracksOnProduceActionTrigger.Event(this.unit.producableId, clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.unit)
-                    println("IS SUCCESSFUL: $isSuccessful")
                     if (isSuccessful) {
-                        println("TRAIN COMPLETE!!!")
                         this.gameContext.pipeline.broacastEvent(event)
                         this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.refreshActions()
                         return null

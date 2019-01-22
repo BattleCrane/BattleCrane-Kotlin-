@@ -39,9 +39,7 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
     private val actionImageViewSet = mutableSetOf<ImageView>()
 
     override fun handle(event: BEvent): BEvent? {
-        println("!!!!!!!!!!!!!!!!HOOOOBABAABABABABAB")
         if (event is BOnAttackEnablePipe.Event && event.attackableId == this.holder.item.attackableId) {
-            println("BSkirmishHumanMarineHolderOnProduceEnableTrigger ${this.holder.item}!")
             val animation: suspend () -> Unit =
                 if (event.isEnable) {
                     { this.isEnableImageView.show() }
@@ -131,9 +129,7 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
                         clickedUnit.y
                     )
                     val isSuccessful = event.isEnable(this.gameContext)
-                    println("ATTACK IS SUCCESSFUL: $isSuccessful")
                     if (isSuccessful) {
-                        println("ATTACK COMPLETE!!!")
                         this.gameContext.pipeline.broacastEvent(event)
                         this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.refreshActions()
                         return null

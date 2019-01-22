@@ -16,7 +16,6 @@ class BSkirmishHumanTurretHolderOnCreateTrigger private constructor(
             this.uiGameContext.uiPipe.addAnimation {
                 val gameContext = this.uiGameContext.gameContext
                 val turret = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
-                println("BSkirmishHumanTurretHolderOnCreateTrigger: $turret")
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, turret)
             }
         }

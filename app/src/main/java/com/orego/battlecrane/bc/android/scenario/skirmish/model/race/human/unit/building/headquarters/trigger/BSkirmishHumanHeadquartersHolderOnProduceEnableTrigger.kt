@@ -45,7 +45,6 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnProduceEnablePipe.Event && event.producableId == this.holder.item.producableId) {
-            println("BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger ${this.holder.item}!")
             val animation: suspend () -> Unit =
                 if (event.isEnable) {
                     { this.isEnableImageView.show() }
@@ -174,9 +173,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
                 if (clickedUnit is BEmptyField) {
                     val event = this.createEvent(clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.unit.playerId)
-                    println("IS SUCCESSFUL: $isSuccessful")
                     if (isSuccessful) {
-                        println("BUILD COMPLETE!!!")
                         this.gameContext.pipeline.broacastEvent(event)
                         this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.refreshActions()
                         return null

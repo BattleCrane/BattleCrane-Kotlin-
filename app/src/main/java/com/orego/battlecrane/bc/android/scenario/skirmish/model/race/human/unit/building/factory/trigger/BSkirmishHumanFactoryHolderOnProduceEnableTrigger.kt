@@ -40,7 +40,6 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnProduceEnablePipe.Event && event.producableId == this.holder.item.producableId) {
-            println("BSkirmishHumanFactoryHolderOnProduceEnableTrigger ${this.holder.item}!")
             val animation: suspend () -> Unit =
                 if (event.isEnable) {
                     { this.isEnableImageView.show() }
@@ -83,7 +82,7 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
         if (factory.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Train.MARINE, ClickMode())
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Produce.TANK, ClickMode())
             )
             var x = 0
             var y = 0
@@ -128,9 +127,8 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
                         clickedUnit.y
                     )
                     val isSuccessful = event.isEnable(this.gameContext, this.unit)
-                    println("IS SUCCESSFUL: $isSuccessful")
                     if (isSuccessful) {
-                        println("PRODUCE COMPLETE!!!")
+                        println("CAN PRODUCE TANK!")
                         this.gameContext.pipeline.broacastEvent(event)
                         this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.refreshActions()
                         return null

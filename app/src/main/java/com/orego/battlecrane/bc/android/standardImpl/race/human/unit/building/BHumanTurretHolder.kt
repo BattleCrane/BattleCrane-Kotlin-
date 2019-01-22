@@ -26,7 +26,6 @@ class BHumanTurretHolder private constructor(uiGameContext: BUiGameContext, over
     open class Builder : BUnitHolder.Builder() {
 
         override fun build(uiGameContext: BUiGameContext, item: BUnit): BHumanTurretHolder {
-            println("BHumanTurretHolder: BUILDING...")
             return BHumanTurretHolder(uiGameContext, item as BHumanTurret)
         }
     }

@@ -20,7 +20,6 @@ class BMapController {
             for (y in 0 until MAP_SIZE) {
                 val isNotInitiablizedField = this.matrix[x][y] == NOT_INITIALIZED_UNIT_ID
                 if (isNotInitiablizedField) {
-                    println()
                     throw IllegalStateException("Position x: $x y: $y is not initialized")
                 }
             }

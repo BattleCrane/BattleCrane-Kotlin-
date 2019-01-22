@@ -1,8 +1,8 @@
 package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.factory.trigger
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.BOnProduceActionPipe
+import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceAction.node.BOnProduceActionNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
@@ -23,12 +23,14 @@ class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
     private val pipeline = context.pipeline
 
     override fun handle(event: BEvent): BEvent? {
+        println("CATCH PRODUCE TANK 1!!!")
         val producableId = this.factory.producableId
         if (event is Event
             && producableId == event.producableId
             && this.factory.isProduceEnable
             && event.isEnable(this.context, this.factory)
         ) {
+            println("CATCH PRODUCE TANK 2!!!")
             event.perform(this.context, this.factory)
             this.pushToInnerPipes(event)
             this.pipeline.pushEvent(BOnProduceEnablePipe.Event(producableId, false))
@@ -75,7 +77,7 @@ class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
     companion object {
 
         fun connect(context: BGameContext, factory: BHumanFactory) {
-            BOnLevelActionNode.connect(context) {
+            BOnProduceActionNode.connect(context) {
                 BSkirmishHumanFactoryOnProduceActionTrigger(
                     context,
                     factory
