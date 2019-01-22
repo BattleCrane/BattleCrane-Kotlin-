@@ -17,7 +17,7 @@ abstract class BFieldHolder(uiGameContext: BUiGameContext, item: BGrassField) :
         }
     }
 
-    protected abstract fun getItemPath() : String
+    abstract fun getItemPath() : String
 
     /**
      * Click mode.

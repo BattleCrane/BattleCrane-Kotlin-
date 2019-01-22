@@ -22,7 +22,7 @@ class BEmptyGrassFieldHolder(uiGameContext: BUiGameContext, override val item: B
 
     open class Builder : BUnitHolder.Builder() {
 
-        override fun build(uiGameContext: BUiGameContext, item: BUnit) : BUnitHolder =
+        override fun build(uiGameContext: BUiGameContext, item: BUnit) : BEmptyGrassFieldHolder =
             BEmptyGrassFieldHolder(uiGameContext, item as BEmptyGrassField)
     }
 }

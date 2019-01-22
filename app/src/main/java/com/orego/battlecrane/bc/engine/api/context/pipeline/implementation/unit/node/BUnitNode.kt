@@ -4,6 +4,7 @@ import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.BUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
+import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onOwnerChanged.BOnOwnerChangedUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 
@@ -19,6 +20,7 @@ class BUnitNode(context: BGameContext) : BNode(context) {
     init {
         this.connectInnerPipe(BOnCreateUnitPipe(context))
         this.connectInnerPipe(BOnDestroyUnitPipe(context))
+        this.connectInnerPipe(BOnOwnerChangedUnitPipe(context))
     }
 
     override fun handle(event: BEvent) =

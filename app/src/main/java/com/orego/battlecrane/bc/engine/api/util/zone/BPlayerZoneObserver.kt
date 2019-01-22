@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.engine.api.util.zone
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
+import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onOwnerChanged.BOnOwnerChangedUnitPipe
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BBuilding
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
@@ -64,8 +65,9 @@ class BPlayerZoneObserver(private val context: BGameContext) {
             val playerId = zone.playerId
             for (point in zone.area) {
                 val unit = this.mapController.getUnitByPosition(this.context, point)
-                if (unit is BEmptyField) {
-//                    this.pipeline.pushEvent(BOnUnitOwnerChangedPipe.Event(unit.unitId, playerId))
+                if (unit is BEmptyField && unit.playerId != playerId) {
+                    println("CHANGED PLAYER!!!")
+                    this.pipeline.pushEvent(BOnOwnerChangedUnitPipe.Event(unit.unitId, playerId))
                 }
             }
         }

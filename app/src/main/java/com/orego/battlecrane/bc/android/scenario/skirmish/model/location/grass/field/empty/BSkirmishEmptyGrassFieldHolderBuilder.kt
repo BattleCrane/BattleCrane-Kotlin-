@@ -4,13 +4,15 @@ import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.holder.unit.trigger.BOnDestroyUnitHolderTrigger
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.trigger.BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger
 import com.orego.battlecrane.bc.android.standardImpl.location.grass.field.empty.BEmptyGrassFieldHolder
 
 class BSkirmishEmptyGrassFieldHolderBuilder : BEmptyGrassFieldHolder.Builder() {
 
-    override fun build(uiGameContext: BUiGameContext, item: BUnit): BUnitHolder {
+    override fun build(uiGameContext: BUiGameContext, item: BUnit): BEmptyGrassFieldHolder {
         val holder = super.build(uiGameContext, item)
         BOnDestroyUnitHolderTrigger.connect(uiGameContext, holder)
+        BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger.connect(uiGameContext, holder)
         return holder
     }
 }
