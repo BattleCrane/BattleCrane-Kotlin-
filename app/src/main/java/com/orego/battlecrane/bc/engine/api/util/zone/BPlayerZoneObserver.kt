@@ -42,7 +42,7 @@ class BPlayerZoneObserver(private val context: BGameContext) {
         this.passedPoints = mutableSetOf()
         for (x in 0 until BMapController.MAP_SIZE) {
             for (y in 0 until BMapController.MAP_SIZE) {
-                val unit = this.mapController.getUnitByPosition(context, x, y)
+                val unit = this.mapController.getUnitByPosition(this.context, x, y)
                 val cursorPoint = BPoint(x, y)
                 if (unit is BEmptyField
                     && unit.playerId == BPlayer.NEUTRAL_PLAYER_ID
