@@ -1,10 +1,11 @@
 package com.orego.battlecrane.bc.android.standardImpl.location.grass.field.empty
 
-import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
-import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
+import android.widget.ImageView
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.standardImpl.location.grass.field.BFieldHolder
+import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
 
 class BEmptyGrassFieldHolder(uiGameContext: BUiGameContext, override val item: BEmptyGrassField) :
     BFieldHolder(uiGameContext, item) {
@@ -18,8 +19,18 @@ class BEmptyGrassFieldHolder(uiGameContext: BUiGameContext, override val item: B
         )
     }
 
-    override fun getItemPath() : String {
+    override val unitView: ImageView = BUnitHolder.placeImageView(uiGameContext, this.item, this.getItemPath())
+
+    init {
+        this.unitView.setOnClickListener {
+            uiGameContext.clickController.pushClickMode(ClickMode())
+        }
+    }
+
+    override fun getItemPath(): String {
         return "std/grass/unit/empty_field_${COLOR_MAP[this.item.playerId]}.png"
+//        println("HOLDER_____-: ${this.item}")
+//        return "std/grass/unit/empty_field_neutral.png"
     }
 
     /**
@@ -28,7 +39,7 @@ class BEmptyGrassFieldHolder(uiGameContext: BUiGameContext, override val item: B
 
     open class Builder : BUnitHolder.Builder() {
 
-        override fun build(uiGameContext: BUiGameContext, item: BUnit) : BEmptyGrassFieldHolder =
+        override fun build(uiGameContext: BUiGameContext, item: BUnit): BEmptyGrassFieldHolder =
             BEmptyGrassFieldHolder(uiGameContext, item as BEmptyGrassField)
     }
 }

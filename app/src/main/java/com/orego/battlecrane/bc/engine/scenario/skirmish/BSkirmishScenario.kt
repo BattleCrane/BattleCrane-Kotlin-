@@ -159,7 +159,8 @@ class BSkirmishScenario : BGameScenario() {
         for (x in 0 until BMapController.MAP_SIZE) {
             for (y in 0 until BMapController.MAP_SIZE) {
                 if (matrix[x][y] == BMapController.NOT_INITIALIZED_UNIT_ID) {
-                    this.add(emptyGrassBuilder.build(context, BPlayer.NEUTRAL_PLAYER_ID, x, y))
+                    val field = emptyGrassBuilder.build(context, BPlayer.NEUTRAL_PLAYER_ID, x, y)
+                    this.add(field)
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.trigger
 
-import android.widget.ImageView
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
 import com.orego.battlecrane.bc.android.standardImpl.location.grass.field.empty.BEmptyGrassFieldHolder
@@ -22,7 +21,7 @@ class BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger private constructor(
         if (event is BOnOwnerChangedUnitPipe.Event && this.holder.item.unitId == event.unitId) {
             println("BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger ${this.holder.item}!")
             this.uiGameContext.uiPipe.addAnimation {
-                val image = this.holder.unitView as ImageView
+                val image = this.holder.unitView
                 image.setImageByAssets(this.uiGameContext.uiProvider.applicationContext, this.holder.getItemPath())
             }
         }
