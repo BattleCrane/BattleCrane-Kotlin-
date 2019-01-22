@@ -11,10 +11,16 @@ class BEmptyGrassFieldHolder(uiGameContext: BUiGameContext, override val item: B
 
     companion object {
 
-        private const val PATH = "std/grass/unit/empty_field.png"
+        private val COLOR_MAP = mapOf(
+            0.toLong() to "neutral",
+            1.toLong() to "blue",
+            2.toLong() to "red"
+        )
     }
 
-    override fun getItemPath() = PATH
+    override fun getItemPath() : String {
+        return "std/grass/unit/empty_field_${COLOR_MAP[this.item.playerId]}.png"
+    }
 
     /**
      * Builder.

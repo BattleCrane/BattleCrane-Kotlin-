@@ -7,6 +7,7 @@ import com.orego.battlecrane.bc.engine.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
+import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BObservePlayerZonesOnStartTurnTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.field.BSkirmishEmptyGrassFieldBuilder
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.trigger.BSkirmishDestroyedGrassFieldOnCreateTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.trigger.BSkirmishEmptyGrassFieldOnCreateTrigger
@@ -24,6 +25,7 @@ class BSkirmishScenario : BGameScenario() {
         super.install(context)
         BSkirmishEmptyGrassFieldOnCreateTrigger.connect(context)
         BSkirmishDestroyedGrassFieldOnCreateTrigger.connect(context)
+        BObservePlayerZonesOnStartTurnTrigger.connect(context)
     }
 
     override fun getPlayers(context: BGameContext): List<BPlayer> {
