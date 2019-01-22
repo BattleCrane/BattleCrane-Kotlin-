@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.node.BOnAttackActionNode
+import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAttackableHeap
@@ -22,6 +23,7 @@ class BSkirmishHumanTankOnAttackActionTrigger private constructor(context: BGame
             && event.isEnable(this.context)
         ) {
             event.perform(this.context, this.tank.damage)
+            this.context.pipeline.pushEvent(BOnAttackEnablePipe.Event(this.tank.attackableId, false))
             this.pushToInnerPipes(event)
         }
         return null

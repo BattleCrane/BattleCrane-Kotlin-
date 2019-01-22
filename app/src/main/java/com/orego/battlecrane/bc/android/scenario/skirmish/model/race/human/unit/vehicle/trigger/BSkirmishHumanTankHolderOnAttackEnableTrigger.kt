@@ -16,9 +16,8 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.util.trigger.attack.BOnAttackEnableTrigger
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.infantry.trigger.BSkirmishHumanMarineOnAttackActionTrigger
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.vehicle.trigger.BSkirmishHumanTankOnAttackActionTrigger
 import com.orego.battlecrane.ui.util.gone
 import com.orego.battlecrane.ui.util.show
 import org.intellij.lang.annotations.MagicConstant
@@ -121,20 +120,18 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
         override fun onNext(nextClickMode: BClickMode): BClickMode? {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
-                if (clickedUnit is BEmptyField) {
-                    val event = BSkirmishHumanMarineOnAttackActionTrigger.Event(
-                        this.unit.attackableId,
-                        this.unit.x,
-                        this.unit.y,
-                        clickedUnit.x,
-                        clickedUnit.y
-                    )
-                    val isSuccessful = event.isEnable(this.gameContext)
-                    if (isSuccessful) {
-                        this.gameContext.pipeline.broacastEvent(event)
-                        this@BSkirmishHumanTankHolderOnAttackEnableTrigger.refreshActions()
-                        return null
-                    }
+                val event = BSkirmishHumanTankOnAttackActionTrigger.Event(
+                    this.unit.attackableId,
+                    this.unit.x,
+                    this.unit.y,
+                    clickedUnit.x,
+                    clickedUnit.y
+                )
+                val isSuccessful = event.isEnable(this.gameContext)
+                if (isSuccessful) {
+                    this.gameContext.pipeline.broacastEvent(event)
+                    this@BSkirmishHumanTankHolderOnAttackEnableTrigger.refreshActions()
+                    return null
                 }
             }
             return this
