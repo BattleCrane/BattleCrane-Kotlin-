@@ -10,10 +10,12 @@ import com.orego.battlecrane.bc.engine.api.model.property.BAttackable
 class BOnAttackEnableTrigger private constructor(context: BGameContext, var attackable: BAttackable) : BNode(context) {
 
     override fun handle(event: BEvent): BEvent? {
+        println("ATTACK ENA:")
         if (event is BOnAttackEnablePipe.Event
             && this.attackable.attackableId == event.attackableId
-            && event.isEnable(this.context)
+//            && event.isEnable(this.context)
         ) {
+            println("ATTACK ENA 2 $attackable")
             event.perform(this.context)
             return this.pushToInnerPipes(event)
         }

@@ -4,12 +4,12 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
+import com.orego.battlecrane.bc.android.api.asset.BCommonPaths
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
 import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
-import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.vehicle.BHumanTankHolder
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
@@ -46,7 +46,7 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
                 } else {
                     { this.isEnableImageView.gone() }
                 }
-            this.uiGameContext.uiPipe.addAnimation(animation)
+            this.uiGameContext.uiTaskManager.addTask(animation)
         }
         return null
     }
@@ -83,7 +83,7 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
             //Create images:
             this.actionImageViewSet.add(
                 //TODO: ADD ATTACK BUTTON!
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Train.MARINE, ClickMode())
+                BToolBuilder.build(this.uiGameContext, BCommonPaths.Action.ATTACK, ClickMode())
             )
             var x = 0
             var y = 0
@@ -118,7 +118,7 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
 
         private val gameContext: BGameContext = this@BSkirmishHumanTankHolderOnAttackEnableTrigger.context
 
-        override fun handle(nextClickMode: BClickMode): BClickMode? {
+        override fun onNext(nextClickMode: BClickMode): BClickMode? {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
                 if (clickedUnit is BEmptyField) {

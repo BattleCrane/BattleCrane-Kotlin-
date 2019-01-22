@@ -95,6 +95,7 @@ class BBattleFragment : BFragment() {
 
         private fun installGraphic() {
             val uiScenario = this.scenarioViewModel.uiGameScenario
+            this.uiGameContext.installScenario(uiScenario)
             this.uiGameContext.installLocationPlugin(uiScenario?.locationPlugin)
             this.uiGameContext.installRacePlugins(uiScenario?.racePlugins)
         }

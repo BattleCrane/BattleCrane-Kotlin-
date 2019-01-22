@@ -16,6 +16,6 @@ abstract class BFieldHolder(uiGameContext: BUiGameContext, item: BGrassField) :
 
     inner class ClickMode : BUnitHolder.ClickMode(this) {
 
-        override fun handle(nextClickMode: BClickMode) = nextClickMode
+        override fun onNext(nextClickMode: BClickMode) = nextClickMode
     }
 }

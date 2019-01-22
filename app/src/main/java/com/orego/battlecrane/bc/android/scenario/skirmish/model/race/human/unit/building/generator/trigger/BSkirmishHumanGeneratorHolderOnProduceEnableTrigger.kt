@@ -51,7 +51,7 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
                 } else {
                     { this.isEnableImageView.gone() }
                 }
-            this.uiGameContext.uiPipe.addAnimation(animation)
+            this.uiGameContext.uiTaskManager.addTask(animation)
         }
         return null
     }
@@ -167,7 +167,7 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
 
         protected abstract fun createEvent(x: Int, y: Int): BHumanConstructBuildingEvent
 
-        override fun handle(nextClickMode: BClickMode): BClickMode? {
+        override fun onNext(nextClickMode: BClickMode): BClickMode? {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
                 if (clickedUnit is BEmptyField) {
@@ -191,9 +191,9 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
         private val gameContext: BGameContext = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.context
 
         private val uiPipe =
-            this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.uiGameContext.uiPipe
+            this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.uiGameContext.uiTaskManager
 
-        override fun handle(nextClickMode: BClickMode): BClickMode? {
+        override fun onNext(nextClickMode: BClickMode): BClickMode? {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
                 if (clickedUnit is BLevelable) {
@@ -201,7 +201,7 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
                     val isSuccessful = event.isEnable(this.gameContext)
                     if (isSuccessful) {
                         this.gameContext.pipeline.broacastEvent(event)
-                        this.uiPipe.addAnimation {
+                        this.uiPipe.addTask {
                             this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.refreshActions()
                         }
                         return null

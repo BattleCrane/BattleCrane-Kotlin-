@@ -93,40 +93,63 @@ class BSkirmishScenario : BGameScenario() {
 
             //Put walls on the map:
             val wallBuiler = BSkirmishHumanWallBuilder()
-            for (j in 0..4) {
-                this.add(
-                    wallBuiler.build(
-                        context,
-                        redPlayerId,
-                        j,
-                        4
-                    )
-                )
-                this.add(
-                    wallBuiler.build(
-                        context,
-                        redPlayerId,
-                        4,
-                        j
-                    )
-                )
-                this.add(
-                    wallBuiler.build(
-                        context,
-                        bluePlayerId,
-                        15 - j,
-                        11
-                    )
-                )
-                this.add(
-                    wallBuiler.build(
-                        context,
-                        bluePlayerId,
-                        11,
-                        15 - j
-                    )
-                )
-            }
+            this.add(wallBuiler.build(context, redPlayerId, 0, 4))
+            this.add(wallBuiler.build(context, redPlayerId, 1, 4))
+            this.add(wallBuiler.build(context, redPlayerId, 2, 4))
+            this.add(wallBuiler.build(context, redPlayerId, 3, 4))
+            this.add(wallBuiler.build(context, redPlayerId, 4, 4))
+            this.add(wallBuiler.build(context, redPlayerId, 4, 0))
+            this.add(wallBuiler.build(context, redPlayerId, 4, 1))
+            this.add(wallBuiler.build(context, redPlayerId, 4, 2))
+            this.add(wallBuiler.build(context, redPlayerId, 4, 3))
+
+            this.add(wallBuiler.build(context, bluePlayerId, 11, 11))
+            this.add(wallBuiler.build(context, bluePlayerId, 12, 11))
+            this.add(wallBuiler.build(context, bluePlayerId, 13, 11))
+            this.add(wallBuiler.build(context, bluePlayerId, 14, 11))
+            this.add(wallBuiler.build(context, bluePlayerId, 15, 11))
+            this.add(wallBuiler.build(context, bluePlayerId, 11, 15))
+            this.add(wallBuiler.build(context, bluePlayerId, 11, 14))
+            this.add(wallBuiler.build(context, bluePlayerId, 11, 13))
+            this.add(wallBuiler.build(context, bluePlayerId, 11, 12))
+
+//
+
+
+//            for (j in 0..4) {
+//                this.add(
+//                    wallBuiler.build(
+//                        context,
+//                        redPlayerId,
+//                        j,
+//                        4
+//                    )
+//                )
+//                this.add(
+//                    wallBuiler.build(
+//                        context,
+//                        redPlayerId,
+//                        4,
+//                        j
+//                    )
+//                )
+//                this.add(
+//                    wallBuiler.build(
+//                        context,
+//                        bluePlayerId,
+//                        15 - j,
+//                        11
+//                    )
+//                )
+//                this.add(
+//                    wallBuiler.build(
+//                        context,
+//                        bluePlayerId,
+//                        11,
+//                        15 - j
+//                    )
+//                )
+//            }
             return this
         } else {
             throw IllegalArgumentException("Standard skirmish gameScenario supports two players!")

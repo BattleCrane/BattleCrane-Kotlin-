@@ -13,7 +13,7 @@ class BSkirmishHumanMarineHolderOnCreateTrigger private constructor(
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BSkirmishHumanMarineOnCreateTrigger.Event && event.playerId == this.holder.item.playerId) {
-            this.uiGameContext.uiPipe.addAnimation {
+            this.uiGameContext.uiTaskManager.addTask {
                 val gameContext = this.uiGameContext.gameContext
                 val marine = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, marine)

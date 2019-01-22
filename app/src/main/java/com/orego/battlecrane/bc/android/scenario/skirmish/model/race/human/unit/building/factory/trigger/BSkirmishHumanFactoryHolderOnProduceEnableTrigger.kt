@@ -46,7 +46,7 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
                 } else {
                     { this.isEnableImageView.gone() }
                 }
-            this.uiGameContext.uiPipe.addAnimation(animation)
+            this.uiGameContext.uiTaskManager.addTask(animation)
         }
         return null
     }
@@ -117,7 +117,7 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
 
         private val gameContext: BGameContext = this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.context
 
-        override fun handle(nextClickMode: BClickMode): BClickMode? {
+        override fun onNext(nextClickMode: BClickMode): BClickMode? {
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
                 if (clickedUnit is BEmptyField) {

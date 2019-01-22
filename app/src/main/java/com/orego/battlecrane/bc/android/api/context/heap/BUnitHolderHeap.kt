@@ -1,6 +1,5 @@
 package com.orego.battlecrane.bc.android.api.context.heap
 
-import android.util.Log
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.generator.BContextGenerator
@@ -11,7 +10,6 @@ class BUnitHolderHeap : BHeap<BUnitHolder>() {
     override fun addObject(any: Any) {
         if (any is BUnitHolder) {
             this.objectMap[any.uiUnitId] = any
-            Log.i(TAG, "ADDED HOLDER: " + any.item::class.java.name)
         }
     }
 
@@ -23,8 +21,6 @@ class BUnitHolderHeap : BHeap<BUnitHolder>() {
 
     companion object {
 
-        private const val TAG = "BUNIT HOLDE HEAP"
-
         private const val START_ID: Long = 0
 
         fun connect(gameContext: BGameContext) {
@@ -32,7 +28,6 @@ class BUnitHolderHeap : BHeap<BUnitHolder>() {
             val uiUnitIdGenerator = BContextGenerator.IdGenerator(START_ID)
             gameContext.storage.addHeap(uiUnitHeap)
             gameContext.contextGenerator.generatorMap[BUnitHolder::class.java] = uiUnitIdGenerator
-            Log.i(TAG, "CONNECTED___")
         }
     }
 }

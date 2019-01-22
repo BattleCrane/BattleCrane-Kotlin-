@@ -1,9 +1,9 @@
 package com.orego.battlecrane.bc.android.api.scenario
 
-import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BLocationPlugin
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BRacePlugin
+import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
 
 abstract class BUiGameScenario {
 
@@ -25,5 +25,5 @@ abstract class BUiGameScenario {
      * Configures ui context.
      */
 
-    abstract fun configure(uiGameContext: BUiGameContext)
+    abstract fun install(uiGameContext: BUiGameContext)
 }

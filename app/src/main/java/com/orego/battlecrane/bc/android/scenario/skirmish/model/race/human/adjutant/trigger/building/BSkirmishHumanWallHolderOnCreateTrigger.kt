@@ -13,7 +13,7 @@ class BSkirmishHumanWallHolderOnCreateTrigger private constructor(
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BSkirmishHumanWallOnCreateTrigger.Event && event.playerId == this.holder.item.playerId) {
-            this.uiGameContext.uiPipe.addAnimation {
+            this.uiGameContext.uiTaskManager.addTask {
                 val mapController = this.context.mapController
                 val unitFactory = this.uiGameContext.uiUnitFactory
                 val x = event.x

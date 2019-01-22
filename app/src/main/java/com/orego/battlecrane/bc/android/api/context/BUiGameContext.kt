@@ -3,9 +3,10 @@ package com.orego.battlecrane.bc.android.api.context
 import com.orego.battlecrane.bc.android.api.context.clickController.BClickController
 import com.orego.battlecrane.bc.android.api.context.heap.BAdjutantHolderHeap
 import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
-import com.orego.battlecrane.bc.android.api.context.uiPipe.BUiPipe
+import com.orego.battlecrane.bc.android.api.context.uiPipe.BUiTaskManager
 import com.orego.battlecrane.bc.android.api.holder.adjutant.BAdjutantHolder
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.scenario.BUiGameScenario
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BLocationPlugin
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BRacePlugin
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
@@ -16,7 +17,7 @@ import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
 
 class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragment.UiProvider) {
 
-    val uiPipe = BUiPipe(this.gameContext)
+    val uiTaskManager = BUiTaskManager(this.gameContext)
 
     val clickController = BClickController()
 
@@ -32,6 +33,10 @@ class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragm
         this.uiProvider.endTurnConstraintLayout.setOnClickListener {
             this.gameContext.pipeline.broacastEvent(BOnTurnFinishedPipe.Event(this.gameContext.playerController.currentPlayerId))
         }
+    }
+
+    fun installScenario(uiGameScenario: BUiGameScenario?) {
+        uiGameScenario?.install(this)
     }
 
     fun installLocationPlugin(locationPlugin: BLocationPlugin?) {

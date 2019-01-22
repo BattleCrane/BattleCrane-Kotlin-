@@ -26,6 +26,7 @@ abstract class BOnHitPointsActionTrigger protected constructor(context: BGameCon
         ) {
             event.perform(this.context)
             this.pushToInnerPipes(event)
+            println("HP: ${this.hitPointable.currentHitPoints}")
             if (this.hitPointable.currentHitPoints <= 0) {
                 this.onHitPointsLost()
             }

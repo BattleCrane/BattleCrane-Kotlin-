@@ -13,7 +13,7 @@ class BSkirmishHumanTankHolderOnCreateTrigger private constructor(
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BSkirmishHumanTankOnCreateTrigger.Event && event.playerId == this.holder.item.playerId) {
-            this.uiGameContext.uiPipe.addAnimation {
+            this.uiGameContext.uiTaskManager.addTask {
                 val gameContext = this.uiGameContext.gameContext
                 val tank = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, tank)

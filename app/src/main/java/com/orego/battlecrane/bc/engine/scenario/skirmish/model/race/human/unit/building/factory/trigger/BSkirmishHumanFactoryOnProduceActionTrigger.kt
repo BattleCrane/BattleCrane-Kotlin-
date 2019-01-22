@@ -23,14 +23,12 @@ class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
     private val pipeline = context.pipeline
 
     override fun handle(event: BEvent): BEvent? {
-        println("CATCH PRODUCE TANK 1!!!")
         val producableId = this.factory.producableId
         if (event is Event
             && producableId == event.producableId
             && this.factory.isProduceEnable
             && event.isEnable(this.context, this.factory)
         ) {
-            println("CATCH PRODUCE TANK 2!!!")
             event.perform(this.context, this.factory)
             this.pushToInnerPipes(event)
             this.pipeline.pushEvent(BOnProduceEnablePipe.Event(producableId, false))

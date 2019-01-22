@@ -61,27 +61,38 @@ abstract class BLineMatcher {
         val attackY = attackPoint.y
         val distanceX = attackX - targerPoint.x
         val distanceY = attackY - targerPoint.y
+        println("DISTANCE X: $distanceX")
+        println("DISTANCE Y: $distanceY")
+
+        println("ATTACK X: $attackX")
+        println("ATTACK Y: $attackY")
+
+        println("TARGET X: ${targerPoint.x}")
+        println("TARGET Y: ${targerPoint.y}")
+
         val isDiagonal = Math.abs(distanceX) == Math.abs(distanceY)
         if (isDiagonal) {
             //Any distance:
             val distanceBetweenUnits = distanceX - 1
             val dx =
                 if (distanceX > 0) {
-                    VECTOR
-                } else {
                     -VECTOR
+                } else {
+                    VECTOR
                 }
             val dy =
                 if (distanceY > 0) {
-                    VECTOR
-                } else {
                     -VECTOR
+                } else {
+                    VECTOR
                 }
             var x = attackX
             var y = attackY
             repeat(distanceBetweenUnits) {
                 x += dx
                 y += dy
+//                println("X: $x")
+//                println("Y: $y")
                 if (this.isBlock(x, y)) {
                     return true
                 }

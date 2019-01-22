@@ -16,13 +16,14 @@ class BSkirmishOnHitPointsActionTrigger private constructor(context: BGameContex
 
     override fun onHitPointsLost() {
         if (this.hitPointable is BUnit) {
+            println("ON UNIT LOST!!!!!!!")
             this.pipeline.pushEvent(
                 BOnDestroyUnitPipe.Event(this.hitPointable.unitId)
             )
             val hitPointableX = this.hitPointable.x
             val hitPointableY = this.hitPointable.y
-            for (x in hitPointableX until this.hitPointable.width) {
-                for (y in hitPointableY until this.hitPointable.height) {
+            for (x in hitPointableX until hitPointableX + this.hitPointable.width) {
+                for (y in hitPointableY until hitPointableY + this.hitPointable.height) {
                     this.pipeline.pushEvent(
                         BSkirmishDestroyedGrassFieldOnCreateTrigger.Event(
                             BPlayer.NEUTRAL_PLAYER_ID, x, y

@@ -4,19 +4,18 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
+import com.orego.battlecrane.bc.android.api.asset.BCommonPaths
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
 import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
-import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.infantry.BHumanMarineHolder
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.util.trigger.attack.BOnAttackEnableTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.infantry.trigger.BSkirmishHumanMarineOnAttackActionTrigger
 import com.orego.battlecrane.ui.util.gone
@@ -46,7 +45,7 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
                 } else {
                     { this.isEnableImageView.gone() }
                 }
-            this.uiGameContext.uiPipe.addAnimation(animation)
+            this.uiGameContext.uiTaskManager.addTask(animation)
         }
         return null
     }
@@ -82,7 +81,7 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
         if (marine.isAttackEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Train.MARINE, ClickMode())
+                BToolBuilder.build(this.uiGameContext, BCommonPaths.Action.ATTACK, ClickMode())
             )
             var x = 0
             var y = 0
@@ -117,23 +116,25 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
 
         private val gameContext: BGameContext = this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.context
 
-        override fun handle(nextClickMode: BClickMode): BClickMode? {
+        override fun onNext(nextClickMode: BClickMode): BClickMode? {
+            println("MARINNEENEENNENENEN")
             if (nextClickMode is BUnitHolder.ClickMode) {
                 val clickedUnit = nextClickMode.unitHolder.item
-                if (clickedUnit is BEmptyField) {
-                    val event = BSkirmishHumanMarineOnAttackActionTrigger.Event(
-                        this.unit.attackableId,
-                        this.unit.x,
-                        this.unit.y,
-                        clickedUnit.x,
-                        clickedUnit.y
-                    )
-                    val isSuccessful = event.isEnable(this.gameContext)
-                    if (isSuccessful) {
-                        this.gameContext.pipeline.broacastEvent(event)
-                        this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.refreshActions()
-                        return null
-                    }
+                val event = BSkirmishHumanMarineOnAttackActionTrigger.Event(
+                    this.unit.attackableId,
+                    this.unit.x,
+                    this.unit.y,
+                    clickedUnit.x,
+                    clickedUnit.y
+                )
+                println("PAW1")
+                val isSuccessful = event.isEnable(this.gameContext)
+                println("SUCESSFUL PAW: $isSuccessful")
+                if (isSuccessful) {
+                    println("PAW2")
+                    this.gameContext.pipeline.broacastEvent(event)
+                    this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.refreshActions()
+                    return null
                 }
             }
             return this

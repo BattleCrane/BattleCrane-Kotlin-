@@ -7,8 +7,9 @@ class BClickController {
     fun pushClickMode(nextClickMode: BClickMode) {
         if (this.currentClickMode == null) {
             this.currentClickMode = nextClickMode
+            nextClickMode.onStart()
         } else {
-            this.currentClickMode = this.currentClickMode!!.handle(nextClickMode)
+            this.currentClickMode = this.currentClickMode!!.onNext(nextClickMode)
         }
     }
 
