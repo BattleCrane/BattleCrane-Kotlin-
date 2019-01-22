@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 
 class BPipeline {
 
-    private var isWorking = false
+    private var isLocking = false
 
     private val eventQueue = mutableListOf<BEvent>()
 
@@ -31,18 +31,24 @@ class BPipeline {
 
     fun pushEvent(event: BEvent?) {
         if (event != null) {
-            if (!this.isWorking) {
-                this.isWorking = true
+            if (!this.isLocking) {
+                //Lock process:
+                this.isLocking = true
+                //Handle event:
                 val pipes = this.pipeMap.values.toList()
                 for (i in 0 until pipes.size) {
                     pipes[i].push(event)
                 }
-                this.isWorking = false
+                //Clear unused pipes & nodes:
+                this.removeUnusedComponents()
+                //Unlock process:
+                this.isLocking = false
+                //Check rest events in collection:
                 if (!this.eventQueue.isEmpty()) {
                     val nextEvent = this.eventQueue.removeAt(0)
                     this.pushEvent(nextEvent)
                 } else {
-                    this.removeUnusedComponents()
+                    //Notify listeners about pipeline work finished:
                     this.onPipelineWorkFinshedObserver.values.forEach { listener ->
                         listener.onPipelineWorkFinished()
                     }

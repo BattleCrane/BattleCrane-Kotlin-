@@ -14,6 +14,7 @@ class BOnAttackEnableTrigger private constructor(context: BGameContext, var atta
             && this.attackable.attackableId == event.attackableId
             && event.isEnable(this.context)
         ) {
+            println("ATTACKABLE: $attackable")
             event.perform(this.context)
             return this.pushToInnerPipes(event)
         }

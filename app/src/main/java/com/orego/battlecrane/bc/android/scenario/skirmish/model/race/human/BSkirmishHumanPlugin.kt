@@ -7,10 +7,10 @@ import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.factory.builder.BSkirmishHumanFactoryHolderBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.generator.builder.BSkirmishHumanGeneratorHolderBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.headquarters.builder.BSkirmishHumanHeadquartersHolderBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.infantry.builder.BSkirmishHumanMarineHolderBuilder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.adjutant.BHumanAdjutantHolder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanTurretHolder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanWallHolder
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.infantry.BHumanMarineHolder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.vehicle.BHumanTankHolder
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.adjutant.BHumanAdjutant
@@ -32,7 +32,7 @@ class BSkirmishHumanPlugin : BRacePlugin() {
         BHumanTurret::class.java to BHumanTurretHolder.Builder(),
         BHumanWall::class.java to BHumanWallHolder.Builder(),
         //Creature:
-        BHumanMarine::class.java to BHumanMarineHolder.Builder(),
+        BHumanMarine::class.java to BSkirmishHumanMarineHolderBuilder(),
         //Vehicle:
         BHumanTank::class.java to BHumanTankHolder.Builder()
     )
