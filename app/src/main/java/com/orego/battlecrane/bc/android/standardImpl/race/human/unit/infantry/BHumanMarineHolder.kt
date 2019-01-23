@@ -1,9 +1,9 @@
 package com.orego.battlecrane.bc.android.standardImpl.race.human.unit.infantry
 
-import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.infantry.implementation.BHumanMarine
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.infantry.implementation.BHumanMarine
 
 class BHumanMarineHolder private constructor(uiGameContext: BUiGameContext, override val item: BHumanMarine) :
     BUnitHolder(uiGameContext, item) {
@@ -17,9 +17,9 @@ class BHumanMarineHolder private constructor(uiGameContext: BUiGameContext, over
     }
 
 
-    override val unitView = BUnitHolder.placeImageView(uiGameContext, this.item, this.getPath())
+    override val unitView = BUnitHolder.placeImageView(uiGameContext, this.item, this.getItemPath())
 
-    private fun getPath() =
+    fun getItemPath() =
         "race/human/unit/marine/" +
                 "${COLOR_MAP[this.item.playerId]}/" +
                 "${this.item.currentHitPoints}_${

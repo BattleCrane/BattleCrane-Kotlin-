@@ -43,6 +43,10 @@ class BHumanWallHolder private constructor(uiGameContext: BUiGameContext, overri
         override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
     }
 
+    /**
+     * Builder.
+     */
+
     open class Builder : BUnitHolder.Builder() {
         override fun build(uiGameContext: BUiGameContext, item: BUnit) =
             BHumanWallHolder(uiGameContext, item as BHumanWall)

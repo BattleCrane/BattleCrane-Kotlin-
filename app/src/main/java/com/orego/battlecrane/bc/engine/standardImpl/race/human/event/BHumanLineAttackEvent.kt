@@ -11,12 +11,27 @@ abstract class BHumanLineAttackEvent(
 ) : BOnAttackActionPipe.Event(attackableId) {
 
     open fun isEnable(context: BGameContext): Boolean {
-        val targetUnit = context.mapController.getUnitByPosition(context, this.targetX, this.targetY)
+        val mapController = context.mapController
+        val targetUnit = mapController.getUnitByPosition(context, this.targetX, this.targetY)
         if (targetUnit is BHitPointable) {
+            val attackable = mapController.getUnitByPosition(context, this.attackableX, this.attackableY)
             val trajectory = this.getLineAttackMatcher(context)
-            return !trajectory.hasBlocks(
-                this.attackableX to this.attackableY, this.targetX to this.targetY
-            )
+            val attackableX = attackable.x
+            val attackableY = attackable.y
+            val targetX = targetUnit.x
+            val targetY = targetUnit.y
+            for (aX in attackableX until attackableX + attackable.width) {
+                for (aY in attackableY until attackableY + attackable.height) {
+                    for (tX in targetX until targetX + targetUnit.width) {
+                        for (tY in targetY until targetY + targetUnit.height) {
+                            if (!trajectory.hasBlocks(aX to aY, tX to tY)
+                            ) {
+                                return true
+                            }
+                        }
+                    }
+                }
+            }
         }
         return false
     }

@@ -1,14 +1,15 @@
 package com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building
 
+import com.orego.battlecrane.bc.android.api.context.BUiGameContext
+import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
+import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanFactory
-import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 
 class BHumanFactoryHolder private constructor(uiGameContext: BUiGameContext, override val item: BHumanFactory) :
     BUnitHolder(uiGameContext, item) {
 
-    override val unitView = BUnitHolder.placeImageView(uiGameContext, this.item, this.getPath())
+    override val unitView = BUnitHolder.placeImageView(uiGameContext, this.item, this.getItemPath())
 
     companion object {
 
@@ -18,10 +19,32 @@ class BHumanFactoryHolder private constructor(uiGameContext: BUiGameContext, ove
         )
     }
 
-    private fun getPath() =
+    init {
+        this.unitView.setOnClickListener {
+            uiGameContext.clickController.pushClickMode(ClickMode())
+        }
+    }
+
+
+    fun getItemPath() =
         "race/human/unit/factory/" +
                 "${COLOR_MAP[this.item.playerId]}/" +
                 "${this.item.currentLevel}_${this.item.currentHitPoints}.png"
+
+
+
+    /**
+     * Click mode.
+     */
+
+    inner class ClickMode : BUnitHolder.ClickMode(this) {
+
+        override fun onStart() {
+            println("Show description!!!")
+        }
+
+        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+    }
 
     open class Builder : BUnitHolder.Builder() {
 
