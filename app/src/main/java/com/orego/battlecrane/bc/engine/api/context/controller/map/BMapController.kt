@@ -7,37 +7,44 @@ import com.orego.battlecrane.bc.engine.api.util.common.BPoint
 import com.orego.battlecrane.bc.engine.api.util.common.x
 import com.orego.battlecrane.bc.engine.api.util.common.y
 
+/**
+ * Represents units on the map by their ids.
+ */
+
 class BMapController {
 
-    private val matrix = Array(MAP_SIZE) { LongArray(MAP_SIZE) { NOT_INITIALIZED_UNIT_ID } }
+    private val matrix = BMapController.createMatrix()
 
-    fun initMap(context: BGameContext) {
-        val unitHeap = context.storage.getHeap(BUnitHeap::class.java)
-        unitHeap.getObjectList().forEach { unit ->
-            this.placeUnitOnMap(unit)
+    /**
+     * Initializes a map by unit ids.
+     */
+
+    fun install(context: BGameContext) {
+        context.storage.getHeap(BUnitHeap::class.java).getObjectList().forEach { unit ->
+            this.notifyUnitChanged(unit)
         }
-        for (x in 0 until MAP_SIZE) {
-            for (y in 0 until MAP_SIZE) {
-                val isNotInitiablizedField = this.matrix[x][y] == NOT_INITIALIZED_UNIT_ID
-                if (isNotInitiablizedField) {
-                    throw IllegalStateException("Position x: $x y: $y is not initialized")
-                }
+        //Check initialized map:
+        BMapController.foreach { x, y ->
+            val isNotInitiablizedField = this.matrix[x][y] == NOT_ID
+            if (isNotInitiablizedField) {
+                throw IllegalStateException("Position x: $x y: $y is not initialized")
             }
         }
     }
 
-    fun placeUnitOnMap(unit: BUnit): Boolean {
-        val startX = unit.x
-        val startY = unit.y
+    /**
+     * Change unit ids on the map.
+     */
+
+    fun notifyUnitChanged(unit: BUnit): Boolean {
         val unitId = unit.unitId
-        //Attach unit to matrix:
-        for (x in startX until startX + unit.width) {
-            for (y in startY until startY + unit.height) {
-                this.matrix[x][y] = unitId
-            }
-        }
+        unit.foreach { x, y -> this.matrix[x][y] = unitId }
         return true
     }
+
+    /**
+     * Getter.
+     */
 
     fun getUnitIdByPosition(x: Int, y: Int) = this.matrix[x][y]
 
@@ -46,6 +53,10 @@ class BMapController {
 
     fun getUnitByPosition(context: BGameContext, x: Int, y: Int) =
         context.storage.getHeap(BUnitHeap::class.java)[this.getUnitIdByPosition(x, y)]
+
+    /**
+     * ToString.
+     */
 
     override fun toString(): String {
         val stringBuilder = StringBuilder()
@@ -58,14 +69,28 @@ class BMapController {
         return stringBuilder.toString()
     }
 
+    /**
+     * Util.
+     */
+
     companion object {
 
         const val MAP_SIZE = 16
 
-        const val NOT_INITIALIZED_UNIT_ID: Long = -1
+        const val NOT_ID: Long = -1
 
         fun inBounds(x: Int, y: Int) = x in 0 until MAP_SIZE && y in 0 until MAP_SIZE
 
-        fun inBounds(point : BPoint) = this.inBounds(point.x, point.y)
+        fun inBounds(point: BPoint) = this.inBounds(point.x, point.y)
+
+        fun createMatrix() = Array(MAP_SIZE) { LongArray(MAP_SIZE) { NOT_ID } }
+
+        inline fun foreach(function: (x: Int, y: Int) -> Unit) {
+            for (x in 0 until MAP_SIZE) {
+                for (y in 0 until MAP_SIZE) {
+                    function(x, y)
+                }
+            }
+        }
     }
 }

@@ -45,7 +45,7 @@ class BStorage(private val context: BGameContext) {
     private fun removeObject(any: Any) {
         val heaps = this.heapMap.values.toList()
         for (i in 0 until heaps.size) {
-            heaps[i].addObject(any)
+            heaps[i].removeObject(any)
         }
     }
 }

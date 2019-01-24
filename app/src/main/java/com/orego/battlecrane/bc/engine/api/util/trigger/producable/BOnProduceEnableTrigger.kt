@@ -38,7 +38,7 @@ class BOnProduceEnableTrigger private constructor(context: BGameContext, val pro
 
         val producable = this@BOnProduceEnableTrigger.producable
 
-        override fun isUnused() = this@BOnProduceEnableTrigger.isFinished()
+        override fun isFinished() = this@BOnProduceEnableTrigger.isFinished()
     }
 
     companion object {

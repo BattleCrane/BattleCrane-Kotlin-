@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.infantry.builder
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.holder.unit.trigger.BOnDestroyUnitHolderTrigger
+import com.orego.battlecrane.bc.android.api.util.trigger.BOnDestroyUnitHolderTrigger
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.infantry.trigger.BSkirmishHumanMarineHolderOnAttackEnableTrigger
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.infantry.trigger.BSkirmishHumanMarineHolderOnHitPointsActionTrigger
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.infantry.BHumanMarineHolder

@@ -22,8 +22,8 @@ class BSkirmishHumanWallHolderOnHitPointsActionTrigger private constructor(
         if (event is BOnHitPointsActionPipe.Event
             && event.hitPointableId == wall.hitPointableId
         ) {
-            if (wall.currentHitPoints > 0) {
-                this.uiGameContext.uiTaskManager.addTask {
+            this.uiGameContext.uiTaskManager.addTask {
+                if (wall.currentHitPoints > 0) {
                     val image = this.holder.unitView
                     val applicationContext = this.uiGameContext.uiProvider.applicationContext
                     image.setImageByAssets(applicationContext, this.holder.getItemPath())
@@ -45,7 +45,7 @@ class BSkirmishHumanWallHolderOnHitPointsActionTrigger private constructor(
 
         val holder = this@BSkirmishHumanWallHolderOnHitPointsActionTrigger.holder
 
-        override fun isUnused() = this@BSkirmishHumanWallHolderOnHitPointsActionTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanWallHolderOnHitPointsActionTrigger.isFinished()
     }
 
     companion object {

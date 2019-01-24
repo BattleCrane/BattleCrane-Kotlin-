@@ -25,6 +25,20 @@ class BSkirmishHumanBarracksOnCreateTrigger private constructor(context: BGameCo
     inner class Pipe : BOnCreateUnitTrigger.Pipe()
 
     /**
+     * Event.
+     */
+
+    class Event(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
+
+        override val width = BHumanBarracks.WIDTH
+
+        override val height = BHumanBarracks.HEIGHT
+
+        override fun createUnit(context: BGameContext) =
+            BSkirmishHumanBarracksBuilder().build(context, this.playerId, this.x, this.y)
+    }
+
+    /**
      * Static.
      */
 
@@ -38,25 +52,5 @@ class BSkirmishHumanBarracksOnCreateTrigger private constructor(context: BGameCo
                 )
             }
         }
-    }
-
-
-    /**
-     * Event.
-     */
-
-    class Event(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
-
-        override val width = BHumanBarracks.WIDTH
-
-        override val height = BHumanBarracks.HEIGHT
-
-        override fun createUnit(context: BGameContext) =
-            BSkirmishHumanBarracksBuilder().build(
-                context,
-                this.playerId,
-                this.x,
-                this.y
-            )
     }
 }

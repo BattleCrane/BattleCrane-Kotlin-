@@ -3,7 +3,11 @@ package com.orego.battlecrane.bc.engine.api.context.controller.player
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.engine.api.util.common.mapWithFilter
+import com.orego.battlecrane.bc.engine.api.util.common.filterMap
+
+/**
+ * Represents a list of active players in the game.
+ */
 
 class BPlayerController(private val context: BGameContext) {
 
@@ -18,7 +22,11 @@ class BPlayerController(private val context: BGameContext) {
 
     lateinit var ablePlayers: MutableList<Long>
 
-    fun setScenario(scenario: BGameScenario) {
+    /**
+     * Initializes active player list by scenario.
+     */
+
+    fun install(scenario: BGameScenario) {
         val playerHeap = this.context.storage.getHeap(BPlayerHeap::class.java)
         val players = playerHeap.getObjectList()
         val startPosition = scenario.startTurnPlayerPosition
@@ -26,7 +34,7 @@ class BPlayerController(private val context: BGameContext) {
         this.currentPlayerPosition = startPosition
         this.currentPlayerId = players[startPosition].playerId
         this.ablePlayers = players
-            .mapWithFilter({ it.isAblePlayer(context) }, { it.playerId })
+            .filterMap({ it.isAblePlayer(context) }, { it.playerId })
             .toMutableList()
     }
 }

@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.wall.builder
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.holder.unit.trigger.BOnDestroyUnitHolderTrigger
+import com.orego.battlecrane.bc.android.api.util.trigger.BOnDestroyUnitHolderTrigger
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.wall.trigger.BSkirmishHumanWallHolderOnHitPointsActionTrigger
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanWallHolder
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit

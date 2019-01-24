@@ -10,10 +10,6 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 abstract class BOnTurnTrigger protected constructor(context: BGameContext) :
     BNode(context) {
 
-    /**
-     * Context.
-     */
-
     open fun onTurnStarted() {}
 
     open fun onTurnFinished() {}
@@ -24,13 +20,13 @@ abstract class BOnTurnTrigger protected constructor(context: BGameContext) :
         if (event is BTurnPipe.Event && this.playerId == event.playerId) {
             when (event) {
                 is BOnTurnStartedPipe.Event -> {
-                    this.pushToInnerPipes(event)
                     this.onTurnStarted()
+                    this.pushToInnerPipes(event)
                     return event
                 }
                 is BOnTurnFinishedPipe.Event -> {
-                    this.pushToInnerPipes(event)
                     this.onTurnFinished()
+                    this.pushToInnerPipes(event)
                     return event
                 }
             }

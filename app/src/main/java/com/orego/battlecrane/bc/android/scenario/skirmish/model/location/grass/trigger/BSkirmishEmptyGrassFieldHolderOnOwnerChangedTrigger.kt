@@ -40,7 +40,7 @@ class BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger private constructor(
 
         val holder = this@BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger.holder
 
-        override fun isUnused() = this@BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger.isFinished()
     }
 
     companion object {

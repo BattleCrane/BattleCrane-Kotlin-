@@ -14,7 +14,7 @@ abstract class BOnLevelActionTrigger protected constructor(context: BGameContext
      * Context.
      */
 
-    private val levelableMap = context.storage.getHeap(BLevelableHeap::class.java).objectMap
+    protected val levelableMap = context.storage.getHeap(BLevelableHeap::class.java).objectMap
 
     protected abstract fun onLevelChanged()
 

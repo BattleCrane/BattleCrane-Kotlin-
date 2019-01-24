@@ -19,7 +19,17 @@ import java.util.*
 
 class BSkirmishScenario : BGameScenario() {
 
-    override val startTurnPlayerPosition = Random().nextInt(1)
+    companion object {
+
+        const val PLAYER_COUNT = 2
+    }
+
+    override val startTurnPlayerPosition =
+        if (Random().nextBoolean()) {
+            0
+        } else {
+            1
+        }
 
     override fun install(context: BGameContext) {
         super.install(context)
@@ -31,13 +41,11 @@ class BSkirmishScenario : BGameScenario() {
     override fun getPlayers(context: BGameContext): List<BPlayer> {
         val playerList = mutableListOf<BPlayer>()
         val builder = BStandardSkirmishPlayerBuilder()
-        val redPlayer = builder.build(context)
         val bluePlayer = builder.build(context)
-
+        val redPlayer = builder.build(context)
         //Set enemies:
         redPlayer.addEnemy(bluePlayer.playerId)
         bluePlayer.addEnemy(redPlayer.playerId)
-
         //Add in player list:
         playerList.add(bluePlayer)
         playerList.add(redPlayer)
@@ -49,12 +57,12 @@ class BSkirmishScenario : BGameScenario() {
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()
         val builder = BSkirmishHumanAdjutantBuilder()
-        if (players.size == 2) {
+        if (players.size == PLAYER_COUNT) {
             adjutantList.add(builder.build(context, players[0].playerId))
             adjutantList.add(builder.build(context, players[1].playerId))
             return adjutantList
         } else {
-            throw IllegalArgumentException("Standard skirmish gameScenario supports two players!")
+            throw IllegalArgumentException("Standard skirmish scenario supports $PLAYER_COUNT players!")
         }
     }
 
@@ -66,31 +74,14 @@ class BSkirmishScenario : BGameScenario() {
     private fun MutableList<BUnit>.addBuildings(context: BGameContext): MutableList<BUnit> {
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()
-        if (players.size == 2) {
-
+        if (players.size == PLAYER_COUNT) {
             //Get players:
             val bluePlayerId = players[0].playerId
             val redPlayerId = players[1].playerId
-
             //Put headquarters on the map:
             val headquartersBuilder = BSkirmishHumanHeadquartersBuilder()
-            this.add(
-                headquartersBuilder.build(
-                    context,
-                    bluePlayerId,
-                    14,
-                    14
-                )
-            )
-            this.add(
-                headquartersBuilder.build(
-                    context,
-                    redPlayerId,
-                    0,
-                    0
-                )
-            )
-
+            this.add(headquartersBuilder.build(context, bluePlayerId, 14, 14))
+            this.add(headquartersBuilder.build(context, redPlayerId, 0, 0))
             //Put walls on the map:
             val wallBuiler = BSkirmishHumanWallBuilder()
             this.add(wallBuiler.build(context, redPlayerId, 0, 4))
@@ -102,7 +93,6 @@ class BSkirmishScenario : BGameScenario() {
             this.add(wallBuiler.build(context, redPlayerId, 4, 1))
             this.add(wallBuiler.build(context, redPlayerId, 4, 2))
             this.add(wallBuiler.build(context, redPlayerId, 4, 3))
-
             this.add(wallBuiler.build(context, bluePlayerId, 11, 11))
             this.add(wallBuiler.build(context, bluePlayerId, 12, 11))
             this.add(wallBuiler.build(context, bluePlayerId, 13, 11))
@@ -112,79 +102,27 @@ class BSkirmishScenario : BGameScenario() {
             this.add(wallBuiler.build(context, bluePlayerId, 11, 14))
             this.add(wallBuiler.build(context, bluePlayerId, 11, 13))
             this.add(wallBuiler.build(context, bluePlayerId, 11, 12))
-
-//
-
-
-//            for (j in 0..4) {
-//                this.add(
-//                    wallBuiler.build(
-//                        context,
-//                        redPlayerId,
-//                        j,
-//                        4
-//                    )
-//                )
-//                this.add(
-//                    wallBuiler.build(
-//                        context,
-//                        redPlayerId,
-//                        4,
-//                        j
-//                    )
-//                )
-//                this.add(
-//                    wallBuiler.build(
-//                        context,
-//                        bluePlayerId,
-//                        15 - j,
-//                        11
-//                    )
-//                )
-//                this.add(
-//                    wallBuiler.build(
-//                        context,
-//                        bluePlayerId,
-//                        11,
-//                        15 - j
-//                    )
-//                )
-//            }
             return this
         } else {
-            throw IllegalArgumentException("Standard skirmish gameScenario supports two players!")
+            throw IllegalArgumentException("Standard skirmish gameScenario supports $PLAYER_COUNT players!")
         }
     }
 
     private fun MutableList<BUnit>.addEmptyFields(context: BGameContext): MutableList<BUnit> {
-        val matrix = Array(BMapController.MAP_SIZE) {
-            Array(BMapController.MAP_SIZE) {
-                BMapController.NOT_INITIALIZED_UNIT_ID
-            }
-        }
+        val matrix = BMapController.createMatrix()
         //Check unit list:
-        for (i in 0 until this.size) {
-            val unit = this[i]
-            val unitId = unit.unitId
-            val startX = unit.x
-            val startY = unit.y
-            val endX = startX + unit.width
-            val endY = startY + unit.height
-            for (x in startX until endX) {
-                for (y in startY until endY) {
-                    matrix[x][y] = unitId
-                }
+        this.forEach { unit ->
+            val id = unit.unitId
+            unit.foreach { x, y ->
+                matrix[x][y] = id
             }
         }
         //Fill rest fileds:
-        val emptyGrassBuilder =
-            BSkirmishEmptyGrassFieldBuilder()
-        for (x in 0 until BMapController.MAP_SIZE) {
-            for (y in 0 until BMapController.MAP_SIZE) {
-                if (matrix[x][y] == BMapController.NOT_INITIALIZED_UNIT_ID) {
-                    val field = emptyGrassBuilder.build(context, BPlayer.NEUTRAL_PLAYER_ID, x, y)
-                    this.add(field)
-                }
+        val emptyGrassBuilder = BSkirmishEmptyGrassFieldBuilder()
+        BMapController.foreach { x, y ->
+            if (matrix[x][y] == BMapController.NOT_ID) {
+                val grassField = emptyGrassBuilder.build(context, BPlayer.NEUTRAL_ID, x, y)
+                this.add(grassField)
             }
         }
         return this

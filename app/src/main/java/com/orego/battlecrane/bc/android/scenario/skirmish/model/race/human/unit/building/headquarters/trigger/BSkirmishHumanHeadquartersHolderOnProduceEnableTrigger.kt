@@ -220,7 +220,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
 
         val holder = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.holder
 
-        override fun isUnused() = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.isFinished()
     }
 
     companion object {

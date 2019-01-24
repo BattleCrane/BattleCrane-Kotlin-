@@ -4,6 +4,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 
+/**
+ * Represents a extendable tree of pipes and nodes.
+ */
+
 class BPipeline {
 
     private var isLocking = false
@@ -136,7 +140,7 @@ class BPipeline {
         for (i in 0 until pipes.size) {
             val pipe = pipes[i]
             pipe.removeUnusedComponents()
-            if (pipe.isUnused()) {
+            if (pipe.isFinished()) {
                 this.pipeMap.remove(pipe.id)
             }
         }

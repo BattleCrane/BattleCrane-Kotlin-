@@ -48,8 +48,8 @@ class BGameContext {
     fun setScenario(scenario: BGameScenario) {
         scenario.install(this)
         this.storage.setScenario(scenario)
-        this.playerController.setScenario(scenario)
-        this.mapController.initMap(this)
+        this.playerController.install(scenario)
+        this.mapController.install(this)
     }
 
     fun startGame() {

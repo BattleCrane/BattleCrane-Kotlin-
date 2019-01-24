@@ -6,6 +6,8 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
+import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanUpgradeBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanHeadquarters
@@ -20,6 +22,8 @@ class BSkirmishHumanHeadquartersOnProduceActionTrigger private constructor(
      */
 
     private val pipeline = context.pipeline
+
+    private val unitMap = context.storage.getHeap(BUnitHeap::class.java).objectMap
 
     override fun handle(event: BEvent): BEvent? {
         val producableId = this.headquarters.producableId
@@ -47,6 +51,21 @@ class BSkirmishHumanHeadquartersOnProduceActionTrigger private constructor(
             }
         }
         return null
+    }
+
+    override fun isFinished() = !this.unitMap.containsKey(this.headquarters.unitId)
+
+    override fun intoPipe() = Pipe()
+
+    /**
+     * Pipe.
+     */
+
+    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
+
+        var headquarters = this@BSkirmishHumanHeadquartersOnProduceActionTrigger.headquarters
+
+        override fun isFinished() = this@BSkirmishHumanHeadquartersOnProduceActionTrigger.isFinished()
     }
 
     companion object {

@@ -146,7 +146,7 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
 
         val holder = this@BSkirmishHumanTankHolderOnAttackEnableTrigger.holder
 
-        override fun isUnused() = this@BSkirmishHumanTankHolderOnAttackEnableTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanTankHolderOnAttackEnableTrigger.isFinished()
     }
 
     companion object {

@@ -41,7 +41,7 @@ class BOnDestroyUnitTrigger private constructor(context: BGameContext, val unit:
 
         val unit = this@BOnDestroyUnitTrigger.unit
 
-        override fun isUnused() = this@BOnDestroyUnitTrigger.isFinished()
+        override fun isFinished() = this@BOnDestroyUnitTrigger.isFinished()
     }
 
     companion object {

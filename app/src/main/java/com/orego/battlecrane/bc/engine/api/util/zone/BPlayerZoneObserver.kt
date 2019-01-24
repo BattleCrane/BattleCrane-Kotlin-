@@ -31,7 +31,7 @@ class BPlayerZoneObserver(private val context: BGameContext) {
             for (y in 0 until BMapController.MAP_SIZE) {
                 val unit = this.mapController.getUnitByPosition(this.context, x, y)
                 if (unit is BEmptyField) {
-                    unit.playerId = BPlayer.NEUTRAL_PLAYER_ID
+                    unit.playerId = BPlayer.NEUTRAL_ID
                 }
             }
         }
@@ -46,7 +46,7 @@ class BPlayerZoneObserver(private val context: BGameContext) {
                 val unit = this.mapController.getUnitByPosition(this.context, x, y)
                 val cursorPoint = BPoint(x, y)
                 if (unit is BEmptyField
-                    && unit.playerId == BPlayer.NEUTRAL_PLAYER_ID
+                    && unit.playerId == BPlayer.NEUTRAL_ID
                     && !this.passedPoints.contains(cursorPoint)
                 ) {
                     this.currentZone = PlayerZone()
@@ -109,14 +109,14 @@ class BPlayerZoneObserver(private val context: BGameContext) {
             //Check building:
             if (unit is BBuilding) {
                 val unitOwnerId = unit.playerId
-                val isOwnedUnit = unitOwnerId != BPlayer.NEUTRAL_PLAYER_ID
+                val isOwnedUnit = unitOwnerId != BPlayer.NEUTRAL_ID
                 //Check unit:
                 if (isOwnedUnit) {
-                    val isOwnedZone = zoneOwnerId != BPlayer.NEUTRAL_PLAYER_ID
+                    val isOwnedZone = zoneOwnerId != BPlayer.NEUTRAL_ID
                     if (isOwnedZone) {
                         val isDifferentOwners = unitOwnerId != zoneOwnerId
                         if (isDifferentOwners) {
-                            this.currentZone.playerId = BPlayer.NEUTRAL_PLAYER_ID
+                            this.currentZone.playerId = BPlayer.NEUTRAL_ID
                             this.currentZone.isExactlyNeutral = true
                         }
                     } else {
@@ -134,7 +134,7 @@ class BPlayerZoneObserver(private val context: BGameContext) {
 
     data class PlayerZone(
         val area: MutableSet<BPoint> = mutableSetOf(),
-        var playerId: Long = BPlayer.NEUTRAL_PLAYER_ID,
+        var playerId: Long = BPlayer.NEUTRAL_ID,
         var isExactlyNeutral: Boolean = false
     )
 }

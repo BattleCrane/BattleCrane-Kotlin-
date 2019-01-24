@@ -10,6 +10,7 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.concurrent.timer
 
+//TODO: LATER
 class BTurnTimerTrigger private constructor(context: BGameContext, var playerId: Long) : BNode(context) {
 
     override val name = NAME

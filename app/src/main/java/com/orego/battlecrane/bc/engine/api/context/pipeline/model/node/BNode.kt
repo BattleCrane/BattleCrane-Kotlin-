@@ -72,7 +72,7 @@ abstract class BNode(protected val context: BGameContext) {
         for (i in 0 until pipes.size) {
             val pipe = pipes[i]
             pipe.removeUnusedComponents()
-            if (pipe.isUnused()) {
+            if (pipe.isFinished()) {
                 this.pipeMap.remove(pipe.id)
             }
         }

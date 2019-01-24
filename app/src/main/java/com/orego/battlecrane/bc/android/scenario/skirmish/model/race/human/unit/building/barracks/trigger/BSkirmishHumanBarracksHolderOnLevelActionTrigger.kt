@@ -1,28 +1,28 @@
-package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.generator.trigger
+package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.barracks.trigger
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanGeneratorHolder
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
+import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanBarracksHolder
+import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.util.trigger.hitPointable.BOnHitPointsActionTrigger
 import com.orego.battlecrane.ui.util.setImageByAssets
 
-class BSkirmishHumanGeneratorHolderOnHitPointsActionTrigger private constructor(
+class BSkirmishHumanBarracksHolderOnLevelActionTrigger private constructor(
     val uiGameContext: BUiGameContext,
-    var holder: BHumanGeneratorHolder
+    var holder: BHumanBarracksHolder
 ) : BNode(uiGameContext.gameContext) {
 
     private val unitMap = this.context.storage.getHeap(BUnitHolderHeap::class.java).objectMap
 
     override fun handle(event: BEvent): BEvent? {
-        val generator = this.holder.item
-        if (event is BOnHitPointsActionPipe.Event
-            && event.hitPointableId == generator.hitPointableId
+        val barracks = this.holder.item
+        if (event is BOnLevelActionPipe.Event
+            && event.levelableId == barracks.levelableId
         ) {
-            if (generator.currentHitPoints > 0) {
+            if (barracks.currentHitPoints > 0) {
                 this.uiGameContext.uiTaskManager.addTask {
                     val image = this.holder.unitView
                     val applicationContext = this.uiGameContext.uiProvider.applicationContext
@@ -43,18 +43,18 @@ class BSkirmishHumanGeneratorHolderOnHitPointsActionTrigger private constructor(
 
     inner class Pipe : BPipe(this.context, mutableListOf(this)) {
 
-        val holder = this@BSkirmishHumanGeneratorHolderOnHitPointsActionTrigger.holder
+        val holder = this@BSkirmishHumanBarracksHolderOnLevelActionTrigger.holder
 
-        override fun isFinished() = this@BSkirmishHumanGeneratorHolderOnHitPointsActionTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanBarracksHolderOnLevelActionTrigger.isFinished()
     }
 
     companion object {
 
-        fun connect(uiGameContext: BUiGameContext, holder: BHumanGeneratorHolder) {
+        fun connect(uiGameContext: BUiGameContext, holder: BHumanBarracksHolder) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
                 node is BOnHitPointsActionTrigger && node.hitPointable == holder.item
             }
-            val uiTrigger = BSkirmishHumanGeneratorHolderOnHitPointsActionTrigger(uiGameContext, holder)
+            val uiTrigger = BSkirmishHumanBarracksHolderOnLevelActionTrigger(uiGameContext, holder)
             trigger.connectInnerPipe(uiTrigger.intoPipe())
         }
     }

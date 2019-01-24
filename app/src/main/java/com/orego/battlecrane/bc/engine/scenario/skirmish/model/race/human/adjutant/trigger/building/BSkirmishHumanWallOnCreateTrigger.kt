@@ -30,8 +30,8 @@ class BSkirmishHumanWallOnCreateTrigger private constructor(context: BGameContex
             val wall1 = BSkirmishHumanWallBuilder().build(this.context, this.playerId, x, y)
             val wall2 = BSkirmishHumanWallBuilder().build(this.context, this.playerId, x, nextY)
             //Set walls:
-            controller.placeUnitOnMap(wall1)
-            controller.placeUnitOnMap(wall2)
+            controller.notifyUnitChanged(wall1)
+            controller.notifyUnitChanged(wall2)
             storage.addObject(wall1)
             storage.addObject(wall2)
             return this.pushToInnerPipes(event)

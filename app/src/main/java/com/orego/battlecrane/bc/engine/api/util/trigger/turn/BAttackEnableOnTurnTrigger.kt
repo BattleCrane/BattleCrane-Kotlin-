@@ -48,7 +48,7 @@ class BAttackEnableOnTurnTrigger private constructor(context: BGameContext, var 
 
         val attackable = this@BAttackEnableOnTurnTrigger.attackable
 
-        override fun isUnused() = this@BAttackEnableOnTurnTrigger.isFinished()
+        override fun isFinished() = this@BAttackEnableOnTurnTrigger.isFinished()
     }
 
     companion object {

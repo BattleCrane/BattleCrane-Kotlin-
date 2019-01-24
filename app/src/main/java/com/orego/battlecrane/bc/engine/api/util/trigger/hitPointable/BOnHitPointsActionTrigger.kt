@@ -4,7 +4,6 @@ import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BHitPointableHeap
 import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
 
@@ -15,7 +14,7 @@ abstract class BOnHitPointsActionTrigger protected constructor(context: BGameCon
      * Context.
      */
 
-    private val hitPointableMap = context.storage.getHeap(BHitPointableHeap::class.java).objectMap
+    protected val hitPointableMap = context.storage.getHeap(BHitPointableHeap::class.java).objectMap
 
     protected abstract fun onHitPointsLost()
 
@@ -26,7 +25,6 @@ abstract class BOnHitPointsActionTrigger protected constructor(context: BGameCon
         ) {
             event.perform(this.context)
             this.pushToInnerPipes(event)
-            println("HP: ${this.hitPointable.currentHitPoints}")
             if (this.hitPointable.currentHitPoints <= 0) {
                 this.onHitPointsLost()
             }
@@ -35,18 +33,5 @@ abstract class BOnHitPointsActionTrigger protected constructor(context: BGameCon
         return null
     }
 
-    override fun intoPipe() = Pipe()
-
     override fun isFinished() = !this.hitPointableMap.containsKey(this.hitPointable.hitPointableId)
-
-    /**
-     * Pipe.
-     */
-
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val hitPointable = this@BOnHitPointsActionTrigger.hitPointable
-
-        override fun isUnused() = this@BOnHitPointsActionTrigger.isFinished()
-    }
 }

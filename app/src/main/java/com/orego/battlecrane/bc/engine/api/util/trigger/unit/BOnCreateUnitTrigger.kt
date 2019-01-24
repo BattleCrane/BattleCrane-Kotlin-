@@ -55,7 +55,7 @@ open class BOnCreateUnitTrigger protected constructor(context: BGameContext, var
             }
             //Create new unit:
             val unit = this.createUnit(context)
-            controller.placeUnitOnMap(unit)
+            controller.notifyUnitChanged(unit)
             context.storage.addObject(unit)
             return true
         }

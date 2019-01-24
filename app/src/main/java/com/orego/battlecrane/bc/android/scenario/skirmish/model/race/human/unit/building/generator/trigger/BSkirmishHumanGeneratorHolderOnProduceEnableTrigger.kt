@@ -80,7 +80,7 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
         val constraintLayoutId = constraintLayout.id
         val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
         val cellSize = (columnSize * CELL_COEFFICIENT).toInt()
-        //Get generator:
+        //Get headquarters:
         val generator = this.holder.item
         val producableId = generator.producableId
         val playerId = generator.playerId
@@ -153,7 +153,15 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
 
     override fun intoPipe() = Pipe()
 
-    override fun isFinished() = !this.unitMap.containsKey(this.holder.uiUnitId)
+    override fun isFinished(): Boolean {
+        println("CHECKED GENERATOR")
+        if (!this.unitMap.containsKey(this.holder.uiUnitId)) {
+            println("REMOVED GENERATOR")
+            this.uiGameContext.uiProvider.mapConstraintLayout.removeView(this.isEnableImageView)
+            return true
+        }
+        return false
+    }
 
     /**
      * Click mode.
@@ -220,7 +228,7 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
 
         val holder = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.holder
 
-        override fun isUnused() = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.isFinished()
     }
 
     companion object {

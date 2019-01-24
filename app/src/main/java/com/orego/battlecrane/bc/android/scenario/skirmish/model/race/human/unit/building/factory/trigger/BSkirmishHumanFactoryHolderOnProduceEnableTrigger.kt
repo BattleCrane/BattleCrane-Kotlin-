@@ -147,7 +147,7 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
 
         val holder = this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.holder
 
-        override fun isUnused() = this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.isFinished()
     }
 
     companion object {

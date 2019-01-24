@@ -49,5 +49,4 @@ class BSkirmishHumanMarineOnCreateTrigger private constructor(context: BGameCont
             }
         }
     }
-
 }

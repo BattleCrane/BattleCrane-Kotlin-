@@ -59,7 +59,7 @@ open class BPipe(
         }
     }
 
-    open fun isUnused() = false
+    open fun isFinished() = false
 
     fun removeUnusedComponents() {
         for (i in 0 until this.nodes.size) {

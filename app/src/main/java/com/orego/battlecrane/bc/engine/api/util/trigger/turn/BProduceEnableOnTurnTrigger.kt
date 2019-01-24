@@ -48,7 +48,7 @@ class BProduceEnableOnTurnTrigger private constructor(context: BGameContext, var
 
         val producable = this@BProduceEnableOnTurnTrigger.producable
 
-        override fun isUnused() = this@BProduceEnableOnTurnTrigger.isFinished()
+        override fun isFinished() = this@BProduceEnableOnTurnTrigger.isFinished()
     }
 
     companion object {

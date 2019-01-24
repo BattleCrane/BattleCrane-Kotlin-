@@ -45,7 +45,7 @@ class BSkirmishHumanTurretHolderOnHitPointsActionTrigger private constructor(
 
         val holder = this@BSkirmishHumanTurretHolderOnHitPointsActionTrigger.holder
 
-        override fun isUnused() = this@BSkirmishHumanTurretHolderOnHitPointsActionTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanTurretHolderOnHitPointsActionTrigger.isFinished()
     }
 
     companion object {

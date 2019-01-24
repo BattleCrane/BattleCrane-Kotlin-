@@ -3,6 +3,7 @@ package com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
+import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
@@ -16,22 +17,28 @@ class BSkirmishOnHitPointsActionTrigger private constructor(context: BGameContex
 
     override fun onHitPointsLost() {
         if (this.hitPointable is BUnit) {
-            println("ON UNIT LOST!!!!!!!")
             this.pipeline.pushEvent(
                 BOnDestroyUnitPipe.Event(this.hitPointable.unitId)
             )
-            val hitPointableX = this.hitPointable.x
-            val hitPointableY = this.hitPointable.y
-            for (x in hitPointableX until hitPointableX + this.hitPointable.width) {
-                for (y in hitPointableY until hitPointableY + this.hitPointable.height) {
-                    this.pipeline.pushEvent(
-                        BSkirmishDestroyedGrassFieldOnCreateTrigger.Event(
-                            BPlayer.NEUTRAL_PLAYER_ID, x, y
-                        )
-                    )
-                }
+            this.hitPointable.foreach { x, y ->
+                this.pipeline.pushEvent(
+                    BSkirmishDestroyedGrassFieldOnCreateTrigger.Event(BPlayer.NEUTRAL_ID, x, y)
+                )
             }
         }
+    }
+
+    override fun intoPipe() = Pipe()
+
+    /**
+     * Pipe.
+     */
+
+    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
+
+        var hitPointable = this@BSkirmishOnHitPointsActionTrigger.hitPointable
+
+        override fun isFinished() = this@BSkirmishOnHitPointsActionTrigger.isFinished()
     }
 
     companion object {

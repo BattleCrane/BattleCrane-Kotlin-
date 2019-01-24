@@ -8,7 +8,7 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.fi
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.BGrassField
 
 class BSkirmishEmptyGrassFieldOnCreateTrigger(context: BGameContext) :
-    BOnCreateUnitTrigger(context, BPlayer.NEUTRAL_PLAYER_ID) {
+    BOnCreateUnitTrigger(context, BPlayer.NEUTRAL_ID) {
 
     override fun handle(event: BEvent): BEvent? {
         if (event is Event) {

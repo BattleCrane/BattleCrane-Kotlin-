@@ -2,18 +2,16 @@ package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.BTurnPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.BTurnNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.pipe.onTurnStarted.BOnTurnStartedPipe
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
+import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
+import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BOnTurnTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanHeadquarters
 
 class BSkirmishHumanHeadquartersOnTurnTrigger private constructor(
     context: BGameContext,
     var headquarters: BHumanHeadquarters
-) : BNode(context) {
+) : BOnTurnTrigger(context) {
 
     /**
      * Context.
@@ -21,30 +19,27 @@ class BSkirmishHumanHeadquartersOnTurnTrigger private constructor(
 
     private val pipeline = context.pipeline
 
-    override fun handle(event: BEvent): BEvent? {
-        if (event is BTurnPipe.Event && this.headquarters.playerId == event.playerId) {
-            val producableId = this.headquarters.producableId
-            when (event) {
-                is BOnTurnStartedPipe.Event -> {
-                    this.pushToInnerPipes(event)
-                    if (this.isBattleMode()) {
-                        this.makeAttack()
-                    }
-                    this.pipeline.pushEvent(
-                        BOnProduceEnablePipe.Event(producableId, true)
-                    )
-                    return event
-                }
-                is BOnTurnFinishedPipe.Event -> {
-                    this.pushToInnerPipes(event)
-                    this.pipeline.pushEvent(
-                        BOnProduceEnablePipe.Event(producableId, false)
-                    )
-                    return event
-                }
-            }
+    private val unitMap = context.storage.getHeap(BUnitHeap::class.java).objectMap
+
+    override var playerId: Long
+        get() = this.headquarters.playerId
+        set(value) {
+            this.headquarters.playerId = value
         }
-        return null
+
+    override fun onTurnStarted() {
+        if (this.isBattleMode()) {
+            this.makeAttack()
+        }
+        this.pipeline.pushEvent(
+            BOnProduceEnablePipe.Event(this.headquarters.producableId, true)
+        )
+    }
+
+    override fun onTurnFinished() {
+        this.pipeline.pushEvent(
+            BOnProduceEnablePipe.Event(this.headquarters.producableId, false)
+        )
     }
 
     private fun isBattleMode(): Boolean {
@@ -54,6 +49,21 @@ class BSkirmishHumanHeadquartersOnTurnTrigger private constructor(
 
     private fun makeAttack() {
         //TODO
+    }
+
+    override fun isFinished() = !this.unitMap.containsKey(this.headquarters.unitId)
+
+    override fun intoPipe() = Pipe()
+
+    /**
+     * Pipe.
+     */
+
+    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
+
+        var headquarters = this@BSkirmishHumanHeadquartersOnTurnTrigger.headquarters
+
+        override fun isFinished() = this@BSkirmishHumanHeadquartersOnTurnTrigger.isFinished()
     }
 
     companion object {

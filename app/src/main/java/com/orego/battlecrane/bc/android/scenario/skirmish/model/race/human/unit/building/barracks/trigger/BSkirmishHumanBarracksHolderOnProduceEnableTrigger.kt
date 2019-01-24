@@ -62,8 +62,9 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.refreshActions()
-            this.holder.showDescription(this.uiGameContext)
+            this.uiGameContext.clickController.pushClickMode(ClickMode())
+//            this.refreshActions()
+//            this.holder.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -82,7 +83,7 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
         if (barracks.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Train.MARINE, ClickMode())
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Train.MARINE, TrainMarineClickMode())
             )
             var x = 0
             var y = 0
@@ -111,7 +112,17 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
      * Click mode.
      */
 
-    private inner class ClickMode : BClickMode {
+    private inner class ClickMode : BUnitHolder.ClickMode(this.holder) {
+
+        override fun onStart() {
+            this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.refreshActions()
+            this.unitHolder.showDescription(this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.uiGameContext)
+        }
+
+        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+    }
+    
+    private inner class TrainMarineClickMode : BClickMode {
 
         private val unit = this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.holder.item
 
@@ -142,7 +153,7 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
 
         val holder = this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.holder
 
-        override fun isUnused() = this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.isFinished()
     }
 
     companion object {

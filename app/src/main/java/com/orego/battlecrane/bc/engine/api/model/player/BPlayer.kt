@@ -9,7 +9,7 @@ open class BPlayer protected constructor(context: BGameContext) {
 
     companion object {
 
-        const val NEUTRAL_PLAYER_ID: Long = 0
+        const val NEUTRAL_ID: Long = 0
     }
 
     /**

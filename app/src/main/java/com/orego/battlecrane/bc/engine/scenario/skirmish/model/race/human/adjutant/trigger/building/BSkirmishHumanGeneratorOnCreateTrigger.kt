@@ -39,12 +39,7 @@ class BSkirmishHumanGeneratorOnCreateTrigger private constructor(context: BGameC
         override val height = BHumanGenerator.HEIGHT
 
         override fun createUnit(context: BGameContext) =
-            BSkirmishHumanGeneratorBuilder().build(
-                context,
-                this.playerId,
-                this.x,
-                this.y
-            )
+            BSkirmishHumanGeneratorBuilder().build(context, this.playerId, this.x, this.y)
     }
 
     companion object {

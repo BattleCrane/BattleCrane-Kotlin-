@@ -15,6 +15,21 @@ abstract class BUnit(
 
     abstract val width: Int
 
-    override fun toString() = "Name: " + this::class.java.name + " Id: " + this.unitId + " x: " + this.x +
-            " y: " + this.y
+    inline fun foreach(function: (x: Int, y: Int) -> Unit) {
+        for (x in this.x until this.x + this.width) {
+            for (y in this.y until this.y + this.height) {
+                function(x, y)
+            }
+        }
+    }
+
+    override fun toString() =
+        "Name: " +
+                this::class.java.name +
+                " Id: " +
+                this.unitId +
+                " x: " +
+                this.x +
+                " y: " +
+                this.y
 }

@@ -47,7 +47,7 @@ class BSkirmishHumanBarracksOnLevelActionTrigger private constructor(
 
         val barracks = this@BSkirmishHumanBarracksOnLevelActionTrigger.levelable
 
-        override fun isUnused() = this@BSkirmishHumanBarracksOnLevelActionTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanBarracksOnLevelActionTrigger.isFinished()
     }
 
     companion object {

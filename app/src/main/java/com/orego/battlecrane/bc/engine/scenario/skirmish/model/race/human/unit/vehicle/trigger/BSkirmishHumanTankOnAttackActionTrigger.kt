@@ -5,8 +5,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
+import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAttackableHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
+import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BCreature
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BVehicle
 import com.orego.battlecrane.bc.engine.api.util.geometry.BLineMatcher
@@ -16,6 +18,8 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.vehicle.impl
 
 class BSkirmishHumanTankOnAttackActionTrigger private constructor(context: BGameContext, var tank: BHumanTank) :
     BNode(context) {
+
+    private val unitMap = context.storage.getHeap(BUnitHeap::class.java).objectMap
 
     override fun handle(event: BEvent): BEvent? {
         if (event is Event
@@ -27,6 +31,21 @@ class BSkirmishHumanTankOnAttackActionTrigger private constructor(context: BGame
             this.pushToInnerPipes(event)
         }
         return null
+    }
+
+    override fun isFinished() = !this.unitMap.containsKey(this.tank.unitId)
+
+    override fun intoPipe() = Pipe()
+
+    /**
+     * Pipe.
+     */
+
+    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
+
+        var tank = this@BSkirmishHumanTankOnAttackActionTrigger.tank
+
+        override fun isFinished() = this@BSkirmishHumanTankOnAttackActionTrigger.isFinished()
     }
 
     /**

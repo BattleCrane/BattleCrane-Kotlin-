@@ -45,11 +45,15 @@ class BSkirmishHumanBarracksOnProduceActionTrigger private constructor(
 
     override fun isFinished() = !this.unitMap.containsKey(this.barracks.unitId)
 
+    /**
+     * Pipe.
+     */
+
     inner class Pipe : BPipe(this.context, mutableListOf(this)) {
 
         val barracks = this@BSkirmishHumanBarracksOnProduceActionTrigger.barracks
 
-        override fun isUnused() = this@BSkirmishHumanBarracksOnProduceActionTrigger.isFinished()
+        override fun isFinished() = this@BSkirmishHumanBarracksOnProduceActionTrigger.isFinished()
     }
 
     /**
