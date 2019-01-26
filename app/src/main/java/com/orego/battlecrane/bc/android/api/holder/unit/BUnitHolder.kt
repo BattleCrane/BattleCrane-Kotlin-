@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
+import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.holder.BHolder
 import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
@@ -25,7 +25,7 @@ abstract class BUnitHolder(uiGameContext: BUiGameContext, unit: BUnit) : BHolder
     open fun showDescription(uiGameContext: BUiGameContext) {
     }
 
-    abstract class ClickMode(val unitHolder: BUnitHolder) : BClickMode
+    abstract class UiClickMode(val unitHolder: BUnitHolder) : BUiClickMode
 
     class Factory : BHolder.Factory<BUnit>()
 

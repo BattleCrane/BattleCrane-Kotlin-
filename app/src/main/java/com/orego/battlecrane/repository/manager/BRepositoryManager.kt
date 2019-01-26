@@ -1,8 +1,8 @@
 package com.orego.battlecrane.repository.manager
 
-import com.orego.battlecrane.bc.engine.api.context.BGameContext
+import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 
 class BRepositoryManager {
 
-    lateinit var gameContext: BGameContext
+    lateinit var uiGameContext: BUiGameContext
 }

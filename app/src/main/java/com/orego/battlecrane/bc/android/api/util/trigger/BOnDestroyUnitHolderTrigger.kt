@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.api.util.trigger
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
+import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
@@ -14,13 +14,13 @@ class BOnDestroyUnitHolderTrigger private constructor(
     val holder: BUnitHolder
 ) : BNode(uiContext.gameContext) {
 
-    private val unitMap = this.context.storage.getHeap(BUnitHolderHeap::class.java).objectMap
+    private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
 
     override fun handle(event: BEvent): BEvent? {
         val holder = this.holder
         if (event is BOnDestroyUnitPipe.Event && event.unitId == holder.item.unitId) {
             this.uiContext.apply {
-                this.gameContext.storage.removeObject(holder.uiUnitId, BUnitHolderHeap::class.java)
+                this.gameContext.storage.removeObject(holder.uiUnitId, BUiUnitHeap::class.java)
                 this.uiTaskManager.addTask {
                     this.uiProvider.mapConstraintLayout.removeView(holder.unitView)
                 }

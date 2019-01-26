@@ -1,8 +1,14 @@
 package com.orego.battlecrane.bc.android.api.scenario
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.scenario.plugin.BLocationPlugin
-import com.orego.battlecrane.bc.android.api.scenario.plugin.BRacePlugin
+import com.orego.battlecrane.bc.android.api.context.heap.BUiAdjutantHeap
+import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
+import com.orego.battlecrane.bc.android.api.holder.adjutant.BAdjutantHolder
+import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.scenario.plugin.BUiLocationPlugin
+import com.orego.battlecrane.bc.android.api.scenario.plugin.BUiRacePlugin
+import com.orego.battlecrane.bc.android.api.util.trigger.BUiBaseOnTurnTrigger
+import com.orego.battlecrane.bc.engine.api.context.generator.BContextGenerator
 import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
 
 abstract class BUiGameScenario {
@@ -11,19 +17,43 @@ abstract class BUiGameScenario {
      * Scenario.
      */
 
-    abstract val gameScenario: BGameScenario
+    abstract fun getGameScenario(): BGameScenario
 
     /**
      * Plugin.
      */
 
-    abstract val racePlugins : Map<Class<out BRacePlugin>, BRacePlugin>
+    abstract fun getUiRacePlugins(): Set<BUiRacePlugin>
 
-    abstract val locationPlugin : BLocationPlugin
+    abstract fun getUiLocationPlugin(): BUiLocationPlugin
 
     /**
      * Configures ui context.
      */
 
-    abstract fun install(uiGameContext: BUiGameContext)
+    open fun install(uiGameContext: BUiGameContext) {
+        this.getGameScenario().install(uiGameContext.gameContext)
+        this.installUiContext(uiGameContext)
+        this.installBaseUiTriggers(uiGameContext)
+        this.getUiLocationPlugin().install(uiGameContext)
+        this.getUiRacePlugins().forEach { plugin -> plugin.install(uiGameContext) }
+    }
+
+    open fun installUiContext(uiGameContext: BUiGameContext) {
+        uiGameContext.gameContext.apply {
+            this.contextGenerator.generatorMap.apply {
+                this[BAdjutantHolder::class.java] = BContextGenerator.IdGenerator(0)
+                this[BUnitHolder::class.java] = BContextGenerator.IdGenerator(0)
+            }
+            this.storage.apply {
+                this.addHeap(BUiAdjutantHeap())
+                this.addHeap(BUiUnitHeap())
+            }
+        }
+
+    }
+
+    open fun installBaseUiTriggers(uiGameContext: BUiGameContext) {
+        BUiBaseOnTurnTrigger.connect(uiGameContext)
+    }
 }

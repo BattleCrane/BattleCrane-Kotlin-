@@ -1,6 +1,6 @@
 package com.orego.battlecrane.bc.android.api.asset
 
-object BCommonPaths {
+object BUiCommonPaths {
 
     object Action {
 

@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human
 
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
-import com.orego.battlecrane.bc.android.api.scenario.plugin.BRacePlugin
+import com.orego.battlecrane.bc.android.api.scenario.plugin.BUiRacePlugin
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.adjutant.BSkirmishHumanAdjutantHolderBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.barracks.builder.BSkirmishHumanBarracksHolderBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.factory.builder.BSkirmishHumanFactoryHolderBuilder
@@ -18,7 +18,7 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.imp
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.infantry.implementation.BHumanMarine
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.vehicle.implementation.BHumanTank
 
-class BSkirmishHumanPlugin : BRacePlugin() {
+class BUiUiSkirmishHumanPlugin : BUiRacePlugin() {
 
     override val uiAdjutantBuilderPair: Pair<Class<BHumanAdjutant>, BHumanAdjutantHolder.Builder> =
         BHumanAdjutant::class.java to BSkirmishHumanAdjutantHolderBuilder()

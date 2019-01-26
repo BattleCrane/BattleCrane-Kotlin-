@@ -4,10 +4,10 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
-import com.orego.battlecrane.bc.android.api.asset.BCommonPaths
+import com.orego.battlecrane.bc.android.api.asset.BUiCommonPaths
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
-import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
+import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
+import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.infantry.BHumanMarineHolder
@@ -27,7 +27,7 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
     val holder: BHumanMarineHolder
 ) : BNode(uiGameContext.gameContext) {
 
-    private val unitMap = this.context.storage.getHeap(BUnitHolderHeap::class.java).objectMap
+    private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
 
     /**
      * ImageView.
@@ -61,7 +61,7 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.uiGameContext.clickController.pushClickMode(ClickMode())
+            this.uiGameContext.uiClickController.pushClickMode(UiClickMode())
 
 //            this.refreshActions()
 //            this.holder.showDescription(this.uiGameContext)
@@ -83,7 +83,7 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
         if (marine.isAttackEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BCommonPaths.Action.ATTACK, AttackClickMode())
+                BToolBuilder.build(this.uiGameContext, BUiCommonPaths.Action.ATTACK, AttackUiClickMode())
             )
             var x = 0
             var y = 0
@@ -112,26 +112,26 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
      * Click mode.
      */
 
-    private inner class ClickMode : BUnitHolder.ClickMode(this.holder) {
+    private inner class UiClickMode : BUnitHolder.UiClickMode(this.holder) {
 
-        override fun onStart() {
+        override fun onStartClickMode() {
             this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.refreshActions()
             this.unitHolder.showDescription(this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.uiGameContext)
         }
 
-        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode.also { it.onStartClickMode() }
     }
 
-    private inner class AttackClickMode : BClickMode {
+    private inner class AttackUiClickMode : BUiClickMode {
 
         private val unit = this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.holder.item
 
         private val gameContext: BGameContext = this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.context
 
-        override fun onNext(nextClickMode: BClickMode): BClickMode? {
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
             println("MARINNEENEENNENENEN")
-            if (nextClickMode is BUnitHolder.ClickMode) {
-                val clickedUnit = nextClickMode.unitHolder.item
+            if (nextUiClickMode is BUnitHolder.UiClickMode) {
+                val clickedUnit = nextUiClickMode.unitHolder.item
                 val event = BSkirmishHumanMarineOnAttackActionTrigger.Event(
                     this.unit.attackableId,
                     this.unit.x,

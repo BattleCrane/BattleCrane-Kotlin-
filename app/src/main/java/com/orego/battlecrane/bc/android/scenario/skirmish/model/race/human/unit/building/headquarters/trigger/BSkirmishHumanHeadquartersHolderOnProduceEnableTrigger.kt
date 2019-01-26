@@ -5,8 +5,8 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
-import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
+import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
+import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
@@ -33,7 +33,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
     val holder: BHumanHeadquartersHolder
 ) : BNode(uiGameContext.gameContext) {
 
-    private val unitMap = this.context.storage.getHeap(BUnitHolderHeap::class.java).objectMap
+    private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
 
     /**
      * ImageView.
@@ -67,7 +67,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.uiGameContext.clickController.pushClickMode(ClickMode())
+            this.uiGameContext.uiClickController.pushClickMode(UiClickMode())
 
 //            this.refreshActions()
 //            this.holder.showDescription(this.uiGameContext)
@@ -91,21 +91,21 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         if (headquarters.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.BARRACKS, object : BuildClickMode() {
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.BARRACKS, object : BuildUiClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
                         BSkirmishHumanConstructBarracksEvent(producableId, x, y)
                 })
             )
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.TURRET, object : BuildClickMode() {
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.TURRET, object : BuildUiClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
                         BSkirmishHumanConstructTurretEvent(producableId, x, y)
                 })
             )
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.WALL, object : BuildClickMode() {
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.WALL, object : BuildUiClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
                         BSkirmishHumanConstructWallEvent(producableId, x, y)
@@ -113,7 +113,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
             )
             if (BHumanCalculations.countGenerators(this.context, playerId) < BSkirmishHumanRule.GENERATOR_LIMIT) {
                 this.actionImageViewSet.add(
-                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.GENERATOR, object : BuildClickMode() {
+                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.GENERATOR, object : BuildUiClickMode() {
 
                         override fun createEvent(x: Int, y: Int) =
                             BSkirmishHumanConstructGeneratorEvent(producableId, x, y)
@@ -122,7 +122,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
             }
             if (BHumanCalculations.countDiffBarracksFactory(this.context, playerId) > 0) {
                 this.actionImageViewSet.add(
-                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.FACTORY, object : BuildClickMode() {
+                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.FACTORY, object : BuildUiClickMode() {
 
                         override fun createEvent(x: Int, y: Int) =
                             BSkirmishHumanConstructFactoryEvent(producableId, x, y)
@@ -131,7 +131,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
             }
             if (BHumanCalculations.countPossibleBuildingUpgrades(this.context, playerId) > 0) {
                 this.actionImageViewSet.add(
-                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Upgrade.BUILDING, UpgradeBuildingClickMode())
+                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Upgrade.BUILDING, UpgradeBuildingUiClickMode())
                 )
             }
             var x = 0
@@ -161,17 +161,17 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
      * Click mode.
      */
 
-    private inner class ClickMode : BUnitHolder.ClickMode(this.holder) {
+    private inner class UiClickMode : BUnitHolder.UiClickMode(this.holder) {
 
-        override fun onStart() {
+        override fun onStartClickMode() {
             this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.refreshActions()
             this.unitHolder.showDescription(this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.uiGameContext)
         }
 
-        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode.also { it.onStartClickMode() }
     }
 
-    private abstract inner class BuildClickMode : BClickMode {
+    private abstract inner class BuildUiClickMode : BUiClickMode {
 
         private val unit = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.holder.item
 
@@ -179,9 +179,9 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
 
         protected abstract fun createEvent(x: Int, y: Int): BHumanConstructBuildingEvent
 
-        override fun onNext(nextClickMode: BClickMode): BClickMode? {
-            if (nextClickMode is BUnitHolder.ClickMode) {
-                val clickedUnit = nextClickMode.unitHolder.item
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
+            if (nextUiClickMode is BUnitHolder.UiClickMode) {
+                val clickedUnit = nextUiClickMode.unitHolder.item
                 if (clickedUnit is BEmptyField) {
                     val event = this.createEvent(clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.unit.playerId)
@@ -196,7 +196,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         }
     }
 
-    private inner class UpgradeBuildingClickMode : BClickMode {
+    private inner class UpgradeBuildingUiClickMode : BUiClickMode {
 
         private val unit = this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.holder.item
 
@@ -205,9 +205,9 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         private val uiPipe =
             this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.uiGameContext.uiTaskManager
 
-        override fun onNext(nextClickMode: BClickMode): BClickMode? {
-            if (nextClickMode is BUnitHolder.ClickMode) {
-                val clickedUnit = nextClickMode.unitHolder.item
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
+            if (nextUiClickMode is BUnitHolder.UiClickMode) {
+                val clickedUnit = nextUiClickMode.unitHolder.item
                 if (clickedUnit is BLevelable) {
                     val event = BHumanUpgradeBuildingEvent(this.unit.producableId, clickedUnit.levelableId)
                     val isSuccessful = event.isEnable(this.gameContext)

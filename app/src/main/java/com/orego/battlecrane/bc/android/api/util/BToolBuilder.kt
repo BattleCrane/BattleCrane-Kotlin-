@@ -4,11 +4,11 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
+import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 
 object BToolBuilder {
 
-    fun build(uiGameContext: BUiGameContext, toolPath: String, clickMode: BClickMode): ImageView {
+    fun build(uiGameContext: BUiGameContext, toolPath: String, uiClickMode: BUiClickMode): ImageView {
         val applicationContext = uiGameContext.uiProvider.applicationContext
         return ImageView(applicationContext)
             .also {
@@ -17,7 +17,7 @@ object BToolBuilder {
                 it.id = View.generateViewId()
                 it.setImageDrawable(drawable)
                 it.setOnClickListener {
-                    uiGameContext.clickController.forcePushClickMode(clickMode)
+                    uiGameContext.uiClickController.forcePushClickMode(uiClickMode)
                 }
             }
     }

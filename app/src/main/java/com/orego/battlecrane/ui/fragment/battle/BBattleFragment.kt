@@ -39,16 +39,6 @@ class BBattleFragment : BFragment() {
 
         private var loadingJob: Job? = null
 
-        /**
-         * Game.
-         */
-
-        private val uiGameContext by lazy {
-            val gameContext = this.manager.gameContext
-            val uiProvider = UiProvider()
-            BUiGameContext(gameContext, uiProvider)
-        }
-
         private val scenarioViewModel by lazy {
             ViewModelProviders
                 .of(this.activity)
@@ -76,38 +66,28 @@ class BBattleFragment : BFragment() {
 
         private fun loadGame() =
             GlobalScope.launch(Dispatchers.Main) {
-                this@Presenter.installGameScenario()
-                this@Presenter.installGraphic()
+                this@Presenter.initGame()
                 this@Presenter.startGame()
             }
 
-        private suspend fun installGameScenario() {
-            this.manager.gameContext =
-                    withContext(Dispatchers.IO) {
-                        val scenario = this@Presenter.scenarioViewModel.uiGameScenario?.gameScenario
-                        if (scenario != null) {
-                            BGameContext().also { it.setScenario(scenario) }
-                        } else {
-                            throw IllegalStateException("Scenario isn't set!")
-                        }
-                    }
-        }
-
-        private fun installGraphic() {
-            val uiScenario = this.scenarioViewModel.uiGameScenario
-            this.uiGameContext.installScenario(uiScenario)
-            this.uiGameContext.installLocationPlugin(uiScenario?.locationPlugin)
-            this.uiGameContext.installRacePlugins(uiScenario?.racePlugins)
+        private suspend fun initGame() {
+            this.manager.uiGameContext = withContext(Dispatchers.IO) {
+                val gameContext = BGameContext()
+                val uiProvider = this@BBattleFragment.UiProvider()
+                val uiGameContext = BUiGameContext(gameContext, uiProvider)
+                uiGameContext.installScenario(this@Presenter.scenarioViewModel.uiGameScenario)
+                uiGameContext
+            }
         }
 
         private fun startGame() {
-            this.uiGameContext.startGame()
+            this.manager.uiGameContext.startGame()
             this@BBattleFragment.fragment_battle_loading_constraint_layout.gone()
         }
     }
 
     /**
-     * Provides interaction with ui.
+     * Provides a interaction with fragment.
      */
 
     inner class UiProvider {

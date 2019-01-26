@@ -16,23 +16,6 @@ class BMapController {
     private val matrix = BMapController.createMatrix()
 
     /**
-     * Initializes a map by unit ids.
-     */
-
-    fun install(context: BGameContext) {
-        context.storage.getHeap(BUnitHeap::class.java).getObjectList().forEach { unit ->
-            this.notifyUnitChanged(unit)
-        }
-        //Check initialized map:
-        BMapController.foreach { x, y ->
-            val isNotInitiablizedField = this.matrix[x][y] == NOT_ID
-            if (isNotInitiablizedField) {
-                throw IllegalStateException("Position x: $x y: $y is not initialized")
-            }
-        }
-    }
-
-    /**
      * Change unit ids on the map.
      */
 
@@ -46,13 +29,15 @@ class BMapController {
      * Getter.
      */
 
-    fun getUnitIdByPosition(x: Int, y: Int) = this.matrix[x][y]
+    operator fun get(x: Int, y: Int): Long = this.matrix[x][y]
+
+    operator fun get(point: BPoint): Long = this.matrix[point.x][point.y]
 
     fun getUnitByPosition(context: BGameContext, point: BPoint) =
         this.getUnitByPosition(context, point.x, point.y)
 
     fun getUnitByPosition(context: BGameContext, x: Int, y: Int) =
-        context.storage.getHeap(BUnitHeap::class.java)[this.getUnitIdByPosition(x, y)]
+        context.storage.getHeap(BUnitHeap::class.java)[this.matrix[x][y]]
 
     /**
      * ToString.

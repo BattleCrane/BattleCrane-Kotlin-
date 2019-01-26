@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.trigger
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
+import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
 import com.orego.battlecrane.bc.android.standardImpl.location.grass.field.empty.BEmptyGrassFieldHolder
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onOwnerChanged.BOnOwnerChangedUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
@@ -15,7 +15,7 @@ class BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger private constructor(
     val holder: BEmptyGrassFieldHolder
 ) : BNode(uiGameContext.gameContext) {
 
-    private val unitMap = this.context.storage.getHeap(BUnitHolderHeap::class.java).objectMap
+    private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnOwnerChangedUnitPipe.Event && this.holder.item.unitId == event.unitId) {

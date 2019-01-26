@@ -6,14 +6,14 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 
-class BOnUiTurnTrigger private constructor(private val uiGameContext: BUiGameContext) :
+class BUiBaseOnTurnTrigger private constructor(private val uiGameContext: BUiGameContext) :
     BNode(uiGameContext.gameContext) {
 
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnTurnFinishedPipe.Event) {
             this.uiGameContext.apply {
                 this.uiTaskManager.addTask {
-                    this.clickController.currentClickMode = null
+                    this.uiClickController.currentUiUiClickMode = null
                     this.uiProvider.apply {
                         this.rightConstraintLayout.removeAllViews()
                         this.leftConstraintLayout.removeAllViews()
@@ -28,7 +28,7 @@ class BOnUiTurnTrigger private constructor(private val uiGameContext: BUiGameCon
 
         fun connect(uiGameContext: BUiGameContext) {
             BTurnNode.connect(uiGameContext.gameContext) {
-                BOnUiTurnTrigger(uiGameContext)
+                BUiBaseOnTurnTrigger(uiGameContext)
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.barracks.trigger
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
+import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanBarracksHolder
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
@@ -15,7 +15,7 @@ class BSkirmishHumanBarracksHolderOnLevelActionTrigger private constructor(
     var holder: BHumanBarracksHolder
 ) : BNode(uiGameContext.gameContext) {
 
-    private val unitMap = this.context.storage.getHeap(BUnitHolderHeap::class.java).objectMap
+    private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
 
     override fun handle(event: BEvent): BEvent? {
         val barracks = this.holder.item

@@ -19,7 +19,7 @@ class BDestroyedGrassFieldHolder(uiGameContext: BUiGameContext, override val  it
 
     init {
         this.unitView.setOnClickListener {
-            uiGameContext.clickController.pushClickMode(ClickMode())
+            uiGameContext.uiClickController.pushClickMode(UiClickMode())
         }
     }
 

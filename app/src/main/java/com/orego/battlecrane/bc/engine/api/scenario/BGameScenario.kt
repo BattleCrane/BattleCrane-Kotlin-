@@ -1,6 +1,7 @@
 package com.orego.battlecrane.bc.engine.api.scenario
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
+import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.engine.api.context.generator.BContextGenerator
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.BAttackablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.BHitPointablePipe
@@ -18,6 +19,7 @@ import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
 import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
 import com.orego.battlecrane.bc.engine.api.model.property.BProducable
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.api.util.common.filterMap
 
 /**
  * Initializes a game step by step.
@@ -30,6 +32,16 @@ abstract class BGameScenario {
      */
 
     open fun install(context: BGameContext) {
+        this.installContextGenerator(context)
+        this.installStorage(context)
+        this.installPipeline(context)
+        this.installContextGenerator(context)
+        this.fillStorage(context)
+        this.installPlayerController(context)
+        this.installMapController(context)
+    }
+
+    protected open fun installContextGenerator(context: BGameContext) {
         context.contextGenerator.generatorMap.apply {
             this[BPipe::class.java] = BContextGenerator.IdGenerator(0)
             this[BNode::class.java] = BContextGenerator.IdGenerator(0)
@@ -41,6 +53,9 @@ abstract class BGameScenario {
             this[BLevelable::class.java] = BContextGenerator.IdGenerator(0)
             this[BProducable::class.java] = BContextGenerator.IdGenerator(0)
         }
+    }
+
+    protected open fun installStorage(context: BGameContext) {
         context.storage.apply {
             this.addHeap(BPlayerHeap())
             this.addHeap(BAdjutantHeap())
@@ -50,6 +65,9 @@ abstract class BGameScenario {
             this.addHeap(BHitPointableHeap())
             this.addHeap(BProducableHeap())
         }
+    }
+
+    protected open fun installPipeline(context: BGameContext) {
         context.pipeline.apply {
             this.connectInnerPipe(BUnitPipe(context))
             this.connectInnerPipe(BAttackablePipe(context))
@@ -61,26 +79,75 @@ abstract class BGameScenario {
     }
 
     /**
+     * Initializes a map by unit ids.
+     */
+
+    protected open fun installMapController(context: BGameContext) {
+        val mapController = context.mapController
+        context.storage.getHeap(BUnitHeap::class.java).getObjectList().forEach { unit ->
+            mapController.notifyUnitChanged(unit)
+        }
+        //Check initialized map:
+        BMapController.foreach { x, y ->
+            val isNotInitiablizedField = mapController[x, y] == BMapController.NOT_ID
+            if (isNotInitiablizedField) {
+                throw IllegalStateException("Position x: $x y: $y is not initialized")
+            }
+        }
+    }
+
+    protected open fun installPlayerController(context: BGameContext) {
+        val playerHeap = context.storage.getHeap(BPlayerHeap::class.java)
+        val players = playerHeap.getObjectList()
+        val startPosition = this.getStartTurnPlayerPosition()
+        //Init fields:
+        context.playerController.apply {
+            this.currentPlayerPosition = startPosition
+            this.currentPlayerId = players[startPosition].playerId
+            this.ablePlayers = players
+                .filterMap({ it.isAblePlayer(context) }, { it.playerId })
+                .toMutableList()
+
+        }
+    }
+
+    protected open fun fillStorage(context: BGameContext) {
+        val storage = context.storage
+        //Player:
+        this.getPlayers(context).forEach { player ->
+            storage.addObject(player)
+        }
+        //Adjutant:
+        this.getAdjutants(context).forEach { adjutant ->
+            storage.addObject(adjutant)
+        }
+        //Unit:
+        this.getUnits(context).forEach { unit ->
+            storage.addObject(unit)
+        }
+    }
+
+    /**
      * 2.) Fills player table.
      */
 
-    abstract fun getPlayers(context: BGameContext): List<BPlayer>
+    protected abstract fun getPlayers(context: BGameContext): List<BPlayer>
 
     /**
      * 3.) Fills adjutant table.
      */
 
-    abstract fun getAdjutants(context: BGameContext): List<BAdjutant>
+    protected abstract fun getAdjutants(context: BGameContext): List<BAdjutant>
 
     /**
      * 4.) Fills unit table when player table is ready.
      */
 
-    abstract fun getUnits(context: BGameContext): List<BUnit>
+    protected abstract fun getUnits(context: BGameContext): List<BUnit>
 
     /**
      * 5.) Invokes when player table is ready.
      */
 
-    abstract val startTurnPlayerPosition: Int
+    protected abstract fun getStartTurnPlayerPosition(): Int
 }

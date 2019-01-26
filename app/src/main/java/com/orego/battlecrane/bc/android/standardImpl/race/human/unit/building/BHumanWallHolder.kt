@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
+import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanWall
@@ -21,7 +21,7 @@ class BHumanWallHolder private constructor(uiGameContext: BUiGameContext, overri
 
     init {
         this.unitView.setOnClickListener {
-            uiGameContext.clickController.pushClickMode(ClickMode())
+            uiGameContext.uiClickController.pushClickMode(UiClickMode())
         }
     }
 
@@ -34,13 +34,13 @@ class BHumanWallHolder private constructor(uiGameContext: BUiGameContext, overri
      * Click mode.
      */
 
-    inner class ClickMode : BUnitHolder.ClickMode(this) {
+    inner class UiClickMode : BUnitHolder.UiClickMode(this) {
 
-        override fun onStart() {
+        override fun onStartClickMode() {
             println("Show description!!!")
         }
 
-        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode.also { it.onStartClickMode() }
     }
 
     /**

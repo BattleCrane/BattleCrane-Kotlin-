@@ -5,8 +5,8 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
-import com.orego.battlecrane.bc.android.api.context.heap.BUnitHolderHeap
+import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
+import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
@@ -28,7 +28,7 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
     val holder: BHumanFactoryHolder
 ) : BNode(uiGameContext.gameContext) {
 
-    private val unitMap = this.context.storage.getHeap(BUnitHolderHeap::class.java).objectMap
+    private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
 
     /**
      * ImageView.
@@ -62,7 +62,7 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.uiGameContext.clickController.pushClickMode(ClickMode())
+            this.uiGameContext.uiClickController.pushClickMode(UiClickMode())
 
 //            this.refreshActions()
 //            this.holder.showDescription(this.uiGameContext)
@@ -84,7 +84,7 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
         if (factory.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Produce.TANK, ProduceTankClickMode())
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Produce.TANK, ProduceTankUiClickMode())
             )
             var x = 0
             var y = 0
@@ -113,25 +113,25 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
      * Click mode.
      */
 
-    private inner class ClickMode : BUnitHolder.ClickMode(this.holder) {
+    private inner class UiClickMode : BUnitHolder.UiClickMode(this.holder) {
 
-        override fun onStart() {
+        override fun onStartClickMode() {
             this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.refreshActions()
             this.unitHolder.showDescription(this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.uiGameContext)
         }
 
-        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode.also { it.onStartClickMode() }
     }
 
-    private inner class ProduceTankClickMode : BClickMode {
+    private inner class ProduceTankUiClickMode : BUiClickMode {
 
         private val unit = this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.holder.item
 
         private val gameContext: BGameContext = this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.context
 
-        override fun onNext(nextClickMode: BClickMode): BClickMode? {
-            if (nextClickMode is BUnitHolder.ClickMode) {
-                val clickedUnit = nextClickMode.unitHolder.item
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
+            if (nextUiClickMode is BUnitHolder.UiClickMode) {
+                val clickedUnit = nextUiClickMode.unitHolder.item
                 if (clickedUnit is BEmptyField) {
                     val event = BSkirmishHumanFactoryOnProduceActionTrigger.Event(
                         this.unit.producableId,

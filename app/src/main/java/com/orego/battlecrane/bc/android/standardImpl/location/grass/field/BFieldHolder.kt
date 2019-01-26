@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.standardImpl.location.grass.field
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.clickController.BClickMode
+import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.BGrassField
 
@@ -14,8 +14,8 @@ abstract class BFieldHolder(uiGameContext: BUiGameContext, item: BGrassField) :
      * Click mode.
      */
 
-    inner class ClickMode : BUnitHolder.ClickMode(this) {
+    inner class UiClickMode : BUnitHolder.UiClickMode(this) {
 
-        override fun onNext(nextClickMode: BClickMode) = nextClickMode
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode
     }
 }

@@ -23,7 +23,7 @@ class BEmptyGrassFieldHolder(uiGameContext: BUiGameContext, override val item: B
 
     init {
         this.unitView.setOnClickListener {
-            uiGameContext.clickController.pushClickMode(ClickMode())
+            uiGameContext.uiClickController.pushClickMode(UiClickMode())
         }
     }
 
