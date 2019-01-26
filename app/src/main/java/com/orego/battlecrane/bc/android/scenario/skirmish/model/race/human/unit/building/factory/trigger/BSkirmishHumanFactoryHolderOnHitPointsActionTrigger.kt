@@ -22,8 +22,8 @@ class BSkirmishHumanFactoryHolderOnHitPointsActionTrigger private constructor(
         if (event is BOnHitPointsActionPipe.Event
             && event.hitPointableId == factory.hitPointableId
         ) {
-            if (factory.currentHitPoints > 0) {
-                this.uiGameContext.uiTaskManager.addTask {
+            this.uiGameContext.uiTaskManager.addTask {
+                if (factory.currentHitPoints > 0) {
                     val image = this.holder.unitView
                     val applicationContext = this.uiGameContext.uiProvider.applicationContext
                     image.setImageByAssets(applicationContext, this.holder.getItemPath())

@@ -67,8 +67,10 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.refreshActions()
-            this.holder.showDescription(this.uiGameContext)
+            this.uiGameContext.clickController.pushClickMode(ClickMode())
+
+            //            this.refreshActions()
+//            this.holder.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -153,19 +155,21 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
 
     override fun intoPipe() = Pipe()
 
-    override fun isFinished(): Boolean {
-        println("CHECKED GENERATOR")
-        if (!this.unitMap.containsKey(this.holder.uiUnitId)) {
-            println("REMOVED GENERATOR")
-            this.uiGameContext.uiProvider.mapConstraintLayout.removeView(this.isEnableImageView)
-            return true
-        }
-        return false
-    }
+    override fun isFinished() = !this.unitMap.containsKey(this.holder.uiUnitId)
 
     /**
      * Click mode.
      */
+
+    private inner class ClickMode : BUnitHolder.ClickMode(this.holder) {
+
+        override fun onStart() {
+            this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.refreshActions()
+            this.unitHolder.showDescription(this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.uiGameContext)
+        }
+
+        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+    }
 
     private abstract inner class BuildClickMode : BClickMode {
 

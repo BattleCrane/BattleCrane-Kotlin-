@@ -8,7 +8,7 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
  * Handles game events.
  */
 
-abstract class BNode(protected val context: BGameContext) {
+abstract class BNode(val context: BGameContext) {
 
     /**
      * Node.

@@ -61,8 +61,10 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.refreshActions()
-            this.holder.showDescription(this.uiGameContext)
+            this.uiGameContext.clickController.pushClickMode(AttackClickMode())
+
+//            this.refreshActions()
+//            this.holder.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -82,7 +84,7 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
             //Create images:
             this.actionImageViewSet.add(
                 //TODO: ADD ATTACK BUTTON!
-                BToolBuilder.build(this.uiGameContext, BCommonPaths.Action.ATTACK, ClickMode())
+                BToolBuilder.build(this.uiGameContext, BCommonPaths.Action.ATTACK, AttackClickMode())
             )
             var x = 0
             var y = 0
@@ -111,7 +113,17 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
      * Click mode.
      */
 
-    private inner class ClickMode : BClickMode {
+    private inner class ClickMode : BUnitHolder.ClickMode(this.holder) {
+
+        override fun onStart() {
+            this@BSkirmishHumanTankHolderOnAttackEnableTrigger.refreshActions()
+            this.unitHolder.showDescription(this@BSkirmishHumanTankHolderOnAttackEnableTrigger.uiGameContext)
+        }
+
+        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+    }
+
+    private inner class AttackClickMode : BClickMode {
 
         private val unit = this@BSkirmishHumanTankHolderOnAttackEnableTrigger.holder.item
 

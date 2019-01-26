@@ -30,7 +30,6 @@ class BHumanBarracksHolder private constructor(uiGameContext: BUiGameContext, ov
                 "${COLOR_MAP[this.item.playerId]}/" +
                 "${this.item.currentLevel}_${this.item.currentHitPoints}.png"
 
-
     /**
      * Click mode.
      */

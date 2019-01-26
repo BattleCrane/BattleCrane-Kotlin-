@@ -62,8 +62,10 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.refreshActions()
-            this.holder.showDescription(this.uiGameContext)
+            this.uiGameContext.clickController.pushClickMode(ClickMode())
+
+//            this.refreshActions()
+//            this.holder.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -82,7 +84,7 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
         if (factory.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Produce.TANK, ClickMode())
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Produce.TANK, ProduceTankClickMode())
             )
             var x = 0
             var y = 0
@@ -111,7 +113,17 @@ class BSkirmishHumanFactoryHolderOnProduceEnableTrigger private constructor(
      * Click mode.
      */
 
-    private inner class ClickMode : BClickMode {
+    private inner class ClickMode : BUnitHolder.ClickMode(this.holder) {
+
+        override fun onStart() {
+            this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.refreshActions()
+            this.unitHolder.showDescription(this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.uiGameContext)
+        }
+
+        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+    }
+
+    private inner class ProduceTankClickMode : BClickMode {
 
         private val unit = this@BSkirmishHumanFactoryHolderOnProduceEnableTrigger.holder.item
 

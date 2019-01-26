@@ -3,6 +3,7 @@ package com.orego.battlecrane.bc.android.scenario.skirmish
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.scenario.BUiGameScenario
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BRacePlugin
+import com.orego.battlecrane.bc.android.api.util.trigger.BOnUiTurnTrigger
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.BSkirmishGrassLocationPlugin
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.trigger.BSkirmishDestroyedGrassFieldHolderOnCreateTrigger
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.trigger.BSkirmishEmptyGrassFieldHolderOnCreateTrigger
@@ -21,6 +22,7 @@ class BUiSkirmishScenario : BUiGameScenario() {
         BSkirmishGrassLocationPlugin()
 
     override fun install(uiGameContext: BUiGameContext) {
+        BOnUiTurnTrigger.connect(uiGameContext)
         BSkirmishDestroyedGrassFieldHolderOnCreateTrigger.connect(uiGameContext)
         BSkirmishEmptyGrassFieldHolderOnCreateTrigger.connect(uiGameContext)
     }

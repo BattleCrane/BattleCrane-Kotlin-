@@ -3,7 +3,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:id="@+id/fragment_battle_root">
+        android:layout_height="match_parent" android:id="@+id/fragment_battle_root"
+>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -81,29 +82,7 @@
             app:layout_constraintStart_toEndOf="@+id/fragment_battle_left_constraint_layout"
             app:layout_constraintTop_toBottomOf="@+id/fragment_battle_map_constraint_layout"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" android:id="@+id/fragment_battle_bonus_constraint_layout">
-
-        <TextView
-                android:text="Reinforcements +"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/fragment_battle_bonus_text_view"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" android:textSize="18sp"
-                android:layout_marginStart="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/fragment_battle_bonus_cont_text_view"
-        />
-        <TextView
-                android:text="12"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/fragment_battle_bonus_cont_text_view"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/fragment_battle_bonus_text_view"
-                android:layout_marginEnd="16dp"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginEnd="16dp" android:id="@+id/fragment_battle_bonus_constraint_layout"/>
 
     <ImageView
             android:layout_width="wrap_content"
@@ -123,19 +102,20 @@
                                                        app:layout_constraintTop_toTopOf="parent"
                                                        app:layout_constraintStart_toStartOf="parent"
                                                        app:layout_constraintEnd_toEndOf="parent"
-                                                       android:background="@android:color/white"
-                                                       android:visibility="visible">
+                                                       android:visibility="visible"
+                                                       android:background="@android:color/background_light">
 
 
         <ProgressBar
-                style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/fragment_battle_loading_progress_bar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:progressBackgroundTintMode="screen"
+                android:indeterminateTint="@color/bc_style"/>
         <TextView
                 android:text="@string/fragment_battle_loading_text_view"
                 android:layout_width="wrap_content"
@@ -145,7 +125,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="1.0"
-                android:gravity="center_horizontal"/>
+                android:gravity="center_horizontal" android:textColor="@color/bc_style"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

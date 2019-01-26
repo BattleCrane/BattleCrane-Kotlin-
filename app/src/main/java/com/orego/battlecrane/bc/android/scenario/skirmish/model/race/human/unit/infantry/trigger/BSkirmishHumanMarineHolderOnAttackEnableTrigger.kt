@@ -61,8 +61,10 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.refreshActions()
-            this.holder.showDescription(this.uiGameContext)
+            this.uiGameContext.clickController.pushClickMode(ClickMode())
+
+//            this.refreshActions()
+//            this.holder.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -81,7 +83,7 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
         if (marine.isAttackEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BCommonPaths.Action.ATTACK, ClickMode())
+                BToolBuilder.build(this.uiGameContext, BCommonPaths.Action.ATTACK, AttackClickMode())
             )
             var x = 0
             var y = 0
@@ -110,7 +112,17 @@ class BSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
      * Click mode.
      */
 
-    private inner class ClickMode : BClickMode {
+    private inner class ClickMode : BUnitHolder.ClickMode(this.holder) {
+
+        override fun onStart() {
+            this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.refreshActions()
+            this.unitHolder.showDescription(this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.uiGameContext)
+        }
+
+        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+    }
+
+    private inner class AttackClickMode : BClickMode {
 
         private val unit = this@BSkirmishHumanMarineHolderOnAttackEnableTrigger.holder.item
 

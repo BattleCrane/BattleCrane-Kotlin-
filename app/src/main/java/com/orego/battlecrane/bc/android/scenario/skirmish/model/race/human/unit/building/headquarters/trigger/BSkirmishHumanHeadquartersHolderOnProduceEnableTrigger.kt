@@ -67,8 +67,10 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         imageView.layoutParams = this.holder.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener {
-            this.refreshActions()
-            this.holder.showDescription(this.uiGameContext)
+            this.uiGameContext.clickController.pushClickMode(ClickMode())
+
+//            this.refreshActions()
+//            this.holder.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -158,6 +160,16 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
     /**
      * Click mode.
      */
+
+    private inner class ClickMode : BUnitHolder.ClickMode(this.holder) {
+
+        override fun onStart() {
+            this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.refreshActions()
+            this.unitHolder.showDescription(this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.uiGameContext)
+        }
+
+        override fun onNext(nextClickMode: BClickMode) = nextClickMode.also { it.onStart() }
+    }
 
     private abstract inner class BuildClickMode : BClickMode {
 

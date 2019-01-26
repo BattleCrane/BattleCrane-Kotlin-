@@ -79,7 +79,9 @@ class BSkirmishHumanMarineOnAttackActionTrigger private constructor(context: BGa
         }
 
         override fun isEnable(context: BGameContext): Boolean {
-            if (super.isEnable(context)) {
+            val isEna = super.isEnable(context)
+            println("MARINE ENA $isEna")
+            if (isEna) {
                 val storage = context.storage
                 val marine = storage.getHeap(BAttackableHeap::class.java)[this.attackableId] as BHumanMarine
                 val player = storage.getHeap(BPlayerHeap::class.java)[marine.playerId]
