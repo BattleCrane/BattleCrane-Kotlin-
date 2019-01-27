@@ -18,8 +18,8 @@ import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
 import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
 import com.orego.battlecrane.bc.engine.api.model.property.BProducable
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
-import com.orego.battlecrane.bc.engine.api.scenario.configuration.location.BLocationConfiguration
-import com.orego.battlecrane.bc.engine.api.scenario.configuration.race.BRaceConfiguration
+import com.orego.battlecrane.bc.engine.api.scenario.plugin.implementation.location.BLocationPlugin
+import com.orego.battlecrane.bc.engine.api.scenario.plugin.implementation.race.BRacePlugin
 
 /**
  * Initializes a game step by step.
@@ -140,9 +140,9 @@ abstract class BGameScenario {
 
     protected abstract fun getPlayers(context: BGameContext): List<BPlayer>
 
-    protected abstract fun getRacePlugins(context: BGameContext): List<BRaceConfiguration>
+    protected abstract fun getRacePlugins(context: BGameContext): List<BRacePlugin>
 
-    protected abstract fun getLocationPlugin(context: BGameContext): BLocationConfiguration
+    protected abstract fun getLocationPlugin(context: BGameContext): BLocationPlugin
 
     protected abstract fun getUnits(context: BGameContext): List<BUnit>
 

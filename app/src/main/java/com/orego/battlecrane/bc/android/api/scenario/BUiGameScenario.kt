@@ -3,8 +3,8 @@ package com.orego.battlecrane.bc.android.api.scenario
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
-import com.orego.battlecrane.bc.android.api.scenario.plugin.BUiLocationPlugin
-import com.orego.battlecrane.bc.android.api.scenario.plugin.BUiRacePlugin
+import com.orego.battlecrane.bc.android.api.scenario.plugin.implementation.location.BUiLocationPlugin
+import com.orego.battlecrane.bc.android.api.scenario.plugin.implementation.race.BUiRacePlugin
 import com.orego.battlecrane.bc.android.api.util.trigger.base.BUiBaseOnTurnTrigger
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.generator.BContextGenerator

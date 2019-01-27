@@ -32,7 +32,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
 
     abstract fun getItemPath(): String
 
-    open fun onDraw(uiGameContext: BUiGameContext): View {
+    protected open fun onDraw(uiGameContext: BUiGameContext): View {
         val uiProvider = uiGameContext.uiProvider
         val applicationContext = uiProvider.applicationContext
         val constraintLayout = uiProvider.mapConstraintLayout

@@ -22,11 +22,16 @@ abstract class BUiItem<T> protected constructor(open val item: T) {
         private val builderMap: MutableMap<Class<out T>, Builder<T>> = mutableMapOf()
 
         fun addBuilder(entry: Map.Entry<Class<out T>, Builder<T>>) {
-            this.builderMap[entry.key] = entry.value
+            val clazz = entry.key
+            if (!this.builderMap.containsKey(clazz)) {
+                this.builderMap[clazz] = entry.value
+            }
         }
 
         fun addBuilder(clazz: Class<out T>, builder: Builder<T>) {
-            this.builderMap[clazz] = builder
+            if (!this.builderMap.containsKey(clazz)) {
+                this.builderMap[clazz] = builder
+            }
         }
 
         open fun build(uiGameContext: BUiGameContext, item: T): BUiItem<T> {
