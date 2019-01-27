@@ -2,18 +2,20 @@ package com.orego.battlecrane.bc.android.api.context.clickController
 
 class BUiClickController {
 
-    var currentUiUiClickMode: BUiClickMode? = null
+    var currentUiClickMode: BUiClickMode? = null
 
-    fun pushClickMode(nextUiClickMode: BUiClickMode) {
-        if (this.currentUiUiClickMode == null) {
-            this.currentUiUiClickMode = nextUiClickMode
-            nextUiClickMode.onStartClickMode()
+    fun pushClickMode(nextUiClickMode: BUiClickMode?) {
+        val currentClickMode = this.currentUiClickMode
+        if (currentClickMode == null) {
+            this.currentUiClickMode = nextUiClickMode
+            nextUiClickMode?.onStartClickMode()
         } else {
-            this.currentUiUiClickMode = this.currentUiUiClickMode!!.onNextClickMode(nextUiClickMode)
+            this.currentUiClickMode = currentClickMode.onNextClickMode(nextUiClickMode)
         }
     }
 
-    fun forcePushClickMode(uiClickMode: BUiClickMode) {
-        this.currentUiUiClickMode = uiClickMode
+    fun forcePushClickMode(uiClickMode: BUiClickMode?) {
+        this.currentUiClickMode = uiClickMode
+        uiClickMode?.onStartClickMode()
     }
 }

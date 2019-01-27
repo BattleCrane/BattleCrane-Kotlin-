@@ -2,9 +2,22 @@ package com.orego.battlecrane.bc.android.api.model
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 
-abstract class BHolder<T>(open val item: T) {
+abstract class BUiItem<T> protected constructor(open val item: T) {
 
-    open class Factory<T : Any> {
+    /**
+     * Creates a item.
+     */
+
+    abstract class Builder<T> {
+
+        abstract fun build(uiGameContext: BUiGameContext, item: T): BUiItem<T>
+    }
+
+    /**
+     * Creates a item by builder map.
+     */
+
+    open class BUiItemFactory<T : Any> {
 
         private val builderMap: MutableMap<Class<out T>, Builder<T>> = mutableMapOf()
 
@@ -16,16 +29,11 @@ abstract class BHolder<T>(open val item: T) {
             this.builderMap[clazz] = builder
         }
 
-        fun build(uiGameContext: BUiGameContext, item: T): BHolder<T> {
+        open fun build(uiGameContext: BUiGameContext, item: T): BUiItem<T> {
             val builder = this.builderMap[item::class.java]!!
             val holder = builder.build(uiGameContext, item)
             uiGameContext.gameContext.storage.addObject(holder)
             return holder
         }
-    }
-
-    abstract class Builder<T> {
-
-        abstract fun build(uiGameContext: BUiGameContext, item: T): BHolder<T>
     }
 }

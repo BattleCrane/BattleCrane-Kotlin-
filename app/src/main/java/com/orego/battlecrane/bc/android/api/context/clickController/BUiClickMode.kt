@@ -12,6 +12,6 @@ interface BUiClickMode {
      * Handles next click controller.
      */
 
-    fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? =
-        nextUiClickMode.also { it.onStartClickMode() }
+    fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? =
+        nextUiClickMode.also { it?.onStartClickMode() }
 }

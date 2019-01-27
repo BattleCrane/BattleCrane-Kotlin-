@@ -8,9 +8,9 @@ import com.orego.battlecrane.bc.android.api.asset.BUiCommonPaths
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
-import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.vehicle.BHumanTankHolder
+import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.vehicle.BUiHumanTank
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
@@ -24,7 +24,7 @@ import org.intellij.lang.annotations.MagicConstant
 
 class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
     private val uiGameContext: BUiGameContext,
-    val holder: BHumanTankHolder
+    val holder: BUiHumanTank
 ) : BNode(uiGameContext.gameContext) {
 
     private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
@@ -64,7 +64,7 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
             this.uiGameContext.uiClickController.pushClickMode(AttackUiClickMode())
 
 //            this.refreshActions()
-//            this.holder.showDescription(this.uiGameContext)
+//            this.unit.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -113,11 +113,11 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
      * Click mode.
      */
 
-    private inner class UiClickMode : BUnitHolder.UiClickMode(this.holder) {
+    private inner class UiClickMode : BUiUnit.UiClickMode(this.holder) {
 
         override fun onStartClickMode() {
             this@BSkirmishHumanTankHolderOnAttackEnableTrigger.refreshActions()
-            this.unitHolder.showDescription(this@BSkirmishHumanTankHolderOnAttackEnableTrigger.uiGameContext)
+            this.unit.showDescription(this@BSkirmishHumanTankHolderOnAttackEnableTrigger.uiGameContext)
         }
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode.also { it.onStartClickMode() }
@@ -130,8 +130,8 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
         private val gameContext: BGameContext = this@BSkirmishHumanTankHolderOnAttackEnableTrigger.context
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
-            if (nextUiClickMode is BUnitHolder.UiClickMode) {
-                val clickedUnit = nextUiClickMode.unitHolder.item
+            if (nextUiClickMode is BUiUnit.UiClickMode) {
+                val clickedUnit = nextUiClickMode.unit.item
                 val event = BSkirmishHumanTankOnAttackActionTrigger.Event(
                     this.unit.attackableId,
                     this.unit.x,
@@ -168,7 +168,7 @@ class BSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
 
         private const val COLUMN_COUNT = 2
 
-        fun connect(uiGameContext: BUiGameContext, holder: BHumanTankHolder) {
+        fun connect(uiGameContext: BUiGameContext, holder: BUiHumanTank) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
                 node is BOnAttackEnableTrigger && node.attackable == holder.item
             }

@@ -2,17 +2,16 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanBarracksHolder
+import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanBarracks
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.util.trigger.hitPointable.BOnHitPointsActionTrigger
-import com.orego.battlecrane.ui.util.setImageByAssets
 
 class BSkirmishHumanBarracksHolderOnLevelActionTrigger private constructor(
     val uiGameContext: BUiGameContext,
-    var holder: BHumanBarracksHolder
+    var holder: BUiHumanBarracks
 ) : BNode(uiGameContext.gameContext) {
 
     private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
@@ -50,7 +49,7 @@ class BSkirmishHumanBarracksHolderOnLevelActionTrigger private constructor(
 
     companion object {
 
-        fun connect(uiGameContext: BUiGameContext, holder: BHumanBarracksHolder) {
+        fun connect(uiGameContext: BUiGameContext, holder: BUiHumanBarracks) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
                 node is BOnHitPointsActionTrigger && node.hitPointable == holder.item
             }

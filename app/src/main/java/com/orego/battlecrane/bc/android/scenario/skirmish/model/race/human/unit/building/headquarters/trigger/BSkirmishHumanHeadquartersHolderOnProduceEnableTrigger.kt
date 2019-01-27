@@ -7,10 +7,10 @@ import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
-import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanHeadquartersHolder
+import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanHeadquarters
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
@@ -30,7 +30,7 @@ import org.intellij.lang.annotations.MagicConstant
 
 class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor(
     private val uiGameContext: BUiGameContext,
-    val holder: BHumanHeadquartersHolder
+    val holder: BUiHumanHeadquarters
 ) : BNode(uiGameContext.gameContext) {
 
     private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
@@ -70,7 +70,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
             this.uiGameContext.uiClickController.pushClickMode(UiClickMode())
 
 //            this.refreshActions()
-//            this.holder.showDescription(this.uiGameContext)
+//            this.unit.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -161,11 +161,11 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
      * Click mode.
      */
 
-    private inner class UiClickMode : BUnitHolder.UiClickMode(this.holder) {
+    private inner class UiClickMode : BUiUnit.UiClickMode(this.holder) {
 
         override fun onStartClickMode() {
             this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.refreshActions()
-            this.unitHolder.showDescription(this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.uiGameContext)
+            this.unit.showDescription(this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.uiGameContext)
         }
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode.also { it.onStartClickMode() }
@@ -180,8 +180,8 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
         protected abstract fun createEvent(x: Int, y: Int): BHumanConstructBuildingEvent
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
-            if (nextUiClickMode is BUnitHolder.UiClickMode) {
-                val clickedUnit = nextUiClickMode.unitHolder.item
+            if (nextUiClickMode is BUiUnit.UiClickMode) {
+                val clickedUnit = nextUiClickMode.unit.item
                 if (clickedUnit is BEmptyField) {
                     val event = this.createEvent(clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.unit.playerId)
@@ -206,8 +206,8 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
             this@BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger.uiGameContext.uiTaskManager
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
-            if (nextUiClickMode is BUnitHolder.UiClickMode) {
-                val clickedUnit = nextUiClickMode.unitHolder.item
+            if (nextUiClickMode is BUiUnit.UiClickMode) {
+                val clickedUnit = nextUiClickMode.unit.item
                 if (clickedUnit is BLevelable) {
                     val event = BHumanUpgradeBuildingEvent(this.unit.producableId, clickedUnit.levelableId)
                     val isSuccessful = event.isEnable(this.gameContext)
@@ -242,7 +242,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
 
         private const val COLUMN_COUNT = 2
 
-        fun connect(uiGameContext: BUiGameContext, holder: BHumanHeadquartersHolder) {
+        fun connect(uiGameContext: BUiGameContext, holder: BUiHumanHeadquarters) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
                 node is BOnProduceEnableTrigger && node.producable == holder.item
             }

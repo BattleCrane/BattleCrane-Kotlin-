@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.android.api.context
 
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickController
 import com.orego.battlecrane.bc.android.api.context.uiTaskManager.BUiTaskManager
-import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
@@ -13,23 +13,11 @@ class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragm
 
     val uiClickController = BUiClickController()
 
-    val uiUnitFactory: BUnitHolder.Factory = BUnitHolder.Factory()
-
-    val uiAdjutantFactory: BAdjutantHolder.Factory = BAdjutantHolder.Factory()
+    val uiUnitFactory: BUiUnit.Factory = BUiUnit.Factory()
 
     fun startGame() {
-        this.instantiateUiAdjutants()
         this.instantiateUiUnits()
         this.gameContext.startGame()
-    }
-
-    private fun instantiateUiAdjutants() {
-        val storage = this.gameContext.storage
-        val adjutants = storage.getHeap(BAdjutantHeap::class.java).getObjectList()
-        for (adjutant in adjutants) {
-            val uiAdjutant = this.uiAdjutantFactory.build(this, adjutant)
-            storage.addObject(uiAdjutant)
-        }
     }
 
     private fun instantiateUiUnits() {

@@ -2,17 +2,16 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
-import com.orego.battlecrane.bc.android.standardImpl.location.grass.field.empty.BEmptyGrassFieldHolder
+import com.orego.battlecrane.bc.android.standardImpl.location.grass.field.empty.BUiEmptyGrassField
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onOwnerChanged.BOnOwnerChangedUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnOwnerChangedUnitTrigger
-import com.orego.battlecrane.ui.util.setImageByAssets
 
 class BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger private constructor(
     val uiGameContext: BUiGameContext,
-    val holder: BEmptyGrassFieldHolder
+    val holder: BUiEmptyGrassField
 ) : BNode(uiGameContext.gameContext) {
 
     private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
@@ -45,7 +44,7 @@ class BSkirmishEmptyGrassFieldHolderOnOwnerChangedTrigger private constructor(
 
     companion object {
 
-        fun connect(uiGameContext: BUiGameContext, holder: BEmptyGrassFieldHolder) {
+        fun connect(uiGameContext: BUiGameContext, holder: BUiEmptyGrassField) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
                 node is BOnOwnerChangedUnitTrigger && node.unit == holder.item
             }

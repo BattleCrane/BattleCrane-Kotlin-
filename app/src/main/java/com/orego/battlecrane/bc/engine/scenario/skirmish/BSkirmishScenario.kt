@@ -6,12 +6,12 @@ import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.B
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.engine.api.scenario.plugin.race.BRacePlugin
+import com.orego.battlecrane.bc.engine.api.scenario.configuration.race.BRaceConfiguration
 import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BObservePlayerZonesOnStartTurnTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.field.BSkirmishEmptyGrassFieldBuilder
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.plugin.BSkirmishLocationGrassPlugin
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.plugin.BSkirmishGrassConfiguration
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.player.BStandardSkirmishPlayerBuilder
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.plugin.BSkirmishHumanPlugin
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.plugin.BSkirmishHumanConfiguration
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.headquarters.builder.BSkirmishHumanHeadquartersBuilder
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.wall.builder.BSkirmishHumanWallBuilder
 import java.util.*
@@ -48,15 +48,15 @@ class BSkirmishScenario : BGameScenario() {
             1
         }
 
-    override fun getLocationPlugin(context: BGameContext) = BSkirmishLocationGrassPlugin()
+    override fun getLocationPlugin(context: BGameContext) = BSkirmishGrassConfiguration()
 
-    override fun getRacePlugins(context: BGameContext): List<BRacePlugin> {
-        val pluginList = mutableListOf<BRacePlugin>()
+    override fun getRacePlugins(context: BGameContext): List<BRaceConfiguration> {
+        val pluginList = mutableListOf<BRaceConfiguration>()
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()
         if (players.size == PLAYER_COUNT) {
-            pluginList.add(BSkirmishHumanPlugin(players[0].playerId))
-            pluginList.add(BSkirmishHumanPlugin(players[1].playerId))
+            pluginList.add(BSkirmishHumanConfiguration(players[0].playerId))
+            pluginList.add(BSkirmishHumanConfiguration(players[1].playerId))
             return pluginList
         } else {
             throw IllegalArgumentException("Standard skirmish scenario supports $PLAYER_COUNT players!")

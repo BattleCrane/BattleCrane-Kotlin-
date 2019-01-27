@@ -7,10 +7,10 @@ import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
-import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanBarracksHolder
+import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanBarracks
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
@@ -25,7 +25,7 @@ import org.intellij.lang.annotations.MagicConstant
 
 class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
     private val uiGameContext: BUiGameContext,
-    val holder: BHumanBarracksHolder
+    val holder: BUiHumanBarracks
 ) : BNode(uiGameContext.gameContext) {
 
     private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
@@ -64,7 +64,7 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
         imageView.setOnClickListener {
             this.uiGameContext.uiClickController.pushClickMode(UiClickMode())
 //            this.refreshActions()
-//            this.holder.showDescription(this.uiGameContext)
+//            this.unit.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -112,11 +112,11 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
      * Click mode.
      */
 
-    private inner class UiClickMode : BUnitHolder.UiClickMode(this.holder) {
+    private inner class UiClickMode : BUiUnit.UiClickMode(this.holder) {
 
         override fun onStartClickMode() {
             this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.refreshActions()
-            this.unitHolder.showDescription(this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.uiGameContext)
+            this.unit.showDescription(this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.uiGameContext)
         }
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode.also { it.onStartClickMode() }
@@ -129,8 +129,8 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
         private val gameContext: BGameContext = this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.context
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
-            if (nextUiClickMode is BUnitHolder.UiClickMode) {
-                val clickedUnit = nextUiClickMode.unitHolder.item
+            if (nextUiClickMode is BUiUnit.UiClickMode) {
+                val clickedUnit = nextUiClickMode.unit.item
                 if (clickedUnit is BEmptyField) {
                     val event = BSkirmishHumanBarracksOnProduceActionTrigger.Event(this.unit.producableId, clickedUnit.x, clickedUnit.y)
                     val isSuccessful = event.isEnable(this.gameContext, this.unit)
@@ -163,7 +163,7 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
 
         private const val COLUMN_COUNT = 2
 
-        fun connect(uiGameContext: BUiGameContext, holder: BHumanBarracksHolder) {
+        fun connect(uiGameContext: BUiGameContext, holder: BUiHumanBarracks) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
                 node is BOnProduceEnableTrigger && node.producable == holder.item
             }

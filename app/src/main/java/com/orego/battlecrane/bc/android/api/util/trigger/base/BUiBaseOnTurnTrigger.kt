@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.android.api.util.trigger
+package com.orego.battlecrane.bc.android.api.util.trigger.base
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.BTurnNode
@@ -13,7 +13,7 @@ class BUiBaseOnTurnTrigger private constructor(private val uiGameContext: BUiGam
         if (event is BOnTurnFinishedPipe.Event) {
             this.uiGameContext.apply {
                 this.uiTaskManager.addTask {
-                    this.uiClickController.currentUiUiClickMode = null
+                    this.uiClickController.currentUiClickMode = null
                     this.uiProvider.apply {
                         this.rightConstraintLayout.removeAllViews()
                         this.leftConstraintLayout.removeAllViews()

@@ -1,14 +1,14 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.wall.builder
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.util.trigger.BOnDestroyUnitHolderTrigger
+import com.orego.battlecrane.bc.android.api.util.trigger.unit.BOnDestroyUnitHolderTrigger
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.wall.trigger.BSkirmishHumanWallHolderOnHitPointsActionTrigger
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BHumanWallHolder
+import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanWall
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 
-class BSkirmishHumanWallHolderBuilder : BHumanWallHolder.Builder() {
+class BSkirmishHumanWallHolderBuilder : BUiHumanWall.Builder() {
 
-    override fun build(uiGameContext: BUiGameContext, item: BUnit): BHumanWallHolder {
+    override fun build(uiGameContext: BUiGameContext, item: BUnit): BUiHumanWall {
         val holder = super.build(uiGameContext, item)
         BOnDestroyUnitHolderTrigger.connect(uiGameContext, holder)
         BSkirmishHumanWallHolderOnHitPointsActionTrigger.connect(uiGameContext, holder)

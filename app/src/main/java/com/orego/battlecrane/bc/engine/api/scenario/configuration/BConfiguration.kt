@@ -1,8 +1,8 @@
-package com.orego.battlecrane.bc.engine.api.scenario.plugin
+package com.orego.battlecrane.bc.engine.api.scenario.configuration
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 
-interface BPlugin {
+interface BConfiguration {
 
     fun install(context: BGameContext)
 }
