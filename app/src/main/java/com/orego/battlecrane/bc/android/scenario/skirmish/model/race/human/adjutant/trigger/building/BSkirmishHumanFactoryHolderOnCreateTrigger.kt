@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.android.standardImpl.race.human.adjutant.BHumanA
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.building.BSkirmishHumanFactoryOnCreateTrigger
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.building.BSkirmishHumanFactoryOnCreateTrigger
 
 class BSkirmishHumanFactoryHolderOnCreateTrigger private constructor(
     private val uiGameContext: BUiGameContext, val holder: BHumanAdjutantHolder

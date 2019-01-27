@@ -3,9 +3,9 @@ package com.orego.battlecrane.bc.engine.api.util.trigger.turn
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.BTurnNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAttackableHeap
 import com.orego.battlecrane.bc.engine.api.model.property.BAttackable
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BAttackEnableOnTurnTrigger private constructor(context: BGameContext, var attackable: BAttackable) :
     BOnTurnTrigger(context) {
@@ -44,12 +44,7 @@ class BAttackEnableOnTurnTrigger private constructor(context: BGameContext, var 
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val attackable = this@BAttackEnableOnTurnTrigger.attackable
-
-        override fun isFinished() = this@BAttackEnableOnTurnTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 

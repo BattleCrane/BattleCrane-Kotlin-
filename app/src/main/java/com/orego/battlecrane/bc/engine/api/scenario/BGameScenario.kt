@@ -18,6 +18,7 @@ import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
 import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
 import com.orego.battlecrane.bc.engine.api.model.property.BProducable
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.api.scenario.plugin.location.BLocationPlugin
 import com.orego.battlecrane.bc.engine.api.scenario.plugin.race.BRacePlugin
 
 /**
@@ -106,7 +107,8 @@ abstract class BGameScenario {
     }
 
     protected open fun installPlugins(context: BGameContext) {
-        this.getPlugins(context).forEach { plugin ->
+        this.getLocationPlugin(context).install(context)
+        this.getRacePlugins(context).forEach { plugin ->
             plugin.install(context)
         }
     }
@@ -138,7 +140,9 @@ abstract class BGameScenario {
 
     protected abstract fun getPlayers(context: BGameContext): List<BPlayer>
 
-    protected abstract fun getPlugins(context: BGameContext): List<BRacePlugin>
+    protected abstract fun getRacePlugins(context: BGameContext): List<BRacePlugin>
+
+    protected abstract fun getLocationPlugin(context: BGameContext): BLocationPlugin
 
     protected abstract fun getUnits(context: BGameContext): List<BUnit>
 

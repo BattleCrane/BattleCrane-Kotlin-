@@ -3,10 +3,10 @@ package com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.node.BOnHitPointsActionNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.api.util.trigger.hitPointable.BOnHitPointsActionTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.trigger.BSkirmishDestroyedGrassFieldOnCreateTrigger
 
@@ -34,12 +34,7 @@ class BSkirmishOnHitPointsActionTrigger private constructor(context: BGameContex
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        var hitPointable = this@BSkirmishOnHitPointsActionTrigger.hitPointable
-
-        override fun isFinished() = this@BSkirmishOnHitPointsActionTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 

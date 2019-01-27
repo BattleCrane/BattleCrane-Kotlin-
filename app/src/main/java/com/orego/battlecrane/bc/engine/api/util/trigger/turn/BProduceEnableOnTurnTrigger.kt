@@ -3,9 +3,9 @@ package com.orego.battlecrane.bc.engine.api.util.trigger.turn
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.BTurnNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BProducableHeap
 import com.orego.battlecrane.bc.engine.api.model.property.BProducable
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BProduceEnableOnTurnTrigger private constructor(context: BGameContext, var producable: BProducable) :
     BOnTurnTrigger(context) {
@@ -44,12 +44,7 @@ class BProduceEnableOnTurnTrigger private constructor(context: BGameContext, var
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val producable = this@BProduceEnableOnTurnTrigger.producable
-
-        override fun isFinished() = this@BProduceEnableOnTurnTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 

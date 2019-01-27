@@ -7,7 +7,7 @@ import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnCreateUnitTrigge
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.field.BSkirmishDestroyedGrassFieldBuilder
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.BGrassField
 
-class BSkirmishDestroyedGrassFieldOnCreateTrigger(context: BGameContext) :
+class BSkirmishDestroyedGrassFieldOnCreateTrigger private constructor(context: BGameContext) :
     BOnCreateUnitTrigger(context, BPlayer.NEUTRAL_ID) {
 
     override fun handle(event: BEvent): BEvent? {
@@ -26,6 +26,20 @@ class BSkirmishDestroyedGrassFieldOnCreateTrigger(context: BGameContext) :
     inner class Pipe : BOnCreateUnitTrigger.Pipe()
 
     /**
+     * Event.
+     */
+
+    class Event(playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
+
+        override val height = BGrassField.HEIGHT
+
+        override val width = BGrassField.WIDTH
+
+        override fun createUnit(context: BGameContext) =
+            BSkirmishDestroyedGrassFieldBuilder().build(context, this.playerId, this.x, this.y)
+    }
+
+    /**
      * Static.
      */
 
@@ -38,25 +52,5 @@ class BSkirmishDestroyedGrassFieldOnCreateTrigger(context: BGameContext) :
                 )
             }
         }
-    }
-
-
-    /**
-     * Event.
-     */
-
-    class Event (playerId: Long, x: Int, y: Int) : BOnCreateUnitTrigger.Event(playerId, x, y) {
-
-        override val height = BGrassField.HEIGHT
-
-        override val width = BGrassField.WIDTH
-
-        override fun createUnit(context: BGameContext) =
-            BSkirmishDestroyedGrassFieldBuilder().build(
-                context,
-                this.playerId,
-                this.x,
-                this.y
-            )
     }
 }

@@ -3,8 +3,8 @@ package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.BTurnNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BOnTurnTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanHeadquarters
 
@@ -59,12 +59,7 @@ class BSkirmishHumanHeadquartersOnTurnTrigger private constructor(
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        var headquarters = this@BSkirmishHumanHeadquartersOnTurnTrigger.headquarters
-
-        override fun isFinished() = this@BSkirmishHumanHeadquartersOnTurnTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 

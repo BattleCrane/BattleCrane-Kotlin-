@@ -6,15 +6,15 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanUpgradeBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanGenerator
 
 class BSkirmishHumanGeneratorOnProduceActionTrigger private constructor(
     context: BGameContext,
-    var generator: BHumanGenerator
+    val generator: BHumanGenerator
 ) : BNode(context) {
 
     /**
@@ -61,12 +61,7 @@ class BSkirmishHumanGeneratorOnProduceActionTrigger private constructor(
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        var generator = this@BSkirmishHumanGeneratorOnProduceActionTrigger.generator
-
-        override fun isFinished() = this@BSkirmishHumanGeneratorOnProduceActionTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 

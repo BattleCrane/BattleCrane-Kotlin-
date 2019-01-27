@@ -6,16 +6,16 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.vehicle.BSkirmishHumanTankOnCreateTrigger
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.vehicle.BSkirmishHumanTankOnCreateTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanFactory
 
 class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
     context: BGameContext,
-    var factory: BHumanFactory
+    val factory: BHumanFactory
 ) : BNode(context) {
 
     /**
@@ -49,12 +49,7 @@ class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        var factory = this@BSkirmishHumanFactoryOnProduceActionTrigger.factory
-
-        override fun isFinished() = this@BSkirmishHumanFactoryOnProduceActionTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     /**
      * Event.

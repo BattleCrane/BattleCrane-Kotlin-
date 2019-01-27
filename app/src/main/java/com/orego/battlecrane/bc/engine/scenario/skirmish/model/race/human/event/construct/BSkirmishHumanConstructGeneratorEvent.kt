@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.building.BSkirmishHumanGeneratorOnCreateTrigger
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.building.BSkirmishHumanGeneratorOnCreateTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.utils.BSkirmishHumanRule.GENERATOR_LIMIT
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanGenerator

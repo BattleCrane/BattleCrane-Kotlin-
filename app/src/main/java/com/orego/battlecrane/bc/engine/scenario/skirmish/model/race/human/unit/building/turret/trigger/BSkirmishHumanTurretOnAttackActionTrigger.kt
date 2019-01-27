@@ -8,10 +8,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanTurret
 
 class BSkirmishHumanTurretOnAttackActionTrigger private constructor(context: BGameContext, var turret: BHumanTurret) :
@@ -35,12 +35,7 @@ class BSkirmishHumanTurretOnAttackActionTrigger private constructor(context: BGa
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        var turret = this@BSkirmishHumanTurretOnAttackActionTrigger.turret
-
-        override fun isFinished() = this@BSkirmishHumanTurretOnAttackActionTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     /**
      * Event.

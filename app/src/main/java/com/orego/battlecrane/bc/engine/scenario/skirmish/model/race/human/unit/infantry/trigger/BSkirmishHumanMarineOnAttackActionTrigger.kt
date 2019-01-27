@@ -5,12 +5,12 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAttackableHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BCreature
 import com.orego.battlecrane.bc.engine.api.util.geometry.BLineMatcher
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.BGrassField
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanLineAttackEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.infantry.implementation.BHumanMarine
@@ -42,12 +42,7 @@ class BSkirmishHumanMarineOnAttackActionTrigger private constructor(context: BGa
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        var marine = this@BSkirmishHumanMarineOnAttackActionTrigger.marine
-
-        override fun isFinished() = this@BSkirmishHumanMarineOnAttackActionTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     /**
      * Event.

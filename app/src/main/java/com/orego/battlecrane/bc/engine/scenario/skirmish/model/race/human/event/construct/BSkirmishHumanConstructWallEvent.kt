@@ -1,6 +1,6 @@
 package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct
 
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.building.BSkirmishHumanWallOnCreateTrigger
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.building.BSkirmishHumanWallOnCreateTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanWall
 

@@ -6,12 +6,12 @@ import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.B
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
+import com.orego.battlecrane.bc.engine.api.scenario.plugin.race.BRacePlugin
 import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BObservePlayerZonesOnStartTurnTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.field.BSkirmishEmptyGrassFieldBuilder
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.trigger.BSkirmishDestroyedGrassFieldOnCreateTrigger
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.trigger.BSkirmishEmptyGrassFieldOnCreateTrigger
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.plugin.BSkirmishLocationGrassPlugin
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.player.BStandardSkirmishPlayerBuilder
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.BSkirmishHumanAdjutantBuilder
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.plugin.BSkirmishHumanPlugin
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.headquarters.builder.BSkirmishHumanHeadquartersBuilder
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.wall.builder.BSkirmishHumanWallBuilder
 import java.util.*
@@ -23,17 +23,7 @@ class BSkirmishScenario : BGameScenario() {
         const val PLAYER_COUNT = 2
     }
 
-    override val startTurnPlayerPosition =
-        if (Random().nextBoolean()) {
-            0
-        } else {
-            1
-        }
-
-    override fun install(context: BGameContext) {
-        super.install(context)
-        BSkirmishEmptyGrassFieldOnCreateTrigger.connect(context)
-        BSkirmishDestroyedGrassFieldOnCreateTrigger.connect(context)
+    override fun installBaseTriggers(context: BGameContext) {
         BObservePlayerZonesOnStartTurnTrigger.connect(context)
     }
 
@@ -51,15 +41,23 @@ class BSkirmishScenario : BGameScenario() {
         return playerList
     }
 
-    override fun getPlugins(context: BGameContext): List<BAdjutant> {
-        val adjutantList = mutableListOf<BAdjutant>()
+    override fun getStartTurnPlayerPosition() =
+        if (Random().nextBoolean()) {
+            0
+        } else {
+            1
+        }
+
+    override fun getLocationPlugin(context: BGameContext) = BSkirmishLocationGrassPlugin()
+
+    override fun getRacePlugins(context: BGameContext): List<BRacePlugin> {
+        val pluginList = mutableListOf<BRacePlugin>()
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()
-        val builder = BSkirmishHumanAdjutantBuilder()
         if (players.size == PLAYER_COUNT) {
-            adjutantList.add(builder.build(context, players[0].playerId))
-            adjutantList.add(builder.build(context, players[1].playerId))
-            return adjutantList
+            pluginList.add(BSkirmishHumanPlugin(players[0].playerId))
+            pluginList.add(BSkirmishHumanPlugin(players[1].playerId))
+            return pluginList
         } else {
             throw IllegalArgumentException("Standard skirmish scenario supports $PLAYER_COUNT players!")
         }

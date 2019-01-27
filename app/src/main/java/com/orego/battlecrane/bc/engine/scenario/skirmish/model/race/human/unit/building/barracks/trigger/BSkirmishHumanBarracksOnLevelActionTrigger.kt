@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.node.BOnLevelActionNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.api.util.trigger.levelable.BOnLevelActionTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 
@@ -43,12 +43,7 @@ class BSkirmishHumanBarracksOnLevelActionTrigger private constructor(
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val barracks = this@BSkirmishHumanBarracksOnLevelActionTrigger.levelable
-
-        override fun isFinished() = this@BSkirmishHumanBarracksOnLevelActionTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 

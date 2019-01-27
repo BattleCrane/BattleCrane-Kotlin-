@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.building
+package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.building
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
@@ -47,7 +47,7 @@ class BSkirmishHumanTurretOnCreateTrigger private constructor(context: BGameCont
             val controller = context.mapController
             val pipeline = context.pipeline
             //Destroy previous unit:
-            val unitId = controller.getUnitIdByPosition(this.x, this.y)
+            val unitId = controller[this.x, this.y]
             pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId))
             //Create turret:
             val turret = this.createUnit(context)

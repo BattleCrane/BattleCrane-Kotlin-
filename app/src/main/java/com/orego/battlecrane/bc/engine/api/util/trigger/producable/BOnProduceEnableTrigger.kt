@@ -5,9 +5,9 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.node.BOnProduceEnableNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BProducableHeap
 import com.orego.battlecrane.bc.engine.api.model.property.BProducable
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BOnProduceEnableTrigger private constructor(context: BGameContext, val producable: BProducable) :
     BNode(context) {
@@ -34,12 +34,7 @@ class BOnProduceEnableTrigger private constructor(context: BGameContext, val pro
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val producable = this@BOnProduceEnableTrigger.producable
-
-        override fun isFinished() = this@BOnProduceEnableTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 

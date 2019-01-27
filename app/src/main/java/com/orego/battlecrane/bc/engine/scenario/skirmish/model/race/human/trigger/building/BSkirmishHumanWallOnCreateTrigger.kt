@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.building
+package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.building
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
@@ -21,8 +21,8 @@ class BSkirmishHumanWallOnCreateTrigger private constructor(context: BGameContex
             val y = event.y
             val nextY = y + NEXT_WALL_POSITION
             //Get previous units:
-            val unitId1 = controller.getUnitIdByPosition(x, y)
-            val unitId2 = controller.getUnitIdByPosition(x, nextY)
+            val unitId1 = controller[x, y]
+            val unitId2 = controller[x, nextY]
             //Delete previous units:
             pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId1))
             pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId2))

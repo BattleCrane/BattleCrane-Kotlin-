@@ -6,11 +6,11 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.adjutant.trigger.infantry.BSkirmishHumanMarineOnCreateTrigger
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.infantry.BSkirmishHumanMarineOnCreateTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 
 class BSkirmishHumanBarracksOnProduceActionTrigger private constructor(
@@ -49,12 +49,7 @@ class BSkirmishHumanBarracksOnProduceActionTrigger private constructor(
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val barracks = this@BSkirmishHumanBarracksOnProduceActionTrigger.barracks
-
-        override fun isFinished() = this@BSkirmishHumanBarracksOnProduceActionTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     /**
      * Event.

@@ -5,9 +5,9 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.node.BOnAttackEnableNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAttackableHeap
 import com.orego.battlecrane.bc.engine.api.model.property.BAttackable
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BOnAttackEnableTrigger private constructor(context: BGameContext, var attackable: BAttackable) : BNode(context) {
 
@@ -36,12 +36,7 @@ class BOnAttackEnableTrigger private constructor(context: BGameContext, var atta
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        var attackable = this@BOnAttackEnableTrigger.attackable
-
-        override fun isFinished() = this@BOnAttackEnableTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 
