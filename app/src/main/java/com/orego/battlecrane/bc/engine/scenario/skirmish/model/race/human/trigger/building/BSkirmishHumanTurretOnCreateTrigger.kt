@@ -46,7 +46,7 @@ class BSkirmishHumanTurretOnCreateTrigger private constructor(context: BGameCont
         override fun perform(context: BGameContext): Boolean {
             val controller = context.mapController
             val pipeline = context.pipeline
-            //Destroy previous unit:
+            //Destroy previous uiUnit:
             val unitId = controller[this.x, this.y]
             pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId))
             //Create turret:

@@ -121,7 +121,7 @@ abstract class BGameScenario {
     }
 
     /**
-     * Initializes a map by unit ids.
+     * Initializes a map by uiUnit ids.
      */
 
     protected open fun installMapController(context: BGameContext) {

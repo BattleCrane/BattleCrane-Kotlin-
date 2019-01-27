@@ -3,15 +3,15 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.trig
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.building.BSkirmishHumanWallOnCreateTrigger
 
-class BSkirmishHumanWallHolderOnCreateTrigger private constructor(
-    private val uiGameContext: BUiGameContext, val holder: BHumanAdjutantHolder
+class BUiSkirmishHumanWallOnCreateTrigger private constructor(
+    private val uiGameContext: BUiGameContext, val playerId: Long
 ) : BNode(uiGameContext.gameContext) {
 
     override fun handle(event: BEvent): BEvent? {
-        if (event is BSkirmishHumanWallOnCreateTrigger.Event && event.playerId == this.holder.item.playerId) {
+        if (event is BSkirmishHumanWallOnCreateTrigger.Event && event.playerId == this.playerId) {
             this.uiGameContext.uiTaskManager.addTask {
                 val mapController = this.context.mapController
                 val unitFactory = this.uiGameContext.uiUnitFactory
@@ -34,18 +34,15 @@ class BSkirmishHumanWallHolderOnCreateTrigger private constructor(
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val holder = this@BSkirmishHumanWallHolderOnCreateTrigger.holder
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 
-        fun connect(uiGameContext: BUiGameContext, holder: BHumanAdjutantHolder) {
+        fun connect(uiGameContext: BUiGameContext, playerId: Long) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
-                node is BSkirmishHumanWallOnCreateTrigger && node.playerId == holder.item.playerId
+                node is BSkirmishHumanWallOnCreateTrigger && node.playerId == playerId
             }
-            val uiTrigger = BSkirmishHumanWallHolderOnCreateTrigger(uiGameContext, holder)
+            val uiTrigger = BUiSkirmishHumanWallOnCreateTrigger(uiGameContext, playerId)
             trigger.connectInnerPipe(uiTrigger.intoPipe())
         }
     }

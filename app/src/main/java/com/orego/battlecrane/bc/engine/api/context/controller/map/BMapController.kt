@@ -16,7 +16,7 @@ class BMapController {
     private val matrix = BMapController.createMatrix()
 
     /**
-     * Change unit ids on the map.
+     * Change uiUnit ids on the map.
      */
 
     fun notifyUnitChanged(unit: BUnit): Boolean {

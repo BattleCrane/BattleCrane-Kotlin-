@@ -110,7 +110,7 @@ class BPlayerZoneObserver(private val context: BGameContext) {
             if (unit is BBuilding) {
                 val unitOwnerId = unit.playerId
                 val isOwnedUnit = unitOwnerId != BPlayer.NEUTRAL_ID
-                //Check unit:
+                //Check uiUnit:
                 if (isOwnedUnit) {
                     val isOwnedZone = zoneOwnerId != BPlayer.NEUTRAL_ID
                     if (isOwnedZone) {

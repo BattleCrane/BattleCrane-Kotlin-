@@ -16,7 +16,7 @@ class BOnCreateUnitNode(context: BGameContext) : BNode(context) {
         NAME
 
     /**
-     * Creates new unit.
+     * Creates new uiUnit.
      */
 
     override fun handle(event: BEvent) =

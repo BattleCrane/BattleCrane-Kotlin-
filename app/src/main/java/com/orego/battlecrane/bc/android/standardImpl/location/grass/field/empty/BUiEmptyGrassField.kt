@@ -18,7 +18,7 @@ class BUiEmptyGrassField private constructor(uiGameContext: BUiGameContext, over
         )
     }
 
-    override fun getItemPath() = "std/grass/unit/empty_field_${COLOR_MAP[this.item.playerId]}.png"
+    override fun getItemPath() = "std/grass/uiUnit/empty_field_${COLOR_MAP[this.item.playerId]}.png"
 
     /**
      * Builder.

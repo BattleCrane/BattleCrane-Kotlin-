@@ -116,7 +116,7 @@ class BSkirmishScenario : BGameScenario() {
 
     private fun MutableList<BUnit>.addEmptyFields(context: BGameContext): MutableList<BUnit> {
         val matrix = BMapController.createMatrix()
-        //Check unit list:
+        //Check uiUnit list:
         this.forEach { unit ->
             val id = unit.unitId
             unit.foreach { x, y ->

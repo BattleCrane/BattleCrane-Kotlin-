@@ -3,15 +3,15 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.trig
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.building.BSkirmishHumanGeneratorOnCreateTrigger
 
-class BSkirmishHumanGeneratorHolderOnCreateTrigger private constructor(
-    private val uiGameContext: BUiGameContext, val holder: BHumanAdjutantHolder
+class BUiSkirmishHumanGeneratorOnCreateTrigger private constructor(
+    private val uiGameContext: BUiGameContext, val playerId: Long
 ) : BNode(uiGameContext.gameContext) {
 
     override fun handle(event: BEvent): BEvent? {
-        if (event is BSkirmishHumanGeneratorOnCreateTrigger.Event && event.playerId == this.holder.item.playerId) {
+        if (event is BSkirmishHumanGeneratorOnCreateTrigger.Event && event.playerId == this.playerId) {
             this.uiGameContext.uiTaskManager.addTask {
                 val gameContext = this.uiGameContext.gameContext
                 val generator = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
@@ -27,18 +27,15 @@ class BSkirmishHumanGeneratorHolderOnCreateTrigger private constructor(
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val holder = this@BSkirmishHumanGeneratorHolderOnCreateTrigger.holder
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 
-        fun connect(uiGameContext: BUiGameContext, holder: BHumanAdjutantHolder) {
+        fun connect(uiGameContext: BUiGameContext, playerId: Long) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
-                node is BSkirmishHumanGeneratorOnCreateTrigger && node.playerId == holder.item.playerId
+                node is BSkirmishHumanGeneratorOnCreateTrigger && node.playerId == playerId
             }
-            val uiTrigger = BSkirmishHumanGeneratorHolderOnCreateTrigger(uiGameContext, holder)
+            val uiTrigger = BUiSkirmishHumanGeneratorOnCreateTrigger(uiGameContext, playerId)
             trigger.connectInnerPipe(uiTrigger.intoPipe())
         }
     }

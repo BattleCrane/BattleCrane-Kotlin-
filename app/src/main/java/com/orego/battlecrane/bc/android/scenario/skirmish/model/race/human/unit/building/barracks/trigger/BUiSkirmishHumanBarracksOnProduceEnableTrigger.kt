@@ -23,7 +23,7 @@ import com.orego.battlecrane.ui.util.gone
 import com.orego.battlecrane.ui.util.show
 import org.intellij.lang.annotations.MagicConstant
 
-class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
+class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
     private val uiGameContext: BUiGameContext,
     val holder: BUiHumanBarracks
 ) : BNode(uiGameContext.gameContext) {
@@ -64,7 +64,7 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
         imageView.setOnClickListener {
             this.uiGameContext.uiClickController.pushClickMode(UiClickMode())
 //            this.refreshActions()
-//            this.unit.showDescription(this.uiGameContext)
+//            this.uiUnit.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
@@ -115,8 +115,8 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
     private inner class UiClickMode : BUiUnit.UiClickMode(this.holder) {
 
         override fun onStartClickMode() {
-            this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.refreshActions()
-            this.unit.showDescription(this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.uiGameContext)
+            this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.refreshActions()
+            this.unit.showDescription(this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.uiGameContext)
         }
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode.also { it.onStartClickMode() }
@@ -124,9 +124,9 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
     
     private inner class TrainMarineUiClickMode : BUiClickMode {
 
-        private val unit = this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.holder.item
+        private val unit = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.holder.item
 
-        private val gameContext: BGameContext = this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.context
+        private val gameContext: BGameContext = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.context
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
             if (nextUiClickMode is BUiUnit.UiClickMode) {
@@ -136,7 +136,7 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
                     val isSuccessful = event.isEnable(this.gameContext, this.unit)
                     if (isSuccessful) {
                         this.gameContext.pipeline.broacastEvent(event)
-                        this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.refreshActions()
+                        this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.refreshActions()
                         return null
                     }
                 }
@@ -151,9 +151,9 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
 
     inner class Pipe : BPipe(this.context, mutableListOf(this)) {
 
-        val holder = this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.holder
+        val holder = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.holder
 
-        override fun isFinished() = this@BSkirmishHumanBarracksHolderOnProduceEnableTrigger.isFinished()
+        override fun isFinished() = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.isFinished()
     }
 
     companion object {
@@ -167,7 +167,7 @@ class BSkirmishHumanBarracksHolderOnProduceEnableTrigger private constructor(
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
                 node is BOnProduceEnableTrigger && node.producable == holder.item
             }
-            val uiTrigger = BSkirmishHumanBarracksHolderOnProduceEnableTrigger(uiGameContext, holder)
+            val uiTrigger = BUiSkirmishHumanBarracksOnProduceEnableTrigger(uiGameContext, holder)
             trigger.connectInnerPipe(uiTrigger.intoPipe())
         }
     }

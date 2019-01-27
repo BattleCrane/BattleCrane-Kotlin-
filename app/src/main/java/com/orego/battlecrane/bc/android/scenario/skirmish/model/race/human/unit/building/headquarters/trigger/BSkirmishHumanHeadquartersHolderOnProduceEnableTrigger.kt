@@ -70,7 +70,7 @@ class BSkirmishHumanHeadquartersHolderOnProduceEnableTrigger private constructor
             this.uiGameContext.uiClickController.pushClickMode(UiClickMode())
 
 //            this.refreshActions()
-//            this.unit.showDescription(this.uiGameContext)
+//            this.uiUnit.showDescription(this.uiGameContext)
         }
         constraintLayout.addView(imageView)
         return imageView
