@@ -8,7 +8,7 @@ import com.orego.battlecrane.bc.android.api.asset.BUiCommonPaths
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
-import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.infantry.BHumanMarineHolder
 import com.orego.battlecrane.bc.engine.api.context.BGameContext

@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
-import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanGenerator
 

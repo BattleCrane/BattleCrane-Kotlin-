@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.android.api.holder.unit
+package com.orego.battlecrane.bc.android.api.model.unit
 
 import android.graphics.drawable.Drawable
 import android.view.View
@@ -6,7 +6,7 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
-import com.orego.battlecrane.bc.android.api.holder.BHolder
+import com.orego.battlecrane.bc.android.api.model.BHolder
 import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import org.intellij.lang.annotations.MagicConstant

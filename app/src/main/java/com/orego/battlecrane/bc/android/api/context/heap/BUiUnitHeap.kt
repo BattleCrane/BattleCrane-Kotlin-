@@ -1,6 +1,6 @@
 package com.orego.battlecrane.bc.android.api.context.heap
 
-import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.BHeap
 
 class BUiUnitHeap : BHeap<BUnitHolder>() {

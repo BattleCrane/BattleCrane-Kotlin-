@@ -1,8 +1,11 @@
 package com.orego.battlecrane.bc.engine.api.model.unit
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
+import com.orego.battlecrane.bc.engine.api.util.common.BPoint
+import com.orego.battlecrane.bc.engine.api.util.common.x
+import com.orego.battlecrane.bc.engine.api.util.common.y
 
-abstract class BUnit(
+abstract class BUnit protected constructor(
     context: BGameContext,
     var playerId: Long,
     var x: Int,
@@ -32,4 +35,16 @@ abstract class BUnit(
                 this.x +
                 " y: " +
                 this.y
+
+    /**
+     * Builder.
+     */
+
+    abstract class Builder {
+
+        abstract fun build(context: BGameContext, playerId: Long, x: Int, y: Int): BUnit
+
+        fun build(context: BGameContext, playerId: Long, point: BPoint) =
+            this.build(context, playerId, point.x, point.y)
+    }
 }

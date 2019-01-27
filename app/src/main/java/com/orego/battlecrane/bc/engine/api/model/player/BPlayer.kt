@@ -1,7 +1,6 @@
 package com.orego.battlecrane.bc.engine.api.model.player
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAdjutantHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 
@@ -27,17 +26,6 @@ open class BPlayer protected constructor(context: BGameContext) {
     val allies = mutableSetOf<Long>()
 
     val enemies = mutableSetOf<Long>()
-
-    open fun isAblePlayer(context: BGameContext): Boolean {
-        val adjutantHeap = context.storage.getHeap(BAdjutantHeap::class.java)
-        for (id in this.adjutants) {
-            val adjutant = adjutantHeap[id]
-            if (adjutant.isAble) {
-                return true
-            }
-        }
-        return false
-    }
 
     open fun getUnits(context: BGameContext): List<BUnit> {
         return context.storage.getHeap(BUnitHeap::class.java).objectMap.values.filter { unit ->

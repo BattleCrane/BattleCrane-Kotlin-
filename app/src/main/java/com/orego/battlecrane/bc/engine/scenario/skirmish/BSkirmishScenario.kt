@@ -3,7 +3,6 @@ package com.orego.battlecrane.bc.engine.scenario.skirmish
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
-import com.orego.battlecrane.bc.engine.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
@@ -52,7 +51,7 @@ class BSkirmishScenario : BGameScenario() {
         return playerList
     }
 
-    override fun getAdjutants(context: BGameContext): List<BAdjutant> {
+    override fun getPlugins(context: BGameContext): List<BAdjutant> {
         val adjutantList = mutableListOf<BAdjutant>()
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()

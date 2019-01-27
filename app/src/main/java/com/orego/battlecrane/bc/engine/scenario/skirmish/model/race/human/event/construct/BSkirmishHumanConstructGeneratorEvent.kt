@@ -20,6 +20,6 @@ class BSkirmishHumanConstructGeneratorEvent(producableId: Long, x: Int, y: Int) 
         return false
     }
 
-    override fun getEvent(playerId: Long, x: Int, y: Int) =
+    override fun getOnCreateEvent(playerId: Long, x: Int, y: Int) =
         BSkirmishHumanGeneratorOnCreateTrigger.Event(playerId, x, y)
 }

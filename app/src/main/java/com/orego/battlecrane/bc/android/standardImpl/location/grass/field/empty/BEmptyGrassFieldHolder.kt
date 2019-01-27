@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.android.standardImpl.location.grass.field.empty
 
 import android.widget.ImageView
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.standardImpl.location.grass.field.BFieldHolder
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField

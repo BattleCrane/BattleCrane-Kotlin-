@@ -4,6 +4,7 @@ import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
 import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
 import com.orego.battlecrane.bc.engine.api.model.property.BProducable
+import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.BHumanBuilding
 
 /**
@@ -82,14 +83,9 @@ class BHumanGenerator private constructor(context: BGameContext, playerId: Long,
      * Builder.
      */
 
-    open class Builder {
+    open class Builder : BUnit.Builder() {
 
-        open fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
-            BHumanGenerator(
-                context,
-                playerId,
-                x,
-                y
-            )
+        override fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
+            BHumanGenerator(context, playerId, x, y)
     }
 }

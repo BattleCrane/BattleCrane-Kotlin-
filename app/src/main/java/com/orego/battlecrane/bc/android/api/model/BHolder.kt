@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.android.api.holder
+package com.orego.battlecrane.bc.android.api.model
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 

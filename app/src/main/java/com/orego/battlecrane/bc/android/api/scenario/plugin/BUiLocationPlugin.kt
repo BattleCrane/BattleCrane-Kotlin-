@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.api.scenario.plugin
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 
 abstract class BUiLocationPlugin {

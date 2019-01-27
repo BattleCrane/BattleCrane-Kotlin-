@@ -2,10 +2,8 @@ package com.orego.battlecrane.bc.android.api.context
 
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickController
 import com.orego.battlecrane.bc.android.api.context.uiTaskManager.BUiTaskManager
-import com.orego.battlecrane.bc.android.api.holder.adjutant.BAdjutantHolder
-import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAdjutantHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
 

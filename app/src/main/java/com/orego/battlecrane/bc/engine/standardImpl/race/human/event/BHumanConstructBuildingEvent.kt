@@ -15,11 +15,10 @@ abstract class BHumanConstructBuildingEvent(
     val startY: Int,
     val width: Int,
     val height: Int
-) :
-    BOnProduceActionPipe.Event(producableId) {
+) : BOnProduceActionPipe.Event(producableId) {
 
     open fun perform(context: BGameContext, playerId: Long) {
-        val event = this.getEvent(playerId, this.startX, this.startY)
+        val event = this.getOnCreateEvent(playerId, this.startX, this.startY)
         context.pipeline.pushEvent(event)
     }
 
@@ -48,5 +47,5 @@ abstract class BHumanConstructBuildingEvent(
         return perimeterMatcher.findAroundPerimeter(this.startX, this.startY, this.width, this.height)
     }
 
-    abstract fun getEvent(playerId: Long, x: Int, y: Int): BOnCreateUnitPipe.Event
+    abstract fun getOnCreateEvent(playerId: Long, x: Int, y: Int): BOnCreateUnitPipe.Event
 }

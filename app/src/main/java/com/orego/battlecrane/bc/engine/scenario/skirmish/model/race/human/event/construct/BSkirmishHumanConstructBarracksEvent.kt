@@ -7,6 +7,6 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.imp
 class BSkirmishHumanConstructBarracksEvent(producableId: Long, x: Int, y: Int) :
     BHumanConstructBuildingEvent(producableId, x, y, BHumanBarracks.WIDTH, BHumanBarracks.HEIGHT) {
 
-    override fun getEvent(playerId: Long, x: Int, y: Int) =
+    override fun getOnCreateEvent(playerId: Long, x: Int, y: Int) =
         BSkirmishHumanBarracksOnCreateTrigger.Event(playerId, x, y)
 }

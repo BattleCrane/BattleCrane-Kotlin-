@@ -7,6 +7,6 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.imp
 class BSkirmishHumanConstructTurretEvent(producableId: Long, x: Int, y: Int) :
     BHumanConstructBuildingEvent(producableId, x, y, BHumanTurret.WIDTH, BHumanTurret.HEIGHT) {
 
-    override fun getEvent(playerId: Long, x: Int, y: Int) =
+    override fun getOnCreateEvent(playerId: Long, x: Int, y: Int) =
         BSkirmishHumanTurretOnCreateTrigger.Event(playerId, x, y)
 }

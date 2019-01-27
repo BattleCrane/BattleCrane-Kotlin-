@@ -12,14 +12,13 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.*
-import com.orego.battlecrane.bc.engine.api.model.adjutant.BAdjutant
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.property.BAttackable
 import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
 import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
 import com.orego.battlecrane.bc.engine.api.model.property.BProducable
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
-import com.orego.battlecrane.bc.engine.api.util.common.filterMap
+import com.orego.battlecrane.bc.engine.api.scenario.plugin.race.BRacePlugin
 
 /**
  * Initializes a game step by step.
@@ -35,9 +34,11 @@ abstract class BGameScenario {
         this.installContextGenerator(context)
         this.installStorage(context)
         this.installPipeline(context)
-        this.installContextGenerator(context)
-        this.fillStorage(context)
+        this.installBaseTriggers(context)
+        this.installPlayers(context)
         this.installPlayerController(context)
+        this.installPlugins(context)
+        this.installUnits(context)
         this.installMapController(context)
     }
 
@@ -46,7 +47,6 @@ abstract class BGameScenario {
             this[BPipe::class.java] = BContextGenerator.IdGenerator(0)
             this[BNode::class.java] = BContextGenerator.IdGenerator(0)
             this[BPlayer::class.java] = BContextGenerator.IdGenerator(1)
-            this[BAdjutant::class.java] = BContextGenerator.IdGenerator(1)
             this[BUnit::class.java] = BContextGenerator.IdGenerator(0)
             this[BAttackable::class.java] = BContextGenerator.IdGenerator(0)
             this[BHitPointable::class.java] = BContextGenerator.IdGenerator(0)
@@ -58,7 +58,6 @@ abstract class BGameScenario {
     protected open fun installStorage(context: BGameContext) {
         context.storage.apply {
             this.addHeap(BPlayerHeap())
-            this.addHeap(BAdjutantHeap())
             this.addHeap(BUnitHeap())
             this.addHeap(BAttackableHeap())
             this.addHeap(BLevelableHeap())
@@ -78,76 +77,70 @@ abstract class BGameScenario {
         }
     }
 
-    /**
-     * Initializes a map by unit ids.
-     */
+    protected open fun installBaseTriggers(context: BGameContext) {
 
-    protected open fun installMapController(context: BGameContext) {
-        val mapController = context.mapController
-        context.storage.getHeap(BUnitHeap::class.java).getObjectList().forEach { unit ->
-            mapController.notifyUnitChanged(unit)
-        }
-        //Check initialized map:
-        BMapController.foreach { x, y ->
-            val isNotInitiablizedField = mapController[x, y] == BMapController.NOT_ID
-            if (isNotInitiablizedField) {
-                throw IllegalStateException("Position x: $x y: $y is not initialized")
-            }
+    }
+
+    protected open fun installPlayers(context: BGameContext) {
+        val storage = context.storage
+        this.getPlayers(context).forEach { player ->
+            storage.addObject(player)
         }
     }
+
+    /**
+     * Initializes active player list by scenario.
+     */
 
     protected open fun installPlayerController(context: BGameContext) {
         val playerHeap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = playerHeap.getObjectList()
         val startPosition = this.getStartTurnPlayerPosition()
-        //Init fields:
         context.playerController.apply {
             this.currentPlayerPosition = startPosition
             this.currentPlayerId = players[startPosition].playerId
-            this.ablePlayers = players
-                .filterMap({ it.isAblePlayer(context) }, { it.playerId })
+            this.playerIds = players
+                .map { player -> player.playerId }
                 .toMutableList()
-
         }
     }
 
-    protected open fun fillStorage(context: BGameContext) {
+    protected open fun installPlugins(context: BGameContext) {
+        this.getPlugins(context).forEach { plugin ->
+            plugin.install(context)
+        }
+    }
+
+    protected open fun installUnits(context: BGameContext) {
         val storage = context.storage
-        //Player:
-        this.getPlayers(context).forEach { player ->
-            storage.addObject(player)
-        }
-        //Adjutant:
-        this.getAdjutants(context).forEach { adjutant ->
-            storage.addObject(adjutant)
-        }
-        //Unit:
         this.getUnits(context).forEach { unit ->
             storage.addObject(unit)
         }
     }
 
     /**
-     * 2.) Fills player table.
+     * Initializes a map by unit ids.
      */
+
+    protected open fun installMapController(context: BGameContext) {
+        val controller = context.mapController
+        context.storage.getHeap(BUnitHeap::class.java).getObjectList().forEach { unit ->
+            controller.notifyUnitChanged(unit)
+        }
+        //Check initialized map:
+        BMapController.foreach { x, y ->
+            val isNotInitiablizedField = controller[x, y] == BMapController.NOT_ID
+            if (isNotInitiablizedField) {
+                throw IllegalStateException("Position x: $x y: $y is not initialized")
+            }
+        }
+    }
 
     protected abstract fun getPlayers(context: BGameContext): List<BPlayer>
 
-    /**
-     * 3.) Fills adjutant table.
-     */
-
-    protected abstract fun getAdjutants(context: BGameContext): List<BAdjutant>
-
-    /**
-     * 4.) Fills unit table when player table is ready.
-     */
+    protected abstract fun getPlugins(context: BGameContext): List<BRacePlugin>
 
     protected abstract fun getUnits(context: BGameContext): List<BUnit>
-
-    /**
-     * 5.) Invokes when player table is ready.
-     */
 
     protected abstract fun getStartTurnPlayerPosition(): Int
 }

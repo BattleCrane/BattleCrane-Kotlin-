@@ -12,6 +12,6 @@ class BSkirmishHumanConstructWallEvent(producableId: Long, x: Int, y: Int) :
         const val WALL_COUNT = 2
     }
 
-    override fun getEvent(playerId: Long, x: Int, y: Int) =
+    override fun getOnCreateEvent(playerId: Long, x: Int, y: Int) =
         BSkirmishHumanWallOnCreateTrigger.Event(playerId, x, y)
 }

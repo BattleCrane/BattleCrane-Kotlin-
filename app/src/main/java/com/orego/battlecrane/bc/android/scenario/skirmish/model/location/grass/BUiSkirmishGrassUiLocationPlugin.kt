@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.holder.unit.BUnitHolder
+import com.orego.battlecrane.bc.android.api.model.unit.BUnitHolder
 import com.orego.battlecrane.bc.android.api.scenario.plugin.BUiLocationPlugin
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.field.destroyed.BSkirmishDestroyedGrassFieldHolderBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.field.empty.BSkirmishEmptyGrassFieldHolderBuilder
