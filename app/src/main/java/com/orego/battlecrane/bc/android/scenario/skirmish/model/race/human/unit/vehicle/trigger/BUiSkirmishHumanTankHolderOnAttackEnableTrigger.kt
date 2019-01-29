@@ -1,26 +1,23 @@
-package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.barracks.trigger
+package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.vehicle.trigger
 
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.orego.battlecrane.bc.android.api.asset.BUiCommonPaths
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
-import com.orego.battlecrane.bc.android.api.util.trigger.producable.BUiOnProduceEnableTrigger
-import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanBarracks
+import com.orego.battlecrane.bc.android.api.util.trigger.attackable.BUiOnAttackEnableTrigger
+import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.vehicle.BUiHumanTank
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
-import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.barracks.trigger.BSkirmishHumanBarracksOnProduceActionTrigger
+import com.orego.battlecrane.bc.engine.api.util.trigger.attack.BOnAttackEnableTrigger
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.vehicle.trigger.BSkirmishHumanTankOnAttackActionTrigger
 import org.intellij.lang.annotations.MagicConstant
 
-class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
+class BUiSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
     uiGameContext: BUiGameContext,
-    override val uiUnit: BUiHumanBarracks
-) : BUiOnProduceEnableTrigger(uiGameContext, uiUnit) {
-
-    private val trainMarineUiClickMode = TrainMarineUiClickMode()
+    override val uiUnit: BUiHumanTank
+) : BUiOnAttackEnableTrigger(uiGameContext, uiUnit) {
 
     private val actionImageViewSet = mutableSetOf<ImageView>()
 
@@ -30,14 +27,15 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
         val constraintLayoutId = constraintLayout.id
         val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
         val cellSize = (columnSize * CELL_COEFFICIENT).toInt()
-        //Get barracks:
-        val barracks = this.uiUnit.item
+        //Get tank:
+        val tank = this.uiUnit.item
         constraintLayout.removeAllViews()
         this.actionImageViewSet.clear()
-        if (barracks.isProduceEnable) {
+        if (tank.isAttackEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Train.MARINE, this.trainMarineUiClickMode)
+                //TODO: ADD ATTACK BUTTON!
+                BToolBuilder.build(this.uiGameContext, BUiCommonPaths.Action.ATTACK, AttackUiClickMode())
             )
             var x = 0
             var y = 0
@@ -58,31 +56,27 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
         }
     }
 
-    /**
-     * Click mode.
-     */
+    private inner class AttackUiClickMode : BUiClickMode {
 
-    private inner class TrainMarineUiClickMode : BUiClickMode {
+        private val unit = this@BUiSkirmishHumanTankHolderOnAttackEnableTrigger.uiUnit.item
 
-        private val unit = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.uiUnit.item
-
-        private val gameContext: BGameContext = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.context
+        private val gameContext: BGameContext = this@BUiSkirmishHumanTankHolderOnAttackEnableTrigger.context
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
             if (nextUiClickMode is BUiUnit.UiClickMode) {
                 val clickedUnit = nextUiClickMode.unit.item
-                if (clickedUnit is BEmptyField) {
-                    val event = BSkirmishHumanBarracksOnProduceActionTrigger.Event(
-                        this.unit.producableId,
-                        clickedUnit.x,
-                        clickedUnit.y
-                    )
-                    val isSuccessful = event.isEnable(this.gameContext, this.unit)
-                    if (isSuccessful) {
-                        this.gameContext.pipeline.broacastEvent(event)
-                        this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.onDrawActions()
-                        return null
-                    }
+                val event = BSkirmishHumanTankOnAttackActionTrigger.Event(
+                    this.unit.attackableId,
+                    this.unit.x,
+                    this.unit.y,
+                    clickedUnit.x,
+                    clickedUnit.y
+                )
+                val isSuccessful = event.isEnable(this.gameContext)
+                if (isSuccessful) {
+                    this.gameContext.pipeline.broacastEvent(event)
+                    this@BUiSkirmishHumanTankHolderOnAttackEnableTrigger.onDrawActions()
+                    return null
                 }
             }
             return this
@@ -96,11 +90,11 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
 
         private const val COLUMN_COUNT = 2
 
-        fun connect(uiGameContext: BUiGameContext, holder: BUiHumanBarracks) {
+        fun connect(uiGameContext: BUiGameContext, holder: BUiHumanTank) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
-                node is BOnProduceEnableTrigger && node.producable == holder.item
+                node is BOnAttackEnableTrigger && node.attackable == holder.item
             }
-            val uiTrigger = BUiSkirmishHumanBarracksOnProduceEnableTrigger(uiGameContext, holder)
+            val uiTrigger = BUiSkirmishHumanTankHolderOnAttackEnableTrigger(uiGameContext, holder)
             trigger.connectInnerPipe(uiTrigger.intoPipe())
         }
     }

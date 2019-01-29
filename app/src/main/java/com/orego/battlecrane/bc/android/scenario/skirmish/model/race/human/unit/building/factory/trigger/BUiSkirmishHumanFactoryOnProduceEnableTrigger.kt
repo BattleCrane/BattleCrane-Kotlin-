@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.barracks.trigger
+package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.factory.trigger
 
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -8,19 +8,19 @@ import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
 import com.orego.battlecrane.bc.android.api.util.trigger.producable.BUiOnProduceEnableTrigger
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanBarracks
+import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanFactory
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.barracks.trigger.BSkirmishHumanBarracksOnProduceActionTrigger
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.factory.trigger.BSkirmishHumanFactoryOnProduceActionTrigger
 import org.intellij.lang.annotations.MagicConstant
 
-class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
+class BUiSkirmishHumanFactoryOnProduceEnableTrigger private constructor(
     uiGameContext: BUiGameContext,
-    override val uiUnit: BUiHumanBarracks
+    override val uiUnit: BUiHumanFactory
 ) : BUiOnProduceEnableTrigger(uiGameContext, uiUnit) {
 
-    private val trainMarineUiClickMode = TrainMarineUiClickMode()
+    private val produceTankUiClickMode = ProduceTankUiClickMode()
 
     private val actionImageViewSet = mutableSetOf<ImageView>()
 
@@ -30,14 +30,14 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
         val constraintLayoutId = constraintLayout.id
         val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
         val cellSize = (columnSize * CELL_COEFFICIENT).toInt()
-        //Get barracks:
-        val barracks = this.uiUnit.item
+        //Get factory:
+        val factory = this.uiUnit.item
         constraintLayout.removeAllViews()
         this.actionImageViewSet.clear()
-        if (barracks.isProduceEnable) {
+        if (factory.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Train.MARINE, this.trainMarineUiClickMode)
+                BToolBuilder.build(this.uiGameContext, BHumanPaths.Produce.TANK, this.produceTankUiClickMode)
             )
             var x = 0
             var y = 0
@@ -58,29 +58,26 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
         }
     }
 
-    /**
-     * Click mode.
-     */
+    private inner class ProduceTankUiClickMode : BUiClickMode {
 
-    private inner class TrainMarineUiClickMode : BUiClickMode {
+        private val unit = this@BUiSkirmishHumanFactoryOnProduceEnableTrigger.uiUnit.item
 
-        private val unit = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.uiUnit.item
-
-        private val gameContext: BGameContext = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.context
+        private val gameContext: BGameContext = this@BUiSkirmishHumanFactoryOnProduceEnableTrigger.context
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
             if (nextUiClickMode is BUiUnit.UiClickMode) {
                 val clickedUnit = nextUiClickMode.unit.item
                 if (clickedUnit is BEmptyField) {
-                    val event = BSkirmishHumanBarracksOnProduceActionTrigger.Event(
+                    val event = BSkirmishHumanFactoryOnProduceActionTrigger.Event(
                         this.unit.producableId,
                         clickedUnit.x,
                         clickedUnit.y
                     )
                     val isSuccessful = event.isEnable(this.gameContext, this.unit)
                     if (isSuccessful) {
+                        println("CAN PRODUCE TANK!")
                         this.gameContext.pipeline.broacastEvent(event)
-                        this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.onDrawActions()
+                        this@BUiSkirmishHumanFactoryOnProduceEnableTrigger.onDrawActions()
                         return null
                     }
                 }
@@ -96,11 +93,11 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
 
         private const val COLUMN_COUNT = 2
 
-        fun connect(uiGameContext: BUiGameContext, holder: BUiHumanBarracks) {
+        fun connect(uiGameContext: BUiGameContext, holder: BUiHumanFactory) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
                 node is BOnProduceEnableTrigger && node.producable == holder.item
             }
-            val uiTrigger = BUiSkirmishHumanBarracksOnProduceEnableTrigger(uiGameContext, holder)
+            val uiTrigger = BUiSkirmishHumanFactoryOnProduceEnableTrigger(uiGameContext, holder)
             trigger.connectInnerPipe(uiTrigger.intoPipe())
         }
     }

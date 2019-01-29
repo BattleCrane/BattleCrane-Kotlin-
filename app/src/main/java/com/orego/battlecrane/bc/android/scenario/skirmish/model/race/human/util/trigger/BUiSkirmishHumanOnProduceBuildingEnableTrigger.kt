@@ -1,22 +1,16 @@
-package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.generator.trigger
+package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.util.trigger
 
-import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
-import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.api.util.BToolBuilder
+import com.orego.battlecrane.bc.android.api.util.trigger.producable.BUiOnProduceEnableTrigger
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
-import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanGenerator
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
+import com.orego.battlecrane.bc.engine.api.model.property.BProducable
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct.*
@@ -24,71 +18,28 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.utils.
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanUpgradeBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
-import com.orego.battlecrane.ui.util.gone
-import com.orego.battlecrane.ui.util.show
 import org.intellij.lang.annotations.MagicConstant
 
-class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
-    private val uiGameContext: BUiGameContext,
-    val holder: BUiHumanGenerator
-) : BNode(uiGameContext.gameContext) {
-
-    private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
-
-    /**
-     * ImageView.
-     */
-
-    private val isEnableImageView: ImageView = this.createIsEnableImageView()
+class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
+    uiGameContext: BUiGameContext,
+    override val uiUnit: BUiUnit
+) : BUiOnProduceEnableTrigger(uiGameContext, uiUnit) {
 
     private val actionImageViewSet = mutableSetOf<ImageView>()
 
-    override fun handle(event: BEvent): BEvent? {
-        if (event is BOnProduceEnablePipe.Event && event.producableId == this.holder.item.producableId) {
-            val animation: suspend () -> Unit =
-                if (event.isEnable) {
-                    { this.isEnableImageView.show() }
-                } else {
-                    { this.isEnableImageView.gone() }
-                }
-            this.uiGameContext.uiTaskManager.addTask(animation)
-        }
-        return null
-    }
-
-    private fun createIsEnableImageView(): ImageView {
-        val uiProvider = this.uiGameContext.uiProvider
-        val applicationContext = uiProvider.applicationContext
-        val constraintLayout = uiProvider.mapConstraintLayout
-        //Create image unitView:
-        val imageView = ImageView(applicationContext)
-        imageView.id = View.generateViewId()
-        imageView.background = applicationContext.getDrawable(R.color.colorReady)
-        imageView.layoutParams = this.holder.unitView.layoutParams
-        imageView.gone()
-        imageView.setOnClickListener {
-            this.uiGameContext.uiClickController.pushClickMode(UiClickMode())
-
-            //            this.refreshActions()
-//            this.uiUnit.showDescription(this.uiGameContext)
-        }
-        constraintLayout.addView(imageView)
-        return imageView
-    }
-
-    private fun refreshActions() {
+    override fun onDrawActions() {
         //Get right layout:
         val constraintLayout = this.uiGameContext.uiProvider.rightConstraintLayout
         val constraintLayoutId = constraintLayout.id
         val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
         val cellSize = (columnSize * CELL_COEFFICIENT).toInt()
         //Get headquarters:
-        val generator = this.holder.item
-        val producableId = generator.producableId
-        val playerId = generator.playerId
+        val unitBuilder = this.uiUnit.item as BProducable
+        val producableId = unitBuilder.producableId
+        val playerId = unitBuilder.playerId
         constraintLayout.removeAllViews()
         this.actionImageViewSet.clear()
-        if (generator.isProduceEnable) {
+        if (unitBuilder.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
                 BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.BARRACKS, object : BuildUiClickMode() {
@@ -153,33 +104,19 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
         }
     }
 
-    override fun intoPipe() = Pipe()
-
-    override fun isFinished() = !this.unitMap.containsKey(this.holder.uiUnitId)
-
     /**
      * Click mode.
      */
 
-    private inner class UiClickMode : BUiUnit.UiClickMode(this.holder) {
-
-        override fun onStartClickMode() {
-            this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.refreshActions()
-            this.unit.showDescription(this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.uiGameContext)
-        }
-
-        override fun onNextClickMode(nextUiClickMode: BUiClickMode) = nextUiClickMode.also { it.onStartClickMode() }
-    }
-
     private abstract inner class BuildUiClickMode : BUiClickMode {
 
-        private val unit = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.holder.item
+        private val unit = this@BUiSkirmishHumanOnProduceBuildingEnableTrigger.uiUnit.item
 
-        private val gameContext: BGameContext = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.context
+        private val gameContext: BGameContext = this@BUiSkirmishHumanOnProduceBuildingEnableTrigger.context
 
         protected abstract fun createEvent(x: Int, y: Int): BHumanConstructBuildingEvent
 
-        override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
             if (nextUiClickMode is BUiUnit.UiClickMode) {
                 val clickedUnit = nextUiClickMode.unit.item
                 if (clickedUnit is BEmptyField) {
@@ -187,7 +124,7 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
                     val isSuccessful = event.isEnable(this.gameContext, this.unit.playerId)
                     if (isSuccessful) {
                         this.gameContext.pipeline.broacastEvent(event)
-                        this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.refreshActions()
+                        this@BUiSkirmishHumanOnProduceBuildingEnableTrigger.onDrawActions()
                         return null
                     }
                 }
@@ -198,23 +135,23 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
 
     private inner class UpgradeBuildingUiClickMode : BUiClickMode {
 
-        private val unit = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.holder.item
+        private val unit = this@BUiSkirmishHumanOnProduceBuildingEnableTrigger.uiUnit.item
 
-        private val gameContext: BGameContext = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.context
+        private val gameContext: BGameContext = this@BUiSkirmishHumanOnProduceBuildingEnableTrigger.context
 
         private val uiPipe =
-            this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.uiGameContext.uiTaskManager
+            this@BUiSkirmishHumanOnProduceBuildingEnableTrigger.uiGameContext.uiTaskManager
 
-        override fun onNextClickMode(nextUiClickMode: BUiClickMode): BUiClickMode? {
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
             if (nextUiClickMode is BUiUnit.UiClickMode) {
                 val clickedUnit = nextUiClickMode.unit.item
                 if (clickedUnit is BLevelable) {
-                    val event = BHumanUpgradeBuildingEvent(this.unit.producableId, clickedUnit.levelableId)
+                    val event = BHumanUpgradeBuildingEvent((this.unit as BProducable).producableId, clickedUnit.levelableId)
                     val isSuccessful = event.isEnable(this.gameContext)
                     if (isSuccessful) {
                         this.gameContext.pipeline.broacastEvent(event)
                         this.uiPipe.addTask {
-                            this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.refreshActions()
+                            this@BUiSkirmishHumanOnProduceBuildingEnableTrigger.onDrawActions()
                         }
                         return null
                     }
@@ -224,17 +161,6 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
         }
     }
 
-    /**
-     * Pipe.
-     */
-
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val holder = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.holder
-
-        override fun isFinished() = this@BSkirmishHumanGeneratorHolderOnProduceEnableTrigger.isFinished()
-    }
-
     companion object {
 
         @MagicConstant
@@ -242,11 +168,11 @@ class BSkirmishHumanGeneratorHolderOnProduceEnableTrigger private constructor(
 
         private const val COLUMN_COUNT = 2
 
-        fun connect(uiGameContext: BUiGameContext, holder: BUiHumanGenerator) {
+        fun connect(uiGameContext: BUiGameContext, holder: BUiUnit) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
                 node is BOnProduceEnableTrigger && node.producable == holder.item
             }
-            val uiTrigger = BSkirmishHumanGeneratorHolderOnProduceEnableTrigger(uiGameContext, holder)
+            val uiTrigger = BUiSkirmishHumanOnProduceBuildingEnableTrigger(uiGameContext, holder)
             trigger.connectInnerPipe(uiTrigger.intoPipe())
         }
     }

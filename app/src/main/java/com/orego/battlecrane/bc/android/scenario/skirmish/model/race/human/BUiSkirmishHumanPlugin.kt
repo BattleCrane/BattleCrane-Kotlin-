@@ -7,13 +7,13 @@ import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.trigg
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.trigger.infantry.BUiSkirmishHumanMarineOnCreateTrigger
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.trigger.vehicle.BUiSkirmishHumanTankOnCreateTrigger
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.barracks.builder.BUiSkirmishHumanBarracksBuilder
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.factory.builder.BSkirmishHumanFactoryHolderBuilder
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.generator.builder.BSkirmishHumanGeneratorHolderBuilder
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.headquarters.builder.BSkirmishHumanHeadquartersHolderBuilder
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.turret.builder.BSkirmishHumanTurretHolderBuilder
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.wall.builder.BSkirmishHumanWallHolderBuilder
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.infantry.builder.BSkirmishHumanMarineHolderBuilder
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.vehicle.builder.BSkirmishHumanTankHolderBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.factory.builder.BUiSkirmishHumanFactoryBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.generator.builder.BUiSkirmishHumanGeneratorBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.headquarters.builder.BUiSkirmishHumanHeadquartersBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.turret.builder.BUiSkirmishHumanTurretBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.wall.builder.BUiSkirmishHumanWallBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.infantry.builder.BUiSkirmishHumanMarineBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.vehicle.builder.BUiSkirmishHumanTankBuilder
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.*
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.infantry.implementation.BHumanMarine
@@ -38,14 +38,14 @@ class BUiSkirmishHumanPlugin(playerId: Long) : BUiRacePlugin(playerId) {
     override val uiUnitBuilderMap: Map<Class<out BUnit>, BUiUnit.Builder> = mapOf(
         //Building:
         BHumanBarracks::class.java to BUiSkirmishHumanBarracksBuilder(),
-        BHumanFactory::class.java to BSkirmishHumanFactoryHolderBuilder(),
-        BHumanGenerator::class.java to BSkirmishHumanGeneratorHolderBuilder(),
-        BHumanHeadquarters::class.java to BSkirmishHumanHeadquartersHolderBuilder(),
-        BHumanTurret::class.java to BSkirmishHumanTurretHolderBuilder(),
-        BHumanWall::class.java to BSkirmishHumanWallHolderBuilder(),
+        BHumanFactory::class.java to BUiSkirmishHumanFactoryBuilder(),
+        BHumanGenerator::class.java to BUiSkirmishHumanGeneratorBuilder(),
+        BHumanHeadquarters::class.java to BUiSkirmishHumanHeadquartersBuilder(),
+        BHumanTurret::class.java to BUiSkirmishHumanTurretBuilder(),
+        BHumanWall::class.java to BUiSkirmishHumanWallBuilder(),
         //Creature:
-        BHumanMarine::class.java to BSkirmishHumanMarineHolderBuilder(),
+        BHumanMarine::class.java to BUiSkirmishHumanMarineBuilder(),
         //Vehicle:
-        BHumanTank::class.java to BSkirmishHumanTankHolderBuilder()
+        BHumanTank::class.java to BUiSkirmishHumanTankBuilder()
     )
 }

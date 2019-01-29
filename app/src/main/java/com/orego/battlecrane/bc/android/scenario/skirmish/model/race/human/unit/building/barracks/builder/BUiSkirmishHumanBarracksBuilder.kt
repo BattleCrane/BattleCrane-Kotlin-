@@ -13,9 +13,8 @@ class BUiSkirmishHumanBarracksBuilder : BUiHumanBarracks.Builder() {
     override fun build(uiGameContext: BUiGameContext, item: BUnit): BUiHumanBarracks {
         val holder = super.build(uiGameContext, item)
         BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
-        BUiSkirmishHumanBarracksOnProduceEnableTrigger.connect(uiGameContext, holder)
-        BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
         BUiOnLevelActionTrigger.connect(uiGameContext, holder)
+        BUiSkirmishHumanBarracksOnProduceEnableTrigger.connect(uiGameContext, holder)
         return holder
     }
 }

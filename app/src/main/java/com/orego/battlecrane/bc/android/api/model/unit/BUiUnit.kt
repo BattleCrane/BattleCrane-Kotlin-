@@ -19,11 +19,15 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
         private const val CELL_COEFFICIENT = 0.9
     }
 
+    val uiUnitId: Long
+
     open val unitView by lazy {
         this.onDraw(uiGameContext)
     }
 
-    val uiUnitId: Long
+    protected val uiClickMode by lazy {
+        UiClickMode(uiGameContext, this)
+    }
 
     init {
         val contextGenerator = uiGameContext.gameContext.contextGenerator
@@ -69,7 +73,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
     }
 
     open fun onClick(uiGameContext: BUiGameContext) {
-        uiGameContext.uiClickController.pushClickMode(UiClickMode(uiGameContext, this))
+        uiGameContext.uiClickController.pushClickMode(this.uiClickMode)
     }
 
     /**
