@@ -5,13 +5,13 @@ import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
 
 class BLevelableHeap: BHeap<BLevelable>() {
 
-    override fun addObject(any: Any) {
+    override fun onPutObject(any: Any) {
         if (any is BLevelable) {
             this.objectMap[any.levelableId] = any
         }
     }
 
-    override fun removeObject(any: Any) {
+    override fun onRemoveObject(any: Any) {
         if (any is BLevelable) {
             this.objectMap.remove(any.levelableId)
         }

@@ -19,7 +19,6 @@ class BGameContext {
 
     val contextGenerator = BContextGenerator()
 
-
     /**
      * Pipeline.
      */
@@ -56,7 +55,7 @@ class BGameContext {
 
     class OnGameFinishedEvent : BEvent()
 
-    class OnWinEvent : BEvent()
+    class OnWinEvent(val playerId: Long) : BEvent()
 
-    class OnLoseEvent : BEvent()
+    class OnLoseEvent(val playerId: Long) : BEvent()
 }

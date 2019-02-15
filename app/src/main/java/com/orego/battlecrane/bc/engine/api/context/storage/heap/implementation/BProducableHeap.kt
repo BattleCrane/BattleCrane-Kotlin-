@@ -5,13 +5,13 @@ import com.orego.battlecrane.bc.engine.api.model.property.BProducable
 
 class BProducableHeap : BHeap<BProducable>() {
 
-    override fun addObject(any: Any) {
+    override fun onPutObject(any: Any) {
         if (any is BProducable) {
             this.objectMap[any.producableId] = any
         }
     }
 
-    override fun removeObject(any: Any) {
+    override fun onRemoveObject(any: Any) {
         if (any is BProducable) {
             this.objectMap.remove(any.producableId)
         }

@@ -1,7 +1,7 @@
 package com.orego.battlecrane.bc.android.api.context
 
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickController
-import com.orego.battlecrane.bc.android.api.context.uiTaskManager.BUiTaskManager
+import com.orego.battlecrane.bc.android.api.context.taskManager.BUiTaskManager
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
@@ -25,7 +25,7 @@ class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragm
         val units = storage.getHeap(BUnitHeap::class.java).getObjectList()
         for (unit in units) {
             val uiUnit = this.uiUnitFactory.build(this, unit)
-            storage.addObject(uiUnit)
+            storage.putObject(uiUnit)
         }
     }
 }

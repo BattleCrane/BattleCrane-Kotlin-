@@ -58,12 +58,12 @@ abstract class BGameScenario {
 
     protected open fun installStorage(context: BGameContext) {
         context.storage.apply {
-            this.addHeap(BPlayerHeap())
-            this.addHeap(BUnitHeap())
-            this.addHeap(BAttackableHeap())
-            this.addHeap(BLevelableHeap())
-            this.addHeap(BHitPointableHeap())
-            this.addHeap(BProducableHeap())
+            this.installHeap(BPlayerHeap())
+            this.installHeap(BUnitHeap())
+            this.installHeap(BAttackableHeap())
+            this.installHeap(BLevelableHeap())
+            this.installHeap(BHitPointableHeap())
+            this.installHeap(BProducableHeap())
         }
     }
 
@@ -85,7 +85,7 @@ abstract class BGameScenario {
     protected open fun installPlayers(context: BGameContext) {
         val storage = context.storage
         this.getPlayers(context).forEach { player ->
-            storage.addObject(player)
+            storage.putObject(player)
         }
     }
 
@@ -116,7 +116,7 @@ abstract class BGameScenario {
     protected open fun installUnits(context: BGameContext) {
         val storage = context.storage
         this.getUnits(context).forEach { unit ->
-            storage.addObject(unit)
+            storage.putObject(unit)
         }
     }
 

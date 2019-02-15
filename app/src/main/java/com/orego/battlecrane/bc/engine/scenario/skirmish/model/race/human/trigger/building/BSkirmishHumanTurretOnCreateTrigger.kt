@@ -52,7 +52,7 @@ class BSkirmishHumanTurretOnCreateTrigger private constructor(context: BGameCont
             //Create turret:
             val turret = this.createUnit(context)
             controller.notifyUnitChanged(turret)
-            context.storage.addObject(turret)
+            context.storage.putObject(turret)
             pipeline.pushEvent(BSkirmishHumanTurretOnAttackActionTrigger.Event(turret.attackableId))
             return true
         }

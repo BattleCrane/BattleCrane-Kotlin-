@@ -48,7 +48,7 @@ abstract class BUiGameScenario {
     }
 
     protected open fun installUiStorage(gameContext: BGameContext) {
-        gameContext.storage.addHeap(BUiUnitHeap())
+        gameContext.storage.installHeap(BUiUnitHeap())
     }
 
     protected open fun installUiBaseTriggers(uiGameContext: BUiGameContext) {

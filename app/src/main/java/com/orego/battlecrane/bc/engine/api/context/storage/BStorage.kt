@@ -2,20 +2,24 @@ package com.orego.battlecrane.bc.engine.api.context.storage
 
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.BHeap
 
+/**
+ * Keeps game context data.
+ */
+
 class BStorage {
 
     val heapMap = mutableMapOf<Class<*>, BHeap<*>>()
 
     inline fun <reified T> getHeap(heapClazz: Class<T>): T = this.heapMap[heapClazz] as T
 
-    fun addHeap(heap : BHeap<*>) {
+    fun installHeap(heap : BHeap<*>) {
         this.heapMap[heap::class.java] = heap
     }
 
-    fun addObject(any: Any) {
+    fun putObject(any: Any) {
         val heaps = this.heapMap.values.toList()
         for (i in 0 until heaps.size) {
-            heaps[i].addObject(any)
+            heaps[i].onPutObject(any)
         }
     }
 
@@ -28,7 +32,7 @@ class BStorage {
     private fun removeObject(any: Any) {
         val heaps = this.heapMap.values.toList()
         for (i in 0 until heaps.size) {
-            heaps[i].removeObject(any)
+            heaps[i].onRemoveObject(any)
         }
     }
 }

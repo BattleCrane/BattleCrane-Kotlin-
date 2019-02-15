@@ -14,7 +14,7 @@ abstract class BLineMatcher {
     abstract fun isBlock(x: Int, y: Int): Boolean
 
     /**
-     * Attack geometry check.
+     * Line geometry check.
      */
 
     fun hasBlocks(attackablePoint: BPoint, targerPoint: BPoint) =

@@ -41,20 +41,18 @@ class BPlayerZoneObserver(private val context: BGameContext) {
         val zones = mutableListOf<PlayerZone>()
         this.currentZone = PlayerZone()
         this.passedPoints = mutableSetOf()
-        for (x in 0 until BMapController.MAP_SIZE) {
-            for (y in 0 until BMapController.MAP_SIZE) {
-                val unit = this.mapController.getUnitByPosition(this.context, x, y)
-                val cursorPoint = BPoint(x, y)
-                if (unit is BEmptyField
-                    && unit.playerId == BPlayer.NEUTRAL_ID
-                    && !this.passedPoints.contains(cursorPoint)
-                ) {
-                    this.currentZone = PlayerZone()
-                    this.currentZone.area.add(cursorPoint)
-                    this.passedPoints.add(cursorPoint)
-                    this.makeWaveStep(this.context, cursorPoint)
-                    zones.add(this.currentZone)
-                }
+        BMapController.foreach { x, y ->
+            val unit = this.mapController.getUnitByPosition(this.context, x, y)
+            val cursorPoint = BPoint(x, y)
+            if (unit is BEmptyField
+                && unit.playerId == BPlayer.NEUTRAL_ID
+                && !this.passedPoints.contains(cursorPoint)
+            ) {
+                this.currentZone = PlayerZone()
+                this.currentZone.area.add(cursorPoint)
+                this.passedPoints.add(cursorPoint)
+                this.makeWaveStep(this.context, cursorPoint)
+                zones.add(this.currentZone)
             }
         }
         return zones

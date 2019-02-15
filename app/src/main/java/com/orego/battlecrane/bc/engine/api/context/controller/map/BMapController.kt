@@ -19,10 +19,9 @@ class BMapController {
      * Change uiUnit ids on the map.
      */
 
-    fun notifyUnitChanged(unit: BUnit): Boolean {
+    fun notifyUnitChanged(unit: BUnit) {
         val unitId = unit.unitId
         unit.foreach { x, y -> this.matrix[x][y] = unitId }
-        return true
     }
 
     /**

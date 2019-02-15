@@ -43,7 +43,7 @@ android {
         targetCompatibility = '1.8'
     }
 }
-repositories{
+repositories {
     maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     mavenCentral()
 }
@@ -65,6 +65,7 @@ dependencies {
     implementation 'android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha07'
     implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-alpha07'
     implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     kapt "android.arch.lifecycle:compiler:1.1.1"
 
     /* androidx */
@@ -113,4 +114,10 @@ dependencies {
             coroutines "enable"
         }
     }
+
+    /* navigation */
+    def nav_version = "1.0.0-beta02"
+
+    implementation "android.arch.navigation:navigation-fragment:$nav_version" // For Kotlin use navigation-fragment-ktx
+    implementation "android.arch.navigation:navigation-ui:$nav_version" // For Kotlin use navigation-ui-ktx
 }

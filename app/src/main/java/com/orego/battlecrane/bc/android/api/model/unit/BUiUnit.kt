@@ -21,7 +21,11 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
 
     val uiUnitId: Long
 
-    open val unitView by lazy {
+    /**
+     *
+     */
+
+    open val unitView : View by lazy {
         this.onDraw(uiGameContext)
     }
 
@@ -69,7 +73,11 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
         return imageView
     }
 
-    open fun showDescription(uiGameContext: BUiGameContext) {
+    /**
+     * Draws description when unit is clicked.
+     */
+
+    open fun setDescription(uiGameContext: BUiGameContext) {
     }
 
     open fun onClick(uiGameContext: BUiGameContext) {
@@ -83,7 +91,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
     open class UiClickMode(private val uiGameContext: BUiGameContext, val unit: BUiUnit) : BUiClickMode {
 
         override fun onStartClickMode() {
-            this.unit.showDescription(this.uiGameContext)
+            this.unit.setDescription(this.uiGameContext)
         }
     }
 

@@ -5,13 +5,13 @@ import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
 
 class BHitPointableHeap : BHeap<BHitPointable>() {
 
-    override fun addObject(any: Any) {
+    override fun onPutObject(any: Any) {
         if (any is BHitPointable) {
             this.objectMap[any.hitPointableId] = any
         }
     }
 
-    override fun removeObject(any: Any) {
+    override fun onRemoveObject(any: Any) {
         if (any is BHitPointable) {
             this.objectMap.remove(any.hitPointableId)
         }

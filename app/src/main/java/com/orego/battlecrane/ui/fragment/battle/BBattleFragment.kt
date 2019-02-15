@@ -33,6 +33,10 @@ class BBattleFragment : BFragment() {
         this.presenter.stop()
     }
 
+    /**
+     *
+     */
+
     inner class Presenter : BFragment.BPresenter() {
 
         private var isPlaying = false
@@ -75,7 +79,7 @@ class BBattleFragment : BFragment() {
                 val gameContext = BGameContext()
                 val uiProvider = this@BBattleFragment.UiProvider()
                 val uiGameContext = BUiGameContext(gameContext, uiProvider)
-                uiGameContext.installScenario(this@Presenter.scenarioViewModel.uiGameScenario)
+                this@Presenter.scenarioViewModel.uiGameScenario?.install(uiGameContext)
                 uiGameContext
             }
         }

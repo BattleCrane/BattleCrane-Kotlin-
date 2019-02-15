@@ -2,9 +2,9 @@ package com.orego.battlecrane.bc.engine.api.model.property
 
 interface BLevelable {
 
-    var playerId : Long
-
     val levelableId : Long
+
+    var playerId : Long
 
     var currentLevel: Int
 

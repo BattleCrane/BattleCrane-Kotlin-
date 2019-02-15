@@ -80,7 +80,7 @@ abstract class BUiOnEnableTrigger(protected val uiGameContext: BUiGameContext, p
     open inner class UiClickMode : BUiUnit.UiClickMode(this.uiGameContext, this.uiUnit) {
 
         override fun onStartClickMode() {
-            this.unit.showDescription(this@BUiOnEnableTrigger.uiGameContext)
+            this.unit.setDescription(this@BUiOnEnableTrigger.uiGameContext)
             this@BUiOnEnableTrigger.onDrawActions()
         }
     }

@@ -37,7 +37,7 @@ abstract class BUiItem<T> protected constructor(open val item: T) {
         open fun build(uiGameContext: BUiGameContext, item: T): BUiItem<T> {
             val builder = this.builderMap[item::class.java]!!
             val holder = builder.build(uiGameContext, item)
-            uiGameContext.gameContext.storage.addObject(holder)
+            uiGameContext.gameContext.storage.putObject(holder)
             return holder
         }
     }

@@ -18,6 +18,10 @@ abstract class BUnit protected constructor(
 
     abstract val width: Int
 
+    /**
+     * Iterates over each holding position of unit.
+     */
+
     inline fun foreach(function: (x: Int, y: Int) -> Unit) {
         for (x in this.x until this.x + this.width) {
             for (y in this.y until this.y + this.height) {

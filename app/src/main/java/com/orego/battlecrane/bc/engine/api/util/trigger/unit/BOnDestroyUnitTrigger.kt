@@ -5,9 +5,9 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.node.BOnDestroyUnitNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BOnDestroyUnitTrigger private constructor(context: BGameContext, val unit: BUnit) :
     BNode(context) {
@@ -37,12 +37,7 @@ class BOnDestroyUnitTrigger private constructor(context: BGameContext, val unit:
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val unit = this@BOnDestroyUnitTrigger.unit
-
-        override fun isFinished() = this@BOnDestroyUnitTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 

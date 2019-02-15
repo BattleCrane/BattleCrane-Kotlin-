@@ -32,8 +32,8 @@ class BSkirmishHumanWallOnCreateTrigger private constructor(context: BGameContex
             //Set walls:
             controller.notifyUnitChanged(wall1)
             controller.notifyUnitChanged(wall2)
-            storage.addObject(wall1)
-            storage.addObject(wall2)
+            storage.putObject(wall1)
+            storage.putObject(wall2)
             return this.pushToInnerPipes(event)
         }
         return null

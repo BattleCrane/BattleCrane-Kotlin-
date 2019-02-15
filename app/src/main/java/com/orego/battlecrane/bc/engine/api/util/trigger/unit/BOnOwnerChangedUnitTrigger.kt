@@ -5,9 +5,9 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onOwnerChanged.node.BOnOwnerChangedUnitNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BOnOwnerChangedUnitTrigger private constructor(context: BGameContext, val unit: BUnit) : BNode(context) {
 
@@ -37,12 +37,7 @@ class BOnOwnerChangedUnitTrigger private constructor(context: BGameContext, val 
      * Pipe.
      */
 
-    inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val unit = this@BOnOwnerChangedUnitTrigger.unit
-
-        override fun isFinished() = this@BOnOwnerChangedUnitTrigger.isFinished()
-    }
+    inner class Pipe : BParentPipe(this)
 
     companion object {
 

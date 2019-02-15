@@ -2,9 +2,9 @@ package com.orego.battlecrane.bc.engine.api.model.property
 
 interface BAttackable {
 
-    var playerId : Long
-
     val attackableId: Long
+
+    var playerId : Long
 
     var damage: Int
 

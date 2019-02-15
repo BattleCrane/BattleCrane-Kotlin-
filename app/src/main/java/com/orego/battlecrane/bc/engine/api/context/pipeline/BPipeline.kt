@@ -10,7 +10,15 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 
 class BPipeline {
 
+    /**
+     * If lock flag is true then a next input event puts into the event queue.
+     */
+
     private var isLocking = false
+
+    /**
+     * Keeps next handled events.
+     */
 
     private val eventQueue = mutableListOf<BEvent>()
 
@@ -32,6 +40,10 @@ class BPipeline {
             listener.onBroadcastEvent(event)
         }
     }
+
+    /**
+     * Handles event with locking and queue.
+     */
 
     fun pushEvent(event: BEvent?) {
         if (event != null) {
@@ -64,12 +76,16 @@ class BPipeline {
     }
 
     /**
-     * Pipe.
+     * Connection functions.
      */
 
     fun connectInnerPipe(pipe: BPipe) {
         this.pipeMap[pipe.id] = pipe
     }
+
+    /**
+     * Searching functions.
+     */
 
     fun findPipe(name: String) = this.findPipeBy { it.name == name }
 
@@ -85,10 +101,6 @@ class BPipeline {
         }
         throw IllegalStateException("Pipe not found!")
     }
-
-    /**
-     * Find.
-     */
 
     fun findNode(name: String) = this.findNodeBy { it.name == name }
 
@@ -106,7 +118,7 @@ class BPipeline {
     }
 
     /**
-     * Bind.
+     * Binding functions.
      */
 
     fun bindPipeToNode(nodeName: String, pipe: BPipe): BNode {
@@ -132,7 +144,7 @@ class BPipeline {
     }
 
     /**
-     * Remove.
+     * Removing functions.
      */
 
     fun removeUnusedComponents() {
@@ -147,7 +159,7 @@ class BPipeline {
     }
 
     /**
-     * Listener.
+     * Listener functions.
      */
 
     fun registerOnPipelineWorkFinishedListener(listener: OnPipelineWorkFinishedListener) {

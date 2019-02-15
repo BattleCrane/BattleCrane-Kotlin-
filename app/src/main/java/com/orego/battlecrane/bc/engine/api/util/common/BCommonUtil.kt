@@ -4,10 +4,10 @@ package com.orego.battlecrane.bc.engine.api.util.common
  * List.
  */
 
-fun <T, R> List<T>.filterMap(
-    filterFunc: (T) -> Boolean,
-    transformFunc: (T) -> R
-) = this.filter { filterFunc(it) }.map { transformFunc(it) }
+//fun <T, R> List<T>.filterMap(
+//    filterFunc: (T) -> Boolean,
+//    transformFunc: (T) -> R
+//) = this.filter { filterFunc(it) }.map { transformFunc(it) }
 
 /**
  * Point.

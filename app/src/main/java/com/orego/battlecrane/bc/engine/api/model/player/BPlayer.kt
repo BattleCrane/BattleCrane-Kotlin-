@@ -2,7 +2,6 @@ package com.orego.battlecrane.bc.engine.api.model.player
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 
 open class BPlayer protected constructor(context: BGameContext) {
 
@@ -21,35 +20,31 @@ open class BPlayer protected constructor(context: BGameContext) {
      * Property.
      */
 
-    val adjutants = mutableSetOf<Long>()
-
     val allies = mutableSetOf<Long>()
 
     val enemies = mutableSetOf<Long>()
 
-    open fun getUnits(context: BGameContext): List<BUnit> {
-        return context.storage.getHeap(BUnitHeap::class.java).objectMap.values.filter { unit ->
-            unit.playerId == this.playerId
-        }
-    }
+    open fun getUnits(context: BGameContext) = context.storage
+        .getHeap(BUnitHeap::class.java).objectMap.values
+        .filter { unit -> unit.playerId == this.playerId }
 
     /**
      * Player.
      */
 
-    fun addEnemy(player: Long) = this.enemies.add(player)
+    fun addEnemy(playerId: Long) = this.enemies.add(playerId)
 
-    fun removeEnemy(player: Long) = this.enemies.remove(player)
+    fun removeEnemy(playerId: Long) = this.enemies.remove(playerId)
 
-    fun isMine(player: Long) = this.playerId == player
+    fun isMine(playerId: Long) = this.playerId == playerId
 
-    fun isEnemy(player: Long) = this.enemies.contains(player)
+    fun isEnemy(playerId: Long) = this.enemies.contains(playerId)
 
-    fun addAlly(player: Long) = this.allies.add(player)
+    fun addAlly(playerId: Long) = this.allies.add(playerId)
 
-    fun removeAlly(player: Long) = this.allies.remove(player)
+    fun removeAlly(playerId: Long) = this.allies.remove(playerId)
 
-    fun isAlly(player: Long) = this.allies.contains(player)
+    fun isAlly(playerId: Long) = this.allies.contains(playerId)
 
     /**
      * Configure player.

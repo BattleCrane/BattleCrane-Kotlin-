@@ -7,8 +7,8 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onDestroyUnit.BOnDestroyUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
-import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 open class BOnCreateUnitTrigger protected constructor(context: BGameContext, var playerId: Long) :
     BNode(context) {
@@ -26,10 +26,7 @@ open class BOnCreateUnitTrigger protected constructor(context: BGameContext, var
      * Pipe.
      */
 
-    open inner class Pipe : BPipe(this.context, mutableListOf(this)) {
-
-        val playerId = this@BOnCreateUnitTrigger.playerId
-    }
+    open inner class Pipe : BParentPipe(this)
 
     /**
      * Event.
@@ -48,15 +45,16 @@ open class BOnCreateUnitTrigger protected constructor(context: BGameContext, var
             for (x in this.x until this.x + this.width) {
                 for (y in this.y until this.y + this.height) {
                     if (BMapController.inBounds(x, y)) {
-                        val unitId = controller.getUnitIdByPosition(x, y)
-                        pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId))
+                        val unitId = controller[x, y]
+                        val onDestroyEvent = BOnDestroyUnitPipe.Event(unitId)
+                        pipeline.pushEvent(onDestroyEvent)
                     }
                 }
             }
             //Create new uiUnit:
             val unit = this.createUnit(context)
             controller.notifyUnitChanged(unit)
-            context.storage.addObject(unit)
+            context.storage.putObject(unit)
             return true
         }
 
