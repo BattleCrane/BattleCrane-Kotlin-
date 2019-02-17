@@ -1,12 +1,12 @@
 package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.scenario.plugin.implementation.race.BRacePlugin
+import com.orego.battlecrane.bc.engine.api.scenario.plugin.implementation.player.BPlayerPlugin
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.building.*
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.infantry.BSkirmishHumanMarineOnCreateTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.vehicle.BSkirmishHumanTankOnCreateTrigger
 
-class BSkirmishHumanPlugin(playerId: Long) : BRacePlugin(playerId) {
+class BSkirmishHumanPlugin(playerId: Long) : BPlayerPlugin(playerId) {
 
     override fun install(context: BGameContext) {
         val playerId = this.playerId

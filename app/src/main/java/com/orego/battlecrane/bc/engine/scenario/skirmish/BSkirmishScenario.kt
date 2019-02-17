@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.B
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.engine.api.scenario.plugin.implementation.race.BRacePlugin
+import com.orego.battlecrane.bc.engine.api.scenario.plugin.implementation.player.BPlayerPlugin
 import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BObservePlayerZonesOnStartTurnTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.BSkirmishGrassPlugin
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.field.BSkirmishEmptyGrassFieldBuilder
@@ -51,8 +51,8 @@ class BSkirmishScenario : BGameScenario() {
     override fun getLocationPlugin(context: BGameContext) =
         BSkirmishGrassPlugin()
 
-    override fun getRacePlugins(context: BGameContext): List<BRacePlugin> {
-        val pluginList = mutableListOf<BRacePlugin>()
+    override fun getRacePlugins(context: BGameContext): List<BPlayerPlugin> {
+        val pluginList = mutableListOf<BPlayerPlugin>()
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()
         if (players.size == PLAYER_COUNT) {
