@@ -15,5 +15,12 @@ class BClickController {
 
     fun forcePushClickMode(clickMode: BClickMode) {
         this.currentClickMode = clickMode
+
+        val a = this[0, 1]
+        print(a)
+    }
+
+    operator fun get(x : Int, y : Int) : Int {
+        return x + y
     }
 }
