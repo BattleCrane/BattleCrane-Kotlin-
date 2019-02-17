@@ -6,6 +6,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.level
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 
+/**
+ * Checks all level event traffic.
+ */
+
 class BLevelableNode(context: BGameContext) : BNode(context) {
 
     companion object {

@@ -6,6 +6,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPo
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BHitPointableHeap
 
+/**
+ * Passes all hit points action event traffic.
+ */
+
 class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
 
     companion object {
@@ -20,7 +24,7 @@ class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
     }
 
     /**
-     * Event.
+     * Hit points action event.
      */
 
     abstract class Event(val hitPointableId: Long, val range: Int) :
@@ -30,6 +34,10 @@ class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
 
         abstract fun perform(context: BGameContext)
     }
+
+    /**
+     * Keeps all events connected with current hit points
+     */
 
     object Current {
 
@@ -79,6 +87,10 @@ class BOnHitPointsActionPipe(context: BGameContext) : BPipe(context) {
             }
         }
     }
+
+    /**
+     * Keeps all events connected with max hit points
+     */
 
     object Max {
 

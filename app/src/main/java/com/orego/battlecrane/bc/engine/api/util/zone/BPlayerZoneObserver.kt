@@ -29,7 +29,7 @@ class BPlayerZoneObserver(private val context: BGameContext) {
     fun clearFields() {
         for (x in 0 until BMapController.MAP_SIZE) {
             for (y in 0 until BMapController.MAP_SIZE) {
-                val unit = this.mapController.getUnitByPosition(this.context, x, y)
+                val unit = this.mapController.getUnitByPosition(x, y)
                 if (unit is BEmptyField) {
                     unit.playerId = BPlayer.NEUTRAL_ID
                 }
@@ -42,7 +42,7 @@ class BPlayerZoneObserver(private val context: BGameContext) {
         this.currentZone = PlayerZone()
         this.passedPoints = mutableSetOf()
         BMapController.foreach { x, y ->
-            val unit = this.mapController.getUnitByPosition(this.context, x, y)
+            val unit = this.mapController.getUnitByPosition(x, y)
             val cursorPoint = BPoint(x, y)
             if (unit is BEmptyField
                 && unit.playerId == BPlayer.NEUTRAL_ID
@@ -62,7 +62,7 @@ class BPlayerZoneObserver(private val context: BGameContext) {
         for (zone in zones) {
             val playerId = zone.playerId
             for (point in zone.area) {
-                val unit = this.mapController.getUnitByPosition(this.context, point)
+                val unit = this.mapController.getUnitByPosition(point)
                 if (unit is BEmptyField && unit.playerId != playerId) {
                     this.pipeline.pushEvent(BOnOwnerChangedUnitPipe.Event(unit.unitId, playerId))
                 }
@@ -102,7 +102,7 @@ class BPlayerZoneObserver(private val context: BGameContext) {
     private fun checkNeighbour(context: BGameContext, point: BPoint, neighbours: MutableList<BPoint>) {
         if (BMapController.inBounds(point) && !this.passedPoints.contains(point)) {
             val mapController = context.mapController
-            val unit = mapController.getUnitByPosition(context, point)
+            val unit = mapController.getUnitByPosition(point)
             val zoneOwnerId = this.currentZone.playerId
             //Check building:
             if (unit is BBuilding) {

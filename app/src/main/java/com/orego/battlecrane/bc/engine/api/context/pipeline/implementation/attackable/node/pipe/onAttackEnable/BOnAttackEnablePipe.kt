@@ -6,6 +6,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAttackableHeap
 
+/**
+ * Passes all attack enable event traffic.
+ */
+
 class BOnAttackEnablePipe(context: BGameContext) : BPipe(context) {
 
     companion object {

@@ -14,7 +14,7 @@ class BUiSkirmishHumanMarineOnCreateTrigger private constructor(
         if (event is BSkirmishHumanMarineOnCreateTrigger.Event && event.playerId == this.playerId) {
             this.uiGameContext.uiTaskManager.addTask {
                 val gameContext = this.uiGameContext.gameContext
-                val marine = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
+                val marine = gameContext.mapController.getUnitByPosition(event.x, event.y)
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, marine)
             }
         }

@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.engine.api.scenario.plugin.implementation.race.B
 import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BObservePlayerZonesOnStartTurnTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.BSkirmishGrassPlugin
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.field.BSkirmishEmptyGrassFieldBuilder
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.player.BStandardSkirmishPlayerBuilder
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.player.BSkirmishPlayerBuilder
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.BSkirmishHumanPlugin
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.headquarters.builder.BSkirmishHumanHeadquartersBuilder
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.wall.builder.BSkirmishHumanWallBuilder
@@ -29,7 +29,7 @@ class BSkirmishScenario : BGameScenario() {
 
     override fun getPlayers(context: BGameContext): List<BPlayer> {
         val playerList = mutableListOf<BPlayer>()
-        val builder = BStandardSkirmishPlayerBuilder()
+        val builder = BSkirmishPlayerBuilder()
         val bluePlayer = builder.build(context)
         val redPlayer = builder.build(context)
         //Set enemies:

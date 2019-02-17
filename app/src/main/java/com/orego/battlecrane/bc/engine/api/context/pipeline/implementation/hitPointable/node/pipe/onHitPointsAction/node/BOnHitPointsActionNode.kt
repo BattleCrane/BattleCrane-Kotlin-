@@ -5,6 +5,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPo
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 
+/**
+ * Checks all hit points action event traffic.
+ */
+
 class BOnHitPointsActionNode(context: BGameContext) : BNode(context) {
 
     override val name = NAME

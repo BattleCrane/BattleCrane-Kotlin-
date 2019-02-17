@@ -64,7 +64,7 @@ class BSkirmishHumanFactoryOnProduceActionTrigger private constructor(
 
         fun isEnable(context: BGameContext, factory: BHumanFactory): Boolean {
             val controller = context.mapController
-            val otherUnit = controller.getUnitByPosition(context, this.x, this.y)
+            val otherUnit = controller.getUnitByPosition(this.x, this.y)
             if (otherUnit !is BEmptyGrassField) {
                 return false
             }

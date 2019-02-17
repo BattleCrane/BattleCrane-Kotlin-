@@ -5,6 +5,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 
+/**
+ * Passes all attack events.
+ */
+
 class BAttackablePipe(context: BGameContext) : BPipe(context) {
 
     companion object {
@@ -17,6 +21,10 @@ class BAttackablePipe(context: BGameContext) : BPipe(context) {
     init {
         this.placeNode(BAttackableNode(context))
     }
+
+    /**
+     * Attack event.
+     */
 
     open class Event : BEvent()
 }

@@ -70,7 +70,7 @@ class BSkirmishHumanBarracksOnProduceActionTrigger private constructor(
 
         fun isEnable(context: BGameContext, barracks: BHumanBarracks): Boolean {
             val controller = context.mapController
-            val otherUnit = controller.getUnitByPosition(context, this.x, this.y)
+            val otherUnit = controller.getUnitByPosition(this.x, this.y)
             if (otherUnit !is BEmptyField) {
                 return false
             }

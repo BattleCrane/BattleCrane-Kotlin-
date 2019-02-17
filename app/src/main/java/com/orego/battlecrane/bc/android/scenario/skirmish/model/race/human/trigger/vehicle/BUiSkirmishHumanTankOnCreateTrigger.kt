@@ -14,7 +14,7 @@ class BUiSkirmishHumanTankOnCreateTrigger private constructor(
         if (event is BSkirmishHumanTankOnCreateTrigger.Event && event.playerId == this.playerId) {
             this.uiGameContext.uiTaskManager.addTask {
                 val gameContext = this.uiGameContext.gameContext
-                val tank = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
+                val tank = gameContext.mapController.getUnitByPosition(event.x, event.y)
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, tank)
             }
         }

@@ -56,7 +56,7 @@ class BSkirmishHumanTurretOnAttackActionTrigger private constructor(context: BGa
             for (x in turretX - radius until turretX + radius + 1) {
                 for (y in turretY - countShift until turretY + 1 + countShift) {
                     if (BMapController.inBounds(x, y)) {
-                        val otherUnit = mapController.getUnitByPosition(context, x, y)
+                        val otherUnit = mapController.getUnitByPosition(x, y)
                         if (otherUnit is BHitPointable && player.isEnemy(otherUnit.playerId)) {
                             this.attack(pipeline, otherUnit.hitPointableId, turretDamage)
                         }

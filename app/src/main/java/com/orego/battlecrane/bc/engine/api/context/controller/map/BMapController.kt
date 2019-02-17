@@ -11,7 +11,7 @@ import com.orego.battlecrane.bc.engine.api.util.common.y
  * Represents units on the map by their ids.
  */
 
-class BMapController {
+class BMapController(private val context: BGameContext) {
 
     private val matrix = BMapController.createMatrix()
 
@@ -32,11 +32,10 @@ class BMapController {
 
     operator fun get(point: BPoint): Long = this.matrix[point.x][point.y]
 
-    fun getUnitByPosition(context: BGameContext, point: BPoint) =
-        this.getUnitByPosition(context, point.x, point.y)
+    fun getUnitByPosition(point: BPoint) = this.getUnitByPosition(point.x, point.y)
 
-    fun getUnitByPosition(context: BGameContext, x: Int, y: Int) =
-        context.storage.getHeap(BUnitHeap::class.java)[this.matrix[x][y]]
+    fun getUnitByPosition(x: Int, y: Int) =
+        this.context.storage.getHeap(BUnitHeap::class.java)[this.matrix[x][y]]
 
     /**
      * ToString.

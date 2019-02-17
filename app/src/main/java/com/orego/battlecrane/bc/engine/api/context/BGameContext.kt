@@ -35,7 +35,7 @@ class BGameContext {
      * Controller.
      */
 
-    val mapController = BMapController()
+    val mapController = BMapController(this)
 
     val playerController = BPlayerController()
 

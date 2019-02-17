@@ -14,7 +14,7 @@ class BUiSkirmishHumanTurretOnCreateTrigger private constructor(
         if (event is BSkirmishHumanTurretOnCreateTrigger.Event && event.playerId == this.playerId) {
             this.uiGameContext.uiTaskManager.addTask {
                 val gameContext = this.uiGameContext.gameContext
-                val turret = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
+                val turret = gameContext.mapController.getUnitByPosition(event.x, event.y)
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, turret)
             }
         }

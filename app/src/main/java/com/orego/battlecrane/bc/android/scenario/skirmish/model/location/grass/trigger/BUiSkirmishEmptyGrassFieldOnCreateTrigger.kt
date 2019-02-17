@@ -14,7 +14,7 @@ class BUiSkirmishEmptyGrassFieldOnCreateTrigger private constructor(
         if (event is BSkirmishEmptyGrassFieldOnCreateTrigger.Event) {
             this.uiGameContext.uiTaskManager.addTask {
                 val gameContext = this.uiGameContext.gameContext
-                val destroyedField = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
+                val destroyedField = gameContext.mapController.getUnitByPosition(event.x, event.y)
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, destroyedField)
             }
         }

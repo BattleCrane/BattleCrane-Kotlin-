@@ -5,9 +5,12 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onCreateUnit.BOnCreateUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
-import com.orego.battlecrane.bc.engine.api.util.geometry.BPerimeterMatcher
-import com.orego.battlecrane.bc.engine.api.util.geometry.BSquareMatcher
+import com.orego.battlecrane.bc.engine.api.util.geometry.BRectangleGeometry
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.BHumanBuilding
+
+/**
+ * Event of creating building.
+ */
 
 abstract class BHumanConstructBuildingEvent(
     producableId: Long,
@@ -25,26 +28,18 @@ abstract class BHumanConstructBuildingEvent(
     open fun isEnable(context: BGameContext, playerId: Long): Boolean {
         val player = context.storage.getHeap(BPlayerHeap::class.java)[playerId]
         val mapController = context.mapController
+        val rectangle = BRectangleGeometry.Rectangle(this.startX to this.startY, this.width, this.height)
         //Check square:
-        val squareMatcher = object : BSquareMatcher() {
-
-            override fun isBlock(x: Int, y: Int) =
-                mapController.getUnitByPosition(context, x, y) !is BEmptyField
-        }
-        val endX = this.startX + this.width
-        val endY = this.startY + this.height
-        if (squareMatcher.hasBlocks(this.startX, this.startY, endX, endY)) {
+        val isBlockFunc: (Int, Int) -> Boolean = { x, y -> mapController.getUnitByPosition(x, y) !is BEmptyField }
+        if (BRectangleGeometry.checkSquare(rectangle, isBlockFunc)) {
             return false
         }
-        val perimeterMatcher = object : BPerimeterMatcher() {
-
-            override fun isFound(x: Int, y: Int): Boolean {
-                val unit = mapController.getUnitByPosition(context, x, y)
-                val unitOwnerId = unit.playerId
-                return unit is BHumanBuilding && (player.isMine(unitOwnerId) || player.isAlly(unitOwnerId))
-            }
+        val hasNeighbourFunc: (Int, Int) -> Boolean = { x, y ->
+            val unit = mapController.getUnitByPosition(x, y)
+            val unitOwnerId = unit.playerId
+            unit is BHumanBuilding && (player.isMine(unitOwnerId) || player.isAlly(unitOwnerId))
         }
-        return perimeterMatcher.findAroundPerimeter(this.startX, this.startY, this.width, this.height)
+        return BRectangleGeometry.checkAroundPerimeter(rectangle, hasNeighbourFunc)
     }
 
     abstract fun getOnCreateEvent(playerId: Long, x: Int, y: Int): BOnCreateUnitPipe.Event

@@ -5,6 +5,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPo
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 
+/**
+ * Passes all hit points event traffic.
+ */
+
 class BHitPointablePipe(context: BGameContext) : BPipe(context) {
 
     companion object {
@@ -17,6 +21,10 @@ class BHitPointablePipe(context: BGameContext) : BPipe(context) {
     init {
         this.placeNode(BHitPointableNode(context))
     }
+
+    /**
+     * Hit points event.
+     */
 
     open class Event : BEvent()
 }

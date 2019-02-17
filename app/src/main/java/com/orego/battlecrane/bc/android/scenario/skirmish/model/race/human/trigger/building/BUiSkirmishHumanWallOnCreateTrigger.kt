@@ -17,10 +17,8 @@ class BUiSkirmishHumanWallOnCreateTrigger private constructor(
                 val unitFactory = this.uiGameContext.uiUnitFactory
                 val x = event.x
                 val y = event.y
-                val wall1 = mapController.getUnitByPosition(this.context, x, y)
-                val wall2 = mapController.getUnitByPosition(
-                    this.context, x, y + BSkirmishHumanWallOnCreateTrigger.NEXT_WALL_POSITION
-                )
+                val wall1 = mapController.getUnitByPosition(x, y)
+                val wall2 = mapController.getUnitByPosition(x, y + BSkirmishHumanWallOnCreateTrigger.NEXT_WALL_POSITION)
                 unitFactory.build(this.uiGameContext, wall1)
                 unitFactory.build(this.uiGameContext, wall2)
             }

@@ -5,6 +5,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.level
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 
+/**
+ * Passes all level events.
+ */
+
 class BLevelablePipe(context: BGameContext) : BPipe(context) {
 
     companion object {
@@ -17,6 +21,10 @@ class BLevelablePipe(context: BGameContext) : BPipe(context) {
     init{
         this.placeNode(BLevelableNode(context))
     }
+
+    /**
+     * Level event.
+     */
 
     open class Event : BEvent()
 }

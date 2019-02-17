@@ -14,7 +14,7 @@ class BUiSkirmishHumanGeneratorOnCreateTrigger private constructor(
         if (event is BSkirmishHumanGeneratorOnCreateTrigger.Event && event.playerId == this.playerId) {
             this.uiGameContext.uiTaskManager.addTask {
                 val gameContext = this.uiGameContext.gameContext
-                val generator = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
+                val generator = gameContext.mapController.getUnitByPosition(event.x, event.y)
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, generator)
             }
         }

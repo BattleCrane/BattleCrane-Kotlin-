@@ -6,6 +6,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPo
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 
+/**
+ * Checks all hit pointable event traffic.
+ */
+
 class BHitPointableNode(context: BGameContext) : BNode(context) {
 
     companion object {

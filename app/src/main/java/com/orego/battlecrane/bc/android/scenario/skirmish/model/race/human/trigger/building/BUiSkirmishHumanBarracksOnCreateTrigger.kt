@@ -14,7 +14,7 @@ class BUiSkirmishHumanBarracksOnCreateTrigger private constructor(
         if (event is BSkirmishHumanBarracksOnCreateTrigger.Event && event.playerId == this.playerId) {
             this.uiGameContext.uiTaskManager.addTask {
                 val gameContext = this.uiGameContext.gameContext
-                val barracks = gameContext.mapController.getUnitByPosition(gameContext, event.x, event.y)
+                val barracks = gameContext.mapController.getUnitByPosition(event.x, event.y)
                 this.uiGameContext.uiUnitFactory.build(this.uiGameContext, barracks)
             }
         }

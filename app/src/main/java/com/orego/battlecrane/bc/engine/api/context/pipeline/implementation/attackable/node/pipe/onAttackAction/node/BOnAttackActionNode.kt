@@ -5,6 +5,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 
+/**
+ * Checks all attack action event traffic.
+ */
+
 class BOnAttackActionNode(context: BGameContext) : BNode(context) {
 
     override val name = NAME

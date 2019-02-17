@@ -6,6 +6,10 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConst
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanFactory
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
 
+/**
+ * Event of factory creating.
+ */
+
 class BSkirmishHumanConstructFactoryEvent(producableId: Long, x: Int, y: Int) :
     BHumanConstructBuildingEvent(producableId, x, y, BHumanFactory.WIDTH, BHumanFactory.HEIGHT) {
 

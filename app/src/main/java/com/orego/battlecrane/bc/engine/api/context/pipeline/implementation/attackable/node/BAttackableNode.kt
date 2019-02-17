@@ -7,6 +7,10 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 
+/**
+ * Checks all attack event traffic.
+ */
+
 class BAttackableNode(context: BGameContext) : BNode(context) {
 
     companion object {
