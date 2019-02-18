@@ -4,6 +4,9 @@ import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 
 abstract class BUiItem<T> protected constructor(open val item: T) {
 
+    open fun onDraw(uiGameContext: BUiGameContext) {
+    }
+
     /**
      * Creates a item.
      */
@@ -37,6 +40,7 @@ abstract class BUiItem<T> protected constructor(open val item: T) {
         open fun build(uiGameContext: BUiGameContext, item: T): BUiItem<T> {
             val builder = this.builderMap[item::class.java]!!
             val holder = builder.build(uiGameContext, item)
+            holder.onDraw(uiGameContext)
             uiGameContext.gameContext.storage.putObject(holder)
             return holder
         }

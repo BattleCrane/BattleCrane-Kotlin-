@@ -12,6 +12,7 @@ class BUiSkirmishHumanWallBuilder : BUiHumanWall.Builder() {
         val holder = super.build(uiGameContext, item)
         BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
         BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
+        println("WORK " + holder.item)
         return holder
     }
 }

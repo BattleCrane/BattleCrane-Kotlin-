@@ -5,9 +5,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
-import com.orego.battlecrane.bc.android.api.util.BToolBuilder
+import com.orego.battlecrane.bc.android.api.util.BUiToolBuilder
 import com.orego.battlecrane.bc.android.api.util.trigger.producable.BUiOnProduceEnableTrigger
-import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
+import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BUiHumanPaths
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanFactory
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
@@ -37,7 +37,7 @@ class BUiSkirmishHumanFactoryOnProduceEnableTrigger private constructor(
         if (factory.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Produce.TANK, this.produceTankUiClickMode)
+                BUiToolBuilder.build(this.uiGameContext, BUiHumanPaths.Produce.TANK, this.produceTankUiClickMode)
             )
             var x = 0
             var y = 0

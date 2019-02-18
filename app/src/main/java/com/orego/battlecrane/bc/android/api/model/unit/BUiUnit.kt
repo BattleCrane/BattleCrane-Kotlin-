@@ -25,9 +25,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
      *
      */
 
-    open val unitView : View by lazy {
-        this.onDraw(uiGameContext)
-    }
+    open lateinit var unitView : View
 
     protected val uiClickMode by lazy {
         UiClickMode(uiGameContext, this)
@@ -40,7 +38,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
 
     abstract fun getItemPath(): String
 
-    protected open fun onDraw(uiGameContext: BUiGameContext): View {
+    override fun onDraw(uiGameContext: BUiGameContext) {
         val uiProvider = uiGameContext.uiProvider
         val applicationContext = uiProvider.applicationContext
         val constraintLayout = uiProvider.mapConstraintLayout
@@ -54,8 +52,8 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
         ).also {
             it.startToStart = constraintLayoutId
             it.topToTop = constraintLayoutId
-            it.marginStart = cellSizeX * item.x
-            it.topMargin = cellSizeY * item.y
+            it.marginStart = cellSizeX * this.item.x
+            it.topMargin = cellSizeY * this.item.y
         }
         //Create image unitView:
         val imageView = ImageView(applicationContext)
@@ -70,7 +68,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
                 it.setOnClickListener { this.onClick(uiGameContext) }
             }
         constraintLayout.addView(imageView)
-        return imageView
+        this.unitView = imageView
     }
 
     /**
@@ -79,6 +77,10 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
 
     open fun setDescription(uiGameContext: BUiGameContext) {
     }
+
+    /**
+     * Handles when unit clicked.
+     */
 
     open fun onClick(uiGameContext: BUiGameContext) {
         uiGameContext.uiClickController.pushClickMode(this.uiClickMode)

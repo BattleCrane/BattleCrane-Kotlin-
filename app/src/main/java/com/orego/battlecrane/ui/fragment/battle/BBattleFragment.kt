@@ -75,13 +75,13 @@ class BBattleFragment : BFragment() {
             }
 
         private suspend fun initGame() {
-            this.manager.uiGameContext = withContext(Dispatchers.IO) {
+            val uiGameContext = withContext(Dispatchers.IO) {
                 val gameContext = BGameContext()
                 val uiProvider = this@BBattleFragment.UiProvider()
-                val uiGameContext = BUiGameContext(gameContext, uiProvider)
-                this@Presenter.scenarioViewModel.uiGameScenario?.install(uiGameContext)
-                uiGameContext
+                BUiGameContext(gameContext, uiProvider)
             }
+            this@Presenter.scenarioViewModel.uiGameScenario?.install(uiGameContext)
+            this.manager.uiGameContext = uiGameContext
         }
 
         private fun startGame() {

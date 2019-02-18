@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.android.api.asset.BUiCommonPaths
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
-import com.orego.battlecrane.bc.android.api.util.BToolBuilder
+import com.orego.battlecrane.bc.android.api.util.BUiToolBuilder
 import com.orego.battlecrane.bc.android.api.util.trigger.attackable.BUiOnAttackEnableTrigger
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.vehicle.BUiHumanTank
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
@@ -35,7 +35,7 @@ class BUiSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
             //Create images:
             this.actionImageViewSet.add(
                 //TODO: ADD ATTACK BUTTON!
-                BToolBuilder.build(this.uiGameContext, BUiCommonPaths.Action.ATTACK, AttackUiClickMode())
+                BUiToolBuilder.build(this.uiGameContext, BUiCommonPaths.Action.ATTACK, AttackUiClickMode())
             )
             var x = 0
             var y = 0

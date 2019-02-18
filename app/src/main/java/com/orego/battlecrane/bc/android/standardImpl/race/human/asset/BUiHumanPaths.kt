@@ -1,6 +1,6 @@
 package com.orego.battlecrane.bc.android.standardImpl.race.human.asset
 
-object BHumanPaths {
+object BUiHumanPaths {
 
     object Build {
 

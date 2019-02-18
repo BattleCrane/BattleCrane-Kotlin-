@@ -5,9 +5,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
-import com.orego.battlecrane.bc.android.api.util.BToolBuilder
+import com.orego.battlecrane.bc.android.api.util.BUiToolBuilder
 import com.orego.battlecrane.bc.android.api.util.trigger.producable.BUiOnProduceEnableTrigger
-import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BHumanPaths
+import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BUiHumanPaths
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
 import com.orego.battlecrane.bc.engine.api.model.property.BProducable
@@ -42,21 +42,21 @@ class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
         if (unitBuilder.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.BARRACKS, object : BuildUiClickMode() {
+                BUiToolBuilder.build(this.uiGameContext, BUiHumanPaths.Build.BARRACKS, object : BuildUiClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
                         BSkirmishHumanConstructBarracksEvent(producableId, x, y)
                 })
             )
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.TURRET, object : BuildUiClickMode() {
+                BUiToolBuilder.build(this.uiGameContext, BUiHumanPaths.Build.TURRET, object : BuildUiClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
                         BSkirmishHumanConstructTurretEvent(producableId, x, y)
                 })
             )
             this.actionImageViewSet.add(
-                BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.WALL, object : BuildUiClickMode() {
+                BUiToolBuilder.build(this.uiGameContext, BUiHumanPaths.Build.WALL, object : BuildUiClickMode() {
 
                     override fun createEvent(x: Int, y: Int) =
                         BSkirmishHumanConstructWallEvent(producableId, x, y)
@@ -64,7 +64,7 @@ class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
             )
             if (BHumanCalculations.countGenerators(this.context, playerId) < BSkirmishHumanRule.GENERATOR_LIMIT) {
                 this.actionImageViewSet.add(
-                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.GENERATOR, object : BuildUiClickMode() {
+                    BUiToolBuilder.build(this.uiGameContext, BUiHumanPaths.Build.GENERATOR, object : BuildUiClickMode() {
 
                         override fun createEvent(x: Int, y: Int) =
                             BSkirmishHumanConstructGeneratorEvent(producableId, x, y)
@@ -73,7 +73,7 @@ class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
             }
             if (BHumanCalculations.countDiffBarracksFactory(this.context, playerId) > 0) {
                 this.actionImageViewSet.add(
-                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Build.FACTORY, object : BuildUiClickMode() {
+                    BUiToolBuilder.build(this.uiGameContext, BUiHumanPaths.Build.FACTORY, object : BuildUiClickMode() {
 
                         override fun createEvent(x: Int, y: Int) =
                             BSkirmishHumanConstructFactoryEvent(producableId, x, y)
@@ -82,7 +82,7 @@ class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
             }
             if (BHumanCalculations.countPossibleBuildingUpgrades(this.context, playerId) > 0) {
                 this.actionImageViewSet.add(
-                    BToolBuilder.build(this.uiGameContext, BHumanPaths.Upgrade.BUILDING, UpgradeBuildingUiClickMode())
+                    BUiToolBuilder.build(this.uiGameContext, BUiHumanPaths.Upgrade.BUILDING, UpgradeBuildingUiClickMode())
                 )
             }
             var x = 0

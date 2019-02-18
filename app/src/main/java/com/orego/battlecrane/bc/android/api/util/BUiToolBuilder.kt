@@ -6,7 +6,7 @@ import android.widget.ImageView
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 
-object BToolBuilder {
+object BUiToolBuilder {
 
     fun build(uiGameContext: BUiGameContext, toolPath: String, uiClickMode: BUiClickMode): ImageView {
         val applicationContext = uiGameContext.uiProvider.applicationContext
