@@ -53,7 +53,7 @@ abstract class BUiOnEnableTrigger(protected val uiGameContext: BUiGameContext, p
         //Create image unitView:
         val imageView = ImageView(applicationContext)
         imageView.id = View.generateViewId()
-        imageView.background = applicationContext.getDrawable(R.color.colorReady)
+        imageView.background = applicationContext.getDrawable(R.color.bc_map)
         imageView.layoutParams = this.uiUnit.unitView.layoutParams
         imageView.gone()
         imageView.setOnClickListener { this.onClick() }

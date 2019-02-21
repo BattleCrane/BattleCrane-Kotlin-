@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent" android:id="@+id/fragment_battle_root"
->
+        android:background="@color/bc_back">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintVertical_bias="0.555"
-            app:layout_constraintDimensionRatio="1:1" android:background="@color/colorPrimary">
+            app:layout_constraintDimensionRatio="1:1" android:background="@color/bc_map">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -51,7 +51,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/fragment_battle_map_constraint_layout"
             android:id="@+id/fragment_battle_end_turn_constraint_layout"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/bc_map"
             app:layout_constraintVertical_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/fragment_battle_map_constraint_layout">
 
@@ -103,7 +103,7 @@
                                                        app:layout_constraintStart_toStartOf="parent"
                                                        app:layout_constraintEnd_toEndOf="parent"
                                                        android:visibility="visible"
-                                                       android:background="@android:color/background_light">
+                                                       android:background="@color/bc_back">
 
 
         <ProgressBar
@@ -115,7 +115,7 @@
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:progressBackgroundTintMode="screen"
-                android:indeterminateTint="@color/bc_style"/>
+                android:indeterminateTint="@color/bc_text"/>
         <TextView
                 android:text="@string/fragment_battle_loading_text_view"
                 android:layout_width="wrap_content"
@@ -125,7 +125,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="1.0"
-                android:gravity="center_horizontal" android:textColor="@color/bc_style"/>
+                android:gravity="center_horizontal" android:textColor="@color/bc_text"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
