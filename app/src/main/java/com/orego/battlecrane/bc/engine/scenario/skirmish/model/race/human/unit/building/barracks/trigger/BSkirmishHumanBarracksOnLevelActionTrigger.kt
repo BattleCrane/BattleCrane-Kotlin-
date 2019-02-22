@@ -28,6 +28,7 @@ class BSkirmishHumanBarracksOnLevelActionTrigger private constructor(
                     BHumanBarracks.SECOND_LEVEL -> BHumanBarracks.LEVEL_2_MAX_HIT_POINTS
                     else -> BHumanBarracks.LEVEL_3_MAX_HIT_POINTS
                 }
+            println("ON LVL CHANGED")
             this.pipeline.pushEvent(
                 BOnHitPointsActionPipe.Max.OnChangedEvent(hitPointableId, newHitPoints)
             )

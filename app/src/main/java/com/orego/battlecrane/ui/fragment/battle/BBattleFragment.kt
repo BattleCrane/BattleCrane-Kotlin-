@@ -157,12 +157,12 @@ class BBattleFragment : BFragment() {
             this@BBattleFragment.fragment_battle_command_constraint_layout
         }
 
-        /**
-         * Menu.
-         */
-
-        val menuButtonImageView by lazy {
-            this@BBattleFragment.fragment_battle_menu_button_image_view
-        }
+//        /**
+//         * Menu.
+//         */
+//
+//        val menuButtonImageView by lazy {
+//            this@BBattleFragment.fragment_battle_menu_button_image_view
+//        }
     }
 }

@@ -23,6 +23,7 @@ open class BUiOnLevelActionTrigger private constructor(
         val image = this.uiUnit.unitView as ImageView
         val applicationContext = this.uiGameContext.uiProvider.applicationContext
         image.setImageByAssets(applicationContext, this.uiUnit.getItemPath())
+        println("UPPPPGRADE!")
     }
 
     override fun handle(event: BEvent): BEvent? {
