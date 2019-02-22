@@ -3,7 +3,8 @@ package com.orego.battlecrane.ui.fragment.battle
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ProgressBar
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import com.orego.battlecrane.R
@@ -100,24 +101,68 @@ class BBattleFragment : BFragment() {
             this@BBattleFragment.context!!
         }
 
+        /**
+         * Map.
+         */
+
         val mapConstraintLayout: ConstraintLayout by lazy {
             this@BBattleFragment.fragment_battle_map_constraint_layout
         }
 
-        val rightConstraintLayout: ConstraintLayout by lazy {
-            this@BBattleFragment.fragment_battle_right_constraint_layout
+        /**
+         * Turn frame.
+         */
+
+        val turnDecorationImageView : ImageView by lazy {
+            this@BBattleFragment.fragment_battle_turn_decoration_image_view
         }
 
-        val leftConstraintLayout: ConstraintLayout by lazy {
-            this@BBattleFragment.fragment_battle_left_constraint_layout
+        val endTurnButtonImageView: ImageView by lazy {
+            this@BBattleFragment.fragment_battle_end_turn_button_image_view
         }
 
-        val lineProgressBar: ProgressBar by lazy {
-            this@BBattleFragment.fragment_battle_end_turn_progress_bar
+        val leftTimeTextView : TextView by lazy {
+            this@BBattleFragment.fragment_battle_left_time
         }
 
-        val endTurnConstraintLayout: ConstraintLayout by lazy {
-            this@BBattleFragment.fragment_battle_end_turn_constraint_layout
+        /**
+         * Item info frame.
+         */
+
+        val itemInfoDecorationImageView by lazy {
+            this@BBattleFragment.fragment_battle_info_decoration_image_view
+        }
+
+        val itemNameTextView : TextView by lazy {
+            this@BBattleFragment.fragment_battle_item_name_text_view
+        }
+
+        val itemDescriptionConstraintLayout : ConstraintLayout by lazy {
+            this@BBattleFragment.fragment_battle_description_constraint_layout
+        }
+
+        val itemCharacteristicsConstraintLayout: ConstraintLayout by lazy {
+            this@BBattleFragment.fragment_battle_characteristics_constraint_layout
+        }
+
+        /**
+         * Command frame.
+         */
+
+        val commandDecorationImageView : ImageView by lazy {
+            this@BBattleFragment.fragment_battle_command_decoration_image_view
+        }
+
+        val commandConstraintLayout: ConstraintLayout by lazy {
+            this@BBattleFragment.fragment_battle_command_constraint_layout
+        }
+
+        /**
+         * Menu.
+         */
+
+        val menuButtonImageView by lazy {
+            this@BBattleFragment.fragment_battle_menu_button_image_view
         }
     }
 }

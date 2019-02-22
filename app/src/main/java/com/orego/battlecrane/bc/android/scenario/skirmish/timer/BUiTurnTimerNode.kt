@@ -9,8 +9,6 @@ import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BTurnTimerTrigger
 class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val playerId: Long) :
     BNode(uiContext.gameContext) {
 
-    private val turnTimeProgressBar = this.uiContext.uiProvider.lineProgressBar
-
     companion object {
 
         private const val DEFAULT_MIN = 0
@@ -32,22 +30,14 @@ class BUiTurnTimerNode(private val uiContext: BUiGameContext, private val player
         val animation: suspend () -> Unit = when (event) {
             is BTurnTimerTrigger.StartEvent -> {
                 {
-                    this.turnTimeProgressBar.min =
-                            DEFAULT_MIN
-                    this.turnTimeProgressBar.max = (event.turnTime / BTurnTimerTrigger.SECOND).toInt()
                 }
             }
             is BTurnTimerTrigger.StopEvent -> {
                 {
-                    this.turnTimeProgressBar.min =
-                            DEFAULT_MIN
-                    this.turnTimeProgressBar.max =
-                            DEFAULT_MIN
                 }
             }
             is BTurnTimerTrigger.TickEvent -> {
                 {
-                    this.turnTimeProgressBar.progress = (event.timeLeft / BTurnTimerTrigger.SECOND).toInt()
                 }
             }
             else -> {

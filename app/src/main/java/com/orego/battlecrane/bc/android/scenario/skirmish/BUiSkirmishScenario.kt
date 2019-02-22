@@ -2,10 +2,8 @@ package com.orego.battlecrane.bc.android.scenario.skirmish
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.scenario.BUiGameScenario
-import com.orego.battlecrane.bc.android.api.scenario.plugin.implementation.race.BUiRacePlugin
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.BUiSkirmishGrassUiLocationPlugin
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.BUiSkirmishHumanPlugin
-import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.engine.scenario.skirmish.BSkirmishScenario
 
@@ -48,7 +46,7 @@ class BUiSkirmishScenario : BUiGameScenario() {
 
         private fun installEndTurnButton(uiGameContext: BUiGameContext) {
             val gameContext = uiGameContext.gameContext
-            uiGameContext.uiProvider.endTurnConstraintLayout.setOnClickListener {
+            uiGameContext.uiProvider.endTurnButtonImageView.setOnClickListener {
                 val currentPlayer = gameContext.playerController.currentPlayerId
                 val endTurnEvent = BOnTurnFinishedPipe.Event(currentPlayer)
                 gameContext.pipeline.broacastEvent(endTurnEvent)

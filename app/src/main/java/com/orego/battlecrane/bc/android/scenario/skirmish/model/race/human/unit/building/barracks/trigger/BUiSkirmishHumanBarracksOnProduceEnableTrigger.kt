@@ -26,7 +26,7 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
 
     override fun onDrawActions() {
         //Get right layout:
-        val constraintLayout = this.uiGameContext.uiProvider.rightConstraintLayout
+        val constraintLayout = this.uiGameContext.uiProvider.commandConstraintLayout
         val constraintLayoutId = constraintLayout.id
         val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
         val cellSize = (columnSize * CELL_COEFFICIENT).toInt()

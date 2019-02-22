@@ -15,8 +15,8 @@ class BUiBaseOnTurnTrigger private constructor(private val uiGameContext: BUiGam
                 this.uiTaskManager.addTask {
                     this.uiClickController.currentUiClickMode = null
                     this.uiProvider.apply {
-                        this.rightConstraintLayout.removeAllViews()
-                        this.leftConstraintLayout.removeAllViews()
+                        this.commandConstraintLayout.removeAllViews()
+                        this.itemCharacteristicsConstraintLayout.removeAllViews()
                     }
                 }
             }
