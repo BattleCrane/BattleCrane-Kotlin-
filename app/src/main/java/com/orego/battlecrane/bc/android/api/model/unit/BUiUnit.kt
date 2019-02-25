@@ -16,7 +16,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
     companion object {
 
         @MagicConstant
-        private const val CELL_COEFFICIENT = 0.9
+        private const val CELL_COEFFICIENT = 1.1
     }
 
     val uiUnitId: Long
@@ -47,8 +47,8 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
         val cellSizeY = constraintLayout.measuredHeight / BMapController.MAP_SIZE
         //Create params:
         val constraintParams = ConstraintLayout.LayoutParams(
-            (this.item.width * cellSizeX * CELL_COEFFICIENT).toInt(),
-            (this.item.height * cellSizeY * CELL_COEFFICIENT).toInt()
+            this.item.width * cellSizeX, //(this.item.width * cellSizeX * CELL_COEFFICIENT).toInt()
+            this.item.height * cellSizeY //(this.item.height * cellSizeY * CELL_COEFFICIENT).toInt()
         ).also {
             it.startToStart = constraintLayoutId
             it.topToTop = constraintLayoutId

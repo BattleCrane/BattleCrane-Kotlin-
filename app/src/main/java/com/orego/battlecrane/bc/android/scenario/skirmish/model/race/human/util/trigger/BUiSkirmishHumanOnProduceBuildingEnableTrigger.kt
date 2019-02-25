@@ -18,7 +18,6 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.utils.
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanUpgradeBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
-import org.intellij.lang.annotations.MagicConstant
 
 class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
     uiGameContext: BUiGameContext,
@@ -31,8 +30,7 @@ class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
         //Get right layout:
         val constraintLayout = this.uiGameContext.uiProvider.commandConstraintLayout
         val constraintLayoutId = constraintLayout.id
-        val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
-        val cellSize = (columnSize * CELL_COEFFICIENT).toInt()
+        val cellSize = constraintLayout.measuredWidth / COLUMN_COUNT
         //Get headquarters:
         val unitBuilder = this.uiUnit.item as BProducable
         val producableId = unitBuilder.producableId
@@ -95,8 +93,8 @@ class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
                 val constraintParams = ConstraintLayout.LayoutParams(cellSize, cellSize)
                 constraintParams.startToStart = constraintLayoutId
                 constraintParams.topToTop = constraintLayoutId
-                constraintParams.marginStart = columnSize * x
-                constraintParams.topMargin = columnSize * y
+                constraintParams.marginStart = cellSize * x
+                constraintParams.topMargin = cellSize * y
                 imageView.layoutParams = constraintParams
                 constraintLayout.addView(imageView)
                 x++
@@ -163,8 +161,8 @@ class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
 
     companion object {
 
-        @MagicConstant
-        private const val CELL_COEFFICIENT = 0.9
+//        @MagicConstant
+//        private const val CELL_COEFFICIENT = 0.9
 
         private const val COLUMN_COUNT = 2
 

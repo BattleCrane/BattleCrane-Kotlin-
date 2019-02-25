@@ -28,8 +28,7 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
         //Get right layout:
         val constraintLayout = this.uiGameContext.uiProvider.commandConstraintLayout
         val constraintLayoutId = constraintLayout.id
-        val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
-        val cellSize = (columnSize * CELL_COEFFICIENT).toInt()
+        val cellSize = constraintLayout.measuredWidth / COLUMN_COUNT
         //Get barracks:
         val barracks = this.uiUnit.item
         constraintLayout.removeAllViews()
@@ -49,8 +48,8 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
                 val constraintParams = ConstraintLayout.LayoutParams(cellSize, cellSize)
                 constraintParams.startToStart = constraintLayoutId
                 constraintParams.topToTop = constraintLayoutId
-                constraintParams.marginStart = columnSize * x
-                constraintParams.topMargin = columnSize * y
+                constraintParams.marginStart = cellSize * x
+                constraintParams.topMargin = cellSize * y
                 imageView.layoutParams = constraintParams
                 constraintLayout.addView(imageView)
                 x++
@@ -91,8 +90,8 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
 
     companion object {
 
-        @MagicConstant
-        private const val CELL_COEFFICIENT = 0.9
+//        @MagicConstant
+//        private const val CELL_COEFFICIENT = 0.9
 
         private const val COLUMN_COUNT = 2
 

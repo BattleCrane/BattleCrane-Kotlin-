@@ -12,7 +12,6 @@ import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.infantry.BU
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.util.trigger.attack.BOnAttackEnableTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.infantry.trigger.BSkirmishHumanMarineOnAttackActionTrigger
-import org.intellij.lang.annotations.MagicConstant
 
 class BUiSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
     uiGameContext: BUiGameContext,
@@ -25,8 +24,7 @@ class BUiSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
         //Get right layout:
         val constraintLayout = this.uiGameContext.uiProvider.commandConstraintLayout
         val constraintLayoutId = constraintLayout.id
-        val columnSize = constraintLayout.measuredWidth / COLUMN_COUNT
-        val cellSize = (columnSize * CELL_COEFFICIENT).toInt()
+        val cellSize = constraintLayout.measuredWidth / COLUMN_COUNT
         //Get marine:
         val marine = this.uiUnit.item
         constraintLayout.removeAllViews()
@@ -46,8 +44,8 @@ class BUiSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
                 val constraintParams = ConstraintLayout.LayoutParams(cellSize, cellSize)
                 constraintParams.startToStart = constraintLayoutId
                 constraintParams.topToTop = constraintLayoutId
-                constraintParams.marginStart = columnSize * x
-                constraintParams.topMargin = columnSize * y
+                constraintParams.marginStart = cellSize * x
+                constraintParams.topMargin = cellSize * y
                 imageView.layoutParams = constraintParams
                 constraintLayout.addView(imageView)
                 x++
@@ -88,8 +86,8 @@ class BUiSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
 
     companion object {
 
-        @MagicConstant
-        private const val CELL_COEFFICIENT = 0.9
+//        @MagicConstant
+//        private const val CELL_COEFFICIENT = 0.9
 
         private const val COLUMN_COUNT = 2
 
