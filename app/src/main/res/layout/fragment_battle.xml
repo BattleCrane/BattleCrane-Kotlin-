@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent" android:id="@+id/fragment_battle_root"
-        android:background="@color/bc_back">
+        android:background="@color/bc_background">
 
     <TextView
             android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
             android:layout_marginTop="28dp"
             app:layout_constraintTop_toBottomOf="@+id/fragment_battle_characteristics_constraint_layout"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="24dp"
-            android:background="@color/design_default_color_primary">
+            android:background="@color/bc_background">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
@@ -45,7 +45,7 @@
             app:layout_constraintBottom_toTopOf="@+id/fragment_battle_characteristics_constraint_layout"
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toTopOf="@+id/fragment_battle_info_decoration_image_view"
-            android:background="@color/design_default_color_primary"/>
+            android:background="@color/bc_background" android:textColor="@color/bc_text"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@drawable/fragment_battle_description_panel"
@@ -72,7 +72,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/fragment_battle_command_decoration_image_view"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp" android:layout_marginTop="32dp"
-            android:background="@color/design_default_color_primary"
+            android:background="@color/bc_background"
             android:layout_width="0dp" android:layout_height="0dp"
             android:minWidth="130dp"
             app:layout_constraintStart_toEndOf="@+id/fragment_battle_info_decoration_image_view"
@@ -92,7 +92,7 @@
             android:layout_marginTop="48dp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:background="@color/bc_map">
+            app:layout_constraintEnd_toEndOf="parent">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -107,7 +107,7 @@
             app:layout_constraintTop_toTopOf="@+id/fragment_battle_info_decoration_image_view"
             android:layout_marginTop="44dp" android:layout_marginBottom="200dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
-            android:background="@color/design_default_color_primary">
+            android:background="@color/bc_background">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -128,7 +128,7 @@
                                                        app:layout_constraintStart_toStartOf="parent"
                                                        app:layout_constraintEnd_toEndOf="parent"
                                                        android:visibility="gone"
-                                                       android:background="@color/bc_back">
+                                                       android:background="@color/bc_background">
 
 
         <ProgressBar
