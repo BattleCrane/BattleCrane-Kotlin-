@@ -9,8 +9,8 @@ import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 
 class BUiSkirmishHumanFactoryBuilder : BUiHumanFactory.Builder() {
 
-    override fun build(uiGameContext: BUiGameContext, item: BUnit): BUiHumanFactory {
-        val holder = super.build(uiGameContext, item)
+    override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiHumanFactory {
+        val holder = super.onCreate(uiGameContext, item)
         BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
         BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
         BUiSkirmishHumanFactoryOnProduceEnableTrigger.connect(uiGameContext, holder)

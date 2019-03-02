@@ -7,13 +7,12 @@ import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.api.util.BUiToolBuilder
 import com.orego.battlecrane.bc.android.api.util.trigger.producable.BUiOnProduceEnableTrigger
-import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BUiHumanPaths
+import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BUiHumanAssets
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanBarracks
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.barracks.trigger.BSkirmishHumanBarracksOnProduceActionTrigger
-import org.intellij.lang.annotations.MagicConstant
 
 class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
     uiGameContext: BUiGameContext,
@@ -36,7 +35,7 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
         if (barracks.isProduceEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BUiToolBuilder.build(this.uiGameContext, BUiHumanPaths.Train.MARINE, this.trainMarineUiClickMode)
+                BUiToolBuilder.build(this.uiGameContext, BUiHumanAssets.Train.MARINE, this.trainMarineUiClickMode)
             )
             var x = 0
             var y = 0

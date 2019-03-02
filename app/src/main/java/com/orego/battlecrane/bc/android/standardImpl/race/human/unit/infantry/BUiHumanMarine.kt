@@ -33,7 +33,7 @@ class BUiHumanMarine private constructor(uiGameContext: BUiGameContext, override
 
     open class Builder : BUiUnit.Builder() {
 
-        override fun build(uiGameContext: BUiGameContext, item: BUnit) =
+        override fun onCreate(uiGameContext: BUiGameContext, item: BUnit) =
             BUiHumanMarine(uiGameContext, item as BHumanMarine)
     }
 }

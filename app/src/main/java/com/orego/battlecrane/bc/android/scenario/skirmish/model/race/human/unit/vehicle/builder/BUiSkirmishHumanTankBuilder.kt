@@ -9,8 +9,8 @@ import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 
 class BUiSkirmishHumanTankBuilder : BUiHumanTank.Builder() {
 
-    override fun build(uiGameContext: BUiGameContext, item: BUnit): BUiHumanTank {
-        val holder = super.build(uiGameContext, item)
+    override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiHumanTank {
+        val holder = super.onCreate(uiGameContext, item)
         BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
         BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
         BUiSkirmishHumanTankHolderOnAttackEnableTrigger.connect(uiGameContext, holder)

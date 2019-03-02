@@ -8,8 +8,8 @@ import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 
 class BUiSkirmishEmptyGrassFieldBuilder : BUiEmptyGrassField.Builder() {
 
-    override fun build(uiGameContext: BUiGameContext, item: BUnit): BUiEmptyGrassField {
-        val holder = super.build(uiGameContext, item)
+    override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiEmptyGrassField {
+        val holder = super.onCreate(uiGameContext, item)
         BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
         BUiSkirmishEmptyGrassFieldOnOwnerChangedTrigger.connect(uiGameContext, holder)
         return holder

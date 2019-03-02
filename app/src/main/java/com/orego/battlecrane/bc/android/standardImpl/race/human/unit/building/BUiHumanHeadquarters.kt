@@ -29,7 +29,7 @@ class BUiHumanHeadquarters private constructor(
 
     open class Builder : BUiUnit.Builder() {
 
-        override fun build(uiGameContext: BUiGameContext, item: BUnit) =
+        override fun onCreate(uiGameContext: BUiGameContext, item: BUnit) =
             BUiHumanHeadquarters(uiGameContext, item as BHumanHeadquarters)
     }
 }

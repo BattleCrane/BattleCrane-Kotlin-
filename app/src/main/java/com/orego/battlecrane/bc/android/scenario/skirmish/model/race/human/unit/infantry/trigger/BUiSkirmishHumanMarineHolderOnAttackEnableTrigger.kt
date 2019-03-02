@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit
 
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bc.android.api.asset.BUiCommonPaths
+import com.orego.battlecrane.bc.android.api.asset.BUiAsset
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
@@ -32,7 +32,7 @@ class BUiSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
         if (marine.isAttackEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BUiToolBuilder.build(this.uiGameContext, BUiCommonPaths.Action.ATTACK, AttackUiClickMode())
+                BUiToolBuilder.build(this.uiGameContext, BUiAsset.CommonPath.ATTACK, AttackUiClickMode())
             )
             var x = 0
             var y = 0
@@ -42,10 +42,12 @@ class BUiSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
                     y++
                 }
                 val constraintParams = ConstraintLayout.LayoutParams(cellSize, cellSize)
-                constraintParams.startToStart = constraintLayoutId
-                constraintParams.topToTop = constraintLayoutId
-                constraintParams.marginStart = cellSize * x
-                constraintParams.topMargin = cellSize * y
+                    .also {
+                        it.startToStart = constraintLayoutId
+                        it.topToTop = constraintLayoutId
+                        it.marginStart = cellSize * x
+                        it.topMargin = cellSize * y
+                    }
                 imageView.layoutParams = constraintParams
                 constraintLayout.addView(imageView)
                 x++
@@ -85,9 +87,6 @@ class BUiSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
     }
 
     companion object {
-
-//        @MagicConstant
-//        private const val CELL_COEFFICIENT = 0.9
 
         private const val COLUMN_COUNT = 2
 

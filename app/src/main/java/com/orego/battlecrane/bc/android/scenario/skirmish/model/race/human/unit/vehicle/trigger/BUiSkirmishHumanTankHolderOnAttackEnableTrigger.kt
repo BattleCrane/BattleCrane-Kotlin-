@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit
 
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bc.android.api.asset.BUiCommonPaths
+import com.orego.battlecrane.bc.android.api.asset.BUiAsset
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
@@ -33,7 +33,7 @@ class BUiSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
             //Create images:
             this.actionImageViewSet.add(
                 //TODO: ADD ATTACK BUTTON!
-                BUiToolBuilder.build(this.uiGameContext, BUiCommonPaths.Action.ATTACK, AttackUiClickMode())
+                BUiToolBuilder.build(this.uiGameContext, BUiAsset.CommonPath.ATTACK, AttackUiClickMode())
             )
             var x = 0
             var y = 0

@@ -27,7 +27,7 @@ class BUiHumanGenerator private constructor(uiGameContext: BUiGameContext, overr
 
     open class Builder : BUiUnit.Builder() {
 
-        override fun build(uiGameContext: BUiGameContext, item: BUnit) =
+        override fun onCreate(uiGameContext: BUiGameContext, item: BUnit) =
             BUiHumanGenerator(uiGameContext, item as BHumanGenerator)
     }
 }

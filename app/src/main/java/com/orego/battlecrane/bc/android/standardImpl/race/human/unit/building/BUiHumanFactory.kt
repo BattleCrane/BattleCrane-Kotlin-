@@ -23,7 +23,7 @@ class BUiHumanFactory private constructor(uiGameContext: BUiGameContext, overrid
 
     open class Builder : BUiUnit.Builder() {
 
-        override fun build(uiGameContext: BUiGameContext, item: BUnit) =
+        override fun onCreate(uiGameContext: BUiGameContext, item: BUnit) =
             BUiHumanFactory(uiGameContext, item as BHumanFactory)
     }
 }

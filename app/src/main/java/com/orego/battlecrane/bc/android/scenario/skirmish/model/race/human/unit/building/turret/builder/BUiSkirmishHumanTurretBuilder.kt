@@ -12,8 +12,8 @@ import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 
 class BUiSkirmishHumanTurretBuilder : BUiHumanTurret.Builder() {
 
-    override fun build(uiGameContext: BUiGameContext, item: BUnit): BUiHumanTurret {
-        val holder = super.build(uiGameContext, item)
+    override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiHumanTurret {
+        val holder = super.onCreate(uiGameContext, item)
         BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
         BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
         return holder

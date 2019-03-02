@@ -1,6 +1,10 @@
 package com.orego.battlecrane.bc.android.standardImpl.race.human.asset
 
-object BUiHumanPaths {
+object BUiHumanAssets {
+
+    const val ROOT = "race/human"
+
+    const val UNIT = "$ROOT/unit"
 
     object Build {
 
@@ -23,7 +27,6 @@ object BUiHumanPaths {
     object Train {
 
         const val MARINE = "race/human/action/train_marine_lvl_1.png"
-
     }
 
     object Produce {

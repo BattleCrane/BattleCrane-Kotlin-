@@ -13,36 +13,23 @@ abstract class BUiItem<T> protected constructor(open val item: T) {
 
     abstract class Builder<T> {
 
-        abstract fun build(uiGameContext: BUiGameContext, item: T): BUiItem<T>
-    }
+        protected open val configurations = mutableListOf<(BUiGameContext, BUiItem<T>) -> Unit>()
 
-    /**
-     * Creates a item by builder map.
-     */
+        protected abstract fun onCreate(uiGameContext: BUiGameContext, item: T): BUiItem<T>
 
-    open class BUiItemFactory<T : Any> {
-
-        private val builderMap: MutableMap<Class<out T>, Builder<T>> = mutableMapOf()
-
-        fun addBuilder(entry: Map.Entry<Class<out T>, Builder<T>>) {
-            val clazz = entry.key
-            if (!this.builderMap.containsKey(clazz)) {
-                this.builderMap[clazz] = entry.value
-            }
+        fun build(uiGameContext: BUiGameContext, item: T): BUiItem<T> {
+            val uiItem = this.onCreate(uiGameContext, item)
+            this.configurations.forEach { configure -> configure(uiGameContext, uiItem) }
+            return uiItem
         }
 
-        fun addBuilder(clazz: Class<out T>, builder: Builder<T>) {
-            if (!this.builderMap.containsKey(clazz)) {
-                this.builderMap[clazz] = builder
-            }
+        fun addConfiguration(configure : (BUiGameContext, BUiItem<T>) -> Unit) {
+            this.configurations += configure
         }
 
-        open fun build(uiGameContext: BUiGameContext, item: T): BUiItem<T> {
-            val builder = this.builderMap[item::class.java]!!
-            val holder = builder.build(uiGameContext, item)
-            holder.onDraw(uiGameContext)
-            uiGameContext.gameContext.storage.putObject(holder)
-            return holder
+
+        fun removeConfiguration(configure : (BUiGameContext, BUiItem<T>) -> Unit) {
+            this.configurations -= configure
         }
     }
 }

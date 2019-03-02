@@ -26,7 +26,7 @@ class BUiEmptyGrassField private constructor(uiGameContext: BUiGameContext, over
 
     open class Builder : BUiUnit.Builder() {
 
-        override fun build(uiGameContext: BUiGameContext, item: BUnit): BUiEmptyGrassField =
+        override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiEmptyGrassField =
             BUiEmptyGrassField(uiGameContext, item as BEmptyGrassField)
     }
 }

@@ -27,7 +27,7 @@ class BUiHumanTurret private constructor(uiGameContext: BUiGameContext, override
 
     open class Builder : BUiUnit.Builder() {
 
-        override fun build(uiGameContext: BUiGameContext, item: BUnit): BUiHumanTurret {
+        override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiHumanTurret {
             return BUiHumanTurret(uiGameContext, item as BHumanTurret)
         }
     }

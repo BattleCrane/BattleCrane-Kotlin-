@@ -9,27 +9,30 @@ import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.BUiItem
 import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
-import org.intellij.lang.annotations.MagicConstant
 
 abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUnit>(unit) {
-
-    companion object {
-
-        @MagicConstant
-        private const val CELL_COEFFICIENT = 1.1
-    }
 
     val uiUnitId: Long
 
     /**
-     *
+     * View on map.
      */
 
-    open lateinit var unitView : View
+    open lateinit var unitView: View
+
+    /**
+     * Handles unit click modes.
+     */
 
     protected val uiClickMode by lazy {
         UiClickMode(uiGameContext, this)
     }
+
+    /**
+     * Type of view mode.
+     */
+
+    var viewType = ViewMode.NORMAL
 
     init {
         val contextGenerator = uiGameContext.gameContext.contextGenerator
@@ -47,8 +50,8 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
         val cellSizeY = constraintLayout.measuredHeight / BMapController.MAP_SIZE
         //Create params:
         val constraintParams = ConstraintLayout.LayoutParams(
-            this.item.width * cellSizeX, //(this.item.width * cellSizeX * CELL_COEFFICIENT).toInt()
-            this.item.height * cellSizeY //(this.item.height * cellSizeY * CELL_COEFFICIENT).toInt()
+            this.item.width * cellSizeX,
+            this.item.height * cellSizeY
         ).also {
             it.startToStart = constraintLayoutId
             it.topToTop = constraintLayoutId
@@ -98,14 +101,16 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
     }
 
     /**
-     * Factory.
-     */
-
-    open class Factory : BUiItem.BUiItemFactory<BUnit>()
-
-    /**
      * Builder.
      */
 
     abstract class Builder : BUiItem.Builder<BUnit>()
+
+    /**
+     * View mode shows current mode of unit interface. For example: unit selected, active e.t.c..
+     */
+
+    enum class ViewMode {
+        NORMAL, ACTIVE, SELECTED
+    }
 }
