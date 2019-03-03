@@ -56,7 +56,7 @@ abstract class BUiGameScenario {
     }
 
     protected open fun installPlugins(uiGameContext: BUiGameContext) {
-        this.getUiLocationPlugin().install(uiGameContext)
         this.getUiRacePlugins().forEach { plugin -> plugin.install(uiGameContext) }
+        this.getUiLocationPlugin().install(uiGameContext)
     }
 }

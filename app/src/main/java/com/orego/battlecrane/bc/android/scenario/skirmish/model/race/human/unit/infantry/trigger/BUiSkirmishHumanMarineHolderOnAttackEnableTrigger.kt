@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit
 
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.orego.battlecrane.bc.android.api.asset.BUiAsset
+import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
@@ -32,7 +32,7 @@ class BUiSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
         if (marine.isAttackEnable) {
             //Create images:
             this.actionImageViewSet.add(
-                BUiToolBuilder.build(this.uiGameContext, BUiAsset.CommonPath.ATTACK, AttackUiClickMode())
+                BUiToolBuilder.build(this.uiGameContext, BUiAssets.CommonPath.ATTACK, AttackUiClickMode())
             )
             var x = 0
             var y = 0

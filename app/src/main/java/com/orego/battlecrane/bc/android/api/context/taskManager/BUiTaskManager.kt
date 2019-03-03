@@ -7,6 +7,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
+/**
+ * Show results of event handling in ui.
+ */
+
 class BUiTaskManager(gameContext: BGameContext) : BPipeline.OnPipelineWorkFinishedListener {
 
     private var job: Job? = null

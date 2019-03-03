@@ -25,7 +25,7 @@ open class BUiItemFactory<T : Any> {
 
     open fun build(uiGameContext: BUiGameContext, item: T): BUiItem<T> {
         val builder = this.builderMap[item::class.java]!!
-        val holder = builder.onCreate(uiGameContext, item)
+        val holder = builder.build(uiGameContext, item)
         holder.onDraw(uiGameContext)
         uiGameContext.gameContext.storage.putObject(holder)
         return holder

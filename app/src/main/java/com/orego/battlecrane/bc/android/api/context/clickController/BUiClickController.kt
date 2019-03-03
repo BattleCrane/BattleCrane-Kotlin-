@@ -1,5 +1,9 @@
 package com.orego.battlecrane.bc.android.api.context.clickController
 
+/**
+ * Handles click events on ui.
+ */
+
 class BUiClickController {
 
     var currentUiClickMode: BUiClickMode? = null

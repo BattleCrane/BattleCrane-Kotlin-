@@ -13,7 +13,7 @@ class BUiDestroyedGrassField private constructor(
 
     companion object {
 
-        private const val PATH = "std/grass/unit/destroyed_field.png"
+        private const val PATH = "std/grass/unit/field/destroyed/destroyed_field.png"
     }
 
     override fun getItemPath() = PATH

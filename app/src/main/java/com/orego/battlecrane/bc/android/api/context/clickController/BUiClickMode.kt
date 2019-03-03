@@ -1,5 +1,9 @@
 package com.orego.battlecrane.bc.android.api.context.clickController
 
+/**
+ * Defines a click states.
+ */
+
 interface BUiClickMode {
 
     /**

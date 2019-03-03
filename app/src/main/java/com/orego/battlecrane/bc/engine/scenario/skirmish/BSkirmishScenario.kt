@@ -77,29 +77,28 @@ class BSkirmishScenario : BGameScenario() {
             val bluePlayerId = players[0].playerId
             val redPlayerId = players[1].playerId
             //Put headquarters on the map:
-            val headquartersBuilder = BSkirmishHumanHeadquartersBuilder()
-            this.add(headquartersBuilder.onCreate(context, bluePlayerId, 14, 14))
-            this.add(headquartersBuilder.onCreate(context, redPlayerId, 0, 0))
+            this.add(BSkirmishHumanHeadquartersBuilder(bluePlayerId, 14, 14).build(context))
+            this.add(BSkirmishHumanHeadquartersBuilder(redPlayerId, 0, 0).build(context))
             //Put walls on the map:
-            val wallBuiler = BSkirmishHumanWallBuilder()
-            this.add(wallBuiler.onCreate(context, redPlayerId, 0, 4))
-            this.add(wallBuiler.onCreate(context, redPlayerId, 1, 4))
-            this.add(wallBuiler.onCreate(context, redPlayerId, 2, 4))
-            this.add(wallBuiler.onCreate(context, redPlayerId, 3, 4))
-            this.add(wallBuiler.onCreate(context, redPlayerId, 4, 4))
-            this.add(wallBuiler.onCreate(context, redPlayerId, 4, 0))
-            this.add(wallBuiler.onCreate(context, redPlayerId, 4, 1))
-            this.add(wallBuiler.onCreate(context, redPlayerId, 4, 2))
-            this.add(wallBuiler.onCreate(context, redPlayerId, 4, 3))
-            this.add(wallBuiler.onCreate(context, bluePlayerId, 11, 11))
-            this.add(wallBuiler.onCreate(context, bluePlayerId, 12, 11))
-            this.add(wallBuiler.onCreate(context, bluePlayerId, 13, 11))
-            this.add(wallBuiler.onCreate(context, bluePlayerId, 14, 11))
-            this.add(wallBuiler.onCreate(context, bluePlayerId, 15, 11))
-            this.add(wallBuiler.onCreate(context, bluePlayerId, 11, 15))
-            this.add(wallBuiler.onCreate(context, bluePlayerId, 11, 14))
-            this.add(wallBuiler.onCreate(context, bluePlayerId, 11, 13))
-            this.add(wallBuiler.onCreate(context, bluePlayerId, 11, 12))
+            val wallBuiler =
+            this.add(BSkirmishHumanWallBuilder(redPlayerId, 0, 4).build(context))
+            this.add(BSkirmishHumanWallBuilder(redPlayerId, 1, 4).build(context))
+            this.add(BSkirmishHumanWallBuilder(redPlayerId, 2, 4).build(context))
+            this.add(BSkirmishHumanWallBuilder(redPlayerId, 3, 4).build(context))
+            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 4).build(context))
+            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 0).build(context))
+            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 1).build(context))
+            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 2).build(context))
+            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 3).build(context))
+            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 11).build(context))
+            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 12, 11).build(context))
+            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 13, 11).build(context))
+            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 14, 11).build(context))
+            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 15, 11).build(context))
+            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 15).build(context))
+            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 14).build(context))
+            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 13).build(context))
+            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 12).build(context))
             return this
         } else {
             throw IllegalArgumentException("Standard skirmish gameScenario supports $PLAYER_COUNT players!")
@@ -116,10 +115,10 @@ class BSkirmishScenario : BGameScenario() {
             }
         }
         //Fill rest fileds:
-        val emptyGrassBuilder = BSkirmishEmptyGrassFieldBuilder()
+        val emptyGrassBuilder =
         BMapController.foreach { x, y ->
             if (matrix[x][y] == BMapController.NOT_ID) {
-                val grassField = emptyGrassBuilder.onCreate(context, BPlayer.NEUTRAL_ID, x, y)
+                val grassField = BSkirmishEmptyGrassFieldBuilder(BPlayer.NEUTRAL_ID, x, y).build(context)
                 this.add(grassField)
             }
         }

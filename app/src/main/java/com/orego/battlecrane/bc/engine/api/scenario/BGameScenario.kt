@@ -27,7 +27,7 @@ import com.orego.battlecrane.bc.engine.api.scenario.plugin.location.BLocationPlu
 abstract class BGameScenario {
 
     /**
-     * 1.) Configures context.
+     * Configures context.
      */
 
     open fun install(context: BGameContext) {
@@ -112,7 +112,7 @@ abstract class BGameScenario {
     }
 
     /**
-     * Initializes a map by uiUnit ids.
+     * Initializes a map by ui unit ids.
      */
 
     protected open fun installMapController(context: BGameContext) {
