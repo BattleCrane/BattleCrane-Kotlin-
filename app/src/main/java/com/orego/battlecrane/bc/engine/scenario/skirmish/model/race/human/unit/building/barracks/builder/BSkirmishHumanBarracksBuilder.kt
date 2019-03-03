@@ -9,10 +9,10 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger.BSkirmishO
 import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BProduceEnableOnTurnTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 
-class BSkirmishHumanBarracksBuilder : BHumanBarracks.Builder() {
+class BSkirmishHumanBarracksBuilder(playerId: Long, x: Int, y: Int) : BHumanBarracks.Builder(playerId, x, y) {
 
-    override fun build(context: BGameContext, playerId: Long, x: Int, y: Int): BHumanBarracks {
-        val barracks = super.build(context, playerId, x, y)
+    override fun onCreate(context: BGameContext): BHumanBarracks {
+        val barracks = super.onCreate(context)
         BSkirmishOnHitPointsActionTrigger.connect(context, barracks)
         BOnProduceEnableTrigger.connect(context, barracks)
         BOnDestroyUnitTrigger.connect(context, barracks)

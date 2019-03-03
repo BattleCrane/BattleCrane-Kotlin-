@@ -27,8 +27,8 @@ class BSkirmishHumanWallOnCreateTrigger private constructor(context: BGameContex
             pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId1))
             pipeline.pushEvent(BOnDestroyUnitPipe.Event(unitId2))
             //Create walls:
-            val wall1 = BSkirmishHumanWallBuilder().build(this.context, this.playerId, x, y)
-            val wall2 = BSkirmishHumanWallBuilder().build(this.context, this.playerId, x, nextY)
+            val wall1 = BSkirmishHumanWallBuilder(this.playerId, x, y).build(this.context)
+            val wall2 = BSkirmishHumanWallBuilder(this.playerId, x, nextY).build(this.context)
             //Set walls:
             controller.notifyUnitChanged(wall1)
             controller.notifyUnitChanged(wall2)

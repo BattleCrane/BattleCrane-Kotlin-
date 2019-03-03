@@ -1,4 +1,8 @@
-package com.orego.battlecrane.bc.engine.api.model.property
+package com.orego.battlecrane.bc.engine.api.model.unit.property
+
+/**
+ * Defines attack properties.
+ */
 
 interface BAttackable {
 

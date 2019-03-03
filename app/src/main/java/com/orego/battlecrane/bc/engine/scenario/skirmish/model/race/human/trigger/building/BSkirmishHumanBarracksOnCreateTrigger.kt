@@ -35,7 +35,7 @@ class BSkirmishHumanBarracksOnCreateTrigger private constructor(context: BGameCo
         override val height = BHumanBarracks.HEIGHT
 
         override fun createUnit(context: BGameContext) =
-            BSkirmishHumanBarracksBuilder().build(context, this.playerId, this.x, this.y)
+            BSkirmishHumanBarracksBuilder(this.playerId, this.x, this.y).build(context)
     }
 
     /**

@@ -13,13 +13,12 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.*
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
-import com.orego.battlecrane.bc.engine.api.model.property.BAttackable
-import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
-import com.orego.battlecrane.bc.engine.api.model.property.BLevelable
-import com.orego.battlecrane.bc.engine.api.model.property.BProducable
+import com.orego.battlecrane.bc.engine.api.model.unit.property.BAttackable
+import com.orego.battlecrane.bc.engine.api.model.unit.property.BHitPointable
+import com.orego.battlecrane.bc.engine.api.model.unit.property.BLevelable
+import com.orego.battlecrane.bc.engine.api.model.unit.property.BProducable
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
-import com.orego.battlecrane.bc.engine.api.scenario.plugin.BPlugin
-import com.orego.battlecrane.bc.engine.api.scenario.plugin.implementation.player.BPlayerPlugin
+import com.orego.battlecrane.bc.engine.api.scenario.plugin.location.BLocationPlugin
 
 /**
  * Initializes a game step by step.
@@ -38,7 +37,6 @@ abstract class BGameScenario {
         this.installBaseTriggers(context)
         this.installPlayers(context)
         this.installPlayerController(context)
-        this.installPlugins(context)
         this.installUnits(context)
         this.installMapController(context)
     }
@@ -79,7 +77,7 @@ abstract class BGameScenario {
     }
 
     protected open fun installBaseTriggers(context: BGameContext) {
-
+        this.getLocationPlugin().invoke(context)
     }
 
     protected open fun installPlayers(context: BGameContext) {
@@ -103,13 +101,6 @@ abstract class BGameScenario {
             this.playerIds = players
                 .map { player -> player.playerId }
                 .toMutableList()
-        }
-    }
-
-    protected open fun installPlugins(context: BGameContext) {
-        this.getLocationPlugin(context).install(context)
-        this.getRacePlugins(context).forEach { plugin ->
-            plugin.install(context)
         }
     }
 
@@ -140,11 +131,9 @@ abstract class BGameScenario {
 
     protected abstract fun getPlayers(context: BGameContext): List<BPlayer>
 
-    protected abstract fun getRacePlugins(context: BGameContext): List<BPlayerPlugin>
-
-    protected abstract fun getLocationPlugin(context: BGameContext): BPlugin
-
     protected abstract fun getUnits(context: BGameContext): List<BUnit>
 
     protected abstract fun getStartTurnPlayerPosition(): Int
+
+    protected abstract fun getLocationPlugin() : BLocationPlugin
 }

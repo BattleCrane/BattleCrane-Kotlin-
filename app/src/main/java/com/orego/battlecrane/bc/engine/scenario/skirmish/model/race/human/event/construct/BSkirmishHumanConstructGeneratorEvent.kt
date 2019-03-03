@@ -7,6 +7,8 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConst
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanGenerator
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
 
+//TODO CHANGE LIMIT TO FIBONACCI SEQUENCE:
+
 class BSkirmishHumanConstructGeneratorEvent(producableId: Long, x: Int, y: Int) :
     BHumanConstructBuildingEvent(producableId, x, y, BHumanGenerator.WIDTH, BHumanGenerator.HEIGHT) {
 

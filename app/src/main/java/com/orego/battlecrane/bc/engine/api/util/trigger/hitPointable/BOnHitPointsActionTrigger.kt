@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPo
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BHitPointableHeap
-import com.orego.battlecrane.bc.engine.api.model.property.BHitPointable
+import com.orego.battlecrane.bc.engine.api.model.unit.property.BHitPointable
 
 abstract class BOnHitPointsActionTrigger protected constructor(context: BGameContext, open val hitPointable: BHitPointable) :
     BNode(context) {

@@ -6,9 +6,9 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BBuilding
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
-import com.orego.battlecrane.bc.engine.api.util.common.BPoint
-import com.orego.battlecrane.bc.engine.api.util.common.x
-import com.orego.battlecrane.bc.engine.api.util.common.y
+import com.orego.battlecrane.bc.engine.api.util.point.BPoint
+import com.orego.battlecrane.bc.engine.api.util.point.x
+import com.orego.battlecrane.bc.engine.api.util.point.y
 
 class BPlayerZoneObserver(private val context: BGameContext) {
 

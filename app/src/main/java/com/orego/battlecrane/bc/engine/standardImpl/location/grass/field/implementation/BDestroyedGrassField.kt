@@ -12,9 +12,9 @@ class BDestroyedGrassField private constructor(context: BGameContext, playerid: 
      * Builder.
      */
 
-    open class Builder : BUnit.Builder() {
+    open class Builder(playerId: Long, x: Int, y: Int) : BUnit.Builder(playerId, x, y) {
 
-        override fun build(context: BGameContext, playerId: Long, x: Int, y: Int) =
-            BDestroyedGrassField(context, playerId, x, y)
+        override fun onCreate(context: BGameContext) =
+            BDestroyedGrassField(context, this.playerId, this.x, this.y)
     }
 }

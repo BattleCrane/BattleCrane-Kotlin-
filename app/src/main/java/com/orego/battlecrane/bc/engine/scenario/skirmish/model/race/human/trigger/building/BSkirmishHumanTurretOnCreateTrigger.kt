@@ -40,8 +40,8 @@ class BSkirmishHumanTurretOnCreateTrigger private constructor(context: BGameCont
 
         override val height = BHumanTurret.HEIGHT
 
-        override fun createUnit(context: BGameContext) =
-            BSkirmishHumanTurretBuilder().build(context, this.playerId, this.x, this.y)
+        override fun createUnit(context: BGameContext) : BHumanTurret =
+            BSkirmishHumanTurretBuilder(this.playerId, this.x, this.y).build(context) as BHumanTurret
 
         override fun perform(context: BGameContext): Boolean {
             val controller = context.mapController

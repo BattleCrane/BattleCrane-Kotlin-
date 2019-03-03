@@ -8,12 +8,12 @@ class BPlayerController {
 
     companion object {
 
-        private const val NOT_INIT_ID = -1
+        private const val NOT_ID = -1
     }
 
-    var currentPlayerPosition: Int = NOT_INIT_ID
+    var currentPlayerPosition: Int = NOT_ID
 
-    var currentPlayerId: Long = NOT_INIT_ID.toLong()
+    var currentPlayerId: Long = NOT_ID.toLong()
 
     lateinit var playerIds: MutableList<Long>
 }

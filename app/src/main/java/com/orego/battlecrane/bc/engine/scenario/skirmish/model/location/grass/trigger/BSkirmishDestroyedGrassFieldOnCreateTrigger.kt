@@ -36,7 +36,7 @@ class BSkirmishDestroyedGrassFieldOnCreateTrigger private constructor(context: B
         override val width = BGrassField.WIDTH
 
         override fun createUnit(context: BGameContext) =
-            BSkirmishDestroyedGrassFieldBuilder().build(context, this.playerId, this.x, this.y)
+            BSkirmishDestroyedGrassFieldBuilder(this.playerId, this.x, this.y).build(context)
     }
 
     /**

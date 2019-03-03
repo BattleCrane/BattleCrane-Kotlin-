@@ -35,7 +35,7 @@ class BSkirmishHumanTankOnCreateTrigger private constructor(context: BGameContex
         override val height = BHumanTank.HEIGHT
 
         override fun createUnit(context: BGameContext) =
-            BSkirmishHumanTankBuilder().build(context, this.playerId, this.x, this.y)
+            BSkirmishHumanTankBuilder(this.playerId, this.x, this.y).build(context)
     }
 
     companion object {

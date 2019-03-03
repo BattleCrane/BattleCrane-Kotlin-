@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.engine.api.model.player
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
+import com.orego.battlecrane.bc.engine.api.util.builder.BBuilder
 
 open class BPlayer protected constructor(context: BGameContext) {
 
@@ -47,11 +48,11 @@ open class BPlayer protected constructor(context: BGameContext) {
     fun isAlly(playerId: Long) = this.allies.contains(playerId)
 
     /**
-     * Configure player.
+     * Creates & configures player.
      */
 
-    open class Builder {
+    open class Builder : BBuilder<BPlayer>() {
 
-        open fun build(context: BGameContext) = BPlayer(context)
+        override fun onCreate(context: BGameContext) = BPlayer(context)
     }
 }

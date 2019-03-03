@@ -9,10 +9,10 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.b
 import com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger.BSkirmishOnHitPointsActionTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanFactory
 
-class BSkirmishHumanFactoryBuilder : BHumanFactory.Builder() {
+class BSkirmishHumanFactoryBuilder(playerId: Long, x: Int, y: Int) : BHumanFactory.Builder(playerId, x, y) {
 
-    override fun build(context: BGameContext, playerId: Long, x: Int, y: Int): BHumanFactory {
-        val factory = super.build(context, playerId, x, y)
+    override fun onCreate(context: BGameContext): BHumanFactory {
+        val factory = super.onCreate(context)
         BSkirmishOnHitPointsActionTrigger.connect(context, factory)
         BOnProduceEnableTrigger.connect(context, factory)
         BOnDestroyUnitTrigger.connect(context, factory)

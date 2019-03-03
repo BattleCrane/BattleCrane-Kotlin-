@@ -4,6 +4,8 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigge
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConstructBuildingEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanTurret
 
+//TODO: AT LEAST ONE BARRACKS REQUIRED
+
 class BSkirmishHumanConstructTurretEvent(producableId: Long, x: Int, y: Int) :
     BHumanConstructBuildingEvent(producableId, x, y, BHumanTurret.WIDTH, BHumanTurret.HEIGHT) {
 

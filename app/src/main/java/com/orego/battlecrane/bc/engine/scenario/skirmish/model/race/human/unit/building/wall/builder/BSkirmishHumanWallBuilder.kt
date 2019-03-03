@@ -5,10 +5,10 @@ import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnDestroyUnitTrigg
 import com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger.BSkirmishOnHitPointsActionTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanWall
 
-class BSkirmishHumanWallBuilder : BHumanWall.Builder() {
+class BSkirmishHumanWallBuilder(playerId: Long, x: Int, y: Int) : BHumanWall.Builder(playerId, x, y) {
 
-    override fun build(context: BGameContext, playerId: Long, x: Int, y: Int): BHumanWall {
-        val wall = super.build(context, playerId, x, y)
+    override fun onCreate(context: BGameContext): BHumanWall {
+        val wall = super.onCreate(context)
         BSkirmishOnHitPointsActionTrigger.connect(context, wall)
         BOnDestroyUnitTrigger.connect(context, wall)
         return wall

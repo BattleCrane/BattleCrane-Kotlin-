@@ -35,7 +35,7 @@ class BSkirmishHumanMarineOnCreateTrigger private constructor(context: BGameCont
         override val height = BHumanMarine.HEIGHT
 
         override fun createUnit(context: BGameContext) =
-            BSkirmishHumanMarineBuilder().build(context, this.playerId, this.x, this.y)
+            BSkirmishHumanMarineBuilder(this.playerId, this.x, this.y).build(context)
     }
 
     companion object {

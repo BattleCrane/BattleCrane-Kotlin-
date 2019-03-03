@@ -9,7 +9,6 @@ import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.B
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BCreature
-import com.orego.battlecrane.bc.engine.api.util.geometry.BLineGeometry
 import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.BGrassField
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanLineAttackEvent

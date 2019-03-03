@@ -1,4 +1,8 @@
-package com.orego.battlecrane.bc.engine.api.model.property
+package com.orego.battlecrane.bc.engine.api.model.unit.property
+
+/**
+ * Defines produce properties.
+ */
 
 interface BProducable {
 

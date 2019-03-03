@@ -8,10 +8,10 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.v
 import com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger.BSkirmishOnHitPointsActionTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.vehicle.implementation.BHumanTank
 
-class BSkirmishHumanTankBuilder : BHumanTank.Builder() {
+class BSkirmishHumanTankBuilder(playerId: Long, x: Int, y: Int) : BHumanTank.Builder(playerId, x, y) {
 
-    override fun build(context: BGameContext, playerId: Long, x: Int, y: Int): BHumanTank {
-        val tank = super.build(context, playerId, x, y)
+    override fun onCreate(context: BGameContext): BHumanTank {
+        val tank = super.onCreate(context)
         BSkirmishOnHitPointsActionTrigger.connect(context, tank)
         BOnDestroyUnitTrigger.connect(context, tank)
         BOnAttackEnableTrigger.connect(context, tank)

@@ -39,7 +39,7 @@ class BSkirmishHumanFactoryOnCreateTrigger private constructor(context: BGameCon
         override val height = BHumanFactory.HEIGHT
 
         override fun createUnit(context: BGameContext) =
-            BSkirmishHumanFactoryBuilder().build(context, this.playerId, this.x, this.y)
+            BSkirmishHumanFactoryBuilder(this.playerId, this.x, this.y).build(context)
     }
 
     companion object {

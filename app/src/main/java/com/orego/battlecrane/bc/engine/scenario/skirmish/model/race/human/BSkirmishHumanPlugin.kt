@@ -1,15 +1,20 @@
 package com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.scenario.plugin.implementation.player.BPlayerPlugin
+import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
+import com.orego.battlecrane.bc.engine.api.scenario.plugin.race.BRacePlugin
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.building.*
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.infantry.BSkirmishHumanMarineOnCreateTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.trigger.vehicle.BSkirmishHumanTankOnCreateTrigger
 
-class BSkirmishHumanPlugin(playerId: Long) : BPlayerPlugin(playerId) {
+/**
+ * Installs human race for current player.
+ */
 
-    override fun install(context: BGameContext) {
-        val playerId = this.playerId
+class BSkirmishHumanPlugin : BRacePlugin {
+
+    override fun invoke(context: BGameContext, player: BPlayer) {
+        val playerId = player.playerId
         //Connect building creators:
         BSkirmishHumanBarracksOnCreateTrigger.connect(context, playerId)
         BSkirmishHumanFactoryOnCreateTrigger.connect(context, playerId)

@@ -8,10 +8,10 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.i
 import com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger.BSkirmishOnHitPointsActionTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.infantry.implementation.BHumanMarine
 
-class BSkirmishHumanMarineBuilder : BHumanMarine.Builder() {
+class BSkirmishHumanMarineBuilder(playerId: Long, x: Int, y: Int) : BHumanMarine.Builder(playerId, x, y) {
 
-    override fun build(context: BGameContext, playerId: Long, x: Int, y: Int): BHumanMarine {
-        val marine = super.build(context, playerId, x, y)
+    override fun onCreate(context: BGameContext): BHumanMarine {
+        val marine = super.onCreate(context)
         BSkirmishOnHitPointsActionTrigger.connect(context, marine)
         BOnDestroyUnitTrigger.connect(context, marine)
         BOnAttackEnableTrigger.connect(context, marine)

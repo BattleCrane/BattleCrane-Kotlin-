@@ -5,10 +5,10 @@ import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnDestroyUnitTrigg
 import com.orego.battlecrane.bc.engine.api.util.trigger.unit.BOnOwnerChangedUnitTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.location.grass.field.implementation.BEmptyGrassField
 
-class BSkirmishEmptyGrassFieldBuilder : BEmptyGrassField.Builder() {
+class BSkirmishEmptyGrassFieldBuilder(playerId: Long, x: Int, y: Int) : BEmptyGrassField.Builder(playerId, x, y) {
 
-    override fun build(context: BGameContext, playerId: Long, x: Int, y: Int): BEmptyGrassField {
-        val emptyField = super.build(context, playerId, x, y)
+    override fun onCreate(context: BGameContext): BEmptyGrassField {
+        val emptyField = super.onCreate(context)
         BOnDestroyUnitTrigger.connect(context, emptyField)
         BOnOwnerChangedUnitTrigger.connect(context, emptyField)
         return emptyField

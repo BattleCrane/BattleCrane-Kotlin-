@@ -8,10 +8,10 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.b
 import com.orego.battlecrane.bc.engine.scenario.skirmish.util.trigger.BSkirmishOnHitPointsActionTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanTurret
 
-class BSkirmishHumanTurretBuilder : BHumanTurret.Builder() {
+class BSkirmishHumanTurretBuilder(playerId: Long, x: Int, y: Int) : BHumanTurret.Builder(playerId, x, y) {
 
-    override fun build(context: BGameContext, playerId: Long, x: Int, y: Int): BHumanTurret {
-        val turret = super.build(context, playerId, x, y)
+    override fun onCreate(context: BGameContext): BHumanTurret {
+        val turret = super.onCreate(context)
         BSkirmishOnHitPointsActionTrigger.connect(context, turret)
         BOnDestroyUnitTrigger.connect(context, turret)
         BSkirmishHumanTurretOnAttackActionTrigger.connect(context, turret)

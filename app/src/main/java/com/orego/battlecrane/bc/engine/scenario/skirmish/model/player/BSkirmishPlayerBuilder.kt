@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 class BSkirmishPlayerBuilder : BPlayer.Builder() {
 
     //TODO: ADD TIMER NODE!!!
-    override fun build(context: BGameContext): BPlayer {
-        return super.build(context)
+    override fun onCreate(context: BGameContext): BPlayer {
+        return super.onCreate(context)
     }
 }
