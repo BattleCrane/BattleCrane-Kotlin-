@@ -5,41 +5,18 @@ import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.BUiItem
 import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 
-abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUnit>(unit) {
+abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BUiItem(uiGameContext) {
 
     val uiUnitId: Long
-
-    /**
-     * View on map.
-     */
-
-    open lateinit var unitView: View
-
-    /**
-     * Handles unit click modes.
-     */
-
-    protected val uiClickMode by lazy {
-        UiClickMode(uiGameContext, this)
-    }
-
-    /**
-     * Type of view mode.
-     */
-
-    var viewType = ViewMode.NORMAL
 
     init {
         val contextGenerator = uiGameContext.gameContext.contextGenerator
         this.uiUnitId = contextGenerator.getIdGenerator(BUiUnit::class.java).generateId()
     }
-
-    abstract fun getItemPath(): String
 
     override fun onDraw(uiGameContext: BUiGameContext) {
         val uiProvider = uiGameContext.uiProvider
@@ -50,13 +27,13 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
         val cellSizeY = constraintLayout.measuredHeight / BMapController.MAP_SIZE
         //Create params:
         val constraintParams = ConstraintLayout.LayoutParams(
-            this.item.width * cellSizeX,
-            this.item.height * cellSizeY
+            this.unit.width * cellSizeX,
+            this.unit.height * cellSizeY
         ).also {
             it.startToStart = constraintLayoutId
             it.topToTop = constraintLayoutId
-            it.marginStart = cellSizeX * this.item.x
-            it.topMargin = cellSizeY * this.item.y
+            it.marginStart = cellSizeX * this.unit.x
+            it.topMargin = cellSizeY * this.unit.y
         }
         //Create image unitView:
         val imageView = ImageView(applicationContext)
@@ -75,42 +52,13 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, unit: BUnit) : BUiItem<BUn
     }
 
     /**
-     * Draws description when unit is clicked.
-     */
-
-    open fun setDescription(uiGameContext: BUiGameContext) {
-    }
-
-    /**
-     * Handles when unit clicked.
-     */
-
-    open fun onClick(uiGameContext: BUiGameContext) {
-        uiGameContext.uiClickController.pushClickMode(this.uiClickMode)
-    }
-
-    /**
-     * Click mode.
-     */
-
-    open class UiClickMode(private val uiGameContext: BUiGameContext, val unit: BUiUnit) : BUiClickMode {
-
-        override fun onStartClickMode() {
-            this.unit.setDescription(this.uiGameContext)
-        }
-    }
-
-    /**
      * Builder.
      */
 
-    abstract class Builder : BUiItem.Builder<BUnit>()
+    abstract class Builder(protected open val unit : BUnit) : BUiItem.Builder() {
 
-    /**
-     * View mode shows current mode of unit interface. For example: unit selected, active e.t.c..
-     */
-
-    enum class ViewMode {
-        NORMAL, ACTIVE, SELECTED
+        override fun build(uiGameContext: BUiGameContext): BUiUnit {
+            return super.build(uiGameContext) as BUiUnit
+        }
     }
 }

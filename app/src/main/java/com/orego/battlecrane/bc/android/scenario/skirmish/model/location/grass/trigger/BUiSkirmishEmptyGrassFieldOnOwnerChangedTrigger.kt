@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.
 import android.widget.ImageView
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
-import com.orego.battlecrane.bc.android.standardImpl.location.grass.field.empty.BUiEmptyGrassField
+import com.orego.battlecrane.bc.android.standardImpl.location.grass.unit.field.empty.BUiEmptyGrassField
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.unit.node.pipe.onOwnerChanged.BOnOwnerChangedUnitPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode

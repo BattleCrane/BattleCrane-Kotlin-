@@ -1,26 +1,24 @@
 package com.orego.battlecrane.bc.android.api.asset
 
+
 object BUiAssets {
 
-    object Unit {
+    enum class ViewMode(val key: String) {
+        BLUE("blue"),
+        RED("red"),
+        NEUTRAL("neutral"),
+        ACTIVE("active"),
+        SELECTED("selected");
 
-        object ViewModeKey {
+        companion object {
 
-            const val BLUE = "blue"
-
-            const val RED = "red"
-
-            const val NEUTRAL = "neutral"
-
-            const val ACTIVE = "active"
-
-            const val SELECTED = "selected"
-
-            val COLOR_KEY_MAP = mapOf(
-                0.toLong() to NEUTRAL,
-                1.toLong() to BLUE,
-                2.toLong() to RED
-            )
+            fun getKeyByPlayerId(playerId: Long) =
+                when (playerId) {
+                    0.toLong() -> NEUTRAL.key
+                    1.toLong() -> BLUE.key
+                    2.toLong() -> RED.key
+                    else -> throw UnsupportedOperationException("$playerId key is not supported")
+                }
         }
     }
 }

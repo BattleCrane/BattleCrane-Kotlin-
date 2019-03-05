@@ -13,12 +13,12 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.pipe.BPipe
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.*
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BAttackable
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BHitPointable
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BLevelable
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BProducable
+import com.orego.battlecrane.bc.engine.api.model.util.BAttackable
+import com.orego.battlecrane.bc.engine.api.model.util.BHitPointable
+import com.orego.battlecrane.bc.engine.api.model.util.BLevelable
+import com.orego.battlecrane.bc.engine.api.model.util.BProducable
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
-import com.orego.battlecrane.bc.engine.api.scenario.plugin.location.BLocationPlugin
+import com.orego.battlecrane.bc.engine.api.scenario.util.plugin.location.BLocationPlugin
 
 /**
  * Initializes a game step by step.
@@ -117,23 +117,25 @@ abstract class BGameScenario {
 
     protected open fun installMapController(context: BGameContext) {
         val controller = context.mapController
-        context.storage.getHeap(BUnitHeap::class.java).getObjectList().forEach { unit ->
-            controller.notifyUnitChanged(unit)
-        }
+        val unitHeap = context.storage.getHeap(BUnitHeap::class.java)
+        //Fill map by unit ids:
+        val units = unitHeap.getObjectList()
+        units.forEach { unit -> controller.notifyUnitChanged(unit) }
         //Check initialized map:
         BMapController.foreach { x, y ->
-            val isNotInitiablizedField = controller[x, y] == BMapController.NOT_ID
+            val unitId = controller[x, y]
+            val isNotInitiablizedField = unitId == BMapController.NOT_ID
             if (isNotInitiablizedField) {
                 throw IllegalStateException("Position x: $x y: $y is not initialized")
             }
         }
     }
 
-    protected abstract fun getPlayers(context: BGameContext): List<BPlayer>
+    protected abstract fun getPlayers(context: BGameContext): Set<BPlayer>
 
-    protected abstract fun getUnits(context: BGameContext): List<BUnit>
+    protected abstract fun getUnits(context: BGameContext): Set<BUnit>
 
     protected abstract fun getStartTurnPlayerPosition(): Int
 
-    protected abstract fun getLocationPlugin() : BLocationPlugin
+    protected abstract fun getLocationPlugin(): BLocationPlugin
 }

@@ -26,7 +26,7 @@ class BUiSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
         val constraintLayoutId = constraintLayout.id
         val cellSize = constraintLayout.measuredWidth / COLUMN_COUNT
         //Get tank:
-        val tank = this.uiUnit.item
+        val tank = this.uiUnit.unit
         constraintLayout.removeAllViews()
         this.actionImageViewSet.clear()
         if (tank.isAttackEnable) {
@@ -56,7 +56,7 @@ class BUiSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
 
     private inner class AttackUiClickMode : BUiClickMode {
 
-        private val unit = this@BUiSkirmishHumanTankHolderOnAttackEnableTrigger.uiUnit.item
+        private val unit = this@BUiSkirmishHumanTankHolderOnAttackEnableTrigger.uiUnit.unit
 
         private val gameContext: BGameContext = this@BUiSkirmishHumanTankHolderOnAttackEnableTrigger.context
 
@@ -90,7 +90,7 @@ class BUiSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
 
         fun connect(uiGameContext: BUiGameContext, holder: BUiHumanTank) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
-                node is BOnAttackEnableTrigger && node.attackable == holder.item
+                node is BOnAttackEnableTrigger && node.attackable == holder.unit
             }
             val uiTrigger = BUiSkirmishHumanTankHolderOnAttackEnableTrigger(uiGameContext, holder)
             trigger.connectInnerPipe(uiTrigger.intoPipe())

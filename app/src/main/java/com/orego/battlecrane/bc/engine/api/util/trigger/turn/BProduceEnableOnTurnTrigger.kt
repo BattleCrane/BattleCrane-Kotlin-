@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.BTurnNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BProducableHeap
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BProducable
+import com.orego.battlecrane.bc.engine.api.model.util.BProducable
 import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BProduceEnableOnTurnTrigger private constructor(context: BGameContext, var producable: BProducable) :

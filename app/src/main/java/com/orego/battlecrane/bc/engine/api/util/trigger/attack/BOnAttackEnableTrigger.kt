@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attac
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAttackableHeap
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BAttackable
+import com.orego.battlecrane.bc.engine.api.model.util.BAttackable
 import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BOnAttackEnableTrigger private constructor(context: BGameContext, var attackable: BAttackable) : BNode(context) {

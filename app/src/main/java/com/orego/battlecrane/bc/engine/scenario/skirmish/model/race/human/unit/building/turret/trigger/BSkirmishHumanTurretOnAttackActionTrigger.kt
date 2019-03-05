@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BPlayerHeap
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BHitPointable
+import com.orego.battlecrane.bc.engine.api.model.util.BHitPointable
 import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanTurret
 

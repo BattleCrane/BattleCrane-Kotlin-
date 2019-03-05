@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.api.util.trigger.enable.BUiOnEnableTrigger
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BAttackable
+import com.orego.battlecrane.bc.engine.api.model.util.BAttackable
 
 abstract class BUiOnAttackEnableTrigger(uiGameContext: BUiGameContext, uiUnit: BUiUnit) :
     BUiOnEnableTrigger(uiGameContext, uiUnit) {

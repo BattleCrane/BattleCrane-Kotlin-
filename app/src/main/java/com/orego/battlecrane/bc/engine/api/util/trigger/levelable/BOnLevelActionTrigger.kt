@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.level
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BLevelableHeap
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BLevelable
+import com.orego.battlecrane.bc.engine.api.model.util.BLevelable
 
 abstract class BOnLevelActionTrigger protected constructor(context: BGameContext, open val levelable: BLevelable) :
     BNode(context) {

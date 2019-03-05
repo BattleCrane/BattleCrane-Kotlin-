@@ -21,6 +21,36 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.vehicle.impl
 
 class BUiSkirmishHumanPlugin(playerId: Long) : BUiRacePlugin(playerId) {
 
+    override val renderFunctionMap: Map<Class<out BUnit>, (BUiGameContext, BUnit) -> BUiUnit> = mapOf(
+        //Building:
+        BHumanBarracks::class.java to { context, unit ->
+            BUiSkirmishHumanBarracksBuilder(unit as BHumanBarracks).build(context)
+        },
+        BHumanFactory::class.java to { context, unit ->
+            BUiSkirmishHumanFactoryBuilder(unit as BHumanFactory).build(context)
+        },
+        BHumanGenerator::class.java to { context, unit ->
+            BUiSkirmishHumanGeneratorBuilder(unit as BHumanGenerator).build(context)
+        },
+        BHumanHeadquarters::class.java to { context, unit ->
+            BUiSkirmishHumanHeadquartersBuilder(unit as BHumanHeadquarters).build(context)
+        },
+        BHumanTurret::class.java to { context, unit ->
+            BUiSkirmishHumanTurretBuilder(unit as BHumanTurret).build(context)
+        },
+        BHumanWall::class.java to { context, unit ->
+            BUiSkirmishHumanWallBuilder(unit as BHumanWall).build(context)
+        },
+        //Creature:
+        BHumanMarine::class.java to { context, unit ->
+            BUiSkirmishHumanMarineBuilder(unit as BHumanMarine).build(context)
+        },
+        //Vehicle:
+        BHumanTank::class.java to { context, unit ->
+            BUiSkirmishHumanTankBuilder(unit as BHumanTank).build(context)
+        }
+    )
+
     override fun install(uiGameContext: BUiGameContext) {
         super.install(uiGameContext)
         //Connect building creators:
@@ -34,18 +64,4 @@ class BUiSkirmishHumanPlugin(playerId: Long) : BUiRacePlugin(playerId) {
         //Connect vehicle creators:
         BUiSkirmishHumanTankOnCreateTrigger.connect(uiGameContext, this.playerId)
     }
-
-    override val uiUnitBuilderMap: Map<Class<out BUnit>, BUiUnit.Builder> = mapOf(
-        //Building:
-        BHumanBarracks::class.java to BUiSkirmishHumanBarracksBuilder(),
-        BHumanFactory::class.java to BUiSkirmishHumanFactoryBuilder(),
-        BHumanGenerator::class.java to BUiSkirmishHumanGeneratorBuilder(),
-        BHumanHeadquarters::class.java to BUiSkirmishHumanHeadquartersBuilder(),
-        BHumanTurret::class.java to BUiSkirmishHumanTurretBuilder(),
-        BHumanWall::class.java to BUiSkirmishHumanWallBuilder(),
-        //Creature:
-        BHumanMarine::class.java to BUiSkirmishHumanMarineBuilder(),
-        //Vehicle:
-        BHumanTank::class.java to BUiSkirmishHumanTankBuilder()
-    )
 }

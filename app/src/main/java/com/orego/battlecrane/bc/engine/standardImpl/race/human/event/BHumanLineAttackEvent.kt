@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.engine.standardImpl.race.human.event
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackAction.BOnAttackActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BHitPointable
+import com.orego.battlecrane.bc.engine.api.model.util.BHitPointable
 import com.orego.battlecrane.bc.engine.api.util.geometry.BLineGeometry
 
 abstract class BHumanLineAttackEvent(

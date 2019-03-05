@@ -1,34 +1,36 @@
 package com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building
 
+import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
+import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BUiHumanAssets
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanTurret
 
-class BUiHumanTurret private constructor(uiGameContext: BUiGameContext, override val item: BHumanTurret) :
-    BUiUnit(uiGameContext, item) {
+class BUiHumanTurret private constructor(uiGameContext: BUiGameContext, override val unit: BHumanTurret) :
+    BUiUnit(uiGameContext, unit) {
 
     companion object {
 
-        private val COLOR_MAP = mapOf(
-            1.toLong() to "blue",
-            2.toLong() to "red"
-        )
+        const val PATH = "${BUiHumanAssets.Unit.Building.PATH}/turret"
     }
 
-    override fun getItemPath() =
-        "race/human/unit/turret/" +
-                "${COLOR_MAP[this.item.playerId]}/" +
-                "${this.item.currentLevel}_${this.item.currentHitPoints}.png"
+    override fun getItemPath() : String {
+        val playerId = this.unit.playerId
+        val viewKey =  BUiAssets.ViewMode.getKeyByPlayerId(playerId)
+        val level = this.unit.currentLevel
+        val hitPoints = this.unit.currentHitPoints
+        return "$PATH/$viewKey/${level}_$hitPoints.png"
+    }
 
     /**
      * Builder.
      */
 
-    open class Builder : BUiUnit.Builder() {
+    open class Builder(override val unit: BHumanTurret) : BUiUnit.Builder(unit) {
 
-        override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiHumanTurret {
-            return BUiHumanTurret(uiGameContext, item as BHumanTurret)
+        override fun onCreate(uiGameContext: BUiGameContext): BUiHumanTurret {
+            return BUiHumanTurret(uiGameContext, this.unit)
         }
     }
 }

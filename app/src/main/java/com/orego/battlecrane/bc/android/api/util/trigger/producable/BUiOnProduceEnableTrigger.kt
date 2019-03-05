@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.api.util.trigger.enable.BUiOnEnableTrigger
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.producable.node.pipe.onProduceEnable.BOnProduceEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BProducable
+import com.orego.battlecrane.bc.engine.api.model.util.BProducable
 
 abstract class BUiOnProduceEnableTrigger(uiGameContext: BUiGameContext, uiUnit: BUiUnit) :
     BUiOnEnableTrigger(uiGameContext, uiUnit) {

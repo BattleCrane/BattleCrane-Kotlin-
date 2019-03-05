@@ -2,8 +2,7 @@ package com.orego.battlecrane.bc.android.api.context
 
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickController
 import com.orego.battlecrane.bc.android.api.context.taskManager.BUiTaskManager
-import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
-import com.orego.battlecrane.bc.android.api.model.unit.BUiUnitFactory
+import com.orego.battlecrane.bc.android.api.model.unit.factory.BUiUnitFactory
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
 import com.orego.battlecrane.ui.fragment.battle.BBattleFragment
@@ -18,7 +17,7 @@ class BUiGameContext(val gameContext: BGameContext, val uiProvider: BBattleFragm
 
     val uiClickController = BUiClickController()
 
-    val uiUnitFactory= BUiUnitFactory()
+    val uiUnitFactory = BUiUnitFactory()
 
     fun startGame() {
         this.instantiateUiUnits()

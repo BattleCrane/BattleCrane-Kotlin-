@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.engine.standardImpl.race.human.util
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BUnitHeap
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BLevelable
+import com.orego.battlecrane.bc.engine.api.model.util.BLevelable
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.BHumanBuilding
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanFactory

@@ -1,9 +1,9 @@
 package com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation
 
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BAttackable
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BHitPointable
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BLevelable
+import com.orego.battlecrane.bc.engine.api.model.util.BAttackable
+import com.orego.battlecrane.bc.engine.api.model.util.BHitPointable
+import com.orego.battlecrane.bc.engine.api.model.util.BLevelable
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.BHumanBuilding
 

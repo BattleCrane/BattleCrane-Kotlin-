@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.produ
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BProducableHeap
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BProducable
+import com.orego.battlecrane.bc.engine.api.model.util.BProducable
 import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BOnProduceEnableTrigger private constructor(context: BGameContext, val producable: BProducable) :

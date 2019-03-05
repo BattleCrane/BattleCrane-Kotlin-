@@ -2,7 +2,7 @@ package com.orego.battlecrane.bc.android.scenario.skirmish
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.scenario.BUiGameScenario
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.BUiSkirmishGrassUiLocationPlugin
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.location.grass.BUiSkirmishGrassLocationPlugin
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.BUiSkirmishHumanPlugin
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.pipe.onTurnFinished.BOnTurnFinishedPipe
 import com.orego.battlecrane.bc.engine.scenario.skirmish.BSkirmishScenario
@@ -31,7 +31,7 @@ class BUiSkirmishScenario : BUiGameScenario() {
 
     override fun getUiRacePlugins() = this.uiRacePluginList
 
-    override fun getUiLocationPlugin() = BUiSkirmishGrassUiLocationPlugin()
+    override fun getUiLocationPlugin() = BUiSkirmishGrassLocationPlugin()
 
     override fun install(uiGameContext: BUiGameContext) {
         super.install(uiGameContext)

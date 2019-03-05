@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.attackable.node.pipe.onAttackEnable.BOnAttackEnablePipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.turn.node.BTurnNode
 import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.BAttackableHeap
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BAttackable
+import com.orego.battlecrane.bc.engine.api.model.util.BAttackable
 import com.orego.battlecrane.bc.engine.api.util.pipe.BParentPipe
 
 class BAttackEnableOnTurnTrigger private constructor(context: BGameContext, var attackable: BAttackable) :

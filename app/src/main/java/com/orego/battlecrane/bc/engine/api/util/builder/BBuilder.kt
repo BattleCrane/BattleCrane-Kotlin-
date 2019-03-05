@@ -3,7 +3,7 @@ package com.orego.battlecrane.bc.engine.api.util.builder
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 
 /**
- * Flexible item builder.
+ * Flexible unit builder.
  */
 
 abstract class BBuilder<T> {

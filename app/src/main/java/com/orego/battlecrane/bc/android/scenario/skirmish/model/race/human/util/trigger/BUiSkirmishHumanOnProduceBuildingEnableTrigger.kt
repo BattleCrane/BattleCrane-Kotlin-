@@ -9,8 +9,8 @@ import com.orego.battlecrane.bc.android.api.util.BUiToolBuilder
 import com.orego.battlecrane.bc.android.api.util.trigger.producable.BUiOnProduceEnableTrigger
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BUiHumanAssets
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BLevelable
-import com.orego.battlecrane.bc.engine.api.model.unit.property.BProducable
+import com.orego.battlecrane.bc.engine.api.model.util.BLevelable
+import com.orego.battlecrane.bc.engine.api.model.util.BProducable
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.util.trigger.producable.BOnProduceEnableTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct.*

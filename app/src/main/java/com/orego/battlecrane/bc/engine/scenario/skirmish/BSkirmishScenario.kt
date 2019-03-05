@@ -6,7 +6,7 @@ import com.orego.battlecrane.bc.engine.api.context.storage.heap.implementation.B
 import com.orego.battlecrane.bc.engine.api.model.player.BPlayer
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.api.scenario.BGameScenario
-import com.orego.battlecrane.bc.engine.api.scenario.plugin.location.BLocationPlugin
+import com.orego.battlecrane.bc.engine.api.scenario.util.plugin.location.BLocationPlugin
 import com.orego.battlecrane.bc.engine.api.util.trigger.turn.BObservePlayerZonesOnStartTurnTrigger
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.BSkirmishGrassPlugin
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.location.grass.field.BSkirmishEmptyGrassFieldBuilder
@@ -41,8 +41,8 @@ class BSkirmishScenario : BGameScenario() {
         BObservePlayerZonesOnStartTurnTrigger.connect(context)
     }
 
-    override fun getPlayers(context: BGameContext): List<BPlayer> {
-        val playerList = mutableListOf<BPlayer>()
+    override fun getPlayers(context: BGameContext): Set<BPlayer> {
+        val playerList = mutableSetOf<BPlayer>()
         val firstPlayerBuilder = this.playerBuilderMap[FIRST_PLAYER_ID]!!
         val secondPlayerBuilder = this.playerBuilderMap[SECOND_PLAYER_ID]!!
         //Create players:
@@ -64,12 +64,23 @@ class BSkirmishScenario : BGameScenario() {
             1
         }
 
-    override fun getUnits(context: BGameContext) =
-        mutableListOf<BUnit>()
+    override fun getUnits(context: BGameContext): Set<BUnit> =
+        mutableSetOf<BUnit>()
             .addBuildings(context)
             .addEmptyFields(context)
 
-    private fun MutableList<BUnit>.addBuildings(context: BGameContext): MutableList<BUnit> {
+    private fun MutableSet<BUnit>.addBuildings(context: BGameContext): MutableSet<BUnit> {
+
+        fun newHeadquarters(playerId : Long, x: Int, y : Int): BUnit {
+            val builder = BSkirmishHumanHeadquartersBuilder(playerId, x, y)
+            return builder.build(context)
+        }
+
+        fun newWall(playerId : Long, x: Int, y : Int) : BUnit {
+            val builder = BSkirmishHumanWallBuilder(playerId, x, y)
+            return builder.build(context)
+        }
+
         val heap = context.storage.getHeap(BPlayerHeap::class.java)
         val players = heap.getObjectList()
         if (players.size == PLAYER_COUNT) {
@@ -77,35 +88,34 @@ class BSkirmishScenario : BGameScenario() {
             val bluePlayerId = players[0].playerId
             val redPlayerId = players[1].playerId
             //Put headquarters on the map:
-            this.add(BSkirmishHumanHeadquartersBuilder(bluePlayerId, 14, 14).build(context))
-            this.add(BSkirmishHumanHeadquartersBuilder(redPlayerId, 0, 0).build(context))
+            this.add(newHeadquarters(bluePlayerId, 14, 14))
+            this.add(newHeadquarters(redPlayerId, 0, 0))
             //Put walls on the map:
-            val wallBuiler =
-            this.add(BSkirmishHumanWallBuilder(redPlayerId, 0, 4).build(context))
-            this.add(BSkirmishHumanWallBuilder(redPlayerId, 1, 4).build(context))
-            this.add(BSkirmishHumanWallBuilder(redPlayerId, 2, 4).build(context))
-            this.add(BSkirmishHumanWallBuilder(redPlayerId, 3, 4).build(context))
-            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 4).build(context))
-            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 0).build(context))
-            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 1).build(context))
-            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 2).build(context))
-            this.add(BSkirmishHumanWallBuilder(redPlayerId, 4, 3).build(context))
-            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 11).build(context))
-            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 12, 11).build(context))
-            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 13, 11).build(context))
-            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 14, 11).build(context))
-            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 15, 11).build(context))
-            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 15).build(context))
-            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 14).build(context))
-            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 13).build(context))
-            this.add(BSkirmishHumanWallBuilder(bluePlayerId, 11, 12).build(context))
+            this.add(newWall(redPlayerId, 0, 4))
+            this.add(newWall(redPlayerId, 1, 4))
+            this.add(newWall(redPlayerId, 2, 4))
+            this.add(newWall(redPlayerId, 3, 4))
+            this.add(newWall(redPlayerId, 4, 4))
+            this.add(newWall(redPlayerId, 4, 0))
+            this.add(newWall(redPlayerId, 4, 1))
+            this.add(newWall(redPlayerId, 4, 2))
+            this.add(newWall(redPlayerId, 4, 3))
+            this.add(newWall(bluePlayerId, 11, 11))
+            this.add(newWall(bluePlayerId, 12, 11))
+            this.add(newWall(bluePlayerId, 13, 11))
+            this.add(newWall(bluePlayerId, 14, 11))
+            this.add(newWall(bluePlayerId, 15, 11))
+            this.add(newWall(bluePlayerId, 11, 15))
+            this.add(newWall(bluePlayerId, 11, 14))
+            this.add(newWall(bluePlayerId, 11, 13))
+            this.add(newWall(bluePlayerId, 11, 12))
             return this
         } else {
             throw IllegalArgumentException("Standard skirmish gameScenario supports $PLAYER_COUNT players!")
         }
     }
 
-    private fun MutableList<BUnit>.addEmptyFields(context: BGameContext): MutableList<BUnit> {
+    private fun MutableSet<BUnit>.addEmptyFields(context: BGameContext): Set<BUnit> {
         val matrix = BMapController.createMatrix()
         //Check uiUnit list:
         this.forEach { unit ->
@@ -115,10 +125,10 @@ class BSkirmishScenario : BGameScenario() {
             }
         }
         //Fill rest fileds:
-        val emptyGrassBuilder =
         BMapController.foreach { x, y ->
             if (matrix[x][y] == BMapController.NOT_ID) {
-                val grassField = BSkirmishEmptyGrassFieldBuilder(BPlayer.NEUTRAL_ID, x, y).build(context)
+                val builder = BSkirmishEmptyGrassFieldBuilder(BPlayer.NEUTRAL_ID, x, y)
+                val grassField = builder.build(context)
                 this.add(grassField)
             }
         }
