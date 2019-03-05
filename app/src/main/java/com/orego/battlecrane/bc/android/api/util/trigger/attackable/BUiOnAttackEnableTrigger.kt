@@ -11,7 +11,7 @@ abstract class BUiOnAttackEnableTrigger(uiGameContext: BUiGameContext, uiUnit: B
     BUiOnEnableTrigger(uiGameContext, uiUnit) {
 
     override fun mathchesEvent(event: BEvent?) = event is BOnAttackEnablePipe.Event
-            && event.attackableId == (this.uiUnit.item as BAttackable).attackableId
+            && event.attackableId == (this.uiUnit.unit as BAttackable).attackableId
 
     override fun BEvent.isEnable() = (this as BOnAttackEnablePipe.Event).isEnable
 }

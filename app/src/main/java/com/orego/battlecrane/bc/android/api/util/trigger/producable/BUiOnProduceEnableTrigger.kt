@@ -11,7 +11,7 @@ abstract class BUiOnProduceEnableTrigger(uiGameContext: BUiGameContext, uiUnit: 
     BUiOnEnableTrigger(uiGameContext, uiUnit) {
 
     override fun mathchesEvent(event: BEvent?) = event is BOnProduceEnablePipe.Event
-            && event.producableId == (this.uiUnit.item as BProducable).producableId
+            && event.producableId == (this.uiUnit.unit as BProducable).producableId
 
     override fun BEvent.isEnable() = (this as BOnProduceEnablePipe.Event).isEnable
 }

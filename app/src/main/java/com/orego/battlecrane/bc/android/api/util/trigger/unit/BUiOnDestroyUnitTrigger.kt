@@ -18,11 +18,12 @@ class BUiOnDestroyUnitTrigger private constructor(
 
     override fun handle(event: BEvent): BEvent? {
         val holder = this.holder
-        if (event is BOnDestroyUnitPipe.Event && event.unitId == holder.item.unitId) {
+        if (event is BOnDestroyUnitPipe.Event && event.unitId == holder.unit.unitId) {
             this.uiContext.apply {
                 this.gameContext.storage.removeObject(holder.uiUnitId, BUiUnitHeap::class.java)
                 this.uiTaskManager.addTask {
-                    this.uiProvider.mapConstraintLayout.removeView(holder.unitView)
+                    holder.onDestroyView(this@BUiOnDestroyUnitTrigger.uiContext)
+
                 }
             }
         }
@@ -45,7 +46,7 @@ class BUiOnDestroyUnitTrigger private constructor(
             val uiTrigger =
                 BUiOnDestroyUnitTrigger(uiContext, holder)
             val trigger = uiContext.gameContext.pipeline.findNodeBy { node ->
-                node is BOnDestroyUnitTrigger && node.unit == holder.item
+                node is BOnDestroyUnitTrigger && node.unit == holder.unit
             }
             trigger.connectInnerPipe(uiTrigger.intoPipe())
         }

@@ -29,7 +29,7 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
         val constraintLayoutId = constraintLayout.id
         val cellSize = constraintLayout.measuredWidth / COLUMN_COUNT
         //Get barracks:
-        val barracks = this.uiUnit.item
+        val barracks = this.uiUnit.unit
         constraintLayout.removeAllViews()
         this.actionImageViewSet.clear()
         if (barracks.isProduceEnable) {
@@ -45,10 +45,12 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
                     y++
                 }
                 val constraintParams = ConstraintLayout.LayoutParams(cellSize, cellSize)
-                constraintParams.startToStart = constraintLayoutId
-                constraintParams.topToTop = constraintLayoutId
-                constraintParams.marginStart = cellSize * x
-                constraintParams.topMargin = cellSize * y
+                    .also {
+                        it.startToStart = constraintLayoutId
+                        it.topToTop = constraintLayoutId
+                        it.marginStart = cellSize * x
+                        it.topMargin = cellSize * y
+                    }
                 imageView.layoutParams = constraintParams
                 constraintLayout.addView(imageView)
                 x++
@@ -62,13 +64,13 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
 
     private inner class TrainMarineUiClickMode : BUiClickMode {
 
-        private val unit = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.uiUnit.item
+        private val unit = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.uiUnit.unit
 
         private val gameContext: BGameContext = this@BUiSkirmishHumanBarracksOnProduceEnableTrigger.context
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
             if (nextUiClickMode is BUiUnit.UiClickMode) {
-                val clickedUnit = nextUiClickMode.unit.item
+                val clickedUnit = nextUiClickMode.item.unit
                 if (clickedUnit is BEmptyField) {
                     val event = BSkirmishHumanBarracksOnProduceActionTrigger.Event(
                         this.unit.producableId,
@@ -89,14 +91,11 @@ class BUiSkirmishHumanBarracksOnProduceEnableTrigger private constructor(
 
     companion object {
 
-//        @MagicConstant
-//        private const val CELL_COEFFICIENT = 0.9
-
         private const val COLUMN_COUNT = 2
 
         fun connect(uiGameContext: BUiGameContext, holder: BUiHumanBarracks) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
-                node is BOnProduceEnableTrigger && node.producable == holder.item
+                node is BOnProduceEnableTrigger && node.producable == holder.unit
             }
             val uiTrigger = BUiSkirmishHumanBarracksOnProduceEnableTrigger(uiGameContext, holder)
             trigger.connectInnerPipe(uiTrigger.intoPipe())

@@ -1,60 +1,18 @@
 package com.orego.battlecrane.bc.android.api.model
 
 import android.view.View
-import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
-import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 
-abstract class BUiItem protected constructor(private val uiGameContext: BUiGameContext) {
+abstract class BUiItem {
 
-    /**
-     * View on map.
-     */
+    abstract fun onCreateView(uiGameContext: BUiGameContext) : View
 
-    open lateinit var unitView: View
+    abstract fun onUpdateView(uiGameContext: BUiGameContext)
 
-    /**
-     * Handles unit click modes.
-     */
-
-    protected val uiClickMode by lazy {
-        UiClickMode(uiGameContext, this)
-    }
-
-    open var viewMode = BUiAssets.ViewMode.NEUTRAL
-
-    abstract fun onDraw(uiGameContext: BUiGameContext)
-
-    abstract fun getItemPath(): String
+    abstract fun onDestroyView(uiGameContext: BUiGameContext)
 
     /**
-     * Draws description when unit is clicked.
-     */
-
-    open fun setDescription(uiGameContext: BUiGameContext) {
-    }
-
-    /**
-     * Handles when unit clicked.
-     */
-
-    open fun onClick(uiGameContext: BUiGameContext) {
-        uiGameContext.uiClickController.pushClickMode(this.uiClickMode)
-    }
-
-    /**
-     * Click mode.
-     */
-
-    open class UiClickMode(private val uiGameContext: BUiGameContext, open val item: BUiItem) : BUiClickMode {
-
-        override fun onStartClickMode() {
-            this.item.setDescription(this.uiGameContext)
-        }
-    }
-
-    /**
-     * Creates a unit.
+     * Creates a item.
      */
 
     abstract class Builder {

@@ -62,7 +62,7 @@ class BUiSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
             if (nextUiClickMode is BUiUnit.UiClickMode) {
-                val clickedUnit = nextUiClickMode.unit.item
+                val clickedUnit = nextUiClickMode.item.unit
                 val event = BSkirmishHumanTankOnAttackActionTrigger.Event(
                     this.unit.attackableId,
                     this.unit.x,
@@ -82,9 +82,6 @@ class BUiSkirmishHumanTankHolderOnAttackEnableTrigger private constructor(
     }
 
     companion object {
-
-//        private const val CELL_COEFFICIENT = 0.9
-//        @MagicConstant
 
         private const val COLUMN_COUNT = 2
 

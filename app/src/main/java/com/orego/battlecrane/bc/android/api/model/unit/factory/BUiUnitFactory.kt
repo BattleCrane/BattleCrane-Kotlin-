@@ -21,9 +21,11 @@ class BUiUnitFactory {
         //Create unit:
         val uiUnit = createUiUnit(uiGameContext, item)
         //Draw unit after creating:
-        uiUnit.onDraw(uiGameContext)
+        val unitView = uiUnit.onCreateView(uiGameContext)
         //Put in the storage:
         uiGameContext.gameContext.storage.putObject(uiUnit)
+        //Put on the map:
+        uiGameContext.uiProvider.mapConstraintLayout.addView(unitView)
         return uiUnit
     }
 }

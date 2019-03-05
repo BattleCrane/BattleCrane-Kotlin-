@@ -6,11 +6,12 @@ import com.orego.battlecrane.bc.android.api.util.trigger.unit.BUiOnDestroyUnitTr
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.vehicle.trigger.BUiSkirmishHumanTankHolderOnAttackEnableTrigger
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.vehicle.BUiHumanTank
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.vehicle.implementation.BHumanTank
 
-class BUiSkirmishHumanTankBuilder : BUiHumanTank.Builder() {
+class BUiSkirmishHumanTankBuilder(unit: BHumanTank) : BUiHumanTank.Builder(unit) {
 
-    override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiHumanTank {
-        val holder = super.onCreate(uiGameContext, item)
+    override fun onCreate(uiGameContext: BUiGameContext): BUiHumanTank {
+        val holder = super.onCreate(uiGameContext)
         BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
         BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
         BUiSkirmishHumanTankHolderOnAttackEnableTrigger.connect(uiGameContext, holder)

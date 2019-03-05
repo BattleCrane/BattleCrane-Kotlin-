@@ -64,7 +64,7 @@ class BUiSkirmishHumanMarineHolderOnAttackEnableTrigger private constructor(
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
             println("MARINNEENEENNENENEN")
             if (nextUiClickMode is BUiUnit.UiClickMode) {
-                val clickedUnit = nextUiClickMode.unit.item
+                val clickedUnit = nextUiClickMode.item.unit
                 val event = BSkirmishHumanMarineOnAttackActionTrigger.Event(
                     this.unit.attackableId,
                     this.unit.x,

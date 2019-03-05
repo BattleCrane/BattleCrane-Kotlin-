@@ -16,7 +16,7 @@ class BUiDestroyedGrassField private constructor(
         const val PATH = "${BUiGrassAssets.Unit.Field.PATH}/destroyed"
     }
 
-    override fun getItemPath() = "$PATH/${this.viewMode.key}.png"
+    override fun createPath() = "$PATH/${this.viewMode.key}.png"
 
     /**
      * Builder.

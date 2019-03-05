@@ -5,11 +5,12 @@ import com.orego.battlecrane.bc.android.api.util.trigger.hitPointable.BUiOnHitPo
 import com.orego.battlecrane.bc.android.api.util.trigger.unit.BUiOnDestroyUnitTrigger
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanWall
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanWall
 
-class BUiSkirmishHumanWallBuilder : BUiHumanWall.Builder() {
+class BUiSkirmishHumanWallBuilder(unit : BHumanWall) : BUiHumanWall.Builder(unit) {
 
-    override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiHumanWall {
-        val holder = super.onCreate(uiGameContext, item)
+    override fun onCreate(uiGameContext: BUiGameContext): BUiHumanWall {
+        val holder = super.onCreate(uiGameContext)
         BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
         BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
         return holder

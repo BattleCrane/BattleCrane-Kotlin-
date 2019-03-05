@@ -29,7 +29,7 @@ class BUiSkirmishHumanFactoryOnProduceEnableTrigger private constructor(
         val constraintLayoutId = constraintLayout.id
         val cellSize = constraintLayout.measuredWidth / COLUMN_COUNT
         //Get factory:
-        val factory = this.uiUnit.item
+        val factory = this.uiUnit.unit
         constraintLayout.removeAllViews()
         this.actionImageViewSet.clear()
         if (factory.isProduceEnable) {
@@ -58,13 +58,13 @@ class BUiSkirmishHumanFactoryOnProduceEnableTrigger private constructor(
 
     private inner class ProduceTankUiClickMode : BUiClickMode {
 
-        private val unit = this@BUiSkirmishHumanFactoryOnProduceEnableTrigger.uiUnit.item
+        private val unit = this@BUiSkirmishHumanFactoryOnProduceEnableTrigger.uiUnit.unit
 
         private val gameContext: BGameContext = this@BUiSkirmishHumanFactoryOnProduceEnableTrigger.context
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
             if (nextUiClickMode is BUiUnit.UiClickMode) {
-                val clickedUnit = nextUiClickMode.unit.item
+                val clickedUnit = nextUiClickMode.item.unit
                 if (clickedUnit is BEmptyField) {
                     val event = BSkirmishHumanFactoryOnProduceActionTrigger.Event(
                         this.unit.producableId,
@@ -86,14 +86,11 @@ class BUiSkirmishHumanFactoryOnProduceEnableTrigger private constructor(
 
     companion object {
 
-//        @MagicConstant
-//        private const val CELL_COEFFICIENT = 0.9
-
         private const val COLUMN_COUNT = 2
 
         fun connect(uiGameContext: BUiGameContext, holder: BUiHumanFactory) {
             val trigger = uiGameContext.gameContext.pipeline.findNodeBy { node ->
-                node is BOnProduceEnableTrigger && node.producable == holder.item
+                node is BOnProduceEnableTrigger && node.producable == holder.unit
             }
             val uiTrigger = BUiSkirmishHumanFactoryOnProduceEnableTrigger(uiGameContext, holder)
             trigger.connectInnerPipe(uiTrigger.intoPipe())

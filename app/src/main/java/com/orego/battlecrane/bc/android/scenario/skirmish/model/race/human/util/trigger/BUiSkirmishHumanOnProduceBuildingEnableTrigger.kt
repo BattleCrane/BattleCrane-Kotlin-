@@ -161,9 +161,6 @@ class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
 
     companion object {
 
-//        @MagicConstant
-//        private const val CELL_COEFFICIENT = 0.9
-
         private const val COLUMN_COUNT = 2
 
         fun connect(uiGameContext: BUiGameContext, holder: BUiUnit) {

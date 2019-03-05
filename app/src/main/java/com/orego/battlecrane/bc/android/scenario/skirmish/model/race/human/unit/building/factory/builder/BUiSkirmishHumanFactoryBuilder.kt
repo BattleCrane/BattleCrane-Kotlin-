@@ -5,12 +5,12 @@ import com.orego.battlecrane.bc.android.api.util.trigger.hitPointable.BUiOnHitPo
 import com.orego.battlecrane.bc.android.api.util.trigger.unit.BUiOnDestroyUnitTrigger
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.factory.trigger.BUiSkirmishHumanFactoryOnProduceEnableTrigger
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanFactory
-import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanFactory
 
-class BUiSkirmishHumanFactoryBuilder : BUiHumanFactory.Builder() {
+class BUiSkirmishHumanFactoryBuilder(unit : BHumanFactory) : BUiHumanFactory.Builder(unit) {
 
-    override fun onCreate(uiGameContext: BUiGameContext, item: BUnit): BUiHumanFactory {
-        val holder = super.onCreate(uiGameContext, item)
+    override fun onCreate(uiGameContext: BUiGameContext): BUiHumanFactory {
+        val holder = super.onCreate(uiGameContext)
         BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
         BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
         BUiSkirmishHumanFactoryOnProduceEnableTrigger.connect(uiGameContext, holder)
