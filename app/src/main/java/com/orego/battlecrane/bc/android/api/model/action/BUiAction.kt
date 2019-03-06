@@ -32,7 +32,7 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
      * View mode.
      */
 
-    protected lateinit var viewMode: BUiAssets.ViewMode
+    protected var viewMode: BUiAssets.ViewMode = BUiAssets.ViewMode.ACTIVE
 
     abstract fun onPerform(uiGameContext: BUiGameContext)
 

@@ -12,7 +12,7 @@ import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.utils.BSkirmishHumanRule
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
 
-class BUiSkirmishBuildGeneratorAction(uiGameContext: BUiGameContext, private val producable: BProducable) :
+class BUiSkirmishBuildHumanGeneratorAction(uiGameContext: BUiGameContext, private val producable: BProducable) :
     BUiAction(uiGameContext) {
 
     companion object {
@@ -64,7 +64,7 @@ class BUiSkirmishBuildGeneratorAction(uiGameContext: BUiGameContext, private val
 
     inner class UiClickMode(uiGameContext: BUiGameContext) : BUiAction.UiClickMode(uiGameContext, this) {
 
-        private val producable = this@BUiSkirmishBuildGeneratorAction.producable
+        private val producable = this@BUiSkirmishBuildHumanGeneratorAction.producable
 
         private val gameContext: BGameContext = uiGameContext.gameContext
 

@@ -34,7 +34,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      * View mode.
      */
 
-    protected lateinit var viewMode: BUiAssets.ViewMode
+    protected var viewMode = BUiAssets.ViewMode.SELECTED
 
     /**
      * Command list.

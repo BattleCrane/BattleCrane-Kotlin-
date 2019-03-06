@@ -10,7 +10,7 @@ import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.model.util.BProducable
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct.BSkirmishHumanConstructTurretEvent
 
-class BUiSkirmishBuildTurretAction(uiGameContext: BUiGameContext, private val producable: BProducable) :
+class BUiSkirmishBuildHumanTurretAction(uiGameContext: BUiGameContext, private val producable: BProducable) :
     BUiAction(uiGameContext) {
 
     companion object {
@@ -57,7 +57,7 @@ class BUiSkirmishBuildTurretAction(uiGameContext: BUiGameContext, private val pr
 
     inner class UiClickMode(uiGameContext: BUiGameContext) : BUiAction.UiClickMode(uiGameContext, this) {
 
-        private val producable = this@BUiSkirmishBuildTurretAction.producable
+        private val producable = this@BUiSkirmishBuildHumanTurretAction.producable
 
         private val gameContext: BGameContext = uiGameContext.gameContext
 

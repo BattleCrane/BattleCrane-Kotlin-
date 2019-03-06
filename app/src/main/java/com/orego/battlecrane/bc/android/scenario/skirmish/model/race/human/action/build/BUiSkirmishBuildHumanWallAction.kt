@@ -8,14 +8,14 @@ import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BUiHumanAs
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.model.util.BProducable
-import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct.BSkirmishHumanConstructBarracksEvent
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct.BSkirmishHumanConstructWallEvent
 
-class BUiSkirmishBuildBarracksAction(uiGameContext: BUiGameContext, private val producable: BProducable) :
+class BUiSkirmishBuildHumanWallAction(uiGameContext: BUiGameContext, private val producable: BProducable) :
     BUiAction(uiGameContext) {
 
     companion object {
 
-        const val PATH = "${BUiHumanAssets.Action.Build.PATH}/barracks"
+        const val PATH = "${BUiHumanAssets.Action.Build.PATH}/wall"
     }
 
     override val uiClickMode by lazy {
@@ -57,7 +57,7 @@ class BUiSkirmishBuildBarracksAction(uiGameContext: BUiGameContext, private val 
 
     inner class UiClickMode(uiGameContext: BUiGameContext) : BUiAction.UiClickMode(uiGameContext, this) {
 
-        private val producable = this@BUiSkirmishBuildBarracksAction.producable
+        private val producable = this@BUiSkirmishBuildHumanWallAction.producable
 
         private val gameContext: BGameContext = uiGameContext.gameContext
 
@@ -69,7 +69,7 @@ class BUiSkirmishBuildBarracksAction(uiGameContext: BUiGameContext, private val 
                     val producableId = this.producable.producableId
                     val x = clickedUnit.x
                     val y = clickedUnit.y
-                    val event = BSkirmishHumanConstructBarracksEvent(producableId, x, y)
+                    val event = BSkirmishHumanConstructWallEvent(producableId, x, y)
                     val isSuccessful = event.isEnable(this.gameContext, playerId)
                     if (isSuccessful) {
                         this.gameContext.pipeline.broacastEvent(event)

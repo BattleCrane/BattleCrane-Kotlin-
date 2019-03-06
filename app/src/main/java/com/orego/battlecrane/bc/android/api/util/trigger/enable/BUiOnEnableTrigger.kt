@@ -26,9 +26,15 @@ abstract class BUiOnEnableTrigger(protected val uiGameContext: BUiGameContext, p
         return null
     }
 
-    abstract fun onEnable()
+    open fun onEnable() {
+        this.uiUnit.activate(this.uiGameContext)
+    }
 
-    abstract fun onDisable()
+    open fun onDisable() {
+        if (this.uiUnit.isActive()) {
+            this.uiUnit.dismiss(this.uiGameContext)
+        }
+    }
 
     /**
      * Checks event.

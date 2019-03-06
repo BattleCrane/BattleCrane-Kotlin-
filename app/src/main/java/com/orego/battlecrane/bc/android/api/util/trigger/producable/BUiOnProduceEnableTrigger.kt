@@ -17,11 +17,8 @@ class BUiOnProduceEnableTrigger private constructor(uiGameContext: BUiGameContex
     override fun BEvent.isEnable() = (this as BOnProduceEnablePipe.Event).isEnable
 
     override fun onEnable() {
-        this.uiUnit.activate(this.uiGameContext)
-    }
-
-    override fun onDisable() {
-        this.uiUnit.dismiss(this.uiGameContext)
+        super.onEnable()
+        println("IS ENA: ${this.uiUnit.unit}")
     }
 
     companion object {

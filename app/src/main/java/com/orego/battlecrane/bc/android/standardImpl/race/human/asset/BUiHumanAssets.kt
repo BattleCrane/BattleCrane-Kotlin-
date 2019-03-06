@@ -47,5 +47,10 @@ object BUiHumanAssets {
 
             const val PATH = "${Action.PATH}/produce"
         }
+
+        object Upgrate {
+
+            const val PATH = "${Action.PATH}/upgrate"
+        }
     }
 }
