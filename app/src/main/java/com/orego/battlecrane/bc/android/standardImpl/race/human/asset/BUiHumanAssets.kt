@@ -33,53 +33,19 @@ object BUiHumanAssets {
             const val PATH = "${Action.PATH}/attack"
         }
 
-        object Building {
+        object Build {
 
-            const val PATH = "${Action.PATH}/building"
+            const val PATH = "${Action.PATH}/build"
         }
 
-        object Infantry {
+        object Train {
 
-            const val PATH = "${Action.PATH}/infantry"
+            const val PATH = "${Action.PATH}/train"
         }
 
-        object Vehicle {
+        object Produce {
 
-            const val PATH = "${Action.PATH}/vehicle"
+            const val PATH = "${Action.PATH}/produce"
         }
-
-        object Common {
-
-            const val PATH = "${Action.PATH}/common"
-        }
-    }
-
-
-    object Build {
-
-        const val BARRACKS = "race/human/action/barracks.png"
-
-        const val FACTORY = "race/human/action/factory.png"
-
-        const val GENERATOR = "race/human/action/generator.png"
-
-        const val TURRET = "race/human/action/turret.png"
-
-        const val WALL = "race/human/action/wall.png"
-    }
-
-    object Upgrade {
-
-        const val BUILDING = "race/human/action/upgrade_building.png"
-    }
-
-    object Train {
-
-        const val MARINE = "race/human/action/train_marine_lvl_1.png"
-    }
-
-    object Produce {
-
-        const val TANK = "race/human/action/train_tank_lvl_1.png"
     }
 }

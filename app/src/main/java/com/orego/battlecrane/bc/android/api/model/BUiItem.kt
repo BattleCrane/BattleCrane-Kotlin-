@@ -5,14 +5,14 @@ import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 
 abstract class BUiItem {
 
-    abstract fun onCreateView(uiGameContext: BUiGameContext) : View
+    abstract fun createView(uiGameContext: BUiGameContext) : View
 
-    abstract fun onUpdateView(uiGameContext: BUiGameContext)
+    abstract fun updateView(uiGameContext: BUiGameContext)
 
-    abstract fun onDestroyView(uiGameContext: BUiGameContext)
+    abstract fun destroyView(uiGameContext: BUiGameContext)
 
     /**
-     * Creates a item.
+     * Creates a uiUnit.
      */
 
     abstract class Builder {

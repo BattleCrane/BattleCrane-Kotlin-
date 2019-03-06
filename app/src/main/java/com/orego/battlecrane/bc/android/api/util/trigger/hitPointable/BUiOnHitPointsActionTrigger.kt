@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.android.api.util.trigger.hitPointable
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
+import com.orego.battlecrane.bc.android.api.context.taskManager.BUiTask
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.hitPointable.node.pipe.onHitPointsAction.BOnHitPointsActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
@@ -17,11 +18,11 @@ open class BUiOnHitPointsActionTrigger private constructor(
 
     private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
 
-    open val uiTask: suspend () -> Unit = {
+    open val uiTask: BUiTask = {
         val unit = this.uiUnit.unit
         if (unit is BHitPointable) {
             if (unit.currentHitPoints > 0) {
-                this.uiUnit.onUpdateView(this.uiGameContext)
+                this.uiUnit.updateView(this.uiGameContext)
             }
         }
     }

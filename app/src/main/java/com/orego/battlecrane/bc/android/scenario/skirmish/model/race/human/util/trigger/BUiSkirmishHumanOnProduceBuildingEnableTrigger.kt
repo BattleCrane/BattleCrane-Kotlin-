@@ -38,46 +38,8 @@ class BUiSkirmishHumanOnProduceBuildingEnableTrigger private constructor(
         constraintLayout.removeAllViews()
         this.actionImageViewSet.clear()
         if (unitBuilder.isProduceEnable) {
-            //Create images:
-            this.actionImageViewSet.add(
-                BUiToolBuilder.build(this.uiGameContext, BUiHumanAssets.Build.BARRACKS, object : BuildUiClickMode() {
 
-                    override fun createEvent(x: Int, y: Int) =
-                        BSkirmishHumanConstructBarracksEvent(producableId, x, y)
-                })
-            )
-            this.actionImageViewSet.add(
-                BUiToolBuilder.build(this.uiGameContext, BUiHumanAssets.Build.TURRET, object : BuildUiClickMode() {
 
-                    override fun createEvent(x: Int, y: Int) =
-                        BSkirmishHumanConstructTurretEvent(producableId, x, y)
-                })
-            )
-            this.actionImageViewSet.add(
-                BUiToolBuilder.build(this.uiGameContext, BUiHumanAssets.Build.WALL, object : BuildUiClickMode() {
-
-                    override fun createEvent(x: Int, y: Int) =
-                        BSkirmishHumanConstructWallEvent(producableId, x, y)
-                })
-            )
-            if (BHumanCalculations.countGenerators(this.context, playerId) < BSkirmishHumanRule.GENERATOR_LIMIT) {
-                this.actionImageViewSet.add(
-                    BUiToolBuilder.build(this.uiGameContext, BUiHumanAssets.Build.GENERATOR, object : BuildUiClickMode() {
-
-                        override fun createEvent(x: Int, y: Int) =
-                            BSkirmishHumanConstructGeneratorEvent(producableId, x, y)
-                    })
-                )
-            }
-            if (BHumanCalculations.countDiffBarracksFactory(this.context, playerId) > 0) {
-                this.actionImageViewSet.add(
-                    BUiToolBuilder.build(this.uiGameContext, BUiHumanAssets.Build.FACTORY, object : BuildUiClickMode() {
-
-                        override fun createEvent(x: Int, y: Int) =
-                            BSkirmishHumanConstructFactoryEvent(producableId, x, y)
-                    })
-                )
-            }
             if (BHumanCalculations.countPossibleBuildingUpgrades(this.context, playerId) > 0) {
                 this.actionImageViewSet.add(
                     BUiToolBuilder.build(this.uiGameContext, BUiHumanAssets.Upgrade.BUILDING, UpgradeBuildingUiClickMode())

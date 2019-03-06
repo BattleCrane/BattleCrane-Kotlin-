@@ -7,6 +7,7 @@ import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.BUiItem
+import com.orego.battlecrane.bc.android.api.model.action.BUiAction
 import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.ui.util.setImageByAssets
@@ -19,13 +20,13 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      * View on map.
      */
 
-    protected lateinit var view: ImageView
+    protected var view: ImageView? = null
 
     /**
      * Handles unit click modes.
      */
 
-    protected val uiClickMode by lazy {
+    protected open val uiClickMode by lazy {
         UiClickMode(uiGameContext, this)
     }
 
@@ -34,6 +35,12 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      */
 
     protected lateinit var viewMode: BUiAssets.ViewMode
+
+    /**
+     * Command list.
+     */
+
+    val actionMap = mutableMapOf<Class<out BUiAction>, BUiAction>()
 
     init {
         val contextGenerator = uiGameContext.gameContext.contextGenerator
@@ -44,7 +51,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      * Create.
      */
 
-    override fun onCreateView(uiGameContext: BUiGameContext): View {
+    override fun createView(uiGameContext: BUiGameContext): View {
         val uiProvider = uiGameContext.uiProvider
         val applicationContext = uiProvider.applicationContext
         val constraintLayout = uiProvider.mapConstraintLayout
@@ -69,10 +76,10 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
                 it.layoutParams = constraintParams
             }
             .also {
-                it.setOnClickListener { this.onClick(uiGameContext) }
+                it.setOnClickListener { this.onClickView(uiGameContext) }
             }
         this.view = imageView
-        this.release(uiGameContext)
+        this.dismiss(uiGameContext)
         return imageView
     }
 
@@ -80,13 +87,13 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      * Update.
      */
 
-    override fun onUpdateView(uiGameContext: BUiGameContext) {
+    override fun updateView(uiGameContext: BUiGameContext) {
         this.checkViewMode()
-        this.updateView(uiGameContext)
+        this.updateImageView(uiGameContext)
     }
 
     private fun checkViewMode() {
-        if (this.isReleased()) {
+        if (this.isDismissed()) {
             val playerId = this.unit.playerId
             val actualViewMode = BUiAssets.ViewMode.getByPlayerId(playerId)
             if (this.viewMode != actualViewMode) {
@@ -95,10 +102,10 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
         }
     }
 
-    private fun updateView(uiGameContext: BUiGameContext) {
+    private fun updateImageView(uiGameContext: BUiGameContext) {
         val applicationContext = uiGameContext.uiProvider.applicationContext
         val path = this.createPath()
-        this.view.setImageByAssets(applicationContext, path)
+        this.view?.setImageByAssets(applicationContext, path)
     }
 
     protected abstract fun createPath(): String
@@ -107,7 +114,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      * Destroy.
      */
 
-    override fun onDestroyView(uiGameContext: BUiGameContext) {
+    override fun destroyView(uiGameContext: BUiGameContext) {
         uiGameContext.uiProvider.mapConstraintLayout.removeView(this.view)
     }
 
@@ -115,7 +122,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      * Handles when unit clicked.
      */
 
-    private fun onClick(uiGameContext: BUiGameContext) {
+    protected open fun onClickView(uiGameContext: BUiGameContext) {
         uiGameContext.uiClickController.pushClickMode(this.uiClickMode)
     }
 
@@ -126,20 +133,36 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
     fun select(uiGameContext: BUiGameContext) {
         if (!this.isSelected()) {
             this.viewMode = BUiAssets.ViewMode.SELECTED
-            this.onUpdateView(uiGameContext)
+            this.updateView(uiGameContext)
+            this.showDescription(uiGameContext)
+            this.showCommands(uiGameContext)
         }
     }
 
     fun isSelected() = this.viewMode == BUiAssets.ViewMode.SELECTED
+
+    open fun showDescription(uiGameContext: BUiGameContext) {}
+
+    open fun showCommands(uiGameContext: BUiGameContext) {
+        val commandConstraintLayout = uiGameContext.uiProvider.commandConstraintLayout
+        val actions = this.actionMap.values
+        actions.forEach { action ->
+            val view = action.createView(uiGameContext)
+            commandConstraintLayout.addView(view)
+            if (action.canActivate(uiGameContext)) {
+                action.activate(uiGameContext)
+            }
+        }
+    }
 
     /**
      * Activate.
      */
 
     fun activate(uiGameContext: BUiGameContext) {
-        if (!this.isReleased()) {
+        if (!this.isDismissed()) {
             this.viewMode = BUiAssets.ViewMode.ACTIVE
-            this.onUpdateView(uiGameContext)
+            this.updateView(uiGameContext)
         }
     }
 
@@ -149,33 +172,48 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      * Release.
      */
 
-    fun release(uiGameContext: BUiGameContext) {
+    fun dismiss(uiGameContext: BUiGameContext) {
         if (this.isActive() || this.isSelected()) {
             this.viewMode = BUiAssets.ViewMode.getByPlayerId(this.unit.playerId)
-            this.onUpdateView(uiGameContext)
+            this.updateView(uiGameContext)
+            this.hideDescription(uiGameContext)
+            this.hideCommands(uiGameContext)
         }
     }
 
-    fun isReleased() = !this.isActive() && !this.isSelected()
+    fun isDismissed() = !this.isActive() && !this.isSelected()
+
+    open fun hideDescription(uiGameContext: BUiGameContext) {
+
+    }
+
+    open fun hideCommands(uiGameContext: BUiGameContext) {
+        val actions = this.actionMap.values
+        actions.forEach { action ->
+            action.destroyView(uiGameContext)
+        }
+    }
 
     /**
      * Click mode.
      */
 
-    open class UiClickMode(protected val uiGameContext: BUiGameContext, open val item: BUiItem) : BUiClickMode {
+    class UiClickMode(val uiGameContext: BUiGameContext, val uiUnit: BUiUnit) : BUiClickMode {
 
         override fun onStartClickMode() {
-            this.onShowDescription(this.uiGameContext)
-            this.onShowCommands(this.uiGameContext)
+            this.uiUnit.select(this.uiGameContext)
         }
 
-        /**
-         * Draws description when unit is clicked.
-         */
-
-        open fun onShowDescription(uiGameContext: BUiGameContext) {}
-
-        open fun onShowCommands(uiGameContext: BUiGameContext) {}
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
+            val actionMap = this.uiUnit.actionMap
+            if (nextUiClickMode !is BUiAction.UiClickMode
+                || !actionMap.containsValue(nextUiClickMode.action)
+            ) {
+                this.uiUnit.dismiss(this.uiGameContext)
+            }
+            nextUiClickMode?.onStartClickMode()
+            return nextUiClickMode
+        }
     }
 
     /**

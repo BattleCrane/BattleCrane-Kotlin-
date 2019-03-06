@@ -42,7 +42,7 @@ abstract class BFragment : Fragment() {
     }
 
     /**
-     * Вызывается после onCreateView.
+     * Вызывается после createView.
      */
 
     final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ abstract class BFragment : Fragment() {
     /**
      * Реализуйте развертку контента в методе onCreateContentView
      * и верните корневой View фрагмента.
-     * Делайте всё также как и при onCreateView.
+     * Делайте всё также как и при createView.
      * Вызывать super.onCreate() не нужно.
      */
 

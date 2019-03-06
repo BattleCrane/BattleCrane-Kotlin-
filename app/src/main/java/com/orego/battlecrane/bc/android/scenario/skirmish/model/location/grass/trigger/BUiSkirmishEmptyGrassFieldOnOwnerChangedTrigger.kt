@@ -19,7 +19,7 @@ class BUiSkirmishEmptyGrassFieldOnOwnerChangedTrigger private constructor(
     override fun handle(event: BEvent): BEvent? {
         if (event is BOnOwnerChangedUnitPipe.Event && this.holder.unit.unitId == event.unitId) {
             this.uiGameContext.uiTaskManager.addTask {
-                this.holder.onUpdateView(this.uiGameContext)
+                this.holder.updateView(this.uiGameContext)
             }
         }
         return null

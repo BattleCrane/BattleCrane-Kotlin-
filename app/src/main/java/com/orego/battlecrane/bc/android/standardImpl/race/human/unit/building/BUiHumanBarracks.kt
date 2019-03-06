@@ -19,7 +19,7 @@ class BUiHumanBarracks private constructor(uiGameContext: BUiGameContext, overri
         val hitPoints = this.unit.currentHitPoints
         return "$PATH/$viewKey/${level}_$hitPoints.png"
     }
-
+    
     /**
      * Builder.
      */

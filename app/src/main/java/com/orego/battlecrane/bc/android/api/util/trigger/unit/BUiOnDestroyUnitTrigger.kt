@@ -22,8 +22,7 @@ class BUiOnDestroyUnitTrigger private constructor(
             this.uiContext.apply {
                 this.gameContext.storage.removeObject(holder.uiUnitId, BUiUnitHeap::class.java)
                 this.uiTaskManager.addTask {
-                    holder.onDestroyView(this@BUiOnDestroyUnitTrigger.uiContext)
-
+                    holder.destroyView(this@BUiOnDestroyUnitTrigger.uiContext)
                 }
             }
         }

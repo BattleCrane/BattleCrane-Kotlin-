@@ -2,18 +2,30 @@ package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.util.trigger.hitPointable.BUiOnHitPointsActionTrigger
+import com.orego.battlecrane.bc.android.api.util.trigger.producable.BUiOnProduceEnableTrigger
 import com.orego.battlecrane.bc.android.api.util.trigger.unit.BUiOnDestroyUnitTrigger
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.barracks.trigger.BUiSkirmishHumanBarracksOnProduceEnableTrigger
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.train.BUiSkirmishTrainMarineAction
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanBarracks
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 
 class BUiSkirmishHumanBarracksBuilder(barracks: BHumanBarracks) : BUiHumanBarracks.Builder(barracks) {
 
     override fun onCreate(uiGameContext: BUiGameContext): BUiHumanBarracks {
-        val holder = super.onCreate(uiGameContext)
-        BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
-        BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
-        BUiSkirmishHumanBarracksOnProduceEnableTrigger.connect(uiGameContext, holder)
-        return holder
+        val uiBarracks = super.onCreate(uiGameContext)
+        this.installTriggers(uiGameContext, uiBarracks)
+        this.installActions(uiGameContext, uiBarracks)
+        return uiBarracks
+    }
+
+    private fun installTriggers(uiGameContext: BUiGameContext, uiBarracks: BUiHumanBarracks) {
+        BUiOnDestroyUnitTrigger.connect(uiGameContext, uiBarracks)
+        BUiOnHitPointsActionTrigger.connect(uiGameContext, uiBarracks)
+        BUiOnProduceEnableTrigger.connect(uiGameContext, uiBarracks)
+    }
+
+    private fun installActions(uiGameContext: BUiGameContext, uiBarracks: BUiHumanBarracks) {
+        val barracks = uiBarracks.unit
+        val action = BUiSkirmishTrainMarineAction(uiGameContext, barracks)
+        uiBarracks.actionMap[action::class.java] = action
     }
 }

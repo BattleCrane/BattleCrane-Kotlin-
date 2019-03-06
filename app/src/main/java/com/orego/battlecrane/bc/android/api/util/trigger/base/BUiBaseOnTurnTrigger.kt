@@ -41,7 +41,7 @@ class BUiBaseOnTurnTrigger private constructor(private val uiGameContext: BUiGam
         val uiUnitHeap = this.gameContext.storage.getHeap(BUiUnitHeap::class.java)
         val allUiUnits = uiUnitHeap.objectMap.values
         for (uiUnit in allUiUnits) {
-            uiUnit.release(this@BUiBaseOnTurnTrigger.uiGameContext)
+            uiUnit.dismiss(this@BUiBaseOnTurnTrigger.uiGameContext)
         }
     }
 

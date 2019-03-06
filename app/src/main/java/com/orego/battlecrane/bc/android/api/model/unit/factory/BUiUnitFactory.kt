@@ -21,7 +21,7 @@ class BUiUnitFactory {
         //Create unit:
         val uiUnit = createUiUnit(uiGameContext, item)
         //Draw unit after creating:
-        val unitView = uiUnit.onCreateView(uiGameContext)
+        val unitView = uiUnit.createView(uiGameContext)
         //Put in the storage:
         uiGameContext.gameContext.storage.putObject(uiUnit)
         //Put on the map:

@@ -10,6 +10,7 @@ import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.BUiItem
 import com.orego.battlecrane.ui.util.setImageByAssets
 
+
 abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() {
 
     companion object {
@@ -17,13 +18,13 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
         private const val COLUMN_COUNT = 2
     }
 
-    protected open lateinit var view: ConstraintLayout
+    protected open var view: ConstraintLayout? = null
 
     /**
      * Click mode.
      */
 
-    protected val uiClickMode by lazy {
+    protected open val uiClickMode by lazy {
         UiClickMode(this.uiGameContext, this)
     }
 
@@ -33,11 +34,13 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
 
     protected lateinit var viewMode: BUiAssets.ViewMode
 
+    abstract fun onPerform(uiGameContext: BUiGameContext)
+
     /**
      * Create.
      */
 
-    override fun onCreateView(uiGameContext: BUiGameContext): View {
+    override fun createView(uiGameContext: BUiGameContext): View {
         val applicationContext = uiGameContext.uiProvider.applicationContext
         //Get command constraint layout:
         val constraintLayout = this.uiGameContext.uiProvider.commandConstraintLayout
@@ -76,7 +79,7 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
      * Update.
      */
 
-    override fun onUpdateView(uiGameContext: BUiGameContext) {
+    override fun updateView(uiGameContext: BUiGameContext) {
         val view = this.view
         if (view is ImageView) {
             val applicationContext = uiGameContext.uiProvider.applicationContext
@@ -91,9 +94,11 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
      * Destroy.
      */
 
-    override fun onDestroyView(uiGameContext: BUiGameContext) {
+    override fun destroyView(uiGameContext: BUiGameContext) {
         uiGameContext.uiProvider.commandConstraintLayout.removeView(this.view)
     }
+
+    abstract fun canActivate(uiGameContext: BUiGameContext): Boolean
 
     /**
      * Select.
@@ -102,11 +107,17 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
     fun select(uiGameContext: BUiGameContext) {
         if (!this.isSelected()) {
             this.viewMode = BUiAssets.ViewMode.SELECTED
-            this.onUpdateView(uiGameContext)
+            this.updateView(uiGameContext)
+            this.showDescription(uiGameContext)
+            this.onSelect(uiGameContext)
         }
     }
 
     fun isSelected() = this.viewMode == BUiAssets.ViewMode.SELECTED
+
+    abstract fun showDescription(uiGameContext: BUiGameContext)
+
+    abstract fun onSelect(uiGameContext: BUiGameContext)
 
     /**
      * Activate.
@@ -115,7 +126,7 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
     fun activate(uiGameContext: BUiGameContext) {
         if (!this.isActive() && !this.isSelected()) {
             this.viewMode = BUiAssets.ViewMode.ACTIVE
-            this.onUpdateView(uiGameContext)
+            this.updateView(uiGameContext)
         }
     }
 
@@ -125,31 +136,33 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
      * Release.
      */
 
-    fun release(uiGameContext: BUiGameContext) {
-        if (!this.isReleased()) {
+    fun dismiss(uiGameContext: BUiGameContext) {
+        if (!this.isDismissed()) {
             this.viewMode = BUiAssets.ViewMode.LOCKED
-            this.onUpdateView(uiGameContext)
+            this.updateView(uiGameContext)
         }
     }
 
-    fun isReleased() = !this.isActive() && !this.isSelected()
-
+    fun isDismissed() = !this.isActive() && !this.isSelected()
 
     /**
      * Click mode.
      */
 
-    open class UiClickMode(protected val uiGameContext: BUiGameContext, val action: BUiAction) : BUiClickMode {
+    open class UiClickMode(protected val uiGameContext: BUiGameContext, open val action: BUiAction) : BUiClickMode {
 
         override fun onStartClickMode() {
-            this.onShowDescription(this.uiGameContext)
+            this.action.select(this.uiGameContext)
         }
 
-        /**
-         * Draws description when unit is clicked.
-         */
-
-        open fun onShowDescription(uiGameContext: BUiGameContext) {}
+        override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
+            if (nextUiClickMode is BUiAction.UiClickMode) {
+                this.action.dismiss(this.uiGameContext)
+                nextUiClickMode.onStartClickMode()
+                return nextUiClickMode
+            }
+            return this
+        }
     }
 
     /**

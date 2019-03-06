@@ -19,9 +19,9 @@ class BUiTaskManager(gameContext: BGameContext) : BPipeline.OnPipelineWorkFinish
         gameContext.pipeline.registerOnPipelineWorkFinishedListener(this)
     }
 
-    private val taskQueue: MutableList<suspend () -> Unit> = mutableListOf()
+    private val taskQueue: MutableList<BUiTask> = mutableListOf()
 
-    fun addTask(task: suspend () -> Unit) {
+    fun addTask(task: BUiTask) {
         this.taskQueue += task
     }
 

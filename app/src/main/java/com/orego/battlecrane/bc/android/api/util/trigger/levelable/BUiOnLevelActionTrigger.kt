@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.android.api.util.trigger.levelable
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
+import com.orego.battlecrane.bc.android.api.context.taskManager.BUiTask
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.engine.api.context.pipeline.implementation.levelable.node.pipe.onLevelAction.BOnLevelActionPipe
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
@@ -17,15 +18,16 @@ open class BUiOnLevelActionTrigger private constructor(
 
     private val unitMap = this.context.storage.getHeap(BUiUnitHeap::class.java).objectMap
 
-    open val uiTask: suspend () -> Unit = {
-        this.uiUnit.onUpdateView(this.uiGameContext)
+    open val uiTask: BUiTask = {
+        this.uiUnit.updateView(this.uiGameContext)
     }
 
     override fun handle(event: BEvent): BEvent? {
         val unit = this.uiUnit.unit
         if (unit is BLevelable
             && event is BOnLevelActionPipe.Event
-            && event.levelableId == unit.levelableId) {
+            && event.levelableId == unit.levelableId
+        ) {
             this.uiGameContext.uiTaskManager.addTask(this.uiTask)
         }
         return null

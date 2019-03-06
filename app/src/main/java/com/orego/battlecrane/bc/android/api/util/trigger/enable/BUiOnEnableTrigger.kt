@@ -2,6 +2,7 @@ package com.orego.battlecrane.bc.android.api.util.trigger.enable
 
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.heap.BUiUnitHeap
+import com.orego.battlecrane.bc.android.api.context.taskManager.BUiTask
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.event.BEvent
 import com.orego.battlecrane.bc.engine.api.context.pipeline.model.node.BNode
@@ -14,23 +15,20 @@ abstract class BUiOnEnableTrigger(protected val uiGameContext: BUiGameContext, p
 
     override fun handle(event: BEvent): BEvent? {
         if (this.mathchesEvent(event)) {
-            val task: suspend () -> Unit = this.getUiTask(event)
-            this.uiGameContext.uiTaskManager.addTask(task)
+            this.uiGameContext.uiTaskManager.addTask {
+                if (event.isEnable()) {
+                    this.onEnable()
+                } else {
+                    this.onDisable()
+                }
+            }
         }
         return null
     }
 
-    /**
-     * Tries to switch and update view.
-     */
+    abstract fun onEnable()
 
-    private fun getUiTask(event: BEvent) : suspend () -> Unit  = {
-        if (event.isEnable()) {
-            this.uiUnit.activate(this.uiGameContext)
-        } else {
-            this.uiUnit.release(this.uiGameContext)
-        }
-    }
+    abstract fun onDisable()
 
     /**
      * Checks event.
