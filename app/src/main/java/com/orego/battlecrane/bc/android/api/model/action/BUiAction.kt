@@ -51,16 +51,18 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
         val childCount = constraintLayout.childCount
         val constraintLayoutId = constraintLayout.id
         val cellSize = constraintLayout.measuredWidth / COLUMN_COUNT
+        val fixedCellSize = (cellSize * DISTANCE_COEFFICIENT).toInt()
         //Create image view:
         val x = childCount % 2
         val y = childCount / 2
-        val constraintParams = ConstraintLayout.LayoutParams(cellSize, cellSize)
-            .also {
-                it.startToStart = constraintLayoutId
-                it.topToTop = constraintLayoutId
-                it.marginStart = cellSize * x
-                it.topMargin = cellSize * y
-            }
+        val constraintParams =
+            ConstraintLayout.LayoutParams(fixedCellSize, fixedCellSize)
+                .also {
+                    it.startToStart = constraintLayoutId
+                    it.topToTop = constraintLayoutId
+                    it.marginStart = cellSize * x
+                    it.topMargin = cellSize * y
+                }
         val imagePath = this.createPath()
         val imageStream = applicationContext.assets.open(imagePath)
         val drawable = Drawable.createFromStream(imageStream, null)
