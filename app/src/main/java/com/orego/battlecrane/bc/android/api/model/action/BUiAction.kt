@@ -16,6 +16,10 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
     companion object {
 
         private const val COLUMN_COUNT = 2
+
+        //TODO: DISTANCE_COEFFICIENT = 0.9
+        private const val DISTANCE_COEFFICIENT = 0.9
+
     }
 
     protected open var view: ConstraintLayout? = null
