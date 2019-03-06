@@ -17,7 +17,7 @@ class BUiSkirmishBuildHumanGeneratorAction(uiGameContext: BUiGameContext, privat
 
     companion object {
 
-        const val PATH = "${BUiHumanAssets.Action.Build.PATH}/barracks"
+        const val PATH = "${BUiHumanAssets.Action.Build.PATH}/generator"
     }
 
     override val uiClickMode by lazy {

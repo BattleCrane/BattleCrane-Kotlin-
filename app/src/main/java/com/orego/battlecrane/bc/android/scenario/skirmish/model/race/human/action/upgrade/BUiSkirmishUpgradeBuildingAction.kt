@@ -16,7 +16,7 @@ class BUiSkirmishUpgradeBuildingAction(uiGameContext: BUiGameContext, private va
 
     companion object {
 
-        const val PATH = BUiHumanAssets.Action.PATH
+        const val PATH = BUiHumanAssets.Action.Upgrate.PATH
     }
 
     override val uiClickMode by lazy {

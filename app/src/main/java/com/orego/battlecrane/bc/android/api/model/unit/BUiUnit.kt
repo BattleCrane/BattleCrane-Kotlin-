@@ -96,9 +96,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
         if (this.isDismissed()) {
             val playerId = this.unit.playerId
             val actualViewMode = BUiAssets.ViewMode.getByPlayerId(playerId)
-            if (this.viewMode != actualViewMode) {
-                this.viewMode = actualViewMode
-            }
+            this.viewMode = actualViewMode
         }
     }
 
@@ -160,7 +158,9 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      */
 
     fun activate(uiGameContext: BUiGameContext) {
-        if (!this.isDismissed()) {
+        println("START TO ACTIVATE")
+        if (this.isDismissed()) {
+            println("ACTIVATE!")
             this.viewMode = BUiAssets.ViewMode.ACTIVE
             this.updateView(uiGameContext)
         }

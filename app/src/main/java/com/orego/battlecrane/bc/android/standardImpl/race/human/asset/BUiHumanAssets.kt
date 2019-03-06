@@ -50,7 +50,7 @@ object BUiHumanAssets {
 
         object Upgrate {
 
-            const val PATH = "${Action.PATH}/upgrate"
+            const val PATH = "${Action.PATH}/upgrade"
         }
     }
 }

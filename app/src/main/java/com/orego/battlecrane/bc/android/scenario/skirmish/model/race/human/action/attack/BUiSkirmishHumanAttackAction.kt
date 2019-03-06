@@ -15,7 +15,7 @@ class BUiSkirmishHumanAttackAction(uiGameContext: BUiGameContext, private val at
 
     companion object {
 
-        const val PATH = BUiHumanAssets.Action.Build.PATH
+        const val PATH = BUiHumanAssets.Action.Attack.PATH
     }
 
     override val uiClickMode by lazy {
