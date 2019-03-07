@@ -2,13 +2,11 @@ package com.orego.battlecrane.bc.android.api.model.action
 
 import android.graphics.drawable.Drawable
 import android.view.View
-import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.BUiItem
-import com.orego.battlecrane.ui.util.setImageByAssets
 
 
 abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() {
@@ -45,7 +43,7 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
      */
 
     override fun createView(uiGameContext: BUiGameContext): View {
-        val applicationContext = uiGameContext.uiProvider.applicationContext
+        val androidContext = uiGameContext.uiProvider.androidContext
         //Get command constraint layout:
         val constraintLayout = this.uiGameContext.uiProvider.commandConstraintLayout
         val childCount = constraintLayout.childCount
@@ -64,16 +62,16 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
                     it.topMargin = cellSize * y
                 }
         val imagePath = this.createPath()
-        val imageStream = applicationContext.assets.open(imagePath)
+        val imageStream = androidContext.assets.open(imagePath)
         val drawable = Drawable.createFromStream(imageStream, null)
-        val actionLayout = ConstraintLayout(applicationContext)
+        val actionLayout = ConstraintLayout(androidContext)
             .also {
                 it.id = View.generateViewId()
                 it.background = drawable
             }
             .also {
                 it.setOnClickListener {
-                    uiGameContext.uiClickController.forcePushClickMode(this.uiClickMode)
+                    uiGameContext.uiClickController.pushClickMode(this.uiClickMode)
                 }
             }
         actionLayout.layoutParams = constraintParams
@@ -87,10 +85,12 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
 
     override fun updateView(uiGameContext: BUiGameContext) {
         val view = this.view
-        if (view is ImageView) {
-            val applicationContext = uiGameContext.uiProvider.applicationContext
-            val path = this.createPath()
-            view.setImageByAssets(applicationContext, path)
+        if (view is ConstraintLayout) {
+            val androidContext = uiGameContext.uiProvider.androidContext
+            val imagePath = this.createPath()
+            val imageStream = androidContext.assets.open(imagePath)
+            val drawable = Drawable.createFromStream(imageStream, null)
+            view.background = drawable
         }
     }
 
@@ -163,7 +163,12 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
             if (nextUiClickMode is BUiAction.UiClickMode) {
-                this.action.dismiss(this.uiGameContext)
+                if (this.action.canActivate(this.uiGameContext)) {
+                    this.action.viewMode = BUiAssets.ViewMode.ACTIVE
+                    this.action.updateView(uiGameContext)
+                } else {
+                    this.action.dismiss(this.uiGameContext)
+                }
                 nextUiClickMode.onStartClickMode()
                 return nextUiClickMode
             }

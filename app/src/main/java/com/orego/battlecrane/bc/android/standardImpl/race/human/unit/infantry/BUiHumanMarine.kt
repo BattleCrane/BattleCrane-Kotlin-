@@ -13,7 +13,7 @@ class BUiHumanMarine private constructor(uiGameContext: BUiGameContext, override
         const val PATH = "${BUiHumanAssets.Unit.Infantry.PATH}/marine"
     }
 
-    override fun createPath(): String {
+    override fun getAssetPath(): String {
         val viewKey = this.viewMode.key
         return "$PATH/$viewKey.png"
     }

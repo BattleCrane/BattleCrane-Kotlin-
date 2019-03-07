@@ -78,7 +78,7 @@ class BUiSkirmishBuildHumanWallAction(uiGameContext: BUiGameContext, private val
                     }
                 }
             }
-            return this
+            return super.onNextClickMode(nextUiClickMode)
         }
     }
 }

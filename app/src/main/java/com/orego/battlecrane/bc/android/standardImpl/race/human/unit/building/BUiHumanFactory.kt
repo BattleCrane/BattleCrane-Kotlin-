@@ -13,7 +13,7 @@ class BUiHumanFactory private constructor(uiGameContext: BUiGameContext, overrid
         const val PATH = "${BUiHumanAssets.Unit.Building.PATH}/factory"
     }
 
-    override fun createPath() : String {
+    override fun getAssetPath() : String {
         val viewKey =  this.viewMode.key
         val level = this.unit.currentLevel
         val hitPoints = this.unit.currentHitPoints

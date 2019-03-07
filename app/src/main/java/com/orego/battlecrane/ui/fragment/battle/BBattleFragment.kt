@@ -97,7 +97,7 @@ class BBattleFragment : BFragment() {
 
     inner class UiProvider {
 
-        val applicationContext by lazy {
+        val androidContext by lazy {
             this@BBattleFragment.context!!
         }
 

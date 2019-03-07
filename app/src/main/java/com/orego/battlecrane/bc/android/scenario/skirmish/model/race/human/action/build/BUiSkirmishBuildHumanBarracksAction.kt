@@ -10,13 +10,15 @@ import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.api.model.util.BProducable
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct.BSkirmishHumanConstructBarracksEvent
 
-class BUiSkirmishBuildHumanBarracksAction(uiGameContext: BUiGameContext, private val producable: BProducable) :
+class BUiSkirmishBuildHumanBarracksAction(uiGameContext: BUiGameContext, private val uiUnit: BUiUnit) :
     BUiAction(uiGameContext) {
 
     companion object {
 
         const val PATH = "${BUiHumanAssets.Action.Build.PATH}/barracks"
     }
+
+    private val producable = this.uiUnit.unit as BProducable
 
     override val uiClickMode by lazy {
         UiClickMode(uiGameContext)
@@ -52,8 +54,15 @@ class BUiSkirmishBuildHumanBarracksAction(uiGameContext: BUiGameContext, private
      */
 
     override fun onPerform(uiGameContext: BUiGameContext) {
-        this.dismiss(uiGameContext)
+        println("ON PERFORM!!!!!!!!!")
+//        this.dismiss(uiGameContext)
+        this.uiUnit.checkCommands(uiGameContext)
+        this.uiUnit.dismiss(uiGameContext)
     }
+
+    /**
+     * Click mode.
+     */
 
     inner class UiClickMode(uiGameContext: BUiGameContext) : BUiAction.UiClickMode(uiGameContext, this) {
 
@@ -78,7 +87,7 @@ class BUiSkirmishBuildHumanBarracksAction(uiGameContext: BUiGameContext, private
                     }
                 }
             }
-            return this
+            return super.onNextClickMode(nextUiClickMode)
         }
     }
 }

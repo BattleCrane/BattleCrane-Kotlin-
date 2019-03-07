@@ -14,7 +14,7 @@ class BUiEmptyGrassField private constructor(uiGameContext: BUiGameContext, over
         const val PATH = "${BUiGrassAssets.Unit.Field.PATH}/empty"
     }
 
-    override fun createPath() = "$PATH/${this.viewMode.key}.png"
+    override fun getAssetPath() = "$PATH/${this.viewMode.key}.png"
 
     /**
      * Builder.

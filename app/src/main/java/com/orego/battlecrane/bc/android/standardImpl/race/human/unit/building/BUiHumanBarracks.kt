@@ -13,7 +13,7 @@ class BUiHumanBarracks private constructor(uiGameContext: BUiGameContext, overri
         const val PATH = "${BUiHumanAssets.Unit.Building.PATH}/barracks"
     }
 
-    override fun createPath(): String {
+    override fun getAssetPath(): String {
         val viewKey = this.viewMode.key
         val level = this.unit.currentLevel
         val hitPoints = this.unit.currentHitPoints

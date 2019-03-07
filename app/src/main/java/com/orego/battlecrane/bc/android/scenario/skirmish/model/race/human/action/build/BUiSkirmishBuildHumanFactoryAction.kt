@@ -61,6 +61,10 @@ class BUiSkirmishBuildHumanFactoryAction(uiGameContext: BUiGameContext, private 
         this.dismiss(uiGameContext)
     }
 
+    /**
+     * Click mode.
+     */
+
     inner class UiClickMode(uiGameContext: BUiGameContext) : BUiAction.UiClickMode(uiGameContext, this) {
 
         private val producable = this@BUiSkirmishBuildHumanFactoryAction.producable
@@ -84,7 +88,7 @@ class BUiSkirmishBuildHumanFactoryAction(uiGameContext: BUiGameContext, private 
                     }
                 }
             }
-            return this
+            return super.onNextClickMode(nextUiClickMode)
         }
     }
 }

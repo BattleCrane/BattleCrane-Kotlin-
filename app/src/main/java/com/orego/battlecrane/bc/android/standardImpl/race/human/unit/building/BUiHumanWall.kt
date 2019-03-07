@@ -13,7 +13,7 @@ class BUiHumanWall private constructor(uiGameContext: BUiGameContext, override v
         const val PATH = "${BUiHumanAssets.Unit.Building.PATH}/wall"
     }
 
-    override fun createPath(): String {
+    override fun getAssetPath(): String {
         val viewKey = this.viewMode.key
         val hitPoints = this.unit.currentHitPoints
         return "$PATH/$viewKey/$hitPoints.png"

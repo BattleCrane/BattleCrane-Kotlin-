@@ -15,6 +15,7 @@ class BUiSkirmishHumanHeadquartersBuilder(unit: BHumanHeadquarters) : BUiHumanHe
         val uiHeadquarters = super.onCreate(uiGameContext)
         this.installTriggers(uiGameContext, uiHeadquarters)
         this.installActions(uiGameContext, uiHeadquarters)
+        this.installInformer(uiHeadquarters)
         return uiHeadquarters
     }
 
@@ -24,15 +25,36 @@ class BUiSkirmishHumanHeadquartersBuilder(unit: BHumanHeadquarters) : BUiHumanHe
         BUiOnProduceEnableTrigger.connect(uiGameContext, uiHeadquarters)
     }
 
-    private fun installActions(context: BUiGameContext, uiHeadquarters: BUiHumanHeadquarters) {
-        val unit = uiHeadquarters.unit
-        uiHeadquarters.actionMap.apply {
-            this[BUiSkirmishBuildHumanBarracksAction::class.java] = BUiSkirmishBuildHumanBarracksAction(context, unit)
+    private fun installActions(context: BUiGameContext, uiUnit: BUiHumanHeadquarters) {
+        val unit = uiUnit.unit
+        uiUnit.actionMap.apply {
+            this[BUiSkirmishBuildHumanBarracksAction::class.java] = BUiSkirmishBuildHumanBarracksAction(context, uiUnit)
             this[BUiSkirmishBuildHumanFactoryAction::class.java] = BUiSkirmishBuildHumanFactoryAction(context, unit)
             this[BUiSkirmishBuildHumanGeneratorAction::class.java] = BUiSkirmishBuildHumanGeneratorAction(context, unit)
             this[BUiSkirmishBuildHumanWallAction::class.java] = BUiSkirmishBuildHumanWallAction(context, unit)
             this[BUiSkirmishBuildHumanTurretAction::class.java] = BUiSkirmishBuildHumanTurretAction(context, unit)
             this[BUiSkirmishUpgradeBuildingAction::class.java] = BUiSkirmishUpgradeBuildingAction(context, unit)
         }
+    }
+
+    private fun installInformer(uiHeadquarters: BUiHumanHeadquarters) {
+        uiHeadquarters.informer = Informer(this.unit)
+    }
+
+    /**
+     * Represents a information about unit.
+     */
+
+    class Informer(headquarters: BHumanHeadquarters) : BUiHumanHeadquarters.Informer(headquarters) {
+
+        companion object {
+
+            const val UNIT_DESCRIPTION =
+                "Main unit. " +
+                        "Can build and upgrade buildings. " +
+                        "Must survive."
+        }
+
+        override val descriptionText = UNIT_DESCRIPTION
     }
 }

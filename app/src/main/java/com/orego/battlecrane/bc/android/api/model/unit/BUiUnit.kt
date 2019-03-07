@@ -53,7 +53,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
 
     override fun createView(uiGameContext: BUiGameContext): View {
         val uiProvider = uiGameContext.uiProvider
-        val applicationContext = uiProvider.applicationContext
+        val androidContext = uiProvider.androidContext
         val constraintLayout = uiProvider.mapConstraintLayout
         val constraintLayoutId = constraintLayout.id
         val cellSizeX = constraintLayout.measuredWidth / BMapController.MAP_SIZE
@@ -70,7 +70,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
                 it.topMargin = cellSizeY * this.unit.y
             }
         //Create image view:
-        val imageView = ImageView(applicationContext)
+        val imageView = ImageView(androidContext)
             .also {
                 it.id = View.generateViewId()
                 it.layoutParams = constraintParams
@@ -101,12 +101,12 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
     }
 
     private fun updateImageView(uiGameContext: BUiGameContext) {
-        val applicationContext = uiGameContext.uiProvider.applicationContext
-        val path = this.createPath()
-        this.view?.setImageByAssets(applicationContext, path)
+        val androidContext = uiGameContext.uiProvider.androidContext
+        val path = this.getAssetPath()
+        this.view?.setImageByAssets(androidContext, path)
     }
 
-    protected abstract fun createPath(): String
+    protected abstract fun getAssetPath(): String
 
     /**
      * Destroy.
@@ -132,23 +132,35 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
         if (!this.isSelected()) {
             this.viewMode = BUiAssets.ViewMode.SELECTED
             this.updateView(uiGameContext)
-            this.showDescription(uiGameContext)
+            this.onShowInfo(uiGameContext)
             this.showCommands(uiGameContext)
         }
     }
 
     fun isSelected() = this.viewMode == BUiAssets.ViewMode.SELECTED
 
-    open fun showDescription(uiGameContext: BUiGameContext) {}
+    open fun onShowInfo(uiGameContext: BUiGameContext) {}
 
     open fun showCommands(uiGameContext: BUiGameContext) {
+        this.createCommands(uiGameContext)
+        this.checkCommands(uiGameContext)
+    }
+
+    fun createCommands(uiGameContext: BUiGameContext) {
         val commandConstraintLayout = uiGameContext.uiProvider.commandConstraintLayout
         val actions = this.actionMap.values
         actions.forEach { action ->
             val view = action.createView(uiGameContext)
             commandConstraintLayout.addView(view)
+        }
+    }
+
+    fun checkCommands(uiGameContext: BUiGameContext) {
+        this.actionMap.values.forEach { action ->
             if (action.canActivate(uiGameContext)) {
                 action.activate(uiGameContext)
+            } else {
+                action.dismiss(uiGameContext)
             }
         }
     }
@@ -176,14 +188,14 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
         if (this.isActive() || this.isSelected()) {
             this.viewMode = BUiAssets.ViewMode.getByPlayerId(this.unit.playerId)
             this.updateView(uiGameContext)
-            this.hideDescription(uiGameContext)
+            this.onHideInfo(uiGameContext)
             this.hideCommands(uiGameContext)
         }
     }
 
     fun isDismissed() = !this.isActive() && !this.isSelected()
 
-    open fun hideDescription(uiGameContext: BUiGameContext) {
+    open fun onHideInfo(uiGameContext: BUiGameContext) {
 
     }
 
@@ -205,10 +217,14 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
         }
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
+            println("OOOOOOOOOOOOOOOOOOOOOO")
             val actionMap = this.uiUnit.actionMap
+//            println("XXX ${nextUiClickMode !is BUiAction.UiClickMode}")
+//            println("YYY ${!actionMap.containsValue((nextUiClickMode as BUiAction.UiClickMode).action)}")
             if (nextUiClickMode !is BUiAction.UiClickMode
                 || !actionMap.containsValue(nextUiClickMode.action)
             ) {
+                println("EEEEEEEEEEEEEEEEEEEEEEEE")
                 this.uiUnit.dismiss(this.uiGameContext)
             }
             nextUiClickMode?.onStartClickMode()

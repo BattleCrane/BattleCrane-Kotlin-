@@ -24,10 +24,10 @@ class BUiSkirmishHumanGeneratorBuilder(unit: BHumanGenerator) : BUiHumanGenerato
         BUiOnProduceEnableTrigger.connect(uiGameContext, uiGenerator)
     }
 
-    private fun installActions(context: BUiGameContext, uiGenerator: BUiHumanGenerator) {
-        val unit = uiGenerator.unit
-        uiGenerator.actionMap.apply {
-            this[BUiSkirmishBuildHumanBarracksAction::class.java] = BUiSkirmishBuildHumanBarracksAction(context, unit)
+    private fun installActions(context: BUiGameContext, uiUnit: BUiHumanGenerator) {
+        val unit = uiUnit.unit
+        uiUnit.actionMap.apply {
+            this[BUiSkirmishBuildHumanBarracksAction::class.java] = BUiSkirmishBuildHumanBarracksAction(context, uiUnit)
             this[BUiSkirmishBuildHumanFactoryAction::class.java] = BUiSkirmishBuildHumanFactoryAction(context, unit)
             this[BUiSkirmishBuildHumanGeneratorAction::class.java] = BUiSkirmishBuildHumanGeneratorAction(context, unit)
             this[BUiSkirmishBuildHumanWallAction::class.java] = BUiSkirmishBuildHumanWallAction(context, unit)

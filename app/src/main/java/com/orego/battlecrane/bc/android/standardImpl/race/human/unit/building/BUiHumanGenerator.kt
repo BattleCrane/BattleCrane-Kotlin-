@@ -13,7 +13,7 @@ class BUiHumanGenerator private constructor(uiGameContext: BUiGameContext, overr
         const val PATH = "${BUiHumanAssets.Unit.Building.PATH}/generator"
     }
 
-    override fun createPath(): String {
+    override fun getAssetPath(): String {
         val viewKey = this.viewMode.key
         val level = this.unit.currentLevel
         val hitPoints = this.unit.currentHitPoints

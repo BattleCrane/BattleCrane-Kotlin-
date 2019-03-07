@@ -14,10 +14,10 @@ class BUiHumanTank private constructor(uiGameContext: BUiGameContext, override v
         const val PATH = "${BUiHumanAssets.Unit.Vehicle.PATH}/tank"
     }
 
-    override fun createPath(): String {
+    override fun getAssetPath(): String {
         val viewKey = this.viewMode.key
         val hitPoints = this.unit.currentHitPoints
-        return "${BUiHumanBarracks.PATH}/$viewKey/$hitPoints.png"
+        return "$PATH/$viewKey/$hitPoints.png"
     }
 
     /**

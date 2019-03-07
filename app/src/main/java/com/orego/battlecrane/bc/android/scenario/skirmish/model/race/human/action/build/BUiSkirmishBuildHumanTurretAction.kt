@@ -78,7 +78,7 @@ class BUiSkirmishBuildHumanTurretAction(uiGameContext: BUiGameContext, private v
                     }
                 }
             }
-            return this
+            return super.onNextClickMode(nextUiClickMode)
         }
     }
 }
