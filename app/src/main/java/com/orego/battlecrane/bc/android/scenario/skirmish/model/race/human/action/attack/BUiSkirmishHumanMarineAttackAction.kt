@@ -1,5 +1,6 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.attack
 
+import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.action.BUiAction
@@ -10,13 +11,15 @@ import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.api.model.util.BAttackable
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.infantry.trigger.BSkirmishHumanMarineOnAttackActionTrigger
 
-class BUiSkirmishHumanAttackAction(uiGameContext: BUiGameContext, private val attackable: BAttackable) :
+class BUiSkirmishHumanMarineAttackAction(uiGameContext: BUiGameContext, private val uiUnit : BUiUnit) :
     BUiAction(uiGameContext) {
 
     companion object {
 
         const val PATH = BUiHumanAssets.Action.Attack.PATH
     }
+
+    private val attackable = this.uiUnit.unit as BAttackable
 
     override val uiClickMode by lazy {
         UiClickMode(uiGameContext)
@@ -52,12 +55,20 @@ class BUiSkirmishHumanAttackAction(uiGameContext: BUiGameContext, private val at
      */
 
     override fun onPerform(uiGameContext: BUiGameContext) {
-        this.dismiss(uiGameContext)
+        this.uiUnit.checkCommands(uiGameContext)
+        if (this.uiUnit.canActivate(uiGameContext)) {
+            this.uiUnit.viewMode = BUiAssets.ViewMode.ACTIVE
+            this.uiUnit.updateView(uiGameContext)
+            this.uiUnit.onHideInfo(uiGameContext)
+            this.uiUnit.hideCommands(uiGameContext)
+        } else {
+            this.uiUnit.dismiss(uiGameContext)
+        }
     }
 
     inner class UiClickMode(uiGameContext: BUiGameContext) : BUiAction.UiClickMode(uiGameContext, this) {
 
-        private val attackable = this@BUiSkirmishHumanAttackAction.attackable
+        private val attackable = this@BUiSkirmishHumanMarineAttackAction.attackable
 
         private val gameContext: BGameContext = uiGameContext.gameContext
 
@@ -78,11 +89,11 @@ class BUiSkirmishHumanAttackAction(uiGameContext: BUiGameContext, private val at
                 if (isSuccessful) {
                     println("PAW2")
                     this.gameContext.pipeline.broacastEvent(event)
-                    this.action.dismiss(this.uiGameContext)
+                    this.action.onPerform(this.uiGameContext)
                     return null
                 }
             }
-            return this
+            return super.onNextClickMode(nextUiClickMode)
         }
     }
 }

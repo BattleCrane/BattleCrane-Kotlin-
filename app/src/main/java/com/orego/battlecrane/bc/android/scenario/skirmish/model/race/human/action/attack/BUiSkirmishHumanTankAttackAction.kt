@@ -1,4 +1,4 @@
-package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.upgrade
+package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.attack
 
 import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
@@ -7,20 +7,21 @@ import com.orego.battlecrane.bc.android.api.model.action.BUiAction
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BUiHumanAssets
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
-import com.orego.battlecrane.bc.engine.api.model.util.BLevelable
-import com.orego.battlecrane.bc.engine.api.model.util.BProducable
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanUpgradeBuildingEvent
-import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
+import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
+import com.orego.battlecrane.bc.engine.api.model.util.BAttackable
+import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.vehicle.trigger.BSkirmishHumanTankOnAttackActionTrigger
 
-class BUiSkirmishUpgradeBuildingAction(uiGameContext: BUiGameContext, private val uiUnit: BUiUnit) :
+
+//TODO: MAKE ATTACK ACTION WITH ATTACK EVENT BUILDER PARAM!
+class BUiSkirmishHumanTankAttackAction(uiGameContext: BUiGameContext, private val uiUnit : BUiUnit) :
     BUiAction(uiGameContext) {
 
     companion object {
 
-        const val PATH = BUiHumanAssets.Action.Upgrate.PATH
+        const val PATH = BUiHumanAssets.Action.Attack.PATH
     }
 
-    private val producable = this.uiUnit.unit as BProducable
+    private val attackable = this.uiUnit.unit as BAttackable
 
     override val uiClickMode by lazy {
         UiClickMode(uiGameContext)
@@ -39,12 +40,7 @@ class BUiSkirmishUpgradeBuildingAction(uiGameContext: BUiGameContext, private va
      * Active.
      */
 
-    override fun canActivate(uiGameContext: BUiGameContext): Boolean {
-        val context = uiGameContext.gameContext
-        val playerId = this.producable.playerId
-        val availableUpgradeCount = BHumanCalculations.countPossibleBuildingUpgrades(context, playerId)
-        return this.producable.isProduceEnable && availableUpgradeCount > 0
-    }
+    override fun canActivate(uiGameContext: BUiGameContext) = this.attackable.isAttackEnable
 
     /**
      * Select.
@@ -74,23 +70,29 @@ class BUiSkirmishUpgradeBuildingAction(uiGameContext: BUiGameContext, private va
 
     inner class UiClickMode(uiGameContext: BUiGameContext) : BUiAction.UiClickMode(uiGameContext, this) {
 
-        private val producable = this@BUiSkirmishUpgradeBuildingAction.producable
+        private val attackable = this@BUiSkirmishHumanTankAttackAction.attackable
 
         private val gameContext: BGameContext = uiGameContext.gameContext
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
-            if (nextUiClickMode is BUiUnit.UiClickMode) {
+            println("MARINNEENEENNENENEN")
+            if (nextUiClickMode is BUiUnit.UiClickMode && this.attackable is BUnit) {
                 val clickedUnit = nextUiClickMode.uiUnit.unit
-                if (clickedUnit is BLevelable) {
-                    val producableId = this.producable.producableId
-                    val targetLevelableId = clickedUnit.levelableId
-                    val event = BHumanUpgradeBuildingEvent(producableId, targetLevelableId)
-                    val isSuccessful = event.isEnable(this.gameContext)
-                    if (isSuccessful) {
-                        this.gameContext.pipeline.broacastEvent(event)
-                        this.action.onPerform(this.uiGameContext)
-                        return null
-                    }
+                val event = BSkirmishHumanTankOnAttackActionTrigger.Event(
+                    this.attackable.attackableId,
+                    this.attackable.x,
+                    this.attackable.y,
+                    clickedUnit.x,
+                    clickedUnit.y
+                )
+                println("PAW1")
+                val isSuccessful = event.isEnable(this.gameContext)
+                println("SUCESSFUL PAW: $isSuccessful")
+                if (isSuccessful) {
+                    println("PAW2")
+                    this.gameContext.pipeline.broacastEvent(event)
+                    this.action.onPerform(this.uiGameContext)
+                    return null
                 }
             }
             return super.onNextClickMode(nextUiClickMode)

@@ -22,6 +22,8 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
 
     protected var view: ImageView? = null
 
+    private var isShowedCommands = false
+
     /**
      * Handles unit click modes.
      */
@@ -34,7 +36,7 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      * View mode.
      */
 
-    protected var viewMode = BUiAssets.ViewMode.SELECTED
+    var viewMode = BUiAssets.ViewMode.SELECTED
 
     /**
      * Command list.
@@ -142,8 +144,11 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
     open fun onShowInfo(uiGameContext: BUiGameContext) {}
 
     open fun showCommands(uiGameContext: BUiGameContext) {
-        this.createCommands(uiGameContext)
-        this.checkCommands(uiGameContext)
+        if (!this.isShowedCommands) {
+            this.createCommands(uiGameContext)
+            this.checkCommands(uiGameContext)
+            this.isShowedCommands = true
+        }
     }
 
     fun createCommands(uiGameContext: BUiGameContext) {
@@ -180,6 +185,16 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
 
     fun isActive() = this.viewMode == BUiAssets.ViewMode.ACTIVE
 
+    fun canActivate(uiGameContext: BUiGameContext): Boolean {
+        val actions = this.actionMap.values
+        actions.forEach { action ->
+            if (action.canActivate(uiGameContext)) {
+                return true
+            }
+        }
+        return false
+    }
+
     /**
      * Release.
      */
@@ -200,9 +215,12 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
     }
 
     open fun hideCommands(uiGameContext: BUiGameContext) {
-        val actions = this.actionMap.values
-        actions.forEach { action ->
-            action.destroyView(uiGameContext)
+        if (this.isShowedCommands) {
+            val actions = this.actionMap.values
+            actions.forEach { action ->
+                action.destroyView(uiGameContext)
+            }
+            this.isShowedCommands = false
         }
     }
 
@@ -210,22 +228,26 @@ abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BU
      * Click mode.
      */
 
-    class UiClickMode(val uiGameContext: BUiGameContext, val uiUnit: BUiUnit) : BUiClickMode {
+    class UiClickMode(val uiGameContext: BUiGameContext, val uiUnit: BUiUnit) : BUiClickMode() {
 
         override fun onStartClickMode() {
             this.uiUnit.select(this.uiGameContext)
         }
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
-            println("OOOOOOOOOOOOOOOOOOOOOO")
+//            nextUiClickMode?.previousMode = this
             val actionMap = this.uiUnit.actionMap
-//            println("XXX ${nextUiClickMode !is BUiAction.UiClickMode}")
-//            println("YYY ${!actionMap.containsValue((nextUiClickMode as BUiAction.UiClickMode).action)}")
             if (nextUiClickMode !is BUiAction.UiClickMode
                 || !actionMap.containsValue(nextUiClickMode.action)
             ) {
-                println("EEEEEEEEEEEEEEEEEEEEEEEE")
-                this.uiUnit.dismiss(this.uiGameContext)
+                if (this.uiUnit.canActivate(this.uiGameContext)) {
+                    this.uiUnit.viewMode = BUiAssets.ViewMode.ACTIVE
+                    this.uiUnit.updateView(this.uiGameContext)
+                    this.uiUnit.onHideInfo(this.uiGameContext)
+                    this.uiUnit.hideCommands(this.uiGameContext)
+                } else {
+                    this.uiUnit.dismiss(this.uiGameContext)
+                }
             }
             nextUiClickMode?.onStartClickMode()
             return nextUiClickMode

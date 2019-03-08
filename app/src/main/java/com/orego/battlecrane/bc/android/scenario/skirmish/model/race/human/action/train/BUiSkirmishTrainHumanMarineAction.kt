@@ -1,5 +1,6 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.train
 
+import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.action.BUiAction
@@ -10,13 +11,15 @@ import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.unit.building.barracks.trigger.BSkirmishHumanBarracksOnProduceActionTrigger
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 
-class BUiSkirmishTrainMarineAction(uiGameContext: BUiGameContext, private val barracks: BHumanBarracks) :
+class BUiSkirmishTrainHumanMarineAction(uiGameContext: BUiGameContext, private val uiUnit: BUiUnit) :
     BUiAction(uiGameContext) {
 
     companion object {
 
         const val PATH = "${BUiHumanAssets.Action.Train.PATH}/marine"
     }
+
+    private val barracks = this.uiUnit.unit as BHumanBarracks
 
     override val uiClickMode by lazy {
         UiClickMode(uiGameContext)
@@ -52,12 +55,20 @@ class BUiSkirmishTrainMarineAction(uiGameContext: BUiGameContext, private val ba
      */
 
     override fun onPerform(uiGameContext: BUiGameContext) {
-        this.dismiss(uiGameContext)
+        this.uiUnit.checkCommands(uiGameContext)
+        if (this.uiUnit.canActivate(uiGameContext)) {
+            this.uiUnit.viewMode = BUiAssets.ViewMode.ACTIVE
+            this.uiUnit.updateView(uiGameContext)
+            this.uiUnit.onHideInfo(uiGameContext)
+            this.uiUnit.hideCommands(uiGameContext)
+        } else {
+            this.uiUnit.dismiss(uiGameContext)
+        }
     }
 
     inner class UiClickMode(uiGameContext: BUiGameContext) : BUiAction.UiClickMode(uiGameContext, this) {
 
-        private val barracks = this@BUiSkirmishTrainMarineAction.barracks
+        private val barracks = this@BUiSkirmishTrainHumanMarineAction.barracks
 
         private val gameContext: BGameContext = uiGameContext.gameContext
 
@@ -78,7 +89,7 @@ class BUiSkirmishTrainMarineAction(uiGameContext: BUiGameContext, private val ba
                     }
                 }
             }
-            return this
+            return super.onNextClickMode(nextUiClickMode)
         }
     }
 }

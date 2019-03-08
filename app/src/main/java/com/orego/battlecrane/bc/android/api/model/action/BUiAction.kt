@@ -155,22 +155,28 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
      * Click mode.
      */
 
-    open class UiClickMode(protected val uiGameContext: BUiGameContext, open val action: BUiAction) : BUiClickMode {
+    open class UiClickMode(protected val uiGameContext: BUiGameContext, open val action: BUiAction) : BUiClickMode() {
 
         override fun onStartClickMode() {
             this.action.select(this.uiGameContext)
         }
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
+//            nextUiClickMode?.previousMode = this
             if (nextUiClickMode is BUiAction.UiClickMode) {
                 if (this.action.canActivate(this.uiGameContext)) {
                     this.action.viewMode = BUiAssets.ViewMode.ACTIVE
-                    this.action.updateView(uiGameContext)
+                    this.action.updateView(this.uiGameContext)
                 } else {
                     this.action.dismiss(this.uiGameContext)
                 }
-                nextUiClickMode.onStartClickMode()
-                return nextUiClickMode
+                return if (this != nextUiClickMode) {
+                    nextUiClickMode.onStartClickMode()
+                    nextUiClickMode
+                } else {
+                    this.action.onPerform(this.uiGameContext)
+                    null
+                }
             }
             return this
         }

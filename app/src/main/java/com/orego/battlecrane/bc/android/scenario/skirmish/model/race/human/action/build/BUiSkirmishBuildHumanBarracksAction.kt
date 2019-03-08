@@ -1,5 +1,6 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.build
 
+import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.action.BUiAction
@@ -54,10 +55,16 @@ class BUiSkirmishBuildHumanBarracksAction(uiGameContext: BUiGameContext, private
      */
 
     override fun onPerform(uiGameContext: BUiGameContext) {
-        println("ON PERFORM!!!!!!!!!")
-//        this.dismiss(uiGameContext)
         this.uiUnit.checkCommands(uiGameContext)
-        this.uiUnit.dismiss(uiGameContext)
+        if (this.uiUnit.canActivate(uiGameContext)) {
+            this.uiUnit.viewMode = BUiAssets.ViewMode.ACTIVE
+            this.uiUnit.updateView(uiGameContext)
+            this.uiUnit.onHideInfo(uiGameContext)
+            this.uiUnit.hideCommands(uiGameContext)
+        } else {
+            this.uiUnit.dismiss(uiGameContext)
+        }
+//        this.uiUnit.dismiss(uiGameContext)
     }
 
     /**

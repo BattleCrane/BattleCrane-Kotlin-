@@ -1,5 +1,6 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.build
 
+import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.action.BUiAction
@@ -11,13 +12,15 @@ import com.orego.battlecrane.bc.engine.api.model.util.BProducable
 import com.orego.battlecrane.bc.engine.scenario.skirmish.model.race.human.event.construct.BSkirmishHumanConstructFactoryEvent
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
 
-class BUiSkirmishBuildHumanFactoryAction(uiGameContext: BUiGameContext, private val producable: BProducable) :
+class BUiSkirmishBuildHumanFactoryAction(uiGameContext: BUiGameContext, private val uiUnit: BUiUnit) :
     BUiAction(uiGameContext) {
 
     companion object {
 
         const val PATH = "${BUiHumanAssets.Action.Build.PATH}/factory"
     }
+
+    private val producable = this.uiUnit.unit as BProducable
 
     override val uiClickMode by lazy {
         UiClickMode(uiGameContext)
@@ -36,7 +39,7 @@ class BUiSkirmishBuildHumanFactoryAction(uiGameContext: BUiGameContext, private 
      * Active.
      */
 
-    override fun canActivate(uiGameContext: BUiGameContext) : Boolean {
+    override fun canActivate(uiGameContext: BUiGameContext): Boolean {
         val context = uiGameContext.gameContext
         val playerId = this.producable.playerId
         val comparison = BHumanCalculations.countDiffBarracksFactory(context, playerId)
@@ -58,7 +61,15 @@ class BUiSkirmishBuildHumanFactoryAction(uiGameContext: BUiGameContext, private 
      */
 
     override fun onPerform(uiGameContext: BUiGameContext) {
-        this.dismiss(uiGameContext)
+        this.uiUnit.checkCommands(uiGameContext)
+        if (this.uiUnit.canActivate(uiGameContext)) {
+            this.uiUnit.viewMode = BUiAssets.ViewMode.ACTIVE
+            this.uiUnit.updateView(uiGameContext)
+            this.uiUnit.onHideInfo(uiGameContext)
+            this.uiUnit.hideCommands(uiGameContext)
+        } else {
+            this.uiUnit.dismiss(uiGameContext)
+        }
     }
 
     /**

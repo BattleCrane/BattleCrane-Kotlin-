@@ -4,18 +4,25 @@ package com.orego.battlecrane.bc.android.api.context.clickController
  * Defines a click states.
  */
 
-interface BUiClickMode {
+open class BUiClickMode {
+
+    var previousMode : BUiClickMode? = null
 
     /**
      * Starts if controller mode is empty
      */
 
-    fun onStartClickMode() {}
+    open fun onStartClickMode() {}
 
     /**
      * Handles next click controller.
      */
 
-    fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? =
-        nextUiClickMode.also { it?.onStartClickMode() }
+    open fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
+        if (nextUiClickMode != null) {
+            nextUiClickMode.previousMode = this
+            nextUiClickMode.onStartClickMode()
+        }
+        return nextUiClickMode
+    }
 }

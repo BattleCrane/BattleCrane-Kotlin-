@@ -4,7 +4,7 @@ import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.util.trigger.hitPointable.BUiOnHitPointsActionTrigger
 import com.orego.battlecrane.bc.android.api.util.trigger.producable.BUiOnProduceEnableTrigger
 import com.orego.battlecrane.bc.android.api.util.trigger.unit.BUiOnDestroyUnitTrigger
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.train.BUiSkirmishTrainMarineAction
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.train.BUiSkirmishTrainHumanMarineAction
 import com.orego.battlecrane.bc.android.standardImpl.race.human.unit.building.BUiHumanBarracks
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 
@@ -24,8 +24,7 @@ class BUiSkirmishHumanBarracksBuilder(barracks: BHumanBarracks) : BUiHumanBarrac
     }
 
     private fun installActions(uiGameContext: BUiGameContext, uiBarracks: BUiHumanBarracks) {
-        val barracks = uiBarracks.unit
-        val action = BUiSkirmishTrainMarineAction(uiGameContext, barracks)
+        val action = BUiSkirmishTrainHumanMarineAction(uiGameContext, uiBarracks)
         uiBarracks.actionMap[action::class.java] = action
     }
 }

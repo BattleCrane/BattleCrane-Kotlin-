@@ -12,8 +12,8 @@ import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.headquarters.builder.BUiSkirmishHumanHeadquartersBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.turret.builder.BUiSkirmishHumanTurretBuilder
 import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.building.wall.builder.BUiSkirmishHumanWallBuilder
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.infantry.builder.BUiSkirmishHumanMarineBuilder
-import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.vehicle.builder.BUiSkirmishHumanTankBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.infantry.marine.builder.BUiSkirmishHumanMarineBuilder
+import com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.unit.vehicle.tank.builder.BUiSkirmishHumanTankBuilder
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.*
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.infantry.implementation.BHumanMarine

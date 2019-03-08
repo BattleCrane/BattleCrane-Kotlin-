@@ -13,9 +13,9 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.imp
 class BUiSkirmishHumanTurretBuilder(unit : BHumanTurret) : BUiHumanTurret.Builder(unit) {
 
     override fun onCreate(uiGameContext: BUiGameContext): BUiHumanTurret {
-        val holder = super.onCreate(uiGameContext)
-        BUiOnDestroyUnitTrigger.connect(uiGameContext, holder)
-        BUiOnHitPointsActionTrigger.connect(uiGameContext, holder)
-        return holder
+        val uiTurret = super.onCreate(uiGameContext)
+        BUiOnDestroyUnitTrigger.connect(uiGameContext, uiTurret)
+        BUiOnHitPointsActionTrigger.connect(uiGameContext, uiTurret)
+        return uiTurret
     }
 }
