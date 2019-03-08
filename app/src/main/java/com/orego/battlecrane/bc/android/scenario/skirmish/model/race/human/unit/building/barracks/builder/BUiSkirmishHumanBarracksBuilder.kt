@@ -14,6 +14,7 @@ class BUiSkirmishHumanBarracksBuilder(barracks: BHumanBarracks) : BUiHumanBarrac
         val uiBarracks = super.onCreate(uiGameContext)
         this.installTriggers(uiGameContext, uiBarracks)
         this.installActions(uiGameContext, uiBarracks)
+        this.installInformer(uiBarracks)
         return uiBarracks
     }
 
@@ -26,5 +27,24 @@ class BUiSkirmishHumanBarracksBuilder(barracks: BHumanBarracks) : BUiHumanBarrac
     private fun installActions(uiGameContext: BUiGameContext, uiBarracks: BUiHumanBarracks) {
         val action = BUiSkirmishTrainHumanMarineAction(uiGameContext, uiBarracks)
         uiBarracks.actionMap[action::class.java] = action
+    }
+
+    private fun installInformer(uiBarracks: BUiHumanBarracks) {
+        uiBarracks.informer = Informer(this.unit)
+    }
+
+    /**
+     * Represents a information about unit.
+     */
+
+    class Informer(barracks: BHumanBarracks) : BUiHumanBarracks.Informer(barracks) {
+
+        companion object {
+
+            const val UNIT_DESCRIPTION =
+                "Train marines 1/1. "
+        }
+
+        override val descriptionText = UNIT_DESCRIPTION
     }
 }

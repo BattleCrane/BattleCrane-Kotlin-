@@ -114,14 +114,16 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
         if (!this.isSelected()) {
             this.viewMode = BUiAssets.ViewMode.SELECTED
             this.updateView(uiGameContext)
-            this.showDescription(uiGameContext)
+            this.onShowInfo(uiGameContext)
             this.onSelect(uiGameContext)
         }
     }
 
     fun isSelected() = this.viewMode == BUiAssets.ViewMode.SELECTED
 
-    abstract fun showDescription(uiGameContext: BUiGameContext)
+    abstract fun onShowInfo(uiGameContext: BUiGameContext)
+
+    abstract fun onHideInfo(uiGameContext: BUiGameContext)
 
     abstract fun onSelect(uiGameContext: BUiGameContext)
 
@@ -158,6 +160,10 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
     open class UiClickMode(protected val uiGameContext: BUiGameContext, open val action: BUiAction) : BUiClickMode() {
 
         override fun onStartClickMode() {
+            this.uiGameContext.uiProvider.apply {
+                this.itemCharacteristicsConstraintLayout.removeAllViews()
+                this.itemDescriptionConstraintLayout.removeAllViews()
+            }
             this.action.select(this.uiGameContext)
         }
 

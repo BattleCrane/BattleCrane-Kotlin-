@@ -1,10 +1,16 @@
 package com.orego.battlecrane.bc.android.scenario.skirmish.model.race.human.action.build
 
+import android.view.Gravity
+import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.orego.battlecrane.R
 import com.orego.battlecrane.bc.android.api.asset.BUiAssets
 import com.orego.battlecrane.bc.android.api.context.BUiGameContext
 import com.orego.battlecrane.bc.android.api.context.clickController.BUiClickMode
 import com.orego.battlecrane.bc.android.api.model.action.BUiAction
 import com.orego.battlecrane.bc.android.api.model.unit.BUiUnit
+import com.orego.battlecrane.bc.android.api.util.context.AndroidContext
 import com.orego.battlecrane.bc.android.standardImpl.race.human.asset.BUiHumanAssets
 import com.orego.battlecrane.bc.engine.api.context.BGameContext
 import com.orego.battlecrane.bc.engine.api.model.unit.type.BEmptyField
@@ -17,7 +23,11 @@ class BUiSkirmishBuildHumanTurretAction(uiGameContext: BUiGameContext, private v
     companion object {
 
         const val PATH = "${BUiHumanAssets.Action.Build.PATH}/turret"
+
+        const val ACTION_NAME = "Build a turret"
     }
+
+    var informer: Informer? = Informer()
 
     private val producable = this.uiUnit.unit as BProducable
 
@@ -47,7 +57,16 @@ class BUiSkirmishBuildHumanTurretAction(uiGameContext: BUiGameContext, private v
     override fun onSelect(uiGameContext: BUiGameContext) {
     }
 
-    override fun showDescription(uiGameContext: BUiGameContext) {
+    /**
+     * Info.
+     */
+
+    override fun onShowInfo(uiGameContext: BUiGameContext) {
+        this.informer?.showInfo(uiGameContext)
+    }
+
+    override fun onHideInfo(uiGameContext: BUiGameContext) {
+        this.informer?.hideInfo(uiGameContext)
     }
 
     /**
@@ -90,6 +109,120 @@ class BUiSkirmishBuildHumanTurretAction(uiGameContext: BUiGameContext, private v
                 }
             }
             return super.onNextClickMode(nextUiClickMode)
+        }
+    }
+
+    /**
+     * Represents a information about unit.
+     */
+
+    open class Informer {
+
+        companion object {
+
+            const val CHARACTERISTICS = "Build a turret nearly your buildings"
+
+            const val DESCRIPTION = "A turret automatically attacks near enemies every turn"
+        }
+
+        protected open val characteristicsText = CHARACTERISTICS
+
+        protected open val descriptionText = DESCRIPTION
+
+        /**
+         * Show.
+         */
+
+        fun showInfo(uiGameContext: BUiGameContext) {
+            uiGameContext.uiProvider.apply {
+                this.itemNameTextView.showItemName()
+                this.itemCharacteristicsConstraintLayout.showCharacteristics(this.androidContext)
+                this.itemDescriptionConstraintLayout.showDescription(this.androidContext)
+            }
+        }
+
+        private fun TextView.showItemName() {
+            this.text = ACTION_NAME
+        }
+
+        private fun ConstraintLayout.showCharacteristics(androidContext: AndroidContext) {
+            val layoutId = this.id
+            val size = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+            val layoutParams = ConstraintLayout.LayoutParams(size, size)
+                .also {
+                    it.startToStart = layoutId
+                    it.endToEnd = layoutId
+                    it.topToTop = layoutId
+                    it.bottomToBottom = layoutId
+                    it.marginStart = 0
+                    it.marginEnd = 0
+                    it.topMargin = 0
+                    it.bottomMargin = 0
+                    it.horizontalBias = 0.5f
+                    it.verticalBias = 0.5f
+                }
+            val characteristicsTextView = TextView(androidContext)
+                .also {
+                    it.id = View.generateViewId()
+                    it.text = this@Informer.characteristicsText
+                    it.textSize = 16f
+                    it.setTextColor(androidContext.getColor(R.color.bc_text))
+                    it.gravity = Gravity.CENTER
+                    it.layoutParams = layoutParams
+                }
+            this.addView(characteristicsTextView)
+        }
+
+        private fun ConstraintLayout.showDescription(androidContext: AndroidContext) {
+            val layoutId = this.id
+            val size = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+            val layoutParams = ConstraintLayout.LayoutParams(size, size)
+                .also {
+                    it.startToStart = layoutId
+                    it.endToEnd = layoutId
+                    it.topToTop = layoutId
+                    it.bottomToBottom = layoutId
+                    it.marginStart = 0
+                    it.marginEnd = 0
+                    it.topMargin = 0
+                    it.bottomMargin = 0
+                    it.horizontalBias = 0.5f
+                    it.verticalBias = 0.5f
+                }
+            val characteristicsTextView = TextView(androidContext)
+                .also {
+                    it.id = View.generateViewId()
+                    it.text = this@Informer.descriptionText
+                    it.textSize = 16f
+                    it.setTextColor(androidContext.getColor(R.color.bc_text))
+                    it.gravity = Gravity.CENTER
+                    it.layoutParams = layoutParams
+                }
+            this.addView(characteristicsTextView)
+        }
+
+        /**
+         * Hide.
+         */
+
+        fun hideInfo(uiGameContext: BUiGameContext) {
+            uiGameContext.uiProvider.apply {
+                this.itemNameTextView.hideItemName()
+                this.itemCharacteristicsConstraintLayout.hideCharacteristics()
+                this.itemDescriptionConstraintLayout.hideDescription()
+            }
+        }
+
+        private fun TextView.hideItemName() {
+            this.text = ""
+        }
+
+        private fun ConstraintLayout.hideCharacteristics() {
+            this.removeAllViews()
+        }
+
+        private fun ConstraintLayout.hideDescription() {
+            this.removeAllViews()
         }
     }
 }

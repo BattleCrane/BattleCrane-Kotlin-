@@ -5,7 +5,7 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.event.BHumanConst
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.implementation.BHumanBarracks
 
 /**
- * Event of barracks creating.
+ * Event of turret creating.
  */
 
 class BSkirmishHumanConstructBarracksEvent(producableId: Long, x: Int, y: Int) :

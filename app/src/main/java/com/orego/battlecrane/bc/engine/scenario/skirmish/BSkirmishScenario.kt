@@ -87,7 +87,7 @@ class BSkirmishScenario : BGameScenario() {
             //Get players:
             val bluePlayerId = players[0].playerId
             val redPlayerId = players[1].playerId
-            //Put headquarters on the map:
+            //Put turret on the map:
             this.add(newHeadquarters(bluePlayerId, 14, 14))
             this.add(newHeadquarters(redPlayerId, 0, 0))
             //Put walls on the map:

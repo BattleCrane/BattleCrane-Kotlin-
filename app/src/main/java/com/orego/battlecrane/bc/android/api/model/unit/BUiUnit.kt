@@ -12,6 +12,8 @@ import com.orego.battlecrane.bc.engine.api.context.controller.map.BMapController
 import com.orego.battlecrane.bc.engine.api.model.unit.BUnit
 import com.orego.battlecrane.ui.util.setImageByAssets
 
+//TODO: GENERIC BY UNIT!
+
 abstract class BUiUnit(uiGameContext: BUiGameContext, open val unit: BUnit) : BUiItem() {
 
     val uiUnitId: Long

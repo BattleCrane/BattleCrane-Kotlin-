@@ -15,6 +15,7 @@ class BUiSkirmishHumanGeneratorBuilder(unit: BHumanGenerator) : BUiHumanGenerato
         val uiGenerator = super.onCreate(uiGameContext)
         this.installTriggers(uiGameContext, uiGenerator)
         this.installActions(uiGameContext, uiGenerator)
+        this.installInformer(uiGenerator)
         return uiGenerator
     }
 
@@ -33,5 +34,24 @@ class BUiSkirmishHumanGeneratorBuilder(unit: BHumanGenerator) : BUiHumanGenerato
             this[BUiSkirmishBuildHumanTurretAction::class.java] = BUiSkirmishBuildHumanTurretAction(context, uiUnit)
             this[BUiSkirmishUpgradeBuildingAction::class.java] = BUiSkirmishUpgradeBuildingAction(context, uiUnit)
         }
+    }
+
+    private fun installInformer(uiGenerator: BUiHumanGenerator) {
+        uiGenerator.informer = Informer(this.unit)
+    }
+
+    /**
+     * Represents a information about unit.
+     */
+
+    class Informer(generator: BHumanGenerator) : BUiHumanGenerator.Informer(generator) {
+
+        companion object {
+
+            const val UNIT_DESCRIPTION =
+                "Construct and upgrade builings\n. Limit: 2"
+        }
+
+        override val descriptionText = UNIT_DESCRIPTION
     }
 }

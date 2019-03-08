@@ -7,7 +7,7 @@ import com.orego.battlecrane.bc.engine.standardImpl.race.human.unit.building.imp
 import com.orego.battlecrane.bc.engine.standardImpl.race.human.util.BHumanCalculations
 
 /**
- * Event of factory creating.
+ * Event of turret creating.
  */
 
 class BSkirmishHumanConstructFactoryEvent(producableId: Long, x: Int, y: Int) :
