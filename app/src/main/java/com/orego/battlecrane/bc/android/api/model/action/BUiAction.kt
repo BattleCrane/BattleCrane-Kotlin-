@@ -168,7 +168,6 @@ abstract class BUiAction(private val uiGameContext: BUiGameContext) : BUiItem() 
         }
 
         override fun onNextClickMode(nextUiClickMode: BUiClickMode?): BUiClickMode? {
-//            nextUiClickMode?.previousMode = this
             if (nextUiClickMode is BUiAction.UiClickMode) {
                 if (this.action.canActivate(this.uiGameContext)) {
                     this.action.viewMode = BUiAssets.ViewMode.ACTIVE
