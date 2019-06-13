@@ -72,7 +72,7 @@ class BUiHumanTurret private constructor(uiGameContext: BUiGameContext, override
                         "Size: 1x1\n" +
                         "Hit points: $currentHitPoints/$maxHitPoints\n" +
                         "Damage: $damage\n" +
-                        "Radius attack: $radiusAttack" +
+                        "Radius attack: $radiusAttack\n" +
                         "Level: $currentLevel/$maxLevel"
             }
 

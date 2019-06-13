@@ -67,7 +67,7 @@ class BUiHumanTank private constructor(uiGameContext: BUiGameContext, override v
                 val damage = marine.damage
                 return "Vehicle\n" +
                         "Size: 1x1\n" +
-                        "Hit points: $currentHitPoints/$maxHitPoints" +
+                        "Hit points: $currentHitPoints/$maxHitPoints\n" +
                         "Damage: $damage"
             }
 

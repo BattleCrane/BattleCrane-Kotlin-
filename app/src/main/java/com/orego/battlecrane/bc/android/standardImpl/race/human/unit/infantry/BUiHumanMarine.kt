@@ -64,7 +64,7 @@ class BUiHumanMarine private constructor(uiGameContext: BUiGameContext, override
                 val damage = marine.damage
                 return "Creature\n" +
                         "Size: 1x1\n" +
-                        "Hit points: $currentHitPoints/$maxHitPoints" +
+                        "Hit points: $currentHitPoints/$maxHitPoints\n" +
                         "Damage: $damage"
             }
 

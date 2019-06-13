@@ -16,8 +16,8 @@ class BActivity : AppCompatActivity() {
 
     private var activityController: BActivityController?
         get() = this.app.activityController
-        set(activityController) {
-            this.app.activityController = activityController
+        set(value) {
+            this.app.activityController = value
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
